@@ -2,6 +2,8 @@
 
 int	main(int argc, char **argv)
 {
+	if (argc != 1)
+		return (FAILURE);
 	write(STDOUT_FILENO, "Main\n", 5);
-	return (0);
+	return (SUCCESS);
 }
