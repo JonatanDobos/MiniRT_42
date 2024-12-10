@@ -3,9 +3,9 @@
 
 // function parameters
 
+# include "MLX42/MLX42.h"
 # include "minirt_extern.h"
 # include "minirt_define.h"
 # include "minirt_data.h"
-# include "MLX42/MLX42.h"
 
 #endif

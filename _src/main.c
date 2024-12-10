@@ -1,6 +1,7 @@
 #include "../_lib/minirt_param.h"
 
-int32_t	main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
+	write(STDOUT_FILENO, "Main\n", 5);
 	return (0);
 }

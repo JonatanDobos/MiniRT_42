@@ -1,4 +1,4 @@
-NAME	= minirt
+NAME	= miniRT
 
 CC		= cc
 
@@ -9,13 +9,13 @@ FSANIT	= -g -fsanitize=address
 LMLXDIR	= ./MLX42
 LIBMLX	= $(LMLXDIR)/build/libmlx42.a -ldl -lglfw -pthread -lm
 
-# LFTDIR	= ./libft
-# LIBFT	= $(LFTDIR)/libft.a
+LFTDIR	= ./libft
+LIBFT	= $(LFTDIR)/libft.a
 
 HEADERS	= -I ./include -I $(LMLXDIR)/include
-LIBS	= $(LIBMLX) #$(LIBFT)
+LIBS	= $(LIBMLX) $(LIBFT)
 
-SRCDIR	= ./src
+SRCDIR	= ./_src
 SRC		=	$(SRCDIR)/main.c
 SRC		=	$(SRCDIR)/utils_window.c
 
@@ -23,8 +23,8 @@ OBJS	= ${SRC:.c=.o}
 
 all: $(LIBS) $(NAME)
 
-# $(LIBFT):
-# 	make -C $(LFTDIR) all
+$(LIBFT):
+	make -C $(LFTDIR) all
 
 $(LIBMLX):
 	cmake $(LMLXDIR) -B $(LMLXDIR)/build && make -C $(LMLXDIR)/build -j4
@@ -36,13 +36,13 @@ $(NAME): $(OBJS)
 	$(CC) $(FSANIT) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
 
 clean:
-#	make -C $(LFTDIR) clean
+	make -C $(LFTDIR) clean
 	rm -rf $(OBJS)
 
 fclean: clean
 	rm -rf $(NAME)
 	rm -rf $(LMLXDIR)/build
-#	rm -rf $(LFTDIR)/libft.a
+	rm -rf $(LFTDIR)/libft.a
 
 re: clean all
 

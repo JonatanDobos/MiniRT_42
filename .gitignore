@@ -1,0 +1,4 @@
+*.o
+miniRT
+libft.a
+obj

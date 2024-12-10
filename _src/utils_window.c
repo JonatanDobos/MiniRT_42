@@ -1,7 +1,5 @@
 #include "../_lib/minirt_param.h"
 
-// USE NEW MLX VERSION!!
-
 t_ushrt	window_init(t_window *wdw, const char *name)
 {
 	mlx_set_setting(MLX_MAXIMIZED, false);
