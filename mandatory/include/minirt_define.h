@@ -3,10 +3,4 @@
 
 // defines and enums
 
-enum	e_return
-{
-	SUCCESS = 0,
-	FAILURE
-};
-
 #endif

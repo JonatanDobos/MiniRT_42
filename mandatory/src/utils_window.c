@@ -1,9 +1,9 @@
-#include "../_lib/minirt_param.h"
+#include "../include/minirt_param.h"
 
 // Creates an MLX window with image ready to be manipulated.
 // t_window->wdth, hght and resize should be set beforehand!
 // The rest will be filled in.
-t_ushrt	window_init(t_window *wdw, const char *name)
+t_uint8	window_init(t_window *wdw, const char *name)
 {
 	mlx_set_setting(MLX_MAXIMIZED, false);
 	wdw->inst = mlx_init(wdw->wdth, wdw->hght, name, wdw->resize);
@@ -16,6 +16,6 @@ t_ushrt	window_init(t_window *wdw, const char *name)
 	if (wdw->id < 0)
 		return (mlx_terminate(wdw->inst), FAILURE);
 	wdw->total_pixels = wdw->wdth * wdw->hght;
-	wdw->pixels = (t_uint)wdw->img->pixels;
+	wdw->pixels = (t_uint8 *)wdw->img->pixels;
 	return (SUCCESS);
 }

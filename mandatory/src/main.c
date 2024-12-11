@@ -1,4 +1,4 @@
-#include "../_lib/minirt_param.h"
+#include "../include/minirt_param.h"
 
 int	main(int argc, char **argv)
 {

@@ -1,27 +1,29 @@
-NAME	= miniRT
+NAME	=	miniRT
 
-CC		= cc
+CC		=	cc
 
-CFLAGS	= -Wall -Werror -Wextra
+CFLAGS	=	-Wall -Werror -Wextra
 
-FSANIT	= -g -fsanitize=address
+FSANIT	=	-g -fsanitize=address
 
-LMLXDIR	= ./MLX42
-LIBMLX	= $(LMLXDIR)/build/libmlx42.a -ldl -lglfw -pthread -lm
+LMLXDIR	=	./libs/MLX42
+LIBMLX	=	$(LMLXDIR)/build/libmlx42.a -ldl -lglfw -pthread -lm
 
-LFTDIR	= ./libft
-LIBFT	= $(LFTDIR)/libft.a
+LFTDIR	=	./libs/libft
+LIBFT	=	$(LFTDIR)/libft.a
 
-HEADERS	= -I ./include -I $(LMLXDIR)/include
-LIBS	= $(LIBMLX) $(LIBFT)
+HEADERS	=	-I ./include -I $(LMLXDIR)/include
+LIBS	=	$(LIBMLX) $(LIBFT)
 
-SRCDIR	= ./_src
+SRCDIR	=	./mandatory/src
 SRC		=	$(SRCDIR)/main.c
 SRC		=	$(SRCDIR)/utils_window.c
 
-OBJS	= ${SRC:.c=.o}
+OBJS	=	${SRC:.c=.o}
 
 all: $(LIBS) $(NAME)
+
+#bonus
 
 $(LIBFT):
 	make -C $(LFTDIR) all
