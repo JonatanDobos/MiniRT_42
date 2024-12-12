@@ -16,10 +16,11 @@ HEADERS	=	-I ./include -I $(LMLXDIR)/include
 LIBS	=	$(LIBMLX) $(LIBFT)
 
 SRCDIR	=	./mandatory/src
-SRC		=	$(SRCDIR)/main.c
-SRC		=	$(SRCDIR)/utils_window.c
+SRC		=	/main.c \
+			/utils_window.c
 
-OBJS	=	${SRC:.c=.o}
+OBJDIRM	=	./mandatory/obj_mandatory
+OBJS	=	${SRC:(SRCDIR)%.c=(OBJDIRM)%.o}
 
 all: $(LIBS) $(NAME)
 
@@ -40,6 +41,7 @@ $(NAME): $(OBJS)
 clean:
 	make -C $(LFTDIR) clean
 	rm -rf $(OBJS)
+	rm -df $(OBJDIRM)
 
 fclean: clean
 	rm -rf $(NAME)
