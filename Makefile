@@ -16,11 +16,11 @@ HEADERS	=	-I ./include -I $(LMLXDIR)/include
 LIBS	=	$(LIBMLX) $(LIBFT)
 
 SRCDIR	=	./mandatory/src
-SRC		=	/main.c \
-			/utils_window.c
+SRC		=	$(SRCDIR)/main.c \
+			$(SRCDIR)/utils_window.c
 
-OBJDIRM	=	./mandatory/obj_mandatory
-OBJS	=	${SRC:(SRCDIR)%.c=(OBJDIRM)%.o}
+OBJDIRM	=	./mandatory/obj
+OBJS	=	$(SRC:$(SRCDIR)%.c=$(OBJDIRM)%.o)
 
 all: $(LIBS) $(NAME)
 
@@ -32,11 +32,14 @@ $(LIBFT):
 $(LIBMLX):
 	cmake $(LMLXDIR) -B $(LMLXDIR)/build && make -C $(LMLXDIR)/build -j4
 
-%.o: %.c
+$(OBJDIRM)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJDIRM) $(OBJS)
 	$(CC) $(FSANIT) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+
+$(OBJDIRM):
+	mkdir -p $(OBJDIRM)
 
 clean:
 	make -C $(LFTDIR) clean
