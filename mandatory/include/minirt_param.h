@@ -9,6 +9,19 @@
 # include "minirt_define.h"
 # include "minirt_data.h"
 
+// vec_advanced.c
+t_eucl		vec_cross(t_eucl a, t_eucl b);
+t_eucl		vec_normalize(t_eucl v);
+t_eucl		vec_project(t_eucl a, t_eucl b);
+t_eucl		vec_reflect(t_eucl v, t_eucl n);
+
+// vec_math.c
+t_eucl		vec_add(t_eucl a, t_eucl b);
+t_eucl		vec_sub(t_eucl a, t_eucl b);
+float		vec_len(t_eucl v);
+t_eucl		vec_scale(t_eucl v, float scalar);
+float		vec_dot(t_eucl a, t_eucl b);
+
 // mlx_init.c
 t_short		window_init(t_window *wdw, const char *name);
 

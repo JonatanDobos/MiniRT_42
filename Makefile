@@ -20,7 +20,9 @@ SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/error.c \
 			$(SRCDIR)/mlx_init.c \
 			$(SRCDIR)/parsing.c \
-			$(SRCDIR)/print.c
+			$(SRCDIR)/print.c \
+			$(SRCDIR)/vec_advanced.c \
+			$(SRCDIR)/vec_math.c
 
 OBJDIRM	=	./mandatory/obj
 OBJS	=	$(SRC:$(SRCDIR)%.c=$(OBJDIRM)%.o)
