@@ -2,9 +2,9 @@ NAME	=	miniRT
 
 CC		=	cc
 
-CFLAGS	=	-Wall -Werror -Wextra
-
-FSANIT	=	-g -fsanitize=address
+# CFLAGS	=	-Wall -Werror -Wextra
+# CFLAGS	+=	-Wunused -Wconversion -Wimplicit
+# CFLAGS	+=	-g -fsanitize=address
 
 LMLXDIR	=	./libs/MLX42
 LIBMLX	=	$(LMLXDIR)/build/libmlx42.a -ldl -lglfw -pthread -lm
@@ -17,7 +17,10 @@ LIBS	=	$(LIBMLX) $(LIBFT)
 
 SRCDIR	=	./mandatory/src
 SRC		=	$(SRCDIR)/main.c \
-			$(SRCDIR)/utils_window.c
+			$(SRCDIR)/error.c \
+			$(SRCDIR)/mlx_init.c \
+			$(SRCDIR)/parsing.c \
+			$(SRCDIR)/print.c
 
 OBJDIRM	=	./mandatory/obj
 OBJS	=	$(SRC:$(SRCDIR)%.c=$(OBJDIRM)%.o)

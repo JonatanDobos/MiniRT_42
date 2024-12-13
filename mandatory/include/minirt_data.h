@@ -24,6 +24,33 @@ typedef struct s_pvec
 	t_eucl	vec;
 }	t_pvec;
 
+typedef struct s_obj
+{
+	t_uint	id;
+	t_eucl	origin;
+	t_eucl	vec;
+}	t_obj;
+
+typedef struct s_light
+{
+	t_uint	id;
+	t_eucl	origin;
+	t_eucl	vec;
+}	t_light;
+
+typedef struct s_cam
+{
+	t_uint	id;
+	t_eucl	origin;
+	t_eucl	vec;
+}	t_cam;
+
+typedef struct s_amblight
+{
+	t_eucl	origin;
+	t_eucl	vec;
+}	t_amblight;
+
 typedef struct s_window
 {
 	mlx_t		*inst;
@@ -32,8 +59,14 @@ typedef struct s_window
 	t_uint8		id;
 	t_uint		wdth;
 	t_uint		hght;
-	t_uint		total_pixels;
+	t_uint		pixel_amount;
 	bool		resize;
 }	t_window;
+
+typedef struct s_minirt
+{
+	t_window	win;
+	t_short		errnum;
+}	t_minirt;
 
 #endif
