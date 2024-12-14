@@ -1,8 +1,10 @@
 #include "../include/minirt_param.h"
 
-t_short	input_parse(t_minirt *mrt, const char *inp)
+t_short	input_parse(t_minirt *mrt, const char *file)
 {
-	(void)mrt;
-	(void)inp;
+	const int	fd = open(file, O_RDONLY);
+
+	if (fd < 0)
+		return (errset(perr("input parse", errno)));
 	return (SUCCESS);
 }

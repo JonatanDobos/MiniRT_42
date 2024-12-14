@@ -34,7 +34,7 @@ void		init_hooks(t_minirt *mrt);
 
 // input_parsing.c
 
-t_short		input_parse(t_minirt *mrt, const char *inp);
+t_short		input_parse(t_minirt *mrt, const char *file);
 
 // init.c
 
@@ -54,7 +54,8 @@ void		clean_all(t_minirt *mrt);
 
 // error.c
 
-t_short		err_set(const t_short num);
+t_short		errset(const t_short num);
+t_short		errsave(const t_short errnum);
 
 // exit.c
 

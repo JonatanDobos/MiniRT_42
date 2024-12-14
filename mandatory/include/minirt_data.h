@@ -48,6 +48,16 @@ typedef struct s_sphere
 	t_rgba			color;
 }	t_sphere;
 
+typedef struct s_cilinder
+{
+	t_eucl			center_a;
+	t_eucl			center_b;
+	t_eucl			normal;
+	float			radius_a;
+	float			radius_b;
+	t_rgba			color;
+}	t_cilinder;
+
 typedef struct s_light
 {
 	t_eucl			origin;
@@ -75,9 +85,11 @@ typedef struct s_scene
 	t_uin16			light_count;
 	t_plane			*plane;
 	t_uin16			plane_count;
-	t_light			*sphere;
+	t_sphere		*sphere;
 	t_uin16			sphere_count;
-	t_light			*cam;
+	t_cilinder		*cilinder;
+	t_uin16			cilinder_count;
+	t_cam			*cam;
 	t_uin16			cam_count;
 }	t_scene;
 

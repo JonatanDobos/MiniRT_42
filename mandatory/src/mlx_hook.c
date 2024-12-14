@@ -5,7 +5,7 @@ static void	close_mlx(void *param)
 	t_minirt	*mrt;
 
 	mrt = (t_minirt *)param;
-	exit_clean(mrt, err_set(ERR_RTRN));
+	exit_clean(mrt, errset(ERTRN));
 }
 
 static void	key_mlx(mlx_key_data_t key, void *param)

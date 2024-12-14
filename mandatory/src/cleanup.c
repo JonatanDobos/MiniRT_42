@@ -19,7 +19,7 @@ void	clean_window(t_window *win)
 }
 
 /**
- * @brief Frees all dynamic memory, and sets all bytes to 0.
+ * @brief Frees what was malloc'd, and sets all bytes to 0.
  * @param sc Pointer to t_scene to be cleaned.
  */
 void	clean_scene(t_scene *sc)
@@ -30,11 +30,12 @@ void	clean_scene(t_scene *sc)
 	ft_vfree((void **)&sc->light);
 	ft_vfree((void **)&sc->plane);
 	ft_vfree((void **)&sc->sphere);
+	ft_vfree((void **)&sc->cilinder);
 	ft_bzero(sc, sizeof(t_scene));
 }
 
 /**
- * @brief Frees all dynamic memory, and sets all bytes to 0.
+ * @brief Frees what was malloc'd, and sets all bytes to 0.
  * @param mrt Pointer to t_minirt to be cleaned.
  */
 void	clean_all(t_minirt *mrt)
