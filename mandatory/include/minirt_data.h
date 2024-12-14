@@ -18,6 +18,7 @@ typedef struct s_rgba
 	t_uint8			g;
 	t_uint8			b;
 	t_uint8			a;
+	t_uint			hex;
 }	t_rgba;
 
 typedef struct s_eucl

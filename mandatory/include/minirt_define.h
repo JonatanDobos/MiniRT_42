@@ -10,17 +10,17 @@
 
 /**
  * @brief Custom error code (range: <= -2) macros.
- * @param ERTRN A fixed option (errset() & errsave()).
+ * @param ERTRN A fixed option (errset() & nsave()).
  * @param ESET A fixed option (errset()).
- * @param CERRNSET Returned by errset() when static is NULL.
- * @param CERROR2 Custom error code 2.
+ * @param ERRNSET Returned by errset() when static is NULL.
+ * @param ERROR2 Custom error code 2.
  */
 enum	custom_error
 {
 	ERTRN = -1,
 	ESET = -2,
-	CERRNSET = -3,
-	CERROR2 = -4
+	ERRNSET = -3,
+	ERROR2 = -4
 };
 
 #endif

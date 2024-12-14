@@ -42,5 +42,4 @@ void	clean_all(t_minirt *mrt)
 {
 	clean_scene(&mrt->scene);
 	clean_window(&mrt->win);
-	ft_bzero(&mrt->errnum, sizeof(mrt->errnum));
 }

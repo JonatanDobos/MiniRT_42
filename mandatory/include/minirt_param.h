@@ -54,8 +54,8 @@ void		clean_all(t_minirt *mrt);
 
 // error.c
 
-t_short		errset(const t_short num);
-t_short		errsave(const t_short errnum);
+t_long		errset(const t_long errnum);
+t_short		nsave(const t_short num);
 
 // exit.c
 

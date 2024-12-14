@@ -12,13 +12,13 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 		return (perr("main", EINVAL));
-	errset(0);
+	errset((t_long)&mrt.errnum);
 	init_struct_mrt(&mrt);
 	if (input_parse(&mrt, argv[1]))
-		return (errset(ERTRN));
+		return (mrt.errnum);
 	if (window_init(&mrt.win, "miniRT"))
-		return (errset(ERTRN));
+		return (clean_all(&mrt), mrt.errnum);
 	render_loop(&mrt);
 	clean_all(&mrt);
-	return (errset(ERTRN));
+	return (mrt.errnum);
 }

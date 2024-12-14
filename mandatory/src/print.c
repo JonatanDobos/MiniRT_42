@@ -17,7 +17,7 @@ static void	perr_custom(const t_short errnum)
 
 /**
  * @brief Prints error message.
- * @param place Name of the function the error occured in or got caught in.
+ * @param place Name of the function the error occured in/ got caught in.
  * @param errnum Error code.
  * @return errnum
  */
@@ -39,7 +39,7 @@ t_short	perr(char *place, const t_short errnum)
 
 /**
  * @brief Prints error message followed by an additional message.
- * @param place Name of the function the error occured in or got caught in.
+ * @param place Name of the function the error occured in/ got caught in.
  * @param errnum Error code.
  * @param msg Message following the error message.
  * @return errnum
@@ -55,7 +55,7 @@ t_short	perr_msg(char *place, const t_short errnum, char *msg)
 
 /**
  * @brief Prints error message based on mlx_errno.
- * @param place Name of the function the error occured in or got caught in.
+ * @param place Name of the function the error occured in/ got caught in.
  * @param errnum Mlx error code.
  * @return errnum
  */
