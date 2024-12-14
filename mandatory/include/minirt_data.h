@@ -1,7 +1,7 @@
 #ifndef MINIRT_DATA_H
 # define MINIRT_DATA_H
 
-// data structures
+// data structures and types
 
 typedef int_fast32_t	t_int;
 typedef int_fast64_t	t_long;
@@ -14,94 +14,90 @@ typedef uint_fast64_t	t_ulong;
 
 typedef struct s_rgba
 {
-	t_uint8	r;
-	t_uint8	g;
-	t_uint8	b;
-	t_uint8	a;
+	t_uint8			r;
+	t_uint8			g;
+	t_uint8			b;
+	t_uint8			a;
 }	t_rgba;
 
 typedef struct s_eucl
 {
-	float	x;
-	float	y;
-	float	z;
+	float			x;
+	float			y;
+	float			z;
 }	t_eucl;
 
 typedef struct s_ray
 {
-	t_eucl	origin;
-	t_eucl	vec;
+	t_eucl			origin;
+	t_eucl			vec;
 }	t_ray;
 
 typedef struct s_plane
 {
-	t_uint	id;
-	t_eucl	a;
-	t_eucl	b;
-	t_eucl	c;
-	t_rgba	color;
+	t_eucl			a;
+	t_eucl			b;
+	t_eucl			c;
+	t_rgba			color;
 }	t_plane;
 
 typedef struct s_sphere
 {
-	t_uint	id;
-	t_eucl	center;
-	float	radius;
-	t_rgba	color;
+	t_eucl			center;
+	float			radius;
+	t_rgba			color;
 }	t_sphere;
 
 typedef struct s_light
 {
-	t_uint	id;
-	t_eucl	origin;
-	t_eucl	vec;
-	t_rgba	color;
+	t_eucl			origin;
+	t_eucl			vec;
+	t_rgba			color;
 }	t_light;
 
 typedef struct s_cam
 {
-	t_uint	id;
-	t_eucl	origin;
-	t_eucl	vec;
+	t_eucl			origin;
+	t_eucl			vec;
 }	t_cam;
 
 typedef struct s_amblight
 {
-	t_eucl	origin;
-	t_eucl	vec;
-	t_rgba	color;
+	t_eucl			origin;
+	t_eucl			vec;
+	t_rgba			color;
 }	t_amblight;
 
 typedef struct s_scene
 {
-	t_amblight	ambient;
-	t_light		light;
-	t_uin16		light_count;
-	t_plane		plane;
-	t_uin16		plane_count;
-	t_light		sphere;
-	t_uin16		sphere_count;
-	t_light		cam;
-	t_uin16		cam_count;
+	t_amblight		ambient;
+	t_light			*light;
+	t_uin16			light_count;
+	t_plane			*plane;
+	t_uin16			plane_count;
+	t_light			*sphere;
+	t_uin16			sphere_count;
+	t_light			*cam;
+	t_uin16			cam_count;
 }	t_scene;
 
 typedef struct s_window
 {
-	mlx_t		*inst;
-	mlx_image_t	*img;
-	t_uint8		*pixels;
-	t_uint8		id;
-	t_uint		wdth;
-	t_uint		hght;
-	t_uint		pixel_amount;
-	bool		resize;
+	mlx_t			*mlx;
+	mlx_image_t		*img;
+	t_uint8			*pixels;
+	t_short			id;
+	t_uint			wdth;
+	t_uint			hght;
+	t_uint			pixel_amount;
+	bool			resize;
 }	t_window;
 
 typedef struct s_minirt
 {
-	t_window	win;
-	t_scene		scene;
-	t_short		errnum;
+	t_window		win;
+	t_scene			scene;
+	t_short			errnum;
 }	t_minirt;
 
 #endif

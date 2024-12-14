@@ -6,7 +6,7 @@
 /*   By: svan-hoo <svan-hoo@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/03 16:53:50 by svan-hoo      #+#    #+#                 */
-/*   Updated: 2024/12/03 15:15:42 by joni          ########   odam.nl         */
+/*   Updated: 2024/12/14 13:09:00 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,14 @@ char		*ft_strjoin(const char *s1, const char *s2);
 char		*ft_substr(const char *str, unsigned int start, size_t len);
 char		*ft_strmapi(const char *str, char (*f)(unsigned int, char));
 
+void		ft_free_varray(void ***array);
+size_t		ft_varray_size(void **array);
+void		**ft_varray_index_ins(void **array, void *insert, size_t index);
+void		**ft_varray_append(void **array, void *add);
+void		**ft_varrdup(void **arr);
+
 void		ft_free(char **ptr);
+void		ft_vfree(void **ptr);
 void		ft_free_array(char **array);
 char		**ft_realloc_array(char **array, size_t size);
 

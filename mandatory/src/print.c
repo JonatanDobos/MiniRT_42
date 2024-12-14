@@ -1,8 +1,8 @@
 #include "../include/minirt_param.h"
 
-static t_short	perr_custom(char *place, const t_short num)
+static t_short	perr_custom(char *place, const t_short errnum)
 {
-	const t_short	index = (num * -1) - 2;
+	const t_short	index = (errnum * -1) - 2;
 
 	const char	msg[CUST_ERR_AMOUNT][20] = \
 		{"Custom error 1", "Custom error 2"};
@@ -18,27 +18,53 @@ static t_short	perr_custom(char *place, const t_short num)
 	else
 		ft_putstr_fd("!unknown error!", STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
-	return (num);
+	return (errnum);
 }
 
-// Prints out:
-// "miniRT: [*place](name of function): [strerror(num)]"
-t_short	perr(char *place, const t_short num)
+/**
+ * @brief Prints error message.
+ * @param place Name of the function the error occured in.
+ * @param errnum Error code.
+ * @return errnum
+ */
+t_short	perr(char *place, const t_short errnum)
 {
-	if (num < 0)
-		return (perr_custom(place, num));
+	if (errnum < 0)
+		return (perr_custom(place, errnum));
 	ft_putstr_fd("miniRT: ", STDERR_FILENO);
 	if (place)
 	{
 		ft_putstr_fd(place, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 	}
-	ft_putstr_fd(strerror(num), STDERR_FILENO);
+	ft_putstr_fd(strerror(errnum), STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
-	return (num);
+	return (errnum);
 }
 
-t_short	perrmlx(char *place, const t_short num)
+/**
+ * @brief Prints error message followed by an additional message.
+ * @param place Name of the function the error occured in.
+ * @param errnum Error code.
+ * @param msg Message following the error message.
+ * @return errnum
+ */
+t_short	perr_msg(char *place, const t_short errnum, char *msg)
+{
+	perr(place, errnum);
+	if (msg)
+		ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+	return (errnum);
+}
+
+/**
+ * @brief Prints error message based on mlx_errno.
+ * @param place Name of the function the error occured in.
+ * @param errnum Mlx error code.
+ * @return errnum
+ */
+t_short	perrmlx(char *place, const t_short errnum)
 {
 	ft_putstr_fd("miniRT: ", STDERR_FILENO);
 	if (place)
@@ -46,7 +72,7 @@ t_short	perrmlx(char *place, const t_short num)
 		ft_putstr_fd(place, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 	}
-	ft_putstr_fd(mlx_strerror(num), STDERR_FILENO);
+	ft_putstr_fd(mlx_strerror(errnum), STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
-	return (num);
+	return (errnum);
 }

@@ -2,7 +2,7 @@ NAME	=	miniRT
 
 CC		=	cc
 
-# CFLAGS	=	-Wall -Werror -Wextra
+CFLAGS	=	-Wall -Werror -Wextra
 # CFLAGS	+=	-Wunused -Wconversion -Wimplicit
 # CFLAGS	+=	-g -fsanitize=address
 
@@ -17,7 +17,11 @@ LIBS	=	$(LIBMLX) $(LIBFT)
 
 SRCDIR	=	./mandatory/src
 SRC		=	$(SRCDIR)/main.c \
+			$(SRCDIR)/cleanup.c \
 			$(SRCDIR)/error.c \
+			$(SRCDIR)/exit.c \
+			$(SRCDIR)/init.c \
+			$(SRCDIR)/mlx_hook.c \
 			$(SRCDIR)/mlx_init.c \
 			$(SRCDIR)/parsing.c \
 			$(SRCDIR)/print.c \
@@ -56,6 +60,6 @@ fclean: clean
 	rm -rf $(LMLXDIR)/build
 	rm -rf $(LFTDIR)/libft.a
 
-re: clean all
+re: fclean all
 
 .PHONY: all clean fclean re

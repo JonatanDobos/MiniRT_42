@@ -80,6 +80,8 @@ SRC		=	$(SRCDIR)/ft_abs.c \
 			$(SRCDIR)/ft_swap_ints.c \
 			$(SRCDIR)/ft_tolower.c \
 			$(SRCDIR)/ft_toupper.c \
+			$(SRCDIR)/ft_vfree.c \
+			$(SRCDIR)/ft_void_array.c \
 			$(SRCDIR)/ft_writing.c \
 			$(SRCDIR)/ft_cpy.c \
 			$(SRCDIR)/get_next_line.c \

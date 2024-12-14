@@ -8,8 +8,12 @@
 
 # define CUST_ERR_AMOUNT 2
 
-// ERR_RTRN is a fix option (for errn_set()),
-// the custom errors are -2 and below.
+/**
+ * @brief Custom error code (range: <= -2) macros.
+ * @param ERR_RTRN A fixed option (for err_set()).
+ * @param CERROR1 Custom error code 1.
+ * @param CERROR2 Custom error code 2.
+ */
 enum	custom_error
 {
 	ERR_RTRN = -1,

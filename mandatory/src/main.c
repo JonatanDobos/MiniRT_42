@@ -2,18 +2,8 @@
 
 void	render_loop(t_minirt *mrt)
 {
-	// rendering
-}
-
-void	init_struct(t_minirt *mrt)
-{
-	mrt->errnum = 0;
-	mrt->win.hght = WIN_HEIGHT;
-	mrt->win.wdth = WIN_WIDTH;
-	mrt->win.id = 0;
-	mrt->win.img = NULL;
-	mrt->win.inst = NULL;
-	mrt->win.resize = true;
+	init_hooks(mrt);
+	mlx_loop(mrt->win.mlx);
 }
 
 int	main(int argc, char **argv)
@@ -21,13 +11,14 @@ int	main(int argc, char **argv)
 	t_minirt	mrt;
 
 	if (argc != 2)
-		return (perr("main()", EINVAL));
-	errn_set(0);
-	init_struct(&mrt);
+		return (perr("main", EINVAL));
+	err_set(0);
+	init_struct_mrt(&mrt);
 	if (input_parse(&mrt, argv[1]))
-		return (errn_set(ERR_RTRN));
+		return (err_set(ERR_RTRN));
 	if (window_init(&mrt.win, "miniRT"))
-		return (errn_set(ERR_RTRN));
+		return (err_set(ERR_RTRN));
 	render_loop(&mrt);
-	return (errn_set(ERR_RTRN));
+	clean_all(&mrt);
+	return (err_set(ERR_RTRN));
 }
