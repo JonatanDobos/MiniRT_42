@@ -100,9 +100,10 @@ typedef struct s_window
 	mlx_image_t		*img;
 	t_uint8			*pixels;
 	t_short			id;
-	t_uint			wdth;
-	t_uint			hght;
-	t_uint			pixel_amount;
+	t_uin16			rndr_wdth;
+	t_uin16			rndr_hght;
+	t_uin16			set_rndr_hght;
+	float			ratio_w;
 	bool			resize;
 }	t_window;
 

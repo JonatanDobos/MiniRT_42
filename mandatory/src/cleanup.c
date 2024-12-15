@@ -36,10 +36,10 @@ void	clean_scene(t_scene *sc)
 
 /**
  * @brief Frees what was malloc'd, and sets all bytes to 0.
- * @param mrt Pointer to t_minirt to be cleaned.
+ * @param m Pointer to t_minirt to be cleaned.
  */
-void	clean_all(t_minirt *mrt)
+void	clean_all(t_minirt *m)
 {
-	clean_scene(&mrt->scene);
-	clean_window(&mrt->win);
+	clean_scene(&m->scene);
+	clean_window(&m->win);
 }

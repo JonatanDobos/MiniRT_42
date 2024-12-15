@@ -3,8 +3,12 @@
 
 // defines and enums
 
-# define WIN_HEIGHT 810
-# define WIN_WIDTH 1440
+# define WIN_HEIGHT 900
+# define WIN_WIDTH 1600
+
+// Custom in-program rendering resolution
+
+# define RNDR_RES 360
 
 # define CUST_ERR_AMOUNT 2
 

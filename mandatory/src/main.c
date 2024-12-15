@@ -1,24 +1,24 @@
 #include "../include/minirt_param.h"
 
-void	render_loop(t_minirt *mrt)
+void	render_loop(t_minirt *m)
 {
-	init_hooks(mrt);
-	mlx_loop(mrt->win.mlx);
+	init_hooks(m);
+	mlx_loop(m->win.mlx);
 }
 
 int	main(int argc, char **argv)
 {
-	t_minirt	mrt;
+	t_minirt	m;
 
 	if (argc != 2)
 		return (perr("main", EINVAL));
-	errset((t_long)&mrt.errnum);
-	init_struct_mrt(&mrt);
-	if (input_parse(&mrt, argv[1]))
-		return (mrt.errnum);
-	if (window_init(&mrt.win, "miniRT"))
-		return (clean_all(&mrt), mrt.errnum);
-	render_loop(&mrt);
-	clean_all(&mrt);
-	return (mrt.errnum);
+	errset((t_long)&m.errnum);
+	init_struct_m(&m);
+	if (input_parse(&m, argv[1]))
+		return (m.errnum);
+	if (window_init(&m.win, WIN_WIDTH, WIN_HEIGHT, "miniRT"))
+		return (clean_all(&m), m.errnum);
+	render_loop(&m);
+	clean_all(&m);
+	return (m.errnum);
 }

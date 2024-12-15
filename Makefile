@@ -25,6 +25,7 @@ SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/mlx_init.c \
 			$(SRCDIR)/parsing.c \
 			$(SRCDIR)/print.c \
+			$(SRCDIR)/scaling.c \
 			$(SRCDIR)/vec_advanced.c \
 			$(SRCDIR)/vec_math.c
 
