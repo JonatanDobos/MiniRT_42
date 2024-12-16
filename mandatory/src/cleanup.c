@@ -6,6 +6,9 @@
  */
 void	clean_window(t_window *win)
 {
+	const int	err_backup = errno;
+	const int	errmlx_backup = mlx_errno;
+
 	if (win == NULL)
 		return ;
 	if (win->mlx)
@@ -16,6 +19,8 @@ void	clean_window(t_window *win)
 		mlx_terminate(win->mlx);
 	}
 	ft_bzero(win, sizeof(t_window));
+	errno = err_backup;
+	mlx_errno = errmlx_backup;
 }
 
 /**
@@ -24,14 +29,15 @@ void	clean_window(t_window *win)
  */
 void	clean_scene(t_scene *sc)
 {
+	const int	err_backup = errno;
+
 	if (sc == NULL)
 		return ;
-	ft_vfree((void **)&sc->cam);
-	ft_vfree((void **)&sc->light);
 	ft_vfree((void **)&sc->plane);
 	ft_vfree((void **)&sc->sphere);
 	ft_vfree((void **)&sc->cilinder);
 	ft_bzero(sc, sizeof(t_scene));
+	errno = err_backup;
 }
 
 /**

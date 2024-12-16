@@ -6,13 +6,15 @@ static void	perr_custom(const t_short errnum)
 	const char		msg[CUST_ERR_AMOUNT][30] = \
 		{
 			"Waiting for errnum address",
-			"Errnum address not set"
+			"Errnum address not set",
+			"Wrong format",
+			"Wrong file extension"
 		};
 
 	if (index >= 0 && index < CUST_ERR_AMOUNT)
 		ft_putstr_fd(msg[index], STDERR_FILENO);
 	else
-		ft_putstr_fd("!unknown error!", STDERR_FILENO);
+		ft_putstr_fd("Unknown error!", STDERR_FILENO);
 }
 
 /**
@@ -23,6 +25,9 @@ static void	perr_custom(const t_short errnum)
  */
 t_short	perr(char *place, const t_short errnum)
 {
+	if (errnum == 0)
+		return (errnum);
+	ft_putstr_fd("Error\n", STDERR_FILENO);
 	ft_putstr_fd("miniRT: ", STDERR_FILENO);
 	if (place)
 	{

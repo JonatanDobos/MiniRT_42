@@ -1,0 +1,10 @@
+TODO:
+
+Framework:
+
+* Finish parsing of individual types (parsing_utils.c).
+* Make functions for mallocing and managing the opject arrays.
+
+When framework is (sorta) done:
+
+* Implement raytracing part...

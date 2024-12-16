@@ -1,7 +1,9 @@
 #ifndef MINIRT_DATA_H
 # define MINIRT_DATA_H
 
-// data structures and types
+// Data structures and types
+
+// Fast integer types
 
 typedef int_fast32_t	t_int;
 typedef int_fast64_t	t_long;
@@ -11,6 +13,8 @@ typedef uint_fast8_t	t_uint8;
 typedef uint_fast16_t	t_uin16;
 typedef uint_fast32_t	t_uint;
 typedef uint_fast64_t	t_ulong;
+
+// Small struct types
 
 typedef struct s_rgba
 {
@@ -79,19 +83,19 @@ typedef struct s_amblight
 	t_rgba			color;
 }	t_amblight;
 
+// Main structs
+
 typedef struct s_scene
 {
 	t_amblight		ambient;
-	t_light			*light;
-	t_uin16			light_count;
+	t_cam			cam;
+	t_light			light;
 	t_plane			*plane;
 	t_uin16			plane_count;
 	t_sphere		*sphere;
 	t_uin16			sphere_count;
 	t_cilinder		*cilinder;
 	t_uin16			cilinder_count;
-	t_cam			*cam;
-	t_uin16			cam_count;
 }	t_scene;
 
 typedef struct s_window
@@ -113,5 +117,17 @@ typedef struct s_minirt
 	t_scene			scene;
 	t_short			errnum;
 }	t_minirt;
+
+// Unique structs
+
+// Parsing
+
+typedef struct s_parsing_value_check
+{
+	t_uin16			cam_amount;
+	t_uin16			light_amount;
+	t_uin16			amb_amount;
+	t_uin16			obj_amount;
+}	t_value_check;
 
 #endif

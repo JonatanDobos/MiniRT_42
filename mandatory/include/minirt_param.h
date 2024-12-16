@@ -51,6 +51,19 @@ void		exit_clean(t_minirt *m, t_short errnum);
 float		render_scale_x(t_window *win, float val);
 float		render_scale_y(t_window *win, float val);
 
+// parsing_utils.c
+
+t_short		parse_amb(t_scene *sc, t_value_check *vc, char *line);
+t_short		parse_cam(t_scene *sc, t_value_check *vc, char *line);
+t_short		parse_light(t_scene *sc, t_value_check *vc, char *line);
+t_short		parse_pl(t_scene *sc, t_value_check *vc, char *line);
+t_short		parse_sp(t_scene *sc, t_value_check *vc, char *line);
+t_short		parse_cy(t_scene *sc, t_value_check *vc, char *line);
+
+// string_utils.c
+
+char		*skipws(char *str);
+
 // vec_advanced.c
 
 t_eucl		vec_cross(t_eucl a, t_eucl b);
