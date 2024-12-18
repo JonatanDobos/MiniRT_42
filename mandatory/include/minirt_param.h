@@ -62,7 +62,9 @@ t_short		parse_cy(t_scene *sc, t_value_check *vc, char *line);
 
 // string_utils.c
 
-char		*skipws(char *str);
+float		rt_atof(const char *str);
+t_int		rt_atoi(const char *str);
+char		*nxtvalue(char *str);
 
 // vec_advanced.c
 

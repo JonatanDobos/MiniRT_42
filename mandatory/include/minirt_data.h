@@ -22,7 +22,6 @@ typedef struct s_rgba
 	t_uint8			g;
 	t_uint8			b;
 	t_uint8			a;
-	t_uint			hex;
 }	t_rgba;
 
 typedef struct s_eucl
@@ -40,9 +39,8 @@ typedef struct s_ray
 
 typedef struct s_plane
 {
-	t_eucl			a;
-	t_eucl			b;
-	t_eucl			c;
+	t_eucl			point;
+	t_eucl			normal;
 	t_rgba			color;
 }	t_plane;
 
@@ -55,33 +53,40 @@ typedef struct s_sphere
 
 typedef struct s_cilinder
 {
-	t_eucl			center_a;
-	t_eucl			center_b;
+	t_eucl			center;
 	t_eucl			normal;
-	float			radius_a;
-	float			radius_b;
+	float			radius;
+	float			height;
 	t_rgba			color;
 }	t_cilinder;
 
 typedef struct s_light
 {
-	t_eucl			origin;
-	t_eucl			vec;
+	t_eucl			point;
+	float			brightness;
 	t_rgba			color;
 }	t_light;
 
 typedef struct s_cam
 {
-	t_eucl			origin;
-	t_eucl			vec;
+	t_eucl			point;
+	t_eucl			orient;
+	t_uint8			fov;
 }	t_cam;
 
 typedef struct s_amblight
 {
-	t_eucl			origin;
-	t_eucl			vec;
+	float			ratio;
 	t_rgba			color;
 }	t_amblight;
+
+typedef struct s_poly
+{
+	t_eucl			a;
+	t_eucl			b;
+	t_eucl			c;
+	t_rgba			color;
+}	t_poly;
 
 // Main structs
 
