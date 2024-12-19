@@ -4,7 +4,8 @@ CC		=	cc
 
 CFLAGS	=	-Wall -Werror -Wextra
 # CFLAGS	+=	-Wunused -Wconversion -Wimplicit
-# CFLAGS	+=	-g -fsanitize=address
+# CFLAGS	+=	-g
+# CFLAGS	+=	-fsanitize=address
 
 LMLXDIR	=	./libs/MLX42
 LIBMLX	=	$(LMLXDIR)/build/libmlx42.a -ldl -lglfw -pthread -lm
@@ -23,7 +24,8 @@ SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/init.c \
 			$(SRCDIR)/mlx_hook.c \
 			$(SRCDIR)/mlx_init.c \
-			$(SRCDIR)/parsing_utils.c \
+			$(SRCDIR)/parse_objects.c \
+			$(SRCDIR)/parse_peripherals.c \
 			$(SRCDIR)/parsing.c \
 			$(SRCDIR)/print.c \
 			$(SRCDIR)/scaling.c \

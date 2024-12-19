@@ -69,10 +69,10 @@ t_short	input_parse(t_minirt *m, const char *file)
 		line = get_next_line(fd);
 		if (line == NULL)
 			return (close(fd), errset(perr("input_line_check", errno)));
-		if (input_line_check(line) != SUCCESS)
-			return (close(fd), ft_free(&line), clean_all(m), errset(ERTRN));
 		if (*line == '\0')
 			break ;
+		if (input_line_check(line) != SUCCESS)
+			return (close(fd), ft_free(&line), clean_all(m), errset(ERTRN));
 		if (input_type_parse(m, &vc, line) != SUCCESS)
 			return (close(fd), ft_free(&line), clean_all(m), errset(ERTRN));
 		ft_free(&line);
