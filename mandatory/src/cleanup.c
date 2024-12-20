@@ -35,7 +35,7 @@ void	clean_scene(t_scene *sc)
 		return ;
 	ft_vfree((void **)&sc->plane);
 	ft_vfree((void **)&sc->sphere);
-	ft_vfree((void **)&sc->cilinder);
+	ft_vfree((void **)&sc->cylinder);
 	ft_bzero(sc, sizeof(t_scene));
 	errno = err_backup;
 }

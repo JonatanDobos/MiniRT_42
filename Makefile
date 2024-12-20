@@ -26,6 +26,7 @@ SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/mlx_init.c \
 			$(SRCDIR)/parse_objects.c \
 			$(SRCDIR)/parse_peripherals.c \
+			$(SRCDIR)/parsing_utils.c \
 			$(SRCDIR)/parsing.c \
 			$(SRCDIR)/print.c \
 			$(SRCDIR)/scaling.c \

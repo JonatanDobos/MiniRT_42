@@ -1,42 +1,23 @@
 #include "../include/minirt_param.h"
 
-/**
- * @brief Takes an address to a void* append size amount of pytes to,
- * amd memcpy's size amount from *append to the end of *ptr.
- * @param ptr Address of a pointer to append to.
- * @param append Pointer to bytes to append.
- * @param size Size in bytes to append.
- * @param len Amount of instances of a datatype *ptr is pointing to.
- * @return The new pointer (ptr + append).
- * @note Malloc and free inside!
- * @note Size of ptr = size * len.
- * @note Size of append = size.
- * @note Final size of new ptr in bytes = size * len + size.
- */
-void	*vappend(void **ptr, void *append, size_t size, size_t len)
-{
-	void	*new;
-	const size_t	ptr_size = size * len;
-
-	if (!ptr || !append || !size)
-		return (NULL);
-	new = (void *)malloc(ptr_size + size);
-	if (new == NULL)
-		return (NULL);
-	if (ptr_size && *ptr)
-		ft_memcpy(new, *ptr, size);
-	ft_free(ptr);
-	if (append)
-		ft_memcpy(new + ptr_size, append, size);
-	*ptr = new;
-	return (*ptr);
-}
-
 t_short	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 {
-	(void)sc;
-	(void)vc;
-	(void)line;
+	t_plane	pl;
+
+	pl.point.x = rt_atof(line);
+	pl.point.y = rt_atof(nxtvalue(line));
+	pl.point.z = rt_atof(nxtvalue(line));
+	pl.normal.x = range(rt_atof(nxtvalue(line)), -1.0f, 1.0f);
+	pl.normal.y = range(rt_atof(nxtvalue(line)), -1.0f, 1.0f);
+	pl.normal.z = range(rt_atof(nxtvalue(line)), -1.0f, 1.0f);
+	pl.color.r = rt_atoi(nxtvalue(line));
+	pl.color.g = rt_atoi(nxtvalue(line));
+	pl.color.b = rt_atoi(nxtvalue(line));
+	pl.color.a = 255;
+	if (!memappend((void **)&sc->plane, &pl, sizeof(t_plane), sc->plane_count))
+		return (errset(perr("parse_pl", errno)));
+	sc->plane_count++;
+	vc->obj_amount++;
 	return (SUCCESS);
 }
 
@@ -44,16 +25,40 @@ t_short	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_sphere	sp;
 
-	// LEFTOFF fill in sp
-	if (!vappend(&sc->sphere, &sp, sizeof(t_sphere), sc->sphere_count))
+	sp.center.x = rt_atof(line);
+	sp.center.y = rt_atof(nxtvalue(line));
+	sp.center.z = rt_atof(nxtvalue(line));
+	sp.radius = rt_atof(nxtvalue(line)) / 2.0f;
+	sp.color.r = rt_atoi(nxtvalue(line));
+	sp.color.g = rt_atoi(nxtvalue(line));
+	sp.color.b = rt_atoi(nxtvalue(line));
+	sp.color.a = 255;
+	if (!memappend((void **)&sc->sphere, &sp, sizeof(t_sphere), sc->sphere_count))
 		return (errset(perr("parse_sp", errno)));
+	sc->sphere_count++;
+	vc->obj_amount++;
 	return (SUCCESS);
 }
 
 t_short	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 {
-	(void)sc;
-	(void)vc;
-	(void)line;
+	t_cylinder	cy;
+
+	cy.center.x = rt_atof(line);
+	cy.center.y = rt_atof(nxtvalue(line));
+	cy.center.z = rt_atof(nxtvalue(line));
+	cy.normal.x = range(rt_atof(nxtvalue(line)), -1.0f, 1.0f);
+	cy.normal.y = range(rt_atof(nxtvalue(line)), -1.0f, 1.0f);
+	cy.normal.z = range(rt_atof(nxtvalue(line)), -1.0f, 1.0f);
+	cy.radius = rt_atof(nxtvalue(line)) / 2.0f;
+	cy.height = rt_atof(nxtvalue(line));
+	cy.color.r = rt_atoi(nxtvalue(line));
+	cy.color.g = rt_atoi(nxtvalue(line));
+	cy.color.b = rt_atoi(nxtvalue(line));
+	cy.color.a = 255;
+	if (!memappend((void **)&sc->cylinder, &cy, sizeof(t_cylinder), sc->cylinder_count))
+		return (errset(perr("parse_cy", errno)));
+	sc->cylinder_count++;
+	vc->obj_amount++;
 	return (SUCCESS);
 }

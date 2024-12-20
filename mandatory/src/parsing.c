@@ -78,6 +78,6 @@ t_short	input_parse(t_minirt *m, const char *file)
 		ft_free(&line);
 	}
 	if (check_values(&vc) != SUCCESS)
-		return (close(fd), ft_free(&line), errset(ERTRN));
+		return (close(fd), ft_free(&line), clean_all(m), errset(ERTRN));
 	return (close(fd), ft_free(&line), SUCCESS);
 }

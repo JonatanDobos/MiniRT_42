@@ -11,13 +11,13 @@
 
 // mlx_init.c
 
-t_short	window_init(t_window *win, t_uint wdth, t_uint hght, const char *name);
+t_short		window_init(t_window *win, t_uint wdth, t_uint hght, const char *name);
 
 // mlx_hook.c
 
 void		init_hooks(t_minirt *m);
 
-// input_parsing.c
+// parsing.c
 
 t_short		input_parse(t_minirt *m, const char *file);
 
@@ -62,6 +62,11 @@ t_short		parse_light(t_scene *sc, t_value_check *vc, char *line);
 t_short		parse_pl(t_scene *sc, t_value_check *vc, char *line);
 t_short		parse_sp(t_scene *sc, t_value_check *vc, char *line);
 t_short		parse_cy(t_scene *sc, t_value_check *vc, char *line);
+
+// parsing_utils.c
+
+void		*memappend(void **ptr, void *append, size_t size, size_t len);
+double		range(double value, double min, double max);
 
 // string_utils.c
 
