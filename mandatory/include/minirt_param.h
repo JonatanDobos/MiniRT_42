@@ -72,7 +72,8 @@ double		range(double value, double min, double max);
 
 float		rt_atof(const char *str);
 t_int		rt_atoi(const char *str);
-char		*nxtvalue(char *str);
+char		*nxtv(char *str);
+char		*nxtvp(char **str);
 
 // vec_advanced.c
 
@@ -88,5 +89,9 @@ t_eucl		vec_sub(t_eucl a, t_eucl b);
 float		vec_len(t_eucl v);
 t_eucl		vec_scale(t_eucl v, float scalar);
 float		vec_dot(t_eucl a, t_eucl b);
+
+// _debug.c
+
+
 
 #endif

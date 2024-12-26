@@ -15,7 +15,7 @@
  */
 void	*memappend(void **ptr, void *append, size_t size, size_t len)
 {
-	void	*new;
+	void			*new;
 	const size_t	ptr_size = size * len;
 
 	if (!ptr || !append || !size)

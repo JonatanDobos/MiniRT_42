@@ -32,7 +32,8 @@ SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/scaling.c \
 			$(SRCDIR)/string_utils.c \
 			$(SRCDIR)/vec_advanced.c \
-			$(SRCDIR)/vec_math.c
+			$(SRCDIR)/vec_math.c \
+			$(SRCDIR)/_debug.c
 
 OBJDIRM	=	./mandatory/obj
 OBJS	=	$(SRC:$(SRCDIR)%.c=$(OBJDIRM)%.o)

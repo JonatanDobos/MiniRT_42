@@ -39,17 +39,17 @@ static t_short	input_line_check(char *line)
 static t_short	input_type_parse(t_minirt *m, t_value_check *vc, char *line)
 {
 	if (!ft_strncmp(line, "A", 1))
-		return (parse_amb(&m->scene, vc, nxtvalue(line)));
+		return (parse_amb(&m->scene, vc, nxtv(line)));
 	if (!ft_strncmp(line, "C", 1))
-		return (parse_cam(&m->scene, vc, nxtvalue(line)));
+		return (parse_cam(&m->scene, vc, nxtv(line)));
 	if (!ft_strncmp(line, "L", 1))
-		return (parse_light(&m->scene, vc, nxtvalue(line)));
+		return (parse_light(&m->scene, vc, nxtv(line)));
 	if (!ft_strncmp(line, "pl", 2))
-		return (parse_pl(&m->scene, vc, nxtvalue(line)));
+		return (parse_pl(&m->scene, vc, nxtv(line)));
 	if (!ft_strncmp(line, "sp", 2))
-		return (parse_sp(&m->scene, vc, nxtvalue(line)));
+		return (parse_sp(&m->scene, vc, nxtv(line)));
 	if (!ft_strncmp(line, "cy", 2))
-		return (parse_cy(&m->scene, vc, nxtvalue(line)));
+		return (parse_cy(&m->scene, vc, nxtv(line)));
 	return (SUCCESS);
 }
 
