@@ -1,72 +1,125 @@
-NAME	=	miniRT
+NAME			=	miniRT
 
-CC		=	cc
+#	libaries
+EXTERN_LIBS	=	./extern_libraries
 
-CFLAGS	=	-Wall -Werror -Wextra
-# CFLAGS	+=	-Wunused -Wconversion -Wimplicit
-# CFLAGS	+=	-g
-# CFLAGS	+=	-fsanitize=address
+#	Libraries
+LIBFT			=	$(LIBFT_DIR)/libft.a
 
-LMLXDIR	=	./libs/MLX42
-LIBMLX	=	$(LMLXDIR)/build/libmlx42.a -ldl -lglfw -pthread -lm
+#	Directories
+LIBFT_DIR		=	./extern_libraries/libft
+SRC_DIR			=	source
+CMD_DIR			=	$(SRC_DIR)
+MLX42_PATH		=	$(EXTERN_LIBS)/MLX42
+BUILD_DIR		=	.build
 
-LFTDIR	=	./libs/libft
-LIBFT	=	$(LFTDIR)/libft.a
+#	MLX
+HEADERS		=	-Iinclude -lglfw -L "/usr/local/Cellar/glfw/3.4/lib/"
+MLXLIB		=	$(MLX42_PATH)/build/libmlx42.a
 
-HEADERS	=	-I ./include -I $(LMLXDIR)/include
-LIBS	=	$(LIBMLX) $(LIBFT)
+#	Flags
+COMPILER		=   cc
+# CFLAGS			+=	-Wall -Wextra
+# Werror cannot go together with fsanitize, because fsanitize won't work correctly.
+# CFLAGS			+=	-Werror
+# CFLAGS			+=	-fsanitize=address
+# CFLAGS			+=	-Wunused -Wuninitialized -Wunreachable-code
+CFLAGS			+=	-MMD -MP
+CFLAGS			+=	-g3
+RM				=	rm -rf
+MKDIR_P			=	mkdir -p
+PRINT_NO_DIR	=	--no-print-directory
 
-SRCDIR	=	./mandatory/src
-SRC		=	$(SRCDIR)/main.c \
-			$(SRCDIR)/cleanup.c \
-			$(SRCDIR)/error.c \
-			$(SRCDIR)/exit.c \
-			$(SRCDIR)/init.c \
-			$(SRCDIR)/mlx_hook.c \
-			$(SRCDIR)/mlx_init.c \
-			$(SRCDIR)/parse_objects.c \
-			$(SRCDIR)/parse_peripherals.c \
-			$(SRCDIR)/parsing_utils.c \
-			$(SRCDIR)/parsing.c \
-			$(SRCDIR)/print.c \
-			$(SRCDIR)/scaling.c \
-			$(SRCDIR)/string_utils.c \
-			$(SRCDIR)/vec_advanced.c \
-			$(SRCDIR)/vec_math.c \
-			$(SRCDIR)/_debug.c
+#	Remove these created files
+DELETE			=	*.out						\
+					.DS_Store					\
+					*.dSYM/
 
-OBJDIRM	=	./mandatory/obj
-OBJS	=	$(SRC:$(SRCDIR)%.c=$(OBJDIRM)%.o)
+MAIN			=	main.c
+# MAIN			=	
 
-all: $(LIBS) $(NAME)
+CMD				=	keyhooks.c					\
+					plane.c						\
+					sphere.c					\
+					test.c
 
-#bonus
+# Find all .c files in the specified directories
+SRCS		:=	$(addprefix $(SRC_DIR)/, $(MAIN))	\
+				$(addprefix $(CMD_DIR)/, $(CMD))
+
+# Generate object file names
+OBJS 			:= $(SRCS:%.c=$(BUILD_DIR)/%.o)
+# Gene			rate dependency file names
+DEPS := $(OBJS:.o=.d)
+
+# Default target
+all:	$(NAME)
+
+$(MLXLIB):
+	@cd $(MLX42_PATH) && cmake -B build && cmake --build build -j4
+
+# cc $(CFLAGS) $(OBJ) $(MLXLIB) $(HEADERS) -lm -o $(NAME)
+$(NAME): $(LIBFT) | $(OBJS) $(MLXLIB)
+	@$(COMPILER) $(CFLAGS) $(OBJS) $(LIBFT) $(MLXLIB) $(HEADERS) -lm -o $(NAME)
+	@printf "$(CREATED)" $@ $(CUR_DIR)
+
+# $(CC) $(CFLAGS) -c $< -o $@
+# Compile .c files to .o files
+$(BUILD_DIR)/%.o: %.c
+	@$(MKDIR_P) $(@D)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):
-	make -C $(LFTDIR) all
-
-$(LIBMLX):
-	cmake $(LMLXDIR) -B $(LMLXDIR)/build && make -C $(LMLXDIR)/build -j4
-
-$(OBJDIRM)/%.o: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
-
-$(NAME): $(OBJDIRM) $(OBJS)
-	$(CC) $(FSANIT) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
-
-$(OBJDIRM):
-	mkdir -p $(OBJDIRM)
+	@$(MAKE) $(PRINT_NO_DIR) -C $(LIBFT_DIR)
 
 clean:
-	make -C $(LFTDIR) clean
-	rm -rf $(OBJS)
-	rm -df $(OBJDIRM)
+	$(MAKE) $(PRINT_NO_DIR) -C $(LIBFT_DIR) clean
+	@$(RM) $(BUILD_DIR) $(DELETE)
+	@printf "$(REMOVED)" $(BUILD_DIR)/ $(CUR_DIR)$(BUILD_DIR)/
 
-fclean: clean
-	rm -rf $(NAME)
-	rm -rf $(LMLXDIR)/build
-	rm -rf $(LFTDIR)/libft.a
+fclean:	clean
+	@$(MAKE) $(PRINT_NO_DIR) -C $(LIBFT_DIR) no_print_fclean
+	@$(RM) $(NAME) $(SRC_42_N) $(LINKED_LIST_N) $(GNL_N) $(FT_PRINTF_N) $(MISC_N)
+	@printf "$(REMOVED)" $(NAME) $(CUR_DIR)
 
-re: fclean all
+re:		fclean all
 
-.PHONY: all clean fclean re
+print-%:
+	$(info $($*))
+
+# Include the dependency files
+-include $(DEPS)
+# -include $(wildcard $(BUILD_DIR)/**/*.d)
+
+.PHONY:	$(NAME) $(BUILD_DIR) $(LIBFT) all clean fclean re
+
+# ----------------------------------- colors --------------------------------- #
+
+BOLD		= \033[1m
+DIM			= \033[2m
+ITALIC		= \033[3m
+UNDERLINE	= \033[4m
+BLACK		= \033[30m
+RED			= \033[31m
+GREEN		= \033[32m
+YELLOW		= \033[33m
+BLUE		= \033[34m
+MAGENTA		= \033[35m
+CYAN		= \033[36m
+WHITE		= \033[37m
+RESET		= \033[0m
+
+R_MARK_UP	= $(MAGENTA)$(BOLD)
+CA_MARK_UP	= $(GREEN)$(BOLD)
+
+# ----------------------------------- messages ------------------------------- #
+
+CUR_DIR := $(dir $(abspath $(firstword $(MAKEFILE_LIST))))
+REMOVED := $(R_MARK_UP)REMOVED $(CYAN)%s$(MAGENTA) (%s) $(RESET)\n
+CREATED := $(CA_MARK_UP)CREATED $(CYAN)%s$(GREEN) (%s) $(RESET)\n
+
+test: all
+	./$(NAME)
+
+valgrind: all
+	valgrind -s --leak-check=full ./$(NAME)
