@@ -14,17 +14,24 @@ t_short	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 	pl.color.g = rt_atoi(nxtvp(&line));
 	pl.color.b = rt_atoi(nxtvp(&line));
 	pl.color.a = 255;
-	printf("\nPlane:\n"
-       "  Point: (x: %.2f, y: %.2f, z: %.2f)\n"
-       "  Normal: (x: %.2f, y: %.2f, z: %.2f)\n"
-       "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
-       pl.point.x, pl.point.y, pl.point.z,
-       pl.normal.x, pl.normal.y, pl.normal.z,
-       pl.color.r, pl.color.g, pl.color.b, pl.color.a);//t
 	if (!memappend((void **)&sc->plane, &pl, sizeof(t_plane), sc->plane_count))
 		return (errset(perr("parse_pl", errno)));
 	sc->plane_count++;
 	vc->obj_amount++;
+	uint16_t i = 0;
+	// DOES NOT WORK?
+	while (i < sc->plane_count)
+	{
+		pl = sc->plane[i];
+		printf("\nPlane [%d]:\n"
+       "  Point: (x: %.2f, y: %.2f, z: %.2f)\n"
+       "  Normal: (x: %.2f, y: %.2f, z: %.2f)\n"
+       "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
+       i, pl.point.x, pl.point.y, pl.point.z,
+       pl.normal.x, pl.normal.y, pl.normal.z,
+       pl.color.r, pl.color.g, pl.color.b, pl.color.a);//t
+	   ++i;
+	}
 	return (SUCCESS);
 }
 
