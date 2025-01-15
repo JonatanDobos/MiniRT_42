@@ -1,5 +1,6 @@
 NAME			:=	libft.a
-COMPILER		:=	cc
+# COMPILER		:=	cc
+COMPILER		:=	gcc
 RM				:=	rm -rf
 
 #		Compiler flags
@@ -12,7 +13,8 @@ CFLAGS			+=	-Wall -Wextra
 CFLAGS			+=	-Werror
 # CFLAGS			+=	-fsanitize=address
 CFLAGS			+=	-Wunused -Wuninitialized -Wunreachable-code
-# CFLAGS			+=	-g3
+# OFLAGS are optimization flags that might have been passed from the parent Makefile.
+CFLAGS			+=	$(OFLAGS)
 
 #		Build directory for objects and dependencies
 BUILD_DIR		:=	.build/

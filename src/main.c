@@ -1,13 +1,8 @@
+#include <stdlib.h>
 #include <miniRT.h>
-#include <utils.h>
+#include <scene.h>
 #include <RTmlx.h>
-
-static void	initiliaze_structs(t_rt *rt)
-{
-	ft_bzero(rt, sizeof(t_rt));
-}
-
-
+#include <utils.h>
 
 bool	check_input(t_rt *rt, int argc, char **argv)
 {
@@ -16,17 +11,16 @@ bool	check_input(t_rt *rt, int argc, char **argv)
 	(void)argv;
 	return (EXIT_SUCCESS);
 }
+
 int main(int argc, char **argv)
 {
 	t_rt	rt;
+
 	printf("%f\n", mlx_get_time());
-	if (check_input(&rt, argc, argv) == EXIT_FAILURE)
-	{
-		return (cleanup(&rt, EXIT_FAILURE));
-	}
-	initiliaze_structs(&rt);
-	object_array(&rt);
-	if (windows_setup_mlx(&rt) == EXIT_FAILURE)
+	ft_bzero(&rt, sizeof(t_rt));
+	if (check_input(&rt, argc, argv) == EXIT_FAILURE || \
+		scene_creation(&rt) == EXIT_FAILURE || \
+		windows_setup_mlx(&rt) == EXIT_FAILURE)
 	{
 		return (cleanup(&rt, EXIT_FAILURE));
 	}

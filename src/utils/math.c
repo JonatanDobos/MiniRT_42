@@ -12,7 +12,7 @@ t_vec3	subtract(t_vec3 a, t_vec3 b)
     return (a - b);
 }
 
-double	dot_product(t_vec3 a, t_vec3 b)
+float	dot_product(t_vec3 a, t_vec3 b)
 {
 	t_vec3 result = a * b;
 	return (result[0] + result[1] + result[2]);

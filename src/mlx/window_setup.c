@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <miniRT.h>
 #include <RTmlx.h>
 

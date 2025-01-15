@@ -6,7 +6,7 @@
 /*   By: rjw <rjw@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 20:31:32 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/08 17:44:16 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/01/15 16:41:48 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 	- malloc
 	- ft_strlen
 */
-char	*ft_substr(t_cchr *s, uint32_t start, size_t len)
+char	*ft_substr(char const *s, uint32_t start, size_t len)
 {
 	char	*ptr;
 	size_t	i;

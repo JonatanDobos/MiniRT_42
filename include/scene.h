@@ -1,9 +1,10 @@
 #ifndef SCENE_H
 # define SCENE_H
 
-#include <miniRT.h>
+#include <stdlib.h>
+# include <miniRT.h>
+# include <dynarr.h>
 // # include <libft.h>
-// # include <dynarr.h>
 
 typedef enum e_obj_types	t_obj_type;
 typedef struct s_objs		t_objs;
@@ -15,6 +16,9 @@ typedef struct s_plane		t_plane;
 typedef struct s_sphere		t_sphere;
 typedef struct s_camera		t_camera;
 // typedef struct s_scene		t_scene;
+
+//	Plane Sphere Cylinder
+#define NUM_OBJ_TYPES 3
 
 enum e_obj_types
 {
@@ -93,7 +97,7 @@ struct	s_objs
 	};
 	t_vec3			coords;
 	t_vec3			color;
-	double			hit;
+	float			hit;
 };
 
 
@@ -115,7 +119,7 @@ typedef struct	s_scene {
 	// float		scale;
 }	t_scene;
 
-void	object_array(t_rt *rt);
+bool	scene_creation(t_rt *rt);
 
 
 // t_plane	plane(t_rt *rt);

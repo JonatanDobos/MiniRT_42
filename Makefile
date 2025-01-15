@@ -1,23 +1,54 @@
 NAME			:=	miniRT
 
-COMPILER		:=   cc
+# COMPILER		:=   cc
+COMPILER		:=   gcc
 RM				:=	rm -rf
 PRINT_NO_DIR	:=	--no-print-directory
 
-CFLAGS			 =	-flto -Ofast
-
 #		CFLAGS for testing
-CFLAGS			+=	-MMD -MP
+CFLAGS			 =	-MMD -MP
 # CFLAGS			+=	-Wall -Wextra
 # # Werror cannot go together with fsanitize, because fsanitize won't work correctly.
 # CFLAGS			+=	-Werror
 # CFLAGS			+=	-fsanitize=address
 # CFLAGS			+=	-Wunused -Wuninitialized -Wunreachable-code
-CFLAGS			+=	-g3
 
-SCREEN_RES := $(shell xrandr | grep '*' | uniq | awk '{print $$1}')
-SCREEN_WIDTH := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
-SCREEN_HEIGHT := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
+#		Optimization flags
+# Generate code optimized for the host machine's CPU
+OFLAGS			 =	-march=native
+# Disable setting errno after math functions for better performance
+OFLAGS			+=	-fno-math-errno
+# This flag allows the compiler to use reciprocal approximations for division operations, which can improve performance but may reduce precision.
+OFLAGS			+=	-freciprocal-math
+# This flag allows the compiler to ignore the distinction between positive and negative zero, which can enable more aggressive optimizations.
+OFLAGS			+=	-fno-signed-zeros
+# This flag tells the compiler that floating-point operations cannot generate traps (such as overflow or division by zero), allowing for more aggressive optimizations.
+OFLAGS			+=	-fno-trapping-math
+
+ifdef DEBUG
+	CFLAGS += -g
+	OFLAGS += -Og
+else
+	OFLAGS += -Ofast
+# OFLAGS += -O3
+endif
+
+#	macOS = Darwin
+ifeq ($(shell uname -s), Darwin)
+# GLFW := $(shell brew --prefix glfw)/lib
+# LINKER_FLAGS += -L $(GLFW)
+# CORE_COUNT = $(shell sysctl -n hw.ncpu)
+	OFLAGS += -flto
+else
+# LINKER_FLAGS += -ldl
+# CORE_COUNT = $(shell grep '^processor' /proc/cpuinfo | wc -l)
+	OFLAGS += -fsingle-precision-constant -flto=auto -fuse-linker-plugin
+endif
+CFLAGS += $(OFLAGS)
+
+SCREEN_RES		:=	$(shell xrandr | grep '*' | uniq | awk '{print $$1}')
+SCREEN_WIDTH	:=	$(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
+SCREEN_HEIGHT	:=	$(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
 
 # Pass screen resolution as defines to the compiler
 CFLAGS += -D SCREEN_WIDTH=$(SCREEN_WIDTH) -D SCREEN_HEIGHT=$(SCREEN_HEIGHT)
@@ -101,7 +132,7 @@ $(BUILD_DIR)%.o: %.c $(HEADERS)
 	$(BUILD) $(INCLUDE_RT) -c $< -o $@
 
 $(LIBFT_L):
-	@$(MAKE) $(PRINT_NO_DIR) -C $(LIBFT_D)
+	@$(MAKE) $(PRINT_NO_DIR) -C $(LIBFT_D) OFLAGS="$(OFLAGS)"
 
 $(MLX42_L):
 	# @cmake $(MLX42_D) -B $(MLX42_D)/build && cmake --build $(MLX42_D)/build --parallel
@@ -131,7 +162,7 @@ fcln:	cln
 re:		fclean all
 
 valgrind: all
-	./$(NAME)
+	valgrind --leak-check=full -s ./$(NAME)
 
 print-%:
 	$(info $($*))

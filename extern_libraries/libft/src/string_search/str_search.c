@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   str_search.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: saleunin <saleunin@student.42.fr>            +#+                     */
+/*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/09/11 20:29:31 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/08 17:44:16 by rde-brui      ########   odam.nl         */
+/*   Created: 2025/01/15 16:27:10 by rde-brui      #+#    #+#                 */
+/*   Updated: 2025/01/15 16:27:12 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

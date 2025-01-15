@@ -125,7 +125,7 @@ bool	alloc_scene_struct(t_scene **scn)
     return (EXIT_SUCCESS);
 }
 
-void	object_array(t_rt *rt)
+bool	scene_creation(t_rt *rt)
 {
 	t_dynarr arr;
 	int initialSize = 5;
@@ -133,13 +133,14 @@ void	object_array(t_rt *rt)
 
 	if (!dynarr_create(&arr, initialSize, dataSize))
 	{
-		// return 1;
+		return (EXIT_FAILURE);
 	}
 	if (alloc_scene_struct(&rt->scene) == EXIT_FAILURE)
 	{
-		// return
+		return (EXIT_FAILURE);
 	}
 	
 	camera_setup(rt, &rt->scene->camera);
 	create_each_obj(&arr, rt, rt->scene);
+	return (EXIT_SUCCESS);
 }

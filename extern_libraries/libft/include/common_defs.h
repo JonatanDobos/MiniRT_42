@@ -6,7 +6,7 @@
 /*   By: rjw <rjw@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/11 17:31:48 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/11 22:17:30 by rjw           ########   odam.nl         */
+/*   Updated: 2025/01/15 16:48:28 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,6 @@ typedef const uint32_t	t_cuint32;
 typedef const uint64_t	t_cuint64;
 typedef const size_t	t_csize_t;
 typedef const ssize_t	t_cssize_t;
+typedef const float		t_cfloat;
+typedef const double	t_cdouble;
 #endif

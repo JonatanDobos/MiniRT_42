@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   libft.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: saleunin <saleunin@student.42.fr>            +#+                     */
+/*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/09/11 20:51:32 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/12 01:55:53 by rjw           ########   odam.nl         */
+/*   Created: 2025/01/15 16:27:18 by rde-brui      #+#    #+#                 */
+/*   Updated: 2025/01/15 16:27:20 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -1,3 +1,4 @@
+#include <MLX42/MLX42.h>
 #include <scene.h>
 #include <utils.h>
 
