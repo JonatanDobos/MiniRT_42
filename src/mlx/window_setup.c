@@ -24,7 +24,7 @@ bool	windows_setup_mlx(t_rt *rt)
 
 static bool	init_mlx(t_rt *rt)
 {
-	rt->mlx = mlx_init(WIDTH, HEIGHT, "miniRT is setting up MLX", true);
+	rt->mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT is setting up MLX", true);
 	if (rt->mlx == NULL)
 		return (false);
 	return (true);
@@ -32,7 +32,7 @@ static bool	init_mlx(t_rt *rt)
 
 static bool	img_to_window(t_rt *rt)
 {
-	rt->img = mlx_new_image(rt->mlx, WIDTH, HEIGHT);
+	rt->img = mlx_new_image(rt->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	if (rt->img == NULL)
 		return (false);
 	if (mlx_image_to_window(rt->mlx, rt->img, 0, 0) == -1)
@@ -57,10 +57,10 @@ static void	center_window(t_rt *rt)
 	int32_t	window_x;
 	int32_t	window_y;
 
-	// window_x = (SCREEN_WIDTH - WIDTH) / 2;
-	// window_y = (SCREEN_HEIGHT - HEIGHT) / 2;
+	// window_x = (SCREEN_WINDOW_WIDTH - WINDOW_WIDTH) / 2;
+	// window_y = (SCREEN_WINDOW_HEIGHT - WINDOW_HEIGHT) / 2;
 	mlx_get_monitor_size(0, &window_x, &window_y);
-	window_x = (window_x - WIDTH) / 2;
-	window_y = (window_y - HEIGHT) / 2;
+	window_x = (window_x - WINDOW_WIDTH) / 2;
+	window_y = (window_y - WINDOW_HEIGHT) / 2;
 	mlx_set_window_pos(rt->mlx, window_x, window_y);
 }

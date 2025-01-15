@@ -9,17 +9,17 @@
 #include <stdio.h>
 
 #ifndef SCREEN_WIDTH
-# define SCREEN_WIDTH 800
+# define SCREEN_WIDTH 2000
 #endif
 
 #ifndef SCREEN_HEIGHT
-# define SCREEN_HEIGHT ((int)(WIDTH / ASPECT_RATIO))
+# define SCREEN_HEIGHT ((int)(SCREEN_WIDTH / ASPECT_RATIO))
 #endif
 
 //	Norminette doesn't allow our macros
-#define WIDTH 800
+#define WINDOW_WIDTH 1600
 #define ASPECT_RATIO (16.0 / 9.0)
-#define HEIGHT ((int)(WIDTH / ASPECT_RATIO))
+#define WINDOW_HEIGHT ((int)(WINDOW_WIDTH / ASPECT_RATIO))
 
 typedef float				t_vec3 __attribute__ ((vector_size(16)));
 //	Forward declaration of structs;

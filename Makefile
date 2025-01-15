@@ -76,10 +76,10 @@ UTILS			:=	utils.c					math.c
 # sphere.c										
 
 #		Find all .c files in the specified directories
-SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))				\
-					$(addprefix $(SRC_DIR)/mlx/, $(MLX))			\
-					$(addprefix $(SRC_DIR)/scene/, $(SCENE))		\
-					$(addprefix $(SRC_DIR)/utils/, $(UTILS))
+SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))			\
+					$(addprefix $(SRC_DIR)mlx/, $(MLX))			\
+					$(addprefix $(SRC_DIR)scene/, $(SCENE))		\
+					$(addprefix $(SRC_DIR)utils/, $(UTILS))
 
 #		Generate object file names
 OBJS 			:=	$(SRCP:%.c=$(BUILD_DIR)%.o)

@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/09 20:31:53 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/01/11 03:12:03 by rjw           ########   odam.nl         */
+/*   Updated: 2025/01/15 17:00:38 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ bool	dynarr_create(t_dynarr *ptr, size_t init_size, const size_t data_size)
 	ptr->capacity = init_size;
 	ptr->length = 0;
 	ptr->arr = ft_calloc(init_size, data_size);
-	return (ptr->arr != NULL);
+	if (ptr->arr == NULL)
+		return (false);
+	return (true);
 }
 
 bool	dynarr_shrink_to_fit(t_dynarr *a)

@@ -5,20 +5,20 @@
 // #include <mlx.h>
 #include <stdlib.h>
 
-#define WIDTH 400
+#define WINDOW_WIDTH 400
 #define ASPECT_RATIO (16.0 / 9.0)
-#define HEIGHT ((int)(WIDTH / ASPECT_RATIO))
+#define WINDOW_HEIGHT ((int)(WINDOW_WIDTH / ASPECT_RATIO))
 
 void render_image(mlx_image_t* img) {
 	// Image
-	int image_width = WIDTH;
-	int image_height = HEIGHT;
+	int image_WINDOW_WIDTH = WINDOW_WIDTH;
+	int image_WINDOW_HEIGHT = WINDOW_HEIGHT;
 
 	// Render
-	for (int j = 0; j < image_height; j++) {
-		for (int i = 0; i < image_width; i++) {
-			double r = (double)i / (image_width - 1);
-			double g = (double)j / (image_height - 1);
+	for (int j = 0; j < image_WINDOW_HEIGHT; j++) {
+		for (int i = 0; i < image_WINDOW_WIDTH; i++) {
+			double r = (double)i / (image_WINDOW_WIDTH - 1);
+			double g = (double)j / (image_WINDOW_HEIGHT - 1);
 			double b = 0.0;
 
 			int ir = (int)(255.999 * r);
@@ -32,12 +32,12 @@ void render_image(mlx_image_t* img) {
 }
 
 int main(void) {
-	mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "MLX42 Window", true);
+	mlx_t* mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "MLX42 Window", true);
 	if (!mlx) {
 		return EXIT_FAILURE;
 	}
 
-	mlx_image_t* img = mlx_new_image(mlx, WIDTH, HEIGHT);
+	mlx_image_t* img = mlx_new_image(mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	if (!img) {
 		mlx_terminate(mlx);
 		return EXIT_FAILURE;

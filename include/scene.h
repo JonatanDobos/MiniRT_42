@@ -1,30 +1,20 @@
 #ifndef SCENE_H
 # define SCENE_H
 
-#include <stdlib.h>
+# include <stdlib.h>
 # include <miniRT.h>
 # include <dynarr.h>
-// # include <libft.h>
 
-typedef enum e_obj_types	t_obj_type;
-typedef struct s_objs		t_objs;
 // typedef union u_vec			t_vec;
-typedef struct s_viewpoint	t_vp;
-// typedef union u_rgb		t_rgb;
-// typedef struct s_vec	t_vec3;
-typedef struct s_plane		t_plane;
-typedef struct s_sphere		t_sphere;
-typedef struct s_camera		t_camera;
-// typedef struct s_scene		t_scene;
 
-//	Plane Sphere Cylinder
-#define NUM_OBJ_TYPES 3
+//	3 objects, Plane Sphere Cylinder
+# define NUM_OBJ_TYPES 3
 
-enum e_obj_types
+typedef enum e_obj_types
 {
 	PLANE,
 	SPHERE
-};
+}	t_obj_type;
 
 // union u_vec
 // {
@@ -52,28 +42,28 @@ enum e_obj_types
 // 	// };
 // };
 
-struct	s_viewpoint
+typedef struct	s_viewpoint
 {
-	t_vec3	ray_position;
-	t_vec3	ray_direction;
-};
+	// t_vec3	ray_position;
+	t_vec3	coords;
+}	t_vp;
 
-struct	s_plane
+typedef struct	s_plane
 {
 	// t_vec3	point;
 	t_vec3	direction;
 	// t_vec3	color;
-};
+}	t_plane;
 
-struct	s_sphere
+typedef struct	s_sphere
 {
 	// t_vec3 center;
 	float radius;
 	// t_vec3 color;
-};
+}	t_sphere;
 
-struct	s_camera {
-	t_vec3	ray_direction;
+typedef struct	s_camera {
+	t_vec3	coords;
 	float	fov;
 	// t_fvec	orientation;
 	// t_fvec	rotated;
@@ -82,9 +72,9 @@ struct	s_camera {
 	// t_fvec	v;
 	// t_fvec	proj_vec;
 	// float	exposure;
-};
+}	t_camera;
 
-struct	s_objs
+typedef struct	s_objs
 {
 	t_obj_type		type;
 	union 
@@ -95,10 +85,10 @@ struct	s_objs
 		t_plane		plane;
 		t_sphere	sphere;
 	};
-	t_vec3			coords;
+	t_vec3			ray_direction;
 	t_vec3			color;
 	float			hit;
-};
+}	t_objs;
 
 
 typedef struct	s_scene {
