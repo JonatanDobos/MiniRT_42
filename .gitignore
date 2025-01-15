@@ -1,7 +1,6 @@
-*.o
 miniRT
-libft.a
-obj
-build
-.DS_Store
 .vscode
+.build
+extern_libraries/libft/libft.a
+extern_libraries/libft/.objects
+extern_libraries/MLX42/build
