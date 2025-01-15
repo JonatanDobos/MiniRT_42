@@ -3,13 +3,13 @@
 #include <MLX42/MLX42.h>
 #include <scene.h>
 
-float	intersect_plane(t_objs *obj, const t_vec3 coords, const t_vec3 ray_direction)
+float	intersect_plane(t_objs *obj, const t_vec3 ray_position, const t_vec3 ray_direction)
 {
 	t_plane *plane = &obj->plane;
 	float intersection_distance;
-	float denom = dot_product(plane->direction, coords);
+	float denom = dot_product(plane->direction, ray_direction);
 	if (fabs(denom) > 1e-6) {
-		t_vec3 p0l0 = obj->ray_direction - ray_direction;
+		t_vec3 p0l0 = obj->coords - ray_position;
 		intersection_distance = dot_product(p0l0, plane->direction) / denom;
 		if (intersection_distance >= 0) {
 			return (intersection_distance);
@@ -18,13 +18,13 @@ float	intersect_plane(t_objs *obj, const t_vec3 coords, const t_vec3 ray_directi
 	return (-1);
 }
 
-float	intersect_sphere(t_objs *obj, const t_vec3 coords, const t_vec3 ray_direction)
+float	intersect_sphere(t_objs *obj, const t_vec3 ray_position, const t_vec3 ray_direction)
 {
 	float radius = obj->sphere.radius;
-	t_vec3 oc = ray_direction - obj->ray_direction;
+	t_vec3 oc = ray_position - obj->coords;
 
-	float a = dot_product(coords, coords);
-	float b = 2.0 * dot_product(oc, coords);
+	float a = dot_product(ray_direction, ray_direction);
+	float b = 2.0 * dot_product(oc, ray_direction);
 	float c = dot_product(oc, oc) - radius * radius;
 	float discriminant = b * b - 4 * a * c;
 
@@ -35,10 +35,6 @@ float	intersect_sphere(t_objs *obj, const t_vec3 coords, const t_vec3 ray_direct
 		if (t0 > 0 && t1 > 0)
 		{
 			return ((t0 < t1) ? t0 : t1); // Choose the closest positive t value
-		}
-		else
-		{
-			return ((t0 > 0) ? t0 : t1); // Choose the positive t value if only one is positive
 		}
 	}
 	return (-1);
@@ -62,14 +58,14 @@ uint32_t	vec_to_uint32(t_vec3 color)
 			((uint32_t)(color[3] * 255) & 0xFF);
 }
 
-uint32_t	obj_nearest_vp(t_rt *rt, t_objs *objarr, const t_vec3 coords, const t_vec3 ray_direction)
+uint32_t	obj_nearest_vp(t_rt *rt, t_objs *objarr, const t_vec3 ray_position, const t_vec3 ray_direction)
 {
 	size_t	i;
 	t_objs	*obj_closest_vp = NULL;
 	t_vec3	color;
 	for (i = 0; i < rt->scene->arr_size; ++i)
 	{
-		intersect_table(&objarr[i], coords, ray_direction);
+		intersect_table(&objarr[i], ray_position, ray_direction);
 		if (objarr[i].hit > 0 && (obj_closest_vp == NULL || objarr[i].hit < obj_closest_vp->hit))
 		{
 			obj_closest_vp = &objarr[i];
@@ -85,7 +81,7 @@ uint32_t	obj_nearest_vp(t_rt *rt, t_objs *objarr, const t_vec3 coords, const t_v
 
 void render_scene(t_rt *rt, t_scene *scn)
 {
-	const t_vec3 base_ray_dir = scn->camera.camera.coords;
+	const t_vec3 ray_position = scn->camera.coords;
 	uint32_t bg_color = 0xFF0000;
 
 	float aspect_ratio = (float)WINDOW_WIDTH / WINDOW_HEIGHT;
@@ -99,11 +95,15 @@ void render_scene(t_rt *rt, t_scene *scn)
 				(1.0 - 2.0 * ((j + 0.5) / WINDOW_HEIGHT)),
 				0.0
 			};
-			t_vec3 coords = normalize(base_ray_dir + offset);
-			uint32_t color = obj_nearest_vp(rt, scn->objarr, coords, scn->camera.ray_direction);
+			t_vec3 ray_direction = normalize(scn->camera.camera.ray_direction + offset);
+			uint32_t color = obj_nearest_vp(rt, scn->objarr, ray_position, ray_direction);
 			if (color != 0)
 			{
 				mlx_put_pixel(rt->img, i, j, color);
+			}
+			else
+			{
+				mlx_put_pixel(rt->img, i, j, bg_color);
 			}
 		}
 	}

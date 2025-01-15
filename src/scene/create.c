@@ -25,7 +25,7 @@ void	plane_sphere(t_dynarr *arr, t_scene *scn)
 {
 	t_objs plane1;
 	plane1.type = PLANE;
-	plane1.ray_direction = (t_vec3) {0.0, 0.0, -1.0};
+	plane1.coords = (t_vec3) {0.0, 0.0, -1.0};
 	plane1.color = (t_vec3) {0.0, 0.5, 0.5, 1};
 
 	t_vec3 direction = {0.0, 1.0, 0.7};
@@ -34,7 +34,7 @@ void	plane_sphere(t_dynarr *arr, t_scene *scn)
 
 	t_objs sphere1;
 	sphere1.type = SPHERE;
-	sphere1.ray_direction = (t_vec3) {-1.0, 0.0, -1.0};
+	sphere1.coords = (t_vec3) {-1.0, 0.0, -1.0};
 	sphere1.color = (t_vec3) {0.5, 0.0, 0.5, 1.0};
 
 	t_vec3 radius = {10};
@@ -46,14 +46,14 @@ void	sphere_behind_another_sphere(t_dynarr *arr, t_scene *scn)
 {
 	t_objs sphere1;
 	sphere1.type = SPHERE;
-	sphere1.ray_direction = (t_vec3) {0.0, 0.0, -5.0};
+	sphere1.coords = (t_vec3) {0.0, 0.0, -5.0};
 	sphere1.color = (t_vec3) {1.0, 0.0, 0.0, 1};
 
 	t_vec3 radius = {10};
 	obj_assign_table(&sphere1, sphere1.type, radius);
 	dynarr_insert(arr, &sphere1);
 
-	sphere1.ray_direction = (t_vec3) {0.0, 0.0, 5.0};
+	sphere1.coords = (t_vec3) {0.0, 0.0, 5.0};
 	sphere1.color = (t_vec3) {1.0, 1.0, 1.0, 1};
 
 	t_vec3 radius2 = {10};
@@ -66,14 +66,14 @@ void	spheres_next_to_eachother(t_dynarr *arr, t_scene *scn)
 {
 	t_objs sphere1;
 	sphere1.type = SPHERE;
-	sphere1.ray_direction = (t_vec3) {-5.0, 0.0, -1.0};
+	sphere1.coords = (t_vec3) {-5.0, 0.0, -1.0};
 	sphere1.color = (t_vec3) {1.0, 0.0, 0.0, 1};
 
 	t_vec3 radius = {10};
 	obj_assign_table(&sphere1, sphere1.type, radius);
 	dynarr_insert(arr, &sphere1);
 
-	sphere1.ray_direction = (t_vec3) {5.0, 0.0, -1.0};
+	sphere1.coords = (t_vec3) {5.0, 0.0, -1.0};
 	sphere1.color = (t_vec3) {1.0, 1.0, 1.0, 1};
 
 	t_vec3 radius2 = {10};
@@ -84,7 +84,7 @@ void	spheres_next_to_eachother(t_dynarr *arr, t_scene *scn)
 void	create_each_obj(t_dynarr *arr, t_rt *rt, t_scene *scn)
 {
 	// plane_sphere(arr, scn);
-	sphere_behind_another_sphere(arr,scn);
+	sphere_behind_another_sphere(arr, scn);
 	// spheres_next_to_eachother(arr, scn);
 
 	scn->objarr = arr->arr;
@@ -93,10 +93,10 @@ void	create_each_obj(t_dynarr *arr, t_rt *rt, t_scene *scn)
 
 void	camera_setup(t_rt *rt, t_objs *obj)
 {
-	// obj->camera.coords = (t_vec3){0.0, 0.0, -1.0};
-	// obj->ray_direction = (t_vec3){0.0, 0.0, 55.0};
-	obj->camera.coords = (t_vec3){-0.3, 0.0, -1.0};
-	obj->ray_direction = (t_vec3){-55.0, 0.0, 55.0};
+	// obj->coords = (t_vec3){0.0, 0.0, 55.0};
+	// obj->camera.ray_direction = (t_vec3){0.0, 0.0, -1.0};
+	obj->coords = (t_vec3){-55.0, 0.0, 55.0};
+	obj->camera.ray_direction = (t_vec3){0.7, 0.0, -1.0};
 	obj->camera.fov = 60;
 }
 

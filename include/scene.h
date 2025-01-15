@@ -63,7 +63,7 @@ typedef struct	s_sphere
 }	t_sphere;
 
 typedef struct	s_camera {
-	t_vec3	coords;
+	t_vec3	ray_direction;
 	float	fov;
 	// t_fvec	orientation;
 	// t_fvec	rotated;
@@ -85,7 +85,7 @@ typedef struct	s_objs
 		t_plane		plane;
 		t_sphere	sphere;
 	};
-	t_vec3			ray_direction;
+	t_vec3			coords;
 	t_vec3			color;
 	float			hit;
 }	t_objs;
