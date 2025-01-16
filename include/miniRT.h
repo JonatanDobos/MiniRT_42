@@ -22,6 +22,7 @@
 #define WINDOW_HEIGHT ((int)(WINDOW_WIDTH / ASPECT_RATIO))
 
 typedef float				t_vec3 __attribute__ ((vector_size(16)));
+typedef const t_vec3		t_cvec3;
 //	Forward declaration of structs;
 typedef struct s_scene		t_scene;
 typedef struct mlx			mlx_t;

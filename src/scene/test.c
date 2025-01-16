@@ -3,48 +3,98 @@
 #include <MLX42/MLX42.h>
 #include <scene.h>
 
-float	intersect_plane(t_objs *obj, const t_vec3 ray_position, const t_vec3 ray_direction)
+float	intersect_plane(t_objs *obj, t_cvec3 ray_position, t_cvec3 ray_direction)
 {
-	t_plane *plane = &obj->plane;
-	float intersection_distance;
-	float denom = dot_product(plane->direction, ray_direction);
-	if (fabs(denom) > 1e-6) {
-		t_vec3 p0l0 = obj->coords - ray_position;
-		intersection_distance = dot_product(p0l0, plane->direction) / denom;
-		if (intersection_distance >= 0) {
+	t_cfloat	denom = dot_product(obj->plane.direction, ray_direction);
+	t_cvec3		ray_to_plane_vector = obj->coords - ray_position;
+	float		intersection_distance;
+
+	if (fabsf(denom) > 1e-6F) {
+		intersection_distance = dot_product(ray_to_plane_vector, obj->plane.direction) / denom;
+		if (intersection_distance >= 0.0F) {
 			return (intersection_distance);
 		}
 	}
-	return (-1);
+	return (-1.0F);
 }
 
-float	intersect_sphere(t_objs *obj, const t_vec3 ray_position, const t_vec3 ray_direction)
+float	intersect_sphere(t_objs *obj, t_cvec3 ray_position, t_cvec3 ray_direction)
 {
-	float radius = obj->sphere.radius;
-	t_vec3 oc = ray_position - obj->coords;
+	t_cvec3		oc = ray_position - obj->coords;
+	t_cfloat	a = dot_product(ray_direction, ray_direction);
+	t_cfloat	b = 2.0F * dot_product(oc, ray_direction);
+	t_cfloat	c = dot_product(oc, oc) - obj->sphere.radius * obj->sphere.radius;
+	t_cfloat	discriminant = b * b - 4.0F * a * c;
 
-	float a = dot_product(ray_direction, ray_direction);
-	float b = 2.0 * dot_product(oc, ray_direction);
-	float c = dot_product(oc, oc) - radius * radius;
-	float discriminant = b * b - 4 * a * c;
-
-	if (discriminant > 0)
+	if (discriminant > 0.0F)
 	{
-		float t0 = (-b - sqrt(discriminant)) / (2.0 * a);
-		float t1 = (-b + sqrt(discriminant)) / (2.0 * a);
-		if (t0 > 0 && t1 > 0)
+		float t0 = (-b - fast_sqrt(discriminant)) / (2.0F * a);
+		float t1 = (-b + fast_sqrt(discriminant)) / (2.0F * a);
+		if (t0 > 0.0F && t1 > 0.0F)
 		{
 			return ((t0 < t1) ? t0 : t1); // Choose the closest positive t value
 		}
 	}
-	return (-1);
+	return (-1.0F);
 }
 
-void intersect_table(t_objs *obj, const t_vec3 coords, const t_vec3 ray_direction)
+// Function to check if the intersection point is within the height of the cylinder
+bool	check_height(const t_objs *obj, const t_cylinder *cyl, t_cvec3 ray_position, t_cvec3 ray_direction, float t)
 {
-	static float (*intersect_obj[NUM_OBJ_TYPES])(t_objs *, const t_vec3, const t_vec3) = {
+	t_cvec3		intersection_point = ray_position + ray_direction * t;
+	t_cvec3		base_to_intersection = intersection_point - obj->coords;
+	t_cfloat	height = dot_product(base_to_intersection, normalize(cyl->direction));
+
+	return (height >= 0.0F && height <= cyl->height);
+}
+
+float	intersect_cylinder(t_objs *obj, t_cvec3 ray_position, t_cvec3 ray_direction)
+{
+	t_cylinder	*cylinder = &obj->cylinder;
+	t_cvec3		oc = ray_position - obj->coords; // Use obj->coords as the base center
+	t_cvec3		d = normalize(cylinder->direction); // Ensure the direction is normalized
+	t_cvec3		rd = ray_direction - d * dot_product(ray_direction, d);
+	t_cvec3		oc_d = oc - d * dot_product(oc, d);
+
+	t_cfloat	a = dot_product(rd, rd);
+	t_cfloat	b = 2.0F * dot_product(rd, oc_d);
+	t_cfloat	c = dot_product(oc_d, oc_d) - cylinder->radius * cylinder->radius;
+
+	t_cfloat	discriminant = b * b - 4.0F * a * c;
+
+	// Debugging information
+	// printf("oc: (%f, %f, %f)\n", oc[0], oc[1], oc[2]);
+	// printf("d: (%f, %f, %f)\n", d[0], d[1], d[2]);
+	// printf("rd: (%f, %f, %f)\n", rd[0], rd[1], rd[2]);
+	// printf("oc_d: (%f, %f, %f)\n", oc_d[0], oc_d[1], oc_d[2]);
+	// printf("a: %f, b: %f, c: %f\n", a, b, c);
+	// printf("discriminant: %f\n", discriminant);
+
+	if (discriminant < 0) {
+		return (-1.0F);
+	}
+
+	t_cfloat	fast_sqrt_discriminant = fast_sqrt(discriminant);
+	t_cfloat	t1 = (-b - fast_sqrt_discriminant) / (2.0F * a);
+	t_cfloat	t2 = (-b + fast_sqrt_discriminant) / (2.0F * a);
+
+	// More debugging information
+	// printf("t1: %f, t2: %f\n", t1, t2);
+
+	if (t1 >= 0.0F && check_height(obj, cylinder, ray_position, ray_direction, t1)) {
+		return (t1);
+	} else if (t2 >= 0.0F && check_height(obj, cylinder, ray_position, ray_direction, t2)) {
+		return (t2);
+	}
+	return (-1.0F);
+}
+
+void intersect_table(t_objs *obj, t_cvec3 coords, t_cvec3 ray_direction)
+{
+	static float	(*intersect_obj[NUM_OBJ_TYPES])(t_objs *, t_cvec3, t_cvec3) = {
 		intersect_plane,
-		intersect_sphere
+		intersect_sphere,
+		intersect_cylinder
 	};
 
 	obj->hit = intersect_obj[obj->type](obj, coords, ray_direction);
@@ -58,11 +108,13 @@ uint32_t	vec_to_uint32(t_vec3 color)
 			((uint32_t)(color[3] * 255) & 0xFF);
 }
 
-uint32_t	obj_nearest_vp(t_rt *rt, t_objs *objarr, const t_vec3 ray_position, const t_vec3 ray_direction)
+uint32_t	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec3 ray_position, t_cvec3 ray_direction)
 {
-	size_t	i;
-	t_objs	*obj_closest_vp = NULL;
-	t_vec3	color;
+	uint32_t	i;
+	t_objs		*obj_closest_vp;
+	t_vec3		color;
+
+	obj_closest_vp = NULL;
 	for (i = 0; i < rt->scene->arr_size; ++i)
 	{
 		intersect_table(&objarr[i], ray_position, ray_direction);
@@ -81,89 +133,30 @@ uint32_t	obj_nearest_vp(t_rt *rt, t_objs *objarr, const t_vec3 ray_position, con
 
 void render_scene(t_rt *rt, t_scene *scn)
 {
-	const t_vec3 ray_position = scn->camera.coords;
-	uint32_t bg_color = 0xFF0000;
-
-	float aspect_ratio = (float)WINDOW_WIDTH / WINDOW_HEIGHT;
-
-	for (int j = 0; j < WINDOW_HEIGHT; j++)
+	t_cvec3		ray_position = scn->camera.coords;
+	t_cuint32	bg_color = 0xFF0000;
+	t_cfloat	scale = tan(scn->camera.camera.fov * 0.5F * (M_PI / 180.0F));
+	t_cfloat	aspect_ratio_scale = ASPECT_RATIO * scale;
+	float		x;
+	float		y;
+	
+	for (uint32_t j = 0; j < WINDOW_HEIGHT; j++)
 	{
-		for (int i = 0; i < WINDOW_WIDTH; i++)
+		for (uint32_t i = 0; i < WINDOW_WIDTH; i++)
 		{
-			t_vec3 offset = {
-				(2.0 * ((i + 0.5) / WINDOW_WIDTH) - 1.0) * aspect_ratio,
-				(1.0 - 2.0 * ((j + 0.5) / WINDOW_HEIGHT)),
-				0.0
-			};
-			t_vec3 ray_direction = normalize(scn->camera.camera.ray_direction + offset);
+			x = (2.0F * (i + 0.5F) / (float)WINDOW_WIDTH - 1) * aspect_ratio_scale;
+			y = (1.0F - 2.0F * (j + 0.5F) / (float)WINDOW_HEIGHT) * scale;
+			t_vec3 ray_direction = normalize((t_vec3){x, y, -1.0F} + scn->camera.camera.ray_direction);
 			uint32_t color = obj_nearest_vp(rt, scn->objarr, ray_position, ray_direction);
+
 			if (color != 0)
 			{
+				// puts("if");
 				mlx_put_pixel(rt->img, i, j, color);
 			}
-			else
-			{
-				mlx_put_pixel(rt->img, i, j, bg_color);
-			}
+			// else {
+			// 	// puts("else");
+			// }
 		}
 	}
 }
-
-
-// void generate_rays(t_camera *camera, int image_WINDOW_WIDTH, int image_WINDOW_HEIGHT, t_vec3 *rays)
-// {
-// 	float aspect_ratio = (float)image_WINDOW_WIDTH / (float)image_WINDOW_HEIGHT;
-// 	float fov_radians = camera->fov * (M_PI / 180.0); // Convert FOV to radians
-// 	float half_WINDOW_HEIGHT = tan(fov_radians / 2);
-// 	float half_WINDOW_WIDTH = aspect_ratio * half_WINDOW_HEIGHT;
-
-// 	t_vec3 forward = normalize(camera->coords);
-// 	t_vec3 right = normalize(cross_product((t_vec3){0, 1, 0}, forward)); // Assuming up vector is (0, 1, 0)
-// 	t_vec3 up = cross_product(forward, right);
-
-// 	for (int y = 0; y < image_WINDOW_HEIGHT; ++y) {
-// 		for (int x = 0; x < image_WINDOW_WIDTH; ++x) {
-// 			float u = (2.0 * ((x + 0.5) / image_WINDOW_WIDTH) - 1.0) * half_WINDOW_WIDTH;
-// 			float v = (1.0 - 2.0 * ((y + 0.5) / image_WINDOW_HEIGHT)) * half_WINDOW_HEIGHT;
-
-// 			t_vec3 coords = normalize((t_vec3){
-// 				u * right[0] + v * up[0] - forward[0],
-// 				u * right[1] + v * up[1] - forward[1],
-// 				u * right[2] + v * up[2] - forward[2]
-// 			});
-
-// 			rays[y * image_WINDOW_WIDTH + x] = coords;
-// 		}
-// 	}
-// }
-
-// void render_scene(t_rt *rt, t_scene *scn)
-// {
-// 	t_vec3 *rays = malloc(SCREEN_WINDOW_WIDTH * SCREEN_WINDOW_HEIGHT * sizeof(t_vec3));
-// 	generate_rays(&scn->camera.camera, SCREEN_WINDOW_WIDTH, SCREEN_WINDOW_HEIGHT, rays);
-
-// 	uint32_t bg_color = 0xFF0000;
-
-// 	for (int j = 0; j < SCREEN_WINDOW_HEIGHT; j++)
-// 	{
-// 		for (int i = 0; i < SCREEN_WINDOW_WIDTH; i++)
-// 		{
-// 			t_vec3 coords = rays[j * SCREEN_WINDOW_WIDTH + i];
-// 			t_vec3 ray_pos = scn->camera.ray_direction;
-// 			uint32_t color = obj_nearest_vp(rt, scn->objarr, coords, ray_pos); // return obj or NULL if nothing hits.
-// 			if (color != 0)
-// 			{
-// 				// puts("OKE");
-// 				// sleep(3);
-// 				mlx_put_pixel(rt->img, i, j, color);
-// 			}
-// 			else
-// 			{
-// 				// puts("or here?");
-// 				mlx_put_pixel(rt->img, i, j, bg_color);
-// 			}
-// 		}
-// 	}
-
-// 	free(rays);
-// }

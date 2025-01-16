@@ -13,7 +13,8 @@
 typedef enum e_obj_types
 {
 	PLANE,
-	SPHERE
+	SPHERE,
+	CYLINDER
 }	t_obj_type;
 
 // union u_vec
@@ -62,10 +63,17 @@ typedef struct	s_sphere
 	// t_vec3 color;
 }	t_sphere;
 
+typedef struct	s_cylinder
+{
+	t_vec3	direction;
+	float	radius;
+	float	height;
+}	t_cylinder;
+
 typedef struct	s_camera {
 	t_vec3	ray_direction;
 	float	fov;
-	// t_fvec	orientation;
+	t_vec3	orientation;
 	// t_fvec	rotated;
 	// float	rotation[2];
 	// t_fvec	u;
@@ -84,6 +92,7 @@ typedef struct	s_objs
 
 		t_plane		plane;
 		t_sphere	sphere;
+		t_cylinder	cylinder;
 	};
 	t_vec3			coords;
 	t_vec3			color;
