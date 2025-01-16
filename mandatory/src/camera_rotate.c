@@ -42,7 +42,7 @@ void	cam_rotate_down(t_scene *scene)
 void	cam_rotate_left(t_scene *scene)
 {
 	printf("KEY: LEFT\n");
-	scene->cam.orient = vec_normalize(rotate_vector(scene->cam.orient, (t_eucl){0, 1, 0}, CAM_ROTATION_SPEED));
+	scene->cam.orient = vec_normalize(rotate_vector(scene->cam.orient, (t_eucl){0, 1, 0}, -CAM_ROTATION_SPEED));
 	scene->render = true;
 }
 
@@ -50,6 +50,6 @@ void	cam_rotate_left(t_scene *scene)
 void	cam_rotate_right(t_scene *scene)
 {
 	printf("KEY: RIGHT\n");
-	scene->cam.orient = vec_normalize(rotate_vector(scene->cam.orient, (t_eucl){0, 1, 0}, -CAM_ROTATION_SPEED));
+	scene->cam.orient = vec_normalize(rotate_vector(scene->cam.orient, (t_eucl){0, 1, 0}, CAM_ROTATION_SPEED));
 	scene->render = true;
 }
