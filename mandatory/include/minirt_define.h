@@ -6,9 +6,15 @@
 # define WIN_HEIGHT 900
 # define WIN_WIDTH 1600
 
+# define EPSILON 1e-6f
+
+# define FOV_MAX 100.0
+
 // Custom in-program rendering resolution
 
 # define RNDR_RES 360
+
+# define CAM_ROTATION_SPEED 0.1f
 
 // Custom error messages
 

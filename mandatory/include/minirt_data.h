@@ -101,6 +101,9 @@ typedef struct s_scene
 	t_uin16			sphere_count;
 	t_cylinder		*cylinder;
 	t_uin16			cylinder_count;
+	float			z_dist;
+	float			realtime_fov;
+	bool			render;
 }	t_scene;
 
 typedef struct s_window

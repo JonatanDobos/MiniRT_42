@@ -14,8 +14,8 @@ t_eucl	vec_normalize(t_eucl v)
 {
 	const float	len = vec_len(v);
 
-	if (len == 0.0f)
-		return ((t_eucl){0, 0, 0});
+	if (len < EPSILON)
+		return (v);
 	return ((t_eucl){v.x / len, v.y / len, v.z / len});
 }
 
@@ -27,4 +27,9 @@ t_eucl	vec_project(t_eucl a, t_eucl b)
 t_eucl	vec_reflect(t_eucl v, t_eucl n)
 {
 	return (vec_sub(v, vec_scale(n, 2.0f * vec_dot(v, n))));
+}
+
+float	vec_len(t_eucl v)
+{
+	return (sqrtf(v.x * v.x + v.y * v.y + v.z * v.z));
 }

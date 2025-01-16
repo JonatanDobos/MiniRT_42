@@ -3,6 +3,7 @@
 void	render_loop(t_minirt *m)
 {
 	init_hooks(m);
+	render(m);
 	mlx_loop(m->win.mlx);
 }
 
@@ -16,6 +17,7 @@ int	main(int argc, char **argv)
 	init_struct_m(&m);
 	if (input_parse(&m, argv[1]))
 		return (m.errnum);
+	_print_parsing(&m.scene);//t
 	if (window_init(&m.win, WIN_WIDTH, WIN_HEIGHT, "miniRT"))
 		return (clean_all(&m), m.errnum);
 	render_loop(&m);

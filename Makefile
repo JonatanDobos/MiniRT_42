@@ -18,6 +18,8 @@ LIBS	=	$(LIBMLX) $(LIBFT)
 
 SRCDIR	=	./mandatory/src
 SRC		=	$(SRCDIR)/main.c \
+			$(SRCDIR)/camera_move.c \
+			$(SRCDIR)/camera_rotate.c \
 			$(SRCDIR)/cleanup.c \
 			$(SRCDIR)/error.c \
 			$(SRCDIR)/exit.c \
@@ -29,6 +31,8 @@ SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/parsing_utils.c \
 			$(SRCDIR)/parsing.c \
 			$(SRCDIR)/print.c \
+			$(SRCDIR)/render_utils.c \
+			$(SRCDIR)/render.c \
 			$(SRCDIR)/scaling.c \
 			$(SRCDIR)/string_utils.c \
 			$(SRCDIR)/vec_advanced.c \

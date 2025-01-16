@@ -16,18 +16,18 @@
 void	*memappend(void **ptr, void *append, size_t size, size_t len)
 {
 	void			*new;
-	const size_t	ptr_size = size * len;
+	const size_t	old_size = size * len;
 
 	if (!ptr || !append || !size)
 		return (NULL);
-	new = (void *)malloc(ptr_size + size);
+	new = (void *)malloc(old_size + size);
 	if (new == NULL)
 		return (NULL);
-	if (ptr_size && *ptr)
-		ft_memcpy(new, *ptr, size);
+	if (old_size && *ptr)
+		ft_memcpy(new, *ptr, old_size);
 	ft_vfree(ptr);
 	if (append)
-		ft_memcpy(new + ptr_size, append, size);
+		ft_memcpy(new + old_size, append, size);
 	*ptr = new;
 	return (*ptr);
 }
