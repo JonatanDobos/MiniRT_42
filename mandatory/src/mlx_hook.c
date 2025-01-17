@@ -37,16 +37,20 @@ void	fov_hook(double xdelta, double ydelta, void *param)
 
 	(void)(xdelta);
 	sc = (t_scene *)param;
-	if (ydelta > 0 && sc->realtime_fov < FOV_MAX)
-	{
-		sc->realtime_fov += 0.5f;
-		sc->z_dist = 1.0f / tanf((sc->realtime_fov * M_PI / 180.0f) / 2.0f);
-		return ;
-	}
-	if (ydelta < 0 && sc->realtime_fov > 1)
+	if (ydelta > 0 && sc->realtime_fov > 1.0f)
 	{
 		sc->realtime_fov -= 0.5f;
 		sc->z_dist = 1.0f / tanf((sc->realtime_fov * M_PI / 180.0f) / 2.0f);
+		sc->render = true;
+		printf("FOV: %.2f\n", sc->realtime_fov);
+		return ;
+	}
+	if (ydelta < 0 && sc->realtime_fov < FOV_MAX)
+	{
+		sc->realtime_fov += 0.5f;
+		sc->z_dist = 1.0f / tanf((sc->realtime_fov * M_PI / 180.0f) / 2.0f);
+		sc->render = true;
+		printf("FOV: %.2f\n", sc->realtime_fov);
 		return ;
 	}
 }

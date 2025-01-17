@@ -7,6 +7,18 @@ CFLAGS	=	-Wall -Werror -Wextra
 # CFLAGS	+=	-g
 # CFLAGS	+=	-fsanitize=address
 
+#		Optimization flags
+# Generate code optimized for the host machine's CPU
+OFLAGS			 =	-march=native
+# Disable setting errno after math functions for better performance
+OFLAGS			+=	-fno-math-errno
+# This flag allows the compiler to use reciprocal approximations for division operations, which can improve performance but may reduce precision.
+OFLAGS			+=	-freciprocal-math
+# This flag allows the compiler to ignore the distinction between positive and negative zero, which can enable more aggressive optimizations.
+OFLAGS			+=	-fno-signed-zeros
+# This flag tells the compiler that floating-point operations cannot generate traps (such as overflow or division by zero), allowing for more aggressive optimizations.
+OFLAGS			+=	-fno-trapping-math
+
 LMLXDIR	=	./libs/MLX42
 LIBMLX	=	$(LMLXDIR)/build/libmlx42.a -ldl -lglfw -pthread -lm
 
@@ -53,10 +65,10 @@ $(LIBMLX):
 	cmake $(LMLXDIR) -B $(LMLXDIR)/build && make -C $(LMLXDIR)/build -j4
 
 $(OBJDIRM)/%.o: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
+	$(CC) $(CFLAGS) $(OFLAGS) -o $@ -c $< $(HEADERS)
 
 $(NAME): $(OBJDIRM) $(OBJS)
-	$(CC) $(FSANIT) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+	$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
 
 $(OBJDIRM):
 	mkdir -p $(OBJDIRM)

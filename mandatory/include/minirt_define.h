@@ -8,7 +8,7 @@
 
 # define EPSILON 1e-6f
 
-# define FOV_MAX 100.0
+# define FOV_MAX 125.0
 
 // Custom in-program rendering resolution
 
