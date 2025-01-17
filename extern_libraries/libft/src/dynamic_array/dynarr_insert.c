@@ -3,15 +3,15 @@
 /*                                                        ::::::::            */
 /*   dynarr_insert.c                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
+/*   By: jdobos <jdobos@student.42.fr>                +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/09 20:19:40 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/01/09 20:28:06 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/01/17 19:40:57 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <dynarr.h>
-
+#include <stdio.h>
 //	Static functions
 static size_t	get_growth_factor(size_t length, size_t capacity);
 static bool		dynarr_grow(t_dynarr *a);
@@ -20,10 +20,12 @@ bool	dynarr_insert(t_dynarr *a, t_cvoid *element)
 {
 	if (a == NULL)
 	{
+		puts("a");
 		return (false);
 	}
 	if (a->length == a->capacity && dynarr_grow(a) == false)
 	{
+		puts("b");
 		return (false);
 	}
 	ft_memcpy(a->arr + a->length * a->elem_size, element, a->elem_size);

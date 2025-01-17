@@ -3,14 +3,14 @@
 
 static int16_t	check_values(t_value_check *vc)
 {
-	if (vc->amb_amount != 1)
-		return (errset(perr_msg("check_values", ERRFORM, EMSG_4A)));
-	if (vc->cam_amount != 1)
-		return (errset(perr_msg("check_values", ERRFORM, EMSG_4C)));
-	if (vc->light_amount != 1)
-		return (errset(perr_msg("check_values", ERRFORM, EMSG_4L)));
-	if (vc->obj_amount < 1)
-		return (errset(perr_msg("check_values", ERRFORM, EMSG_4O)));
+	// if (vc->amb_amount != 1)
+	// 	return (errset(perr_msg("check_values", ERRFORM, EMSG_4A)));
+	// if (vc->cam_amount != 1)
+	// 	return (errset(perr_msg("check_values", ERRFORM, EMSG_4C)));
+	// if (vc->light_amount != 1)
+	// 	return (errset(perr_msg("check_values", ERRFORM, EMSG_4L)));
+	// if (vc->obj_amount < 1)
+	// 	return (errset(perr_msg("check_values", ERRFORM, EMSG_4O)));
 	return (SUCCESS);
 }
 
@@ -69,19 +69,20 @@ int16_t	input_parse(t_rt *m, const char *file)
 	while (true)
 	{
 		line = gnl(fd);
+		if (line == NULL && errno == ENOMEM)
+			return (puts("1"), close(fd), errset(perr("input_line_check", errno)));
 		if (line == NULL)
-			return (close(fd), errset(perr("input_line_check", errno)));
-		if (*line == '\0')
 			break ;
 		if (input_line_check(line) != SUCCESS)
-			return (close(fd), free_str(&line), cleanup(m), errset(ERTRN));
+			return (puts("2"), close(fd), free_str(&line), cleanup(m), errset(ERTRN));
 		if (input_type_parse(m, &vc, line) != SUCCESS)
-			return (close(fd), free_str(&line), cleanup(m), errset(ERTRN));
+			return (puts("3"), close(fd), free_str(&line), cleanup(m), errset(ERTRN));
 		free_str(&line);
 	}
 	if (check_values(&vc) != SUCCESS)
 		return (close(fd), free_str(&line), cleanup(m), errset(ERTRN));
 	dynarr_shrink_to_fit(&m->scene->obj);
 	m->scene->objarr = m->scene->obj.arr;
+	_print_parsing(m->scene);//test
 	return (close(fd), free_str(&line), SUCCESS);
 }

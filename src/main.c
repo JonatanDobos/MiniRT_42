@@ -32,10 +32,10 @@ int main(int argc, char **argv)
 	alloc_scene_struct(&rt.scene);
 		// scene_creation(&rt) == EXIT_FAILURE || 
 	if (check_input(&rt, argc, argv) == EXIT_FAILURE || \
-		input_parse(&rt, argv[1]) == EXIT_FAILURE || \
+		input_parse(&rt, argv[1]) != 0 || \
 		windows_setup_mlx(&rt) == EXIT_FAILURE)
 	{
-		return (cleanup(&rt));
+		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	}
 	render_scene(&rt, rt.scene);
 

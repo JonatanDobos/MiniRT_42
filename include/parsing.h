@@ -78,4 +78,8 @@ int32_t		rt_atoi(const char *str);
 char		*nxtv(char *str);
 char		*nxtvp(char **str);
 
+
+
+//trash
+void	_print_parsing(t_scene *sc);
 #endif

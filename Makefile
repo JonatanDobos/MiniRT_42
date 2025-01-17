@@ -66,7 +66,7 @@ SRC_DIR			:=	src/
 
 MAIN			:=	main.c
 
-PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c
+PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c _debug.c
 
 MLX				:=	window_setup.c			keyhooks.c		
 
@@ -169,8 +169,10 @@ re:		fclean all
 
 
 test: all
-	./$(NAME)
+	./$(NAME) ./test1.rt
 
+test2: all
+	./$(NAME) ./test2.rt
 
 valgrind: all
 	valgrind --leak-check=full -s ./$(NAME)

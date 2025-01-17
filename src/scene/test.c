@@ -126,9 +126,10 @@ t_rgba	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec3 ray_position, t_cvec3 ra
 	}
 	if (obj_closest_vp != NULL)
 	{
+
 		return (color);
 	}
-	return ((t_rgba){0, 0, 0, 0});
+	return ((t_rgba){0, 0, 0, 255});
 }
 
 void	set_pixel(t_rt *m, uint16_t x, uint16_t y, t_rgba color)
@@ -164,6 +165,8 @@ void render_scene(t_rt *rt, t_scene *scn)
 			// {
 				// puts("if");
 				// mlx_put_pixel(rt->img, i, j, color);
+				// printf("r%d\tg%d\tb%d\ta%d\n", color.r, color.g, color.b, color.a);
+				// exit(0);
 				set_pixel(rt, i, j, color);
 			// }
 			// else {
