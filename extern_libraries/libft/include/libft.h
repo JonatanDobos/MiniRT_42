@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   libft.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
+/*   By: jdobos <jdobos@student.42.fr>                +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/15 16:27:18 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/01/15 16:27:20 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/01/17 18:54:06 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,13 @@
 # include <is_ctype1.h>
 # include <is_ctype2.h>
 # include <validate_ptr.h>
+
+enum	e_return
+{
+	ERROR = -1,
+	SUCCESS,
+	FAILURE
+};
 
 typedef struct s_list		t_lst;
 
@@ -117,9 +124,9 @@ int			ft_memcmp(const void *s1, const void *s2, size_t n);
 
 //	Putchars Functions
 void		ft_putchar_fd(char c, int fd);
-void		ft_putendl_fd(char *s, int fd);
+void		ft_putendl_fd(t_cchr *s, int fd);
 void		ft_putnbr_fd(int n, int fd);
-void		ft_putstr_fd(char *s, int fd);
+void		ft_putstr_fd(t_cchr *s, int fd);
 
 //	String Create Functions
 char		*ft_itoa(int n);

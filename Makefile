@@ -66,17 +66,23 @@ SRC_DIR			:=	src/
 
 MAIN			:=	main.c
 
+PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c
+
 MLX				:=	window_setup.c			keyhooks.c		
 
 SCENE			:=	create.c				test.c
 
 UTILS			:=	utils.c					math.c
 
+ERROR			:=	error.c					print.c
+
 # plane.c										
 # sphere.c										
 
 #		Find all .c files in the specified directories
 SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))			\
+					$(addprefix $(SRC_DIR)parsing/, $(PARSE))	\
+					$(addprefix $(SRC_DIR)error/, $(ERROR))		\
 					$(addprefix $(SRC_DIR)mlx/, $(MLX))			\
 					$(addprefix $(SRC_DIR)scene/, $(SCENE))		\
 					$(addprefix $(SRC_DIR)utils/, $(UTILS))
@@ -87,7 +93,7 @@ OBJS 			:=	$(SRCP:%.c=$(BUILD_DIR)%.o)
 DEPS			:=	$(OBJS:.o=.d)
 
 #		HEADERS
-INCS			:=	miniRT.h				scene.h				RTmlx.h					utils.h
+INCS			:=	miniRT.h		parsing.h		RTerror.h			scene.h				RTmlx.h					utils.h
 INCP			:=	$(addprefix $(INCD), $(INCS))
 HEADERS			:=	$(INCP)
 INCLUDE_RT		:=	-I $(INCD)
@@ -161,6 +167,11 @@ fcln:	cln
 
 re:		fclean all
 
+
+test: all
+	./$(NAME)
+
+
 valgrind: all
 	valgrind --leak-check=full -s ./$(NAME)
 
@@ -195,8 +206,3 @@ CUR_DIR := $(dir $(abspath $(firstword $(MAKEFILE_LIST))))
 REMOVED := $(R_MARK_UP)REMOVED $(CYAN)%s$(MAGENTA) (%s) $(RESET)\n
 CREATED := $(CA_MARK_UP)CREATED $(CYAN)%s$(GREEN) (%s) $(RESET)\n
 
-test: all
-	./$(NAME)
-
-valgrind: all
-	valgrind -s --leak-check=full ./$(NAME)

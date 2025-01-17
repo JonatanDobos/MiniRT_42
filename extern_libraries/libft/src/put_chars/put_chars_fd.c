@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   put_chars_fd.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rjw <rjw@student.codam.nl>                   +#+                     */
+/*   By: jdobos <jdobos@student.42.fr>                +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 20:31:50 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/08 17:44:16 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/01/17 18:54:06 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_putchar_fd(char c, int fd)
 	Used functions:
 	- write
 */
-void	ft_putendl_fd(char *s, int fd)
+void	ft_putendl_fd(t_cchr *s, int fd)
 {
 	char	destination[BUFFER_SIZE];
 	size_t	i;
@@ -90,7 +90,7 @@ void	ft_putnbr_fd(int n, int fd)
 	Used functions:
 	- write
 */
-void	ft_putstr_fd(char *s, int fd)
+void	ft_putstr_fd(t_cchr *s, int fd)
 {
 	if (write(fd, s, ft_strlen(s)) == -1)
 		perror("ft_putstr_fd: write");

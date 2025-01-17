@@ -4,7 +4,7 @@
 # include <math.h>
 # include <miniRT.h>
 
-t_cint32	cleanup(t_rt *rt, t_cint32 status);
+t_cint32	cleanup(t_rt *rt);
 
 //	if many more math functions come, create ft_math.h
 float	fast_sqrt(float number);

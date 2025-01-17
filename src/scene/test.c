@@ -108,11 +108,11 @@ uint32_t	vec_to_uint32(t_vec3 color)
 			((uint32_t)(color[3] * 255) & 0xFF);
 }
 
-uint32_t	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec3 ray_position, t_cvec3 ray_direction)
+t_rgba	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec3 ray_position, t_cvec3 ray_direction)
 {
 	uint32_t	i;
 	t_objs		*obj_closest_vp;
-	t_vec3		color;
+	t_rgba		color;
 
 	obj_closest_vp = NULL;
 	for (i = 0; i < rt->scene->arr_size; ++i)
@@ -126,9 +126,20 @@ uint32_t	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec3 ray_position, t_cvec3 
 	}
 	if (obj_closest_vp != NULL)
 	{
-		return (vec_to_uint32(color));
+		return (color);
 	}
-	return (0);
+	return ((t_rgba){0, 0, 0, 0});
+}
+
+void	set_pixel(t_rt *m, uint16_t x, uint16_t y, t_rgba color)
+{
+	uint8_t	*pixels;
+
+	pixels = m->img->pixels + (y * WINDOW_WIDTH + x) * 4;
+	*(pixels++) = color.r;
+	*(pixels++) = color.g;
+	*(pixels++) = color.b;
+	*(pixels++) = color.a;
 }
 
 void render_scene(t_rt *rt, t_scene *scn)
@@ -147,13 +158,14 @@ void render_scene(t_rt *rt, t_scene *scn)
 			x = (2.0F * (i + 0.5F) / (float)WINDOW_WIDTH - 1) * aspect_ratio_scale;
 			y = (1.0F - 2.0F * (j + 0.5F) / (float)WINDOW_HEIGHT) * scale;
 			t_vec3 ray_direction = normalize((t_vec3){x, y, -1.0F} + scn->camera.camera.ray_direction);
-			uint32_t color = obj_nearest_vp(rt, scn->objarr, ray_position, ray_direction);
+			t_rgba color = obj_nearest_vp(rt, scn->objarr, ray_position, ray_direction);
 
-			if (color != 0)
-			{
+			// if (color != (t_rgba){0, 0, 0, 0})
+			// {
 				// puts("if");
-				mlx_put_pixel(rt->img, i, j, color);
-			}
+				// mlx_put_pixel(rt->img, i, j, color);
+				set_pixel(rt, i, j, color);
+			// }
 			// else {
 			// 	// puts("else");
 			// }

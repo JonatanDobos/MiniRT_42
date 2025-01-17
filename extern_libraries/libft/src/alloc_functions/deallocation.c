@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   deallocation.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rjw <rjw@student.codam.nl>                   +#+                     */
+/*   By: jdobos <jdobos@student.42.fr>                +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 20:41:01 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/09 21:00:30 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/01/17 18:36:14 by jdobos        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

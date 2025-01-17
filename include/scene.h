@@ -10,6 +10,24 @@
 //	3 objects, Plane Sphere Cylinder
 # define NUM_OBJ_TYPES 3
 
+typedef struct s_rgba
+{
+	uint8_t			r;
+	uint8_t			g;
+	uint8_t			b;
+	uint8_t			a;
+}	t_rgba;
+
+typedef struct s_light
+{
+	float		brightness;
+}	t_light;
+
+typedef struct s_amblight
+{
+	float		ratio;
+}	t_amblight;
+
 typedef enum e_obj_types
 {
 	PLANE,
@@ -17,50 +35,14 @@ typedef enum e_obj_types
 	CYLINDER
 }	t_obj_type;
 
-// union u_vec
-// {
-// 	t_vec3 vec3;
-// 	struct
-// 	{
-// 		float x;
-// 		float y;
-// 		float z;
-// 		float w; // Padding or additional value
-// 	};
-// 	struct
-// 	{
-// 		float r;
-// 		float g;
-// 		float b;
-// 		float a; // Padding or alpha value for color
-// 	};
-// 	// struct
-// 	// {
-// 	// 	float i;
-// 	// 	float j;
-// 	// 	float k;
-// 	//	float l; // Padding or additional value
-// 	// };
-// };
-
-typedef struct	s_viewpoint
-{
-	// t_vec3	ray_position;
-	t_vec3	coords;
-}	t_vp;
-
 typedef struct	s_plane
 {
-	// t_vec3	point;
 	t_vec3	direction;
-	// t_vec3	color;
 }	t_plane;
 
 typedef struct	s_sphere
 {
-	// t_vec3 center;
 	float radius;
-	// t_vec3 color;
 }	t_sphere;
 
 typedef struct	s_cylinder
@@ -70,10 +52,13 @@ typedef struct	s_cylinder
 	float	height;
 }	t_cylinder;
 
-typedef struct	s_camera {
+typedef struct	s_camera
+{
 	t_vec3	ray_direction;
 	float	fov;
+	float	realtime_fov;
 	t_vec3	orientation;
+	float	zvp_dist;
 	// t_fvec	rotated;
 	// float	rotation[2];
 	// t_fvec	u;
@@ -88,22 +73,27 @@ typedef struct	s_objs
 	union 
 	{
 		t_camera	camera;
-		t_vp		vp;
+		t_amblight	ambient;
+		t_light		light;
 
 		t_plane		plane;
 		t_sphere	sphere;
 		t_cylinder	cylinder;
 	};
 	t_vec3			coords;
-	t_vec3			color;
-	float			hit;
+	t_rgba			color;
+	float			hit;	//	Evt weg pleuren
 }	t_objs;
 
 
-typedef struct	s_scene {
+typedef struct	s_scene
+{
 	t_objs	camera;
+	t_objs	light;
+	t_objs	ambient;
 	struct
 	{
+		t_dynarr	obj;
 		t_objs		*objarr;
 		size_t		arr_size;	
 	};

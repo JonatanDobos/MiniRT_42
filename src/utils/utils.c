@@ -2,7 +2,7 @@
 #include <scene.h>
 #include <utils.h>
 
-t_cint32	cleanup(t_rt *rt, t_cint32 status)
+t_cint32	cleanup(t_rt *rt)
 {
 	if (rt->img != NULL)
 		mlx_delete_image(rt->mlx, rt->img);
@@ -10,5 +10,5 @@ t_cint32	cleanup(t_rt *rt, t_cint32 status)
 		mlx_terminate(rt->mlx);
 	if (rt->scene->objarr)
 		free(rt->scene->objarr);
-	return (status);
+	return (rt->errnum);
 }
