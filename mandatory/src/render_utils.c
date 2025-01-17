@@ -2,10 +2,11 @@
 
 void	set_pixel(t_minirt *m, t_uin16 x, t_uin16 y, t_rgba color)
 {
-	const int	pixel_idx = (y * m->win.rndr_wdth + x) * 4;
+	t_uint8		*pixels;
 
-	m->win.pixels[pixel_idx + 0] = color.r;
-	m->win.pixels[pixel_idx + 1] = color.g;
-	m->win.pixels[pixel_idx + 2] = color.b;
-	m->win.pixels[pixel_idx + 3] = color.a;
+	pixels = m->win.pixels + (y * m->win.rndr_wdth + x) * 4;
+	*(pixels++) = color.r;
+	*(pixels++) = color.g;
+	*(pixels++) = color.b;
+	*(pixels++) = color.a;
 }
