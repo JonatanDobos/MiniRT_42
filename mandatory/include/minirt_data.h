@@ -14,47 +14,35 @@ typedef uint_fast16_t	t_uin16;
 typedef uint_fast32_t	t_uint;
 typedef uint_fast64_t	t_ulong;
 
+typedef float	t_vec4 __attribute__((vector_size(16), aligned(16)));
+typedef t_uint8	t_rgba __attribute__((vector_size(4), aligned(4)));
+
 // Small struct types
-
-typedef struct s_rgba
-{
-	t_uint8			r;
-	t_uint8			g;
-	t_uint8			b;
-	t_uint8			a;
-}	t_rgba;
-
-typedef struct s_eucl
-{
-	float			x;
-	float			y;
-	float			z;
-}	t_eucl;
 
 typedef struct s_ray
 {
-	t_eucl			origin;
-	t_eucl			vec;
+	t_vec4			origin;
+	t_vec4			vec;
 }	t_ray;
 
 typedef struct s_plane
 {
-	t_eucl			point;
-	t_eucl			normal;
+	t_vec4			point;
+	t_vec4			normal;
 	t_rgba			color;
 }	t_plane;
 
 typedef struct s_sphere
 {
-	t_eucl			center;
+	t_vec4			center;
 	float			radius;
 	t_rgba			color;
 }	t_sphere;
 
 typedef struct s_cylinder
 {
-	t_eucl			center;
-	t_eucl			normal;
+	t_vec4			center;
+	t_vec4			normal;
 	float			radius;
 	float			height;
 	t_rgba			color;
@@ -62,15 +50,15 @@ typedef struct s_cylinder
 
 typedef struct s_light
 {
-	t_eucl			point;
+	t_vec4			point;
 	float			brightness;
 	t_rgba			color;
 }	t_light;
 
 typedef struct s_cam
 {
-	t_eucl			point;
-	t_eucl			orient;
+	t_vec4			point;
+	t_vec4			orient;
 	t_uint8			fov;
 }	t_cam;
 
@@ -82,9 +70,9 @@ typedef struct s_amblight
 
 typedef struct s_poly
 {
-	t_eucl			a;
-	t_eucl			b;
-	t_eucl			c;
+	t_vec4			a;
+	t_vec4			b;
+	t_vec4			c;
 	t_rgba			color;
 }	t_poly;
 

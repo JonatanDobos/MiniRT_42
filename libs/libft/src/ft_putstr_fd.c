@@ -6,7 +6,7 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/03 14:46:27 by joni          #+#    #+#                 */
-/*   Updated: 2024/12/03 14:46:29 by joni          ########   odam.nl         */
+/*   Updated: 2025/01/18 21:58:21 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 void	ft_putstr_fd(const char *s, int fd)
 {
-	write(fd, s, ft_strlen(s));
+	if (write(fd, s, ft_strlen(s)) < 0)
+		return ;
 }

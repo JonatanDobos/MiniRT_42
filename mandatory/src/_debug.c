@@ -8,21 +8,21 @@ void	_print_parsing(t_scene *sc)
 	   "  Ratio: %.2f\n"
 	   "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
 	   sc->ambient.ratio,
-	   sc->ambient.color.r, sc->ambient.color.g, sc->ambient.color.b, sc->ambient.color.a);
+	   sc->ambient.color[R], sc->ambient.color[G], sc->ambient.color[B], sc->ambient.color[A]);
 	printf("\nCamera:\n"
 	   "  Position: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Orientation: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  FOV: %d\n",
-	   sc->cam.point.x, sc->cam.point.y, sc->cam.point.z,
-	   sc->cam.orient.x, sc->cam.orient.y, sc->cam.orient.z,
+	   sc->cam.point[X], sc->cam.point[Y], sc->cam.point[Z],
+	   sc->cam.orient[X], sc->cam.orient[Y], sc->cam.orient[Z],
 	   sc->cam.fov);
 	printf("\nLight:\n"
 	   "  Position: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Brightness: %.2f\n"
 	   "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
-	   sc->light.point.x, sc->light.point.y, sc->light.point.z,
+	   sc->light.point[X], sc->light.point[Y], sc->light.point[Z],
 	   sc->light.brightness,
-	   sc->light.color.r, sc->light.color.g, sc->light.color.b, sc->light.color.a);
+	   sc->light.color[R], sc->light.color[G], sc->light.color[B], sc->light.color[A]);
 	printf("\n\033[0;32m");
 	t_uin16	i = 0;
 	t_plane pl;
@@ -33,9 +33,9 @@ void	_print_parsing(t_scene *sc)
 	   "  Point: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Normal: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
-	   i, pl.point.x, pl.point.y, pl.point.z,
-	   pl.normal.x, pl.normal.y, pl.normal.z,
-	   pl.color.r, pl.color.g, pl.color.b, pl.color.a);
+	   i, pl.point[X], pl.point[Y], pl.point[Z],
+	   pl.normal[X], pl.normal[Y], pl.normal[Z],
+	   pl.color[R], pl.color[G], pl.color[B], pl.color[A]);
 	   ++i;
 	}
 	printf("\n\033[0;34m");
@@ -48,9 +48,9 @@ void	_print_parsing(t_scene *sc)
 	   "  Center: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Radius: %.2f\n"
 	   "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
-	   i, sp.center.x, sp.center.y, sp.center.z,
+	   i, sp.center[X], sp.center[Y], sp.center[Z],
 	   sp.radius,
-	   sp.color.r, sp.color.g, sp.color.b, sp.color.a);
+	   sp.color[R], sp.color[G], sp.color[B], sp.color[A]);
 		++i;
 	}
 	printf("\n\033[0;35m");
@@ -65,11 +65,11 @@ void	_print_parsing(t_scene *sc)
 	   "  Radius: %.2f\n"
 	   "  Height: %.2f\n"
 	   "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
-	   i, cy.center.x, cy.center.y, cy.center.z,
-	   cy.normal.x, cy.normal.y, cy.normal.z,
+	   i, cy.center[X], cy.center[Y], cy.center[Z],
+	   cy.normal[X], cy.normal[Y], cy.normal[Z],
 	   cy.radius,
 	   cy.height,
-	   cy.color.r, cy.color.g, cy.color.b, cy.color.a);
+	   cy.color[R], cy.color[G], cy.color[B], cy.color[A]);
 		++i;
 	}
 	printf("\n\033[0m");

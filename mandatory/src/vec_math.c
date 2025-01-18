@@ -1,26 +1,33 @@
 #include "../include/minirt_param.h"
 
-t_eucl	vec_add(t_eucl a, t_eucl b)
+t_vec4	vec_add(t_vec4 a, t_vec4 b)
 {
-	return ((t_eucl){a.x + b.x, a.y + b.y, a.z + b.z});
+	return (a + b);
 }
 
-t_eucl	vec_sub(t_eucl a, t_eucl b)
+t_vec4	vec_sub(t_vec4 a, t_vec4 b)
 {
-	return ((t_eucl){a.x - b.x, a.y - b.y, a.z - b.z});
+	return (a - b);
 }
 
-t_eucl	vec_scale(t_eucl v, float scalar)
+t_vec4	vec_scale(t_vec4 v, float scalar)
 {
-	return ((t_eucl){v.x * scalar, v.y * scalar, v.z * scalar});
+	const t_vec4	scale_vec = vcast(scalar);
+
+	return (v * scale_vec);
 }
 
-float	vec_dot(t_eucl a, t_eucl b)
+float	vec_dot(t_vec4 a, t_vec4 b)
 {
-	return (a.x * b.x + a.y * b.y + a.z * b.z);
+	const t_vec4	vmult = a * b;
+
+	return (vmult[X] + vmult[Y] + vmult[Z]);
 }
 
-t_eucl	vec_mul(t_eucl a, float s)
+// ! Where is this one used? isnt vec_scale the same?
+t_vec4	vec_mul(t_vec4 a, float s)
 {
-	return (t_eucl){a.x * s, a.y * s, a.z * s};
+	const t_vec4	scale_vec = vcast(s);
+
+	return (a * scale_vec);
 }

@@ -1,35 +1,37 @@
 #include "../include/minirt_param.h"
 
-t_eucl	vec_cross(t_eucl a, t_eucl b)
+t_vec4	vec_cross(t_vec4 a, t_vec4 b)
 {
-	return ((t_eucl)
+	return ((t_vec4)
 	{
-		a.y * b.z - a.z * b.y,
-		a.z * b.x - a.x * b.z,
-		a.x * b.y - a.y * b.x
+		a[Y] * b[Z] - a[Z] * b[Y],
+		a[Z] * b[X] - a[X] * b[Z],
+		a[X] * b[Y] - a[Y] * b[X]
 	});
 }
 
-t_eucl	vec_normalize(t_eucl v)
+t_vec4	vec_normalize(t_vec4 v)
 {
-	const float	len = vec_len(v);
+	const t_vec4	len = vcast(vec_len(v));
 
-	if (len < EPSILON)
+	if (len[0] < EPSILON)
 		return (v);
-	return ((t_eucl){v.x / len, v.y / len, v.z / len});
+	return (v / len);
 }
 
-t_eucl	vec_project(t_eucl a, t_eucl b)
+t_vec4	vec_project(t_vec4 a, t_vec4 b)
 {
 	return (vec_scale(b, vec_dot(a, b) / vec_dot(b, b)));
 }
 
-t_eucl	vec_reflect(t_eucl v, t_eucl n)
+t_vec4	vec_reflect(t_vec4 v, t_vec4 n)
 {
 	return (vec_sub(v, vec_scale(n, 2.0f * vec_dot(v, n))));
 }
 
-float	vec_len(t_eucl v)
+float	vec_len(t_vec4 v)
 {
-	return (sqrtf(v.x * v.x + v.y * v.y + v.z * v.z));
+	const t_vec4	vsquared = v * v;
+
+	return (sqrtf(vsquared[X] + vsquared[Y] + vsquared[Z]));
 }

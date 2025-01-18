@@ -1,8 +1,11 @@
 NAME	=	miniRT
 
-CC		=	cc
+# CC		=	cc
+
+CC		=	gcc
 
 CFLAGS	=	-Wall -Werror -Wextra
+CFLAGS	=	-flto -O3
 # CFLAGS	+=	-Wunused -Wconversion -Wimplicit
 # CFLAGS	+=	-g
 # CFLAGS	+=	-fsanitize=address
@@ -82,6 +85,13 @@ fclean: clean
 	rm -rf $(NAME)
 	rm -rf $(LMLXDIR)/build
 	rm -rf $(LFTDIR)/libft.a
+
+mclean:
+	rm -rf $(OBJS)
+	rm -df $(OBJDIRM)
+	rm -rf $(NAME)
+
+test: mclean all
 
 re: fclean all
 

@@ -14,7 +14,7 @@ bool	ray_intersect_plane(t_ray ray, t_plane *plane, float *t)
 	float denom = vec_dot(ray.vec, plane->normal);
 
 	if (fabs(denom) > EPSILON) {
-		t_eucl diff = vec_sub(plane->point, ray.origin);
+		t_vec4 diff = vec_sub(plane->point, ray.origin);
 		*t = vec_dot(diff, plane->normal) / denom;
 		return (*t >= 0);
 	}
@@ -24,7 +24,7 @@ bool	ray_intersect_plane(t_ray ray, t_plane *plane, float *t)
 // Ray-sphere intersection
 bool	ray_intersect_sphere(t_ray ray, t_sphere *sphere, float *t)
 {
-	t_eucl oc = vec_sub(ray.origin, sphere->center);
+	t_vec4 oc = vec_sub(ray.origin, sphere->center);
 	float a = vec_dot(ray.vec, ray.vec);
 	float b = 2.0f * vec_dot(oc, ray.vec);
 	float c = vec_dot(oc, oc) - sphere->radius * sphere->radius;
@@ -39,22 +39,21 @@ bool	ray_intersect_sphere(t_ray ray, t_sphere *sphere, float *t)
 
 // Lighting calculation (ambient + diffuse)
 t_rgba	calculate_lighting(
-	t_scene *scene, t_eucl point, t_eucl normal, t_rgba obj_color)
+	t_scene *scene, t_vec4 point, t_vec4 normal, t_rgba obj_color)
 {
-	t_rgba result = {0, 0, 0, 255};
+	const t_rgba	scalar_amb = ccast(scene->ambient.ratio / 255.0f);
+	t_rgba			scalar_light;
+	t_rgba 			result = {0, 0, 0, 255};
 
 	// Ambient lighting
-	result.r = obj_color.r * scene->ambient.ratio * scene->ambient.color.r / 255.0f;
-	result.g = obj_color.g * scene->ambient.ratio * scene->ambient.color.g / 255.0f;
-	result.b = obj_color.b * scene->ambient.ratio * scene->ambient.color.b / 255.0f;
+	result = obj_color * scene->ambient.color * scalar_amb;
 
 	// Diffuse lighting
-	t_eucl light_dir = vec_normalize(vec_sub(scene->light.point, point));
+	t_vec4 light_dir = vec_normalize(vec_sub(scene->light.point, point));
 	float diff = clamp(vec_dot(normal, light_dir), 0.0f, 1.0f) * scene->light.brightness;
 
-	result.r += obj_color.r * diff * scene->light.color.r / 255.0f;
-	result.g += obj_color.g * diff * scene->light.color.g / 255.0f;
-	result.b += obj_color.b * diff * scene->light.color.b / 255.0f;
+	scalar_light = ccast(diff / 255.0f);
+	result += obj_color * scene->light.color * scalar_light;
 
 	return result;
 }
@@ -64,7 +63,7 @@ t_rgba	trace_ray(t_scene *scene, t_ray ray)
 {
 	float t, closest_t = INFINITY;
 	t_rgba pixel_color = {0, 0, 0, 255};
-	t_eucl normal;
+	t_vec4 normal;
 
 	// Check plane intersections
 	for (t_uin16 i = 0; i < scene->plane_count; i++) {
@@ -86,34 +85,34 @@ t_rgba	trace_ray(t_scene *scene, t_ray ray)
 
 	// Apply lighting if an object was hit
 	if (closest_t < INFINITY) {
-		t_eucl hit_point = vec_add(ray.origin, vec_mul(ray.vec, closest_t));
+		t_vec4 hit_point = vec_add(ray.origin, vec_mul(ray.vec, closest_t));
 		return calculate_lighting(scene, hit_point, normal, pixel_color);
 	}
 
 	return pixel_color; // Background color
 }
 
-t_eucl	transform_ray_dir(t_eucl ndc_dir, t_eucl cam_orient)
+t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
 {
 	// Normalize the camera orientation vector (forward direction)
-	t_eucl	z_axis = vec_normalize(cam_orient);
+	t_vec4	z_axis = vec_normalize(cam_orient);
 
 	// Create an "up" vector (default is Y-axis in world space)
-	t_eucl	up = {0, 1, 0};
-	if (fabsf(z_axis.x) == 0.0f && fabsf(z_axis.z) == 0.0f) // Handle edge case where cam_orient is vertical
-		up = (z_axis.y > 0) ? (t_eucl){0, 0, -1} : (t_eucl){0, 0, 1};
+	t_vec4	up = {0, 1, 0};
+	if (fabsf(z_axis[X]) == 0.0f && fabsf(z_axis[Z]) == 0.0f) // Handle edge case where cam_orient is vertical
+		up = (z_axis[Y] > 0) ? (t_vec4){0, 0, -1} : (t_vec4){0, 0, 1};
 
 	// Calculate the right vector (x-axis of the camera)
-	t_eucl	x_axis = vec_normalize(vec_cross(up, z_axis));
+	t_vec4	x_axis = vec_normalize(vec_cross(up, z_axis));
 
 	// Calculate the up vector (y-axis of the camera, perpendicular to both)
-	t_eucl	y_axis = vec_cross(z_axis, x_axis);
+	t_vec4	y_axis = vec_cross(z_axis, x_axis);
 
 	// Apply the rotation matrix to the direction vector
-	t_eucl world_dir = {
-		x_axis.x * ndc_dir.x + y_axis.x * ndc_dir.y + z_axis.x * ndc_dir.z,
-		x_axis.y * ndc_dir.x + y_axis.y * ndc_dir.y + z_axis.y * ndc_dir.z,
-		x_axis.z * ndc_dir.x + y_axis.z * ndc_dir.y + z_axis.z * ndc_dir.z
+	t_vec4 world_dir = {
+		x_axis[X] * ndc_dir[X] + y_axis[X] * ndc_dir[Y] + z_axis[X] * ndc_dir[Z],
+		x_axis[Y] * ndc_dir[X] + y_axis[Y] * ndc_dir[Y] + z_axis[Y] * ndc_dir[Z],
+		x_axis[Z] * ndc_dir[X] + y_axis[Z] * ndc_dir[Y] + z_axis[Z] * ndc_dir[Z]
 	};
 
 	return vec_normalize(world_dir);
@@ -137,8 +136,8 @@ void	render(t_minirt *m)
 			ndc_x = (2 * ((x + 0.5f) / (float)m->win.rndr_wdth) - 1) * m->win.ratio_w;
 			ndc_y = 1 - 2 * ((y + 0.5f) / (float)m->win.rndr_hght);
 			ray.origin = m->scene.cam.point;
-			ray.vec = transform_ray_dir((t_eucl){ndc_x, ndc_y, m->scene.z_dist}, m->scene.cam.orient);
-			set_pixel(m, x, y, trace_ray(&m->scene, ray));
+			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, m->scene.z_dist}, m->scene.cam.orient);
+			set_pixel(&m->win, x, y, trace_ray(&m->scene, ray));
 			++x;
 		}
 		++y;

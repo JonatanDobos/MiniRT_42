@@ -3,6 +3,7 @@ NAME	=	libft.a
 CC		=	cc
 
 CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	+=	-O3 -flto
 
 SRCDIR	=	./src
 SRC		=	$(SRCDIR)/ft_abs.c \
@@ -82,7 +83,6 @@ SRC		=	$(SRCDIR)/ft_abs.c \
 			$(SRCDIR)/ft_toupper.c \
 			$(SRCDIR)/ft_vfree.c \
 			$(SRCDIR)/ft_void_array.c \
-			$(SRCDIR)/ft_writing.c \
 			$(SRCDIR)/ft_cpy.c \
 			$(SRCDIR)/get_next_line.c \
 

@@ -3,8 +3,8 @@
 
 // defines and enums
 
-# define WIN_HEIGHT 900
-# define WIN_WIDTH 1600
+# define WIN_HEIGHT 450
+# define WIN_WIDTH 800
 
 # define EPSILON 1e-6f
 
@@ -47,6 +47,22 @@ enum	custom_error
 	ERRNSET = -3,
 	ERRFORM = -4,
 	ERRFEXT = -5
+};
+
+enum	coord
+{
+	X = 0,
+	Y,
+	Z,
+	W
+};
+
+enum	color
+{
+	R = 0,
+	G,
+	B,
+	A
 };
 
 #endif

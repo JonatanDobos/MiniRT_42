@@ -1,22 +1,22 @@
 #include "../include/minirt_param.h"
 
 // Function to rotate a vector around an axis
-t_eucl	rotate_vector(t_eucl v, t_eucl axis, float angle)
+t_vec4	rotate_vector(t_vec4 v, t_vec4 axis, float angle)
 {
 	const float cos_angle = cosf(angle);
 	const float sin_angle = sinf(angle);
 
-	return ((t_eucl)
+	return ((t_vec4)
 	{
-		.x = v.x * (cos_angle + axis.x * axis.x * (1 - cos_angle)) +
-			 v.y * (axis.x * axis.y * (1 - cos_angle) - axis.z * sin_angle) +
-			 v.z * (axis.x * axis.z * (1 - cos_angle) + axis.y * sin_angle),
-		.y = v.x * (axis.y * axis.x * (1 - cos_angle) + axis.z * sin_angle) +
-			 v.y * (cos_angle + axis.y * axis.y * (1 - cos_angle)) +
-			 v.z * (axis.y * axis.z * (1 - cos_angle) - axis.x * sin_angle),
-		.z = v.x * (axis.z * axis.x * (1 - cos_angle) - axis.y * sin_angle) +
-			 v.y * (axis.z * axis.y * (1 - cos_angle) + axis.x * sin_angle) +
-			 v.z * (cos_angle + axis.z * axis.z * (1 - cos_angle))
+		v[X] * (cos_angle + axis[X] * axis[X] * (1 - cos_angle)) +
+			 v[Y] * (axis[X] * axis[Y] * (1 - cos_angle) - axis[Z] * sin_angle) +
+			 v[Z] * (axis[X] * axis[Z] * (1 - cos_angle) + axis[Y] * sin_angle),
+		v[X] * (axis[Y] * axis[X] * (1 - cos_angle) + axis[Z] * sin_angle) +
+			 v[Y] * (cos_angle + axis[Y] * axis[Y] * (1 - cos_angle)) +
+			 v[Z] * (axis[Y] * axis[Z] * (1 - cos_angle) - axis[X] * sin_angle),
+		v[X] * (axis[Z] * axis[X] * (1 - cos_angle) - axis[Y] * sin_angle) +
+			 v[Y] * (axis[Z] * axis[Y] * (1 - cos_angle) + axis[X] * sin_angle) +
+			 v[Z] * (cos_angle + axis[Z] * axis[Z] * (1 - cos_angle))
 	});
 }
 
@@ -24,7 +24,7 @@ t_eucl	rotate_vector(t_eucl v, t_eucl axis, float angle)
 void	cam_rotate_up(t_scene *scene)
 {
 	printf("KEY: UP\n");
-	t_eucl right = vec_cross(scene->cam.orient, (t_eucl){0, 1, 0});
+	t_vec4 right = vec_cross(scene->cam.orient, (t_vec4){0, 1, 0});
 	scene->cam.orient = vec_normalize(rotate_vector(scene->cam.orient, right, CAM_ROTATION_SPEED));
 	scene->render = true;
 }
@@ -33,7 +33,7 @@ void	cam_rotate_up(t_scene *scene)
 void	cam_rotate_down(t_scene *scene)
 {
 	printf("KEY: DOWN\n");
-	t_eucl right = vec_cross(scene->cam.orient, (t_eucl){0, 1, 0});
+	t_vec4 right = vec_cross(scene->cam.orient, (t_vec4){0, 1, 0});
 	scene->cam.orient = vec_normalize(rotate_vector(scene->cam.orient, right, -CAM_ROTATION_SPEED));
 	scene->render = true;
 }
@@ -42,7 +42,7 @@ void	cam_rotate_down(t_scene *scene)
 void	cam_rotate_left(t_scene *scene)
 {
 	printf("KEY: LEFT\n");
-	scene->cam.orient = vec_normalize(rotate_vector(scene->cam.orient, (t_eucl){0, 1, 0}, -CAM_ROTATION_SPEED));
+	scene->cam.orient = vec_normalize(rotate_vector(scene->cam.orient, (t_vec4){0, 1, 0}, -CAM_ROTATION_SPEED));
 	scene->render = true;
 }
 
@@ -50,6 +50,6 @@ void	cam_rotate_left(t_scene *scene)
 void	cam_rotate_right(t_scene *scene)
 {
 	printf("KEY: RIGHT\n");
-	scene->cam.orient = vec_normalize(rotate_vector(scene->cam.orient, (t_eucl){0, 1, 0}, CAM_ROTATION_SPEED));
+	scene->cam.orient = vec_normalize(rotate_vector(scene->cam.orient, (t_vec4){0, 1, 0}, CAM_ROTATION_SPEED));
 	scene->render = true;
 }

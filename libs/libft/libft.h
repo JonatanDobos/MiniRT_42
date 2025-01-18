@@ -6,7 +6,7 @@
 /*   By: svan-hoo <svan-hoo@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/03 16:53:50 by svan-hoo      #+#    #+#                 */
-/*   Updated: 2024/12/14 13:09:00 by joni          ########   odam.nl         */
+/*   Updated: 2025/01/18 22:00:21 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,6 @@ int			ft_lstsize(t_list *lst);
 
 int			ft_abs(int value);
 short		ft_sign(int value);
-
-int			ft_writing(const char *str, int n);
 
 int			ft_printf(const char *form, ...);
 char		*get_next_line(int fd);

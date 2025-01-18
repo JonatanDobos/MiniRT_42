@@ -6,7 +6,7 @@
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/12/03 14:45:32 by joni          #+#    #+#                 */
-/*   Updated: 2024/12/03 14:45:34 by joni          ########   odam.nl         */
+/*   Updated: 2025/01/18 21:57:56 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_putnbr_fd(int n, int fd)
 	if (n < 0)
 	{
 		c = '-';
-		write(fd, &c, 1);
+		ft_putchar_fd(c, fd);
 		n = -n;
 	}
 	if (n > 9)
@@ -35,6 +35,6 @@ void	ft_putnbr_fd(int n, int fd)
 	if (n <= 9)
 	{
 		c = n + 48;
-		write(fd, &c, 1);
+		ft_putchar_fd(c, fd);
 	}
 }

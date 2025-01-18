@@ -15,7 +15,9 @@ void		render(t_minirt *m);
 
 // render_utils.c
 
-void		set_pixel(t_minirt *m, t_uin16 x, t_uin16 y, t_rgba color);
+void		set_pixel(t_window *w, t_uin16 x, t_uin16 y, t_rgba color)__attribute__((hot));
+t_vec4		vcast(float scalar)__attribute__((const, hot));
+t_rgba		ccast(float scalar)__attribute__((const, hot));
 
 // mlx_init.c
 
@@ -101,19 +103,19 @@ char		*nxtvp(char **str);
 
 // vec_advanced.c
 
-t_eucl		vec_cross(t_eucl a, t_eucl b);
-t_eucl		vec_normalize(t_eucl v);
-t_eucl		vec_project(t_eucl a, t_eucl b);
-t_eucl		vec_reflect(t_eucl v, t_eucl n);
-float		vec_len(t_eucl v);
+t_vec4		vec_cross(t_vec4 a, t_vec4 b)__attribute__((const, hot));
+t_vec4		vec_normalize(t_vec4 v)__attribute__((const, hot));
+t_vec4		vec_project(t_vec4 a, t_vec4 b)__attribute__((const, hot));
+t_vec4		vec_reflect(t_vec4 v, t_vec4 n)__attribute__((const, hot));
+float		vec_len(t_vec4 v)__attribute__((const, hot));
 
 // vec_math.c
 
-t_eucl		vec_add(t_eucl a, t_eucl b);
-t_eucl		vec_sub(t_eucl a, t_eucl b);
-t_eucl		vec_scale(t_eucl v, float scalar);
-float		vec_dot(t_eucl a, t_eucl b);
-t_eucl		vec_mul(t_eucl a, float s);
+t_vec4		vec_add(t_vec4 a, t_vec4 b)__attribute__((const, hot));
+t_vec4		vec_sub(t_vec4 a, t_vec4 b)__attribute__((const, hot));
+t_vec4		vec_scale(t_vec4 v, float scalar)__attribute__((const, hot));
+float		vec_dot(t_vec4 a, t_vec4 b)__attribute__((const, hot));
+t_vec4		vec_mul(t_vec4 a, float s)__attribute__((const, hot));
 
 // _debug.c
 
