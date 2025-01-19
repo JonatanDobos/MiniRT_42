@@ -65,7 +65,7 @@ int16_t	input_parse(t_rt *m, const char *file)
 	if (ft_strncmp(file + (ft_strlen(file) - 3), ".rt", 4))
 		return (close(fd), errset(perr("input_parse", ERRFEXT)));
 	ft_bzero(&vc, sizeof(t_value_check));
-	dynarr_create(&m->scene->obj, 5, sizeof(t_dynarr));
+	dynarr_create(&m->scene->obj, 5, sizeof(t_objs));
 	while (true)
 	{
 		line = gnl(fd);
@@ -82,7 +82,7 @@ int16_t	input_parse(t_rt *m, const char *file)
 	if (check_values(&vc) != SUCCESS)
 		return (close(fd), free_str(&line), cleanup(m), errset(ERTRN));
 	dynarr_shrink_to_fit(&m->scene->obj);
-	m->scene->objarr = m->scene->obj.arr;
-	_print_parsing(m->scene);//test
+	m->scene->objarr = (t_objs *)dynarr_take_arr(&m->scene->obj);
+	// _print_parsing(m->scene);//test
 	return (close(fd), free_str(&line), SUCCESS);
 }

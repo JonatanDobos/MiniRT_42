@@ -6,7 +6,7 @@
 /*   By: rjw <rjw@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 20:32:47 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/08 17:44:16 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/01/19 03:41:31 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,15 @@ void	ft_bzero(void *s, size_t n)
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	char	*tmp;
-
-	tmp = dest;
+	t_uchr	*tmp_dest;
+	t_cuchr	*tmp_src;
+	
 	if (!dest && !src)
 		return (NULL);
+	tmp_dest = (t_uchr *)dest;
+	tmp_src = (t_cuchr *)src;
 	while (n--)
-		*tmp++ = *(t_uchar *)src++;
+		*tmp_dest++ = *tmp_src++;
 	return (dest);
 }
 
@@ -49,10 +51,10 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 
 void	*ft_memset(void *b, int c, size_t len)
 {
-	t_uchar	*charb;
+	t_uchr	*charb;
 
 	charb = b;
 	while (len--)
-		*charb++ = (t_uchar)c;
+		*charb++ = (t_uchr)c;
 	return (b);
 }

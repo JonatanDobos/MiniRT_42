@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/09 20:31:53 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/01/15 17:00:38 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/01/19 02:28:45 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,16 @@ bool	dynarr_create(t_dynarr *ptr, size_t init_size, const size_t data_size)
 	return (true);
 }
 
+/**
+ * use this function in a if statement and check for ENOMEM.
+ */
 bool	dynarr_shrink_to_fit(t_dynarr *a)
 {
 	void	*ar;
 
 	if (a == NULL || a->arr == NULL)
 		return (false);
-	ar = ft_realloc(&a->arr, a->length * a->elem_size, a->length * a->capacity);
+	ar = ft_realloc(&a->arr, a->length * a->elem_size, a->capacity * a->elem_size);
 	if (ar == NULL)
 		return (false);
 	a->arr = ar;

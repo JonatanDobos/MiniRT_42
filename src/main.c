@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 {
 	t_rt	rt;
 
-	printf("%f\n", mlx_get_time());
+	printf("miniRT startwatch %f\n", mlx_get_time());
 	ft_bzero(&rt, sizeof(t_rt));
 	errset((int64_t)&rt.errnum);
 	alloc_scene_struct(&rt.scene);

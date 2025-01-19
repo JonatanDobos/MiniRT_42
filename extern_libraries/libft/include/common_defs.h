@@ -6,7 +6,7 @@
 /*   By: rjw <rjw@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/11 17:31:48 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/15 16:48:28 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/01/19 03:39:45 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@
 # endif
 
 //	unsigned datatypes
-typedef unsigned char	t_uchar;
+typedef unsigned char	t_uchr;
 //	const datatypes
 typedef const void		t_cvoid;
 typedef const bool		t_cbool;
 typedef const char		t_cchr;
-typedef const t_uchar	t_cuchr;
+typedef const t_uchr	t_cuchr;
 typedef const int8_t	t_cint8;
 typedef const int16_t	t_cint16;
 typedef const int32_t	t_cint32;

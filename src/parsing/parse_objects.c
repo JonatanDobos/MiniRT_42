@@ -15,7 +15,7 @@ int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 	pl.color.g = rt_atoi(nxtvp(&line));
 	pl.color.b = rt_atoi(nxtvp(&line));
 	pl.color.a = 255;
-	if (dynarr_insert(&sc->obj, &pl) == false);
+	if (dynarr_insert(&sc->obj, &pl) == false)
 		return (errset(perr("parse_pl", errno)));
 	sc->arr_size++;
 	vc->obj_amount++;
@@ -35,7 +35,7 @@ int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 	sp.color.g = rt_atoi(nxtvp(&line));
 	sp.color.b = rt_atoi(nxtvp(&line));
 	sp.color.a = 255;
-	if (dynarr_insert(&sc->obj, &sp) == false);
+	if (dynarr_insert(&sc->obj, &sp) == false)
 		return (errset(perr("parse_sp", errno)));
 	sc->arr_size++;
 	vc->obj_amount++;
@@ -59,7 +59,7 @@ int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 	cy.color.g = rt_atoi(nxtvp(&line));
 	cy.color.b = rt_atoi(nxtvp(&line));
 	cy.color.a = 255;
-	if (dynarr_insert(&sc->obj, &cy) == false);
+	if (dynarr_insert(&sc->obj, &cy) == false)
 		return (errset(perr("parse_cy", errno)));
 	sc->arr_size++;
 	vc->obj_amount++;
