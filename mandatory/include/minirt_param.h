@@ -119,6 +119,6 @@ t_vec4		vec_mul(t_vec4 a, float s)__attribute__((const, hot));
 
 // _debug.c
 
-void	_print_parsing(t_scene *sc);
+void		_print_parsing(t_scene *sc);
 
 #endif

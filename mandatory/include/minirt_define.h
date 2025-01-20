@@ -14,7 +14,11 @@
 
 # define RNDR_RES 360
 
-# define CAM_ROTATION_SPEED 0.1f
+# define CRS 0.1f
+# define CAM_ROTATION_SPEED (t_vec4){CRS, CRS, CRS, CRS}
+
+# define CMS 0.5f
+# define CAM_MOVE_SPEED (t_vec4){CMS, CMS, CMS, CMS}
 
 // Custom error messages
 
