@@ -28,6 +28,7 @@ typedef float				t_vec3 __attribute__ ((vector_size(16)));
 typedef const t_vec3		t_cvec3;
 //	Forward declaration of structs;
 typedef struct s_scene		t_scene;
+typedef struct s_window		t_window;
 typedef struct mlx			mlx_t;
 typedef struct mlx_texture	mlx_texture_t;
 typedef struct mlx_image	mlx_image_t;
@@ -48,9 +49,7 @@ enum e_axis {
 typedef struct	s_rt
 {
 	t_scene			*scene;
-	mlx_t			*mlx;
-	mlx_texture_t	*logo;
-	mlx_image_t		*img;
+	t_window		*win;
 	int				errnum;
 }	t_rt;
 

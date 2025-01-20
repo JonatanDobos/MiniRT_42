@@ -2,6 +2,7 @@
 #include <utils.h>
 #include <MLX42/MLX42.h>
 #include <scene.h>
+#include <RTmlx.h>
 
 float	intersect_plane(t_objs *obj, t_cvec3 ray_position, t_cvec3 ray_direction)
 {
@@ -132,11 +133,11 @@ t_rgba	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec3 ray_position, t_cvec3 ra
 	return ((t_rgba){0, 0, 0, 255});
 }
 
-void	set_pixel(t_rt *m, uint16_t x, uint16_t y, t_rgba color)
+void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_rgba color)
 {
 	uint8_t	*pixels;
 
-	pixels = m->img->pixels + (y * WINDOW_WIDTH + x) * 4;
+	pixels = win->img->pixels + (y * WINDOW_WIDTH + x) * 4;
 	*(pixels++) = color.r;
 	*(pixels++) = color.g;
 	*(pixels++) = color.b;
@@ -167,7 +168,7 @@ void render_scene(t_rt *rt, t_scene *scn)
 				// mlx_put_pixel(rt->img, i, j, color);
 				// printf("r%d\tg%d\tb%d\ta%d\n", color.r, color.g, color.b, color.a);
 				// exit(0);
-				set_pixel(rt, i, j, color);
+				set_pixel(rt->win, i, j, color);
 			// }
 			// else {
 			// 	// puts("else");

@@ -5,15 +5,6 @@
 #include <RTmlx.h>
 #include <utils.h>
 
-bool	alloc_scene_struct(t_scene **scn)
-{
-	*scn = (t_scene *)malloc(sizeof(t_scene));
-	if (*scn == NULL)
-		return (EXIT_FAILURE);
-	ft_bzero(*scn, sizeof(t_scene));
-	return (EXIT_SUCCESS);
-}
-
 bool	check_input(t_rt *rt, int argc, char **argv)
 {
 	(void)rt;
@@ -22,18 +13,27 @@ bool	check_input(t_rt *rt, int argc, char **argv)
 	return (EXIT_SUCCESS);
 }
 
+void	init_main(t_rt *rt, t_scene *scn, t_window *win)
+{
+	ft_bzero(rt, sizeof(t_rt));
+	ft_bzero(scn, sizeof(t_scene));
+	ft_bzero(win, sizeof(t_window));
+	errset((int64_t)rt->errnum);
+	rt->scene = scn;
+	rt->win = win;
+
+}
 int main(int argc, char **argv)
 {
-	t_rt	rt;
+	t_rt		rt;
+	t_scene		sc;
+	t_window	win;
 
 	printf("miniRT startwatch %f\n", mlx_get_time());
-	ft_bzero(&rt, sizeof(t_rt));
-	errset((int64_t)&rt.errnum);
-	alloc_scene_struct(&rt.scene);
-		// scene_creation(&rt) == EXIT_FAILURE || 
+	init_main(&rt, &sc, &win);
 	if (check_input(&rt, argc, argv) == EXIT_FAILURE || \
 		input_parse(&rt, argv[1]) != 0 || \
-		windows_setup_mlx(&rt) == EXIT_FAILURE)
+		windows_setup_mlx(rt.win) == EXIT_FAILURE)
 	{
 		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	}
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
 	printf("%f\n", mlx_get_time());
 
-	mlx_loop(rt.mlx); // Start the MLX loop
+	mlx_loop(rt.win->mlx); // Start the MLX loop
 	// mlx_run_time()
 	cleanup(&rt);
 	printf("exiting miniRT\n");
