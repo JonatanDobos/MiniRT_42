@@ -15,7 +15,6 @@ typedef uint_fast32_t	t_uint;
 typedef uint_fast64_t	t_ulong;
 
 typedef float	t_vec4 __attribute__((vector_size(16), aligned(16)));
-typedef t_uint8	t_rgba __attribute__((vector_size(4), aligned(4)));
 
 // Small struct types
 
@@ -29,14 +28,14 @@ typedef struct s_plane
 {
 	t_vec4			point;
 	t_vec4			normal;
-	t_rgba			color;
+	t_vec4			color;
 }	t_plane;
 
 typedef struct s_sphere
 {
 	t_vec4			center;
 	float			radius;
-	t_rgba			color;
+	t_vec4			color;
 }	t_sphere;
 
 typedef struct s_cylinder
@@ -45,14 +44,14 @@ typedef struct s_cylinder
 	t_vec4			normal;
 	float			radius;
 	float			height;
-	t_rgba			color;
+	t_vec4			color;
 }	t_cylinder;
 
 typedef struct s_light
 {
 	t_vec4			point;
 	float			brightness;
-	t_rgba			color;
+	t_vec4			color;
 }	t_light;
 
 typedef struct s_cam
@@ -65,7 +64,7 @@ typedef struct s_cam
 typedef struct s_amblight
 {
 	float			ratio;
-	t_rgba			color;
+	t_vec4			color;
 }	t_amblight;
 
 typedef struct s_poly
@@ -73,7 +72,7 @@ typedef struct s_poly
 	t_vec4			a;
 	t_vec4			b;
 	t_vec4			c;
-	t_rgba			color;
+	t_vec4			color;
 }	t_poly;
 
 // Main structs

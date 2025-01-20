@@ -15,9 +15,9 @@ void		render(t_minirt *m);
 
 // render_utils.c
 
-void		set_pixel(t_window *w, t_uin16 x, t_uin16 y, t_rgba color)__attribute__((hot));
+void		set_pixel(t_window *w, t_uin16 x, t_uin16 y, t_vec4 color)__attribute__((hot));
 t_vec4		vcast(float scalar)__attribute__((const, hot));
-t_rgba		ccast(float scalar)__attribute__((const, hot));
+t_vec4		ccast(float scalar)__attribute__((const, hot));
 
 // mlx_init.c
 

@@ -5,7 +5,7 @@ NAME	=	miniRT
 CC		=	gcc
 
 CFLAGS	=	-Wall -Werror -Wextra
-CFLAGS	=	-flto -O3
+CFLAGS	=	-flto -Ofast
 # CFLAGS	+=	-Wunused -Wconversion -Wimplicit
 # CFLAGS	+=	-g
 # CFLAGS	+=	-fsanitize=address

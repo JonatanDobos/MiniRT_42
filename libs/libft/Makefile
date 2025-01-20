@@ -3,7 +3,7 @@ NAME	=	libft.a
 CC		=	cc
 
 CFLAGS	=	-Wall -Wextra -Werror
-CFLAGS	+=	-O3 -flto
+CFLAGS	+=	-Ofast -flto
 
 SRCDIR	=	./src
 SRC		=	$(SRCDIR)/ft_abs.c \

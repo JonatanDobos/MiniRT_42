@@ -5,7 +5,22 @@
 // Clamp a value between min and max
 float	clamp(float value, float min, float max)
 {
-	return value < min ? min : (value > max ? max : value);
+	if (value < min)
+		return (min);
+	if (value > max)
+		return (max);
+	return (value);
+}
+
+// Clamp a vector between min and max
+t_vec4	vec_clamp(t_vec4 value, float min, float max)
+{
+	return (t_vec4){
+		clamp(value[0], min, max),
+		clamp(value[1], min, max),
+		clamp(value[2], min, max),
+		clamp(value[3], min, max)
+	};
 }
 
 // Ray-plane intersection
@@ -38,12 +53,12 @@ bool	ray_intersect_sphere(t_ray ray, t_sphere *sphere, float *t)
 }
 
 // Lighting calculation (ambient + diffuse)
-t_rgba	calculate_lighting(
-	t_scene *scene, t_vec4 point, t_vec4 normal, t_rgba obj_color)
+t_vec4	calculate_lighting(
+	t_scene *scene, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
 {
-	const t_rgba	scalar_amb = ccast(scene->ambient.ratio / 255.0f);
-	t_rgba			scalar_light;
-	t_rgba 			result = {0, 0, 0, 255};
+	const t_vec4	scalar_amb = ccast(scene->ambient.ratio);
+	t_vec4			scalar_light;
+	t_vec4 			result = {0, 0, 0, 1.0};
 
 	// Ambient lighting
 	result = obj_color * scene->ambient.color * scalar_amb;
@@ -52,17 +67,17 @@ t_rgba	calculate_lighting(
 	t_vec4 light_dir = vec_normalize(vec_sub(scene->light.point, point));
 	float diff = clamp(vec_dot(normal, light_dir), 0.0f, 1.0f) * scene->light.brightness;
 
-	scalar_light = ccast(diff / 255.0f);
-	result += obj_color * scene->light.color * scalar_light;
+	scalar_light = ccast(diff);
+	result += vec_clamp(obj_color * scene->light.color * scalar_light, 0.0f, 1.0f);
 
 	return result;
 }
 
 // Trace a ray through the scene
-t_rgba	trace_ray(t_scene *scene, t_ray ray)
+t_vec4	trace_ray(t_scene *scene, t_ray ray)
 {
 	float t, closest_t = INFINITY;
-	t_rgba pixel_color = {0, 0, 0, 255};
+	t_vec4 pixel_color = {0, 0, 0, 1.0};
 	t_vec4 normal;
 
 	// Check plane intersections
@@ -114,7 +129,6 @@ t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
 		x_axis[Y] * ndc_dir[X] + y_axis[Y] * ndc_dir[Y] + z_axis[Y] * ndc_dir[Z],
 		x_axis[Z] * ndc_dir[X] + y_axis[Z] * ndc_dir[Y] + z_axis[Z] * ndc_dir[Z]
 	};
-
 	return vec_normalize(world_dir);
 }
 
@@ -136,7 +150,7 @@ void	render(t_minirt *m)
 			ndc_x = (2 * ((x + 0.5f) / (float)m->win.rndr_wdth) - 1) * m->win.ratio_w;
 			ndc_y = 1 - 2 * ((y + 0.5f) / (float)m->win.rndr_hght);
 			ray.origin = m->scene.cam.point;
-			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, m->scene.z_dist}, m->scene.cam.orient);
+			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, m->scene.z_dist, 0}, m->scene.cam.orient);
 			set_pixel(&m->win, x, y, trace_ray(&m->scene, ray));
 			++x;
 		}

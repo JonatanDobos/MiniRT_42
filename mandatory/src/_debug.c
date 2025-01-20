@@ -6,7 +6,7 @@ void	_print_parsing(t_scene *sc)
 {
 	printf("\nAmbient Light:\n"
 	   "  Ratio: %.2f\n"
-	   "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
+	   "  Color: (r: %.2f, g: %.2f, b: %.2f, a: %.2f)\n",
 	   sc->ambient.ratio,
 	   sc->ambient.color[R], sc->ambient.color[G], sc->ambient.color[B], sc->ambient.color[A]);
 	printf("\nCamera:\n"
@@ -19,7 +19,7 @@ void	_print_parsing(t_scene *sc)
 	printf("\nLight:\n"
 	   "  Position: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Brightness: %.2f\n"
-	   "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
+	   "  Color: (r: %.2f, g: %.2f, b: %.2f, a: %.2f)\n",
 	   sc->light.point[X], sc->light.point[Y], sc->light.point[Z],
 	   sc->light.brightness,
 	   sc->light.color[R], sc->light.color[G], sc->light.color[B], sc->light.color[A]);
@@ -32,7 +32,7 @@ void	_print_parsing(t_scene *sc)
 		printf("\nPlane [%ld]:\n"
 	   "  Point: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Normal: (x: %.2f, y: %.2f, z: %.2f)\n"
-	   "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
+	   "  Color: (r: %.2f, g: %.2f, b: %.2f, a: %.2f)\n",
 	   i, pl.point[X], pl.point[Y], pl.point[Z],
 	   pl.normal[X], pl.normal[Y], pl.normal[Z],
 	   pl.color[R], pl.color[G], pl.color[B], pl.color[A]);
@@ -47,7 +47,7 @@ void	_print_parsing(t_scene *sc)
 		printf("\nSphere [%ld]:\n"
 	   "  Center: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Radius: %.2f\n"
-	   "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
+	   "  Color: (r: %.2f, g: %.2f, b: %.2f, a: %.2f)\n",
 	   i, sp.center[X], sp.center[Y], sp.center[Z],
 	   sp.radius,
 	   sp.color[R], sp.color[G], sp.color[B], sp.color[A]);
@@ -64,7 +64,7 @@ void	_print_parsing(t_scene *sc)
 	   "  Normal: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Radius: %.2f\n"
 	   "  Height: %.2f\n"
-	   "  Color: (r: %d, g: %d, b: %d, a: %d)\n",
+	   "  Color: (r: %.2f, g: %.2f, b: %.2f, a: %.2f)\n",
 	   i, cy.center[X], cy.center[Y], cy.center[Z],
 	   cy.normal[X], cy.normal[Y], cy.normal[Z],
 	   cy.radius,
