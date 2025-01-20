@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 	init_main(&rt, &sc, &win);
 	if (check_input(&rt, argc, argv) == EXIT_FAILURE || \
 		input_parse(&rt, argv[1]) != 0 || \
-		windows_setup_mlx(rt.win) == EXIT_FAILURE)
+		windows_setup_mlx(&rt) == EXIT_FAILURE)
 	{
 		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	}

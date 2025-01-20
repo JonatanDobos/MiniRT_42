@@ -8,16 +8,16 @@ static bool	img_to_window(t_window *win);
 static bool	windows_logo(t_window *win);
 static void	center_window(t_window *win);
 
-bool	windows_setup_mlx(t_window *win)
+bool	windows_setup_mlx(t_rt *rt)
 {
-	if (init_mlx(win) == false || \
-		img_to_window(win) == false || \
-		windows_logo(win) == false)
+	if (init_mlx(rt->win) == false || \
+		img_to_window(rt->win) == false || \
+		windows_logo(rt->win) == false)
 		return (EXIT_FAILURE);
-	center_window(win);
-	mlx_set_window_title(win->mlx, "miniRT");
+	center_window(rt->win);
+	mlx_set_window_title(rt->win->mlx, "miniRT");
 	// mlx_set_window_title(win->mlx, "miniRT is still rendering!");
-	mlx_key_hook(win->mlx, (mlx_keyfunc)my_keyhook, win);
+	init_hooks(rt);
 
 	return (EXIT_SUCCESS);
 }

@@ -22,10 +22,10 @@
 # define ASPECT_RATIO (16.0 / 9.0)
 # define WINDOW_HEIGHT ((int)(WINDOW_WIDTH / ASPECT_RATIO))
 
-typedef float				t_vec3 __attribute__ ((vector_size(16)));
+typedef float				t_vec4 __attribute__ ((vector_size(16)));
 // typedef uint8_t				t_rgba __attribute__ ((vector_size(sizeof(uint8_t) * 4)));
 
-typedef const t_vec3		t_cvec3;
+typedef const t_vec4		t_cvec4;
 //	Forward declaration of structs;
 typedef struct s_scene		t_scene;
 typedef struct s_window		t_window;

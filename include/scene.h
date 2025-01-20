@@ -10,6 +10,8 @@
 //	3 objects, Plane Sphere Cylinder
 # define NUM_OBJ_TYPES 3
 
+# define FOV_MAX 180.0f
+
 typedef struct s_rgba
 {
 	uint8_t			r;
@@ -37,7 +39,7 @@ typedef enum e_obj_types
 
 typedef struct	s_plane
 {
-	t_vec3	direction;
+	t_vec4	direction;
 }	t_plane;
 
 typedef struct	s_sphere
@@ -47,17 +49,16 @@ typedef struct	s_sphere
 
 typedef struct	s_cylinder
 {
-	t_vec3	direction;
+	t_vec4	direction;
 	float	radius;
 	float	height;
 }	t_cylinder;
 
 typedef struct	s_camera
 {
-	t_vec3	ray_direction;
+	t_vec4	orientation;
 	float	fov;
 	float	realtime_fov;
-	t_vec3	orientation;
 	float	zvp_dist;
 	// t_fvec	rotated;
 	// float	rotation[2];
@@ -80,7 +81,7 @@ typedef struct	s_objs
 		t_sphere	sphere;
 		t_cylinder	cylinder;
 	};
-	t_vec3			coords;
+	t_vec4			coords;
 	t_rgba			color;
 	float			hit;	//	Evt weg pleuren
 }	t_objs;
@@ -91,6 +92,7 @@ typedef struct	s_scene
 	t_objs	camera;
 	t_objs	light;
 	t_objs	ambient;
+	bool	render;
 	struct
 	{
 		t_dynarr	obj;

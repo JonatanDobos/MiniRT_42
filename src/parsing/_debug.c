@@ -14,7 +14,7 @@ void	_print_parsing(t_scene *sc)
 	"  Orientation: (x: %.2f, y: %.2f, z: %.2f)\n"
 	"  FOV: %f\n",
 	sc->camera.coords[0], sc->camera.coords[1], sc->camera.coords[2],
-	sc->camera.camera.ray_direction[0], sc->camera.camera.ray_direction[1], sc->camera.camera.ray_direction[2],
+	sc->camera.camera.orientation[0], sc->camera.camera.orientation[1], sc->camera.camera.orientation[2],
 	sc->camera.camera.fov);
 	printf("\nLight:\n"
 	"  Position: (x: %.2f, y: %.2f, z: %.2f)\n"

@@ -18,19 +18,29 @@ float	fast_sqrt(float number)
 	return (number * y);
 }
 
-t_vec3	normalize(t_vec3 v)
+t_vec4	normalize(t_vec4 v)
 {
 	t_cfloat length = fast_sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 	return (v / length);
 }
 
-t_vec3	subtract(t_vec3 a, t_vec3 b)
+t_vec4	subtract(t_vec4 a, t_vec4 b)
 {
 	return (a - b);
 }
 
-float	dot_product(t_vec3 a, t_vec3 b)
+float	dot_product(t_vec4 a, t_vec4 b)
 {
-	t_cvec3 result = a * b;
+	t_cvec4 result = a * b;
 	return (result[0] + result[1] + result[2]);
+}
+
+t_vec4	cross(t_vec4 a, t_vec4 b)
+{
+	return ((t_vec4)
+	{
+		a[Y] * b[Z] - a[Z] * b[Y],
+		a[Z] * b[X] - a[X] * b[Z],
+		a[X] * b[Y] - a[Y] * b[X]
+	});
 }
