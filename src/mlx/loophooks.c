@@ -9,20 +9,20 @@ void	fov_hook(double xdelta, double ydelta, void *param)
 
 	(void)(xdelta);
 	sc = (t_scene *)param;
-	if (ydelta > 0 && sc->camera.camera.realtime_fov > 1.0f)
+	if (ydelta > 0 && sc->camera.c.realtime_fov > 1.0f)
 	{
-		sc->camera.camera.realtime_fov -= 0.5f;
-		sc->camera.camera.zvp_dist = 1.0f / tanf((sc->camera.camera.realtime_fov * M_PI / 180.0f) / 2.0f);
+		sc->camera.c.realtime_fov -= 0.5f;
+		sc->camera.c.zvp_dist = 1.0f / tanf((sc->camera.c.realtime_fov * M_PI / 180.0f) / 2.0f);
 		sc->render = true;
-		printf("FOV: %.2f\n", sc->camera.camera.realtime_fov);
+		printf("FOV: %.2f\n", sc->camera.c.realtime_fov);
 		return ;
 	}
-	if (ydelta < 0 && sc->camera.camera.realtime_fov < FOV_MAX)
+	if (ydelta < 0 && sc->camera.c.realtime_fov < FOV_MAX)
 	{
-		sc->camera.camera.realtime_fov += 0.5f;
-		sc->camera.camera.zvp_dist = 1.0f / tanf((sc->camera.camera.realtime_fov * M_PI / 180.0f) / 2.0f);
+		sc->camera.c.realtime_fov += 0.5f;
+		sc->camera.c.zvp_dist = 1.0f / tanf((sc->camera.c.realtime_fov * M_PI / 180.0f) / 2.0f);
 		sc->render = true;
-		printf("FOV: %.2f\n", sc->camera.camera.realtime_fov);
+		printf("FOV: %.2f\n", sc->camera.c.realtime_fov);
 		return ;
 	}
 }
@@ -60,7 +60,7 @@ void	loop_hook(void *param)
 	if (rt->scene->render == true)
 	{
 		printf("RENDER\n");
-		// render_scene(rt, rt->scene);
+		render_scene(rt, rt->scene);
 		rt->scene->render = false;
 	}
 }

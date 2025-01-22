@@ -138,7 +138,7 @@ $(BUILD_DIR)%.o: %.c $(HEADERS)
 	$(BUILD) $(INCLUDE_RT) -c $< -o $@
 
 $(LIBFT_L):
-	@$(MAKE) $(PRINT_NO_DIR) -C $(LIBFT_D) OFLAGS="$(OFLAGS)"
+	@$(MAKE) -j $(PRINT_NO_DIR) -C $(LIBFT_D) OFLAGS="$(OFLAGS)"
 
 $(MLX42_L):
 	# @cmake $(MLX42_D) -B $(MLX42_D)/build && cmake --build $(MLX42_D)/build --parallel

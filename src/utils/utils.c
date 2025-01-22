@@ -9,7 +9,7 @@ t_cint32	cleanup(t_rt *rt)
 		mlx_delete_image(rt->win->mlx, rt->win->img);
 	if (rt->win->mlx != NULL)
 		mlx_terminate(rt->win->mlx);
-	if (rt->scene->objarr)
-		free(rt->scene->objarr);
+	if (rt->scene->objs)
+		free(rt->scene->objs);
 	return (rt->errnum);
 }

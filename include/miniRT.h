@@ -33,18 +33,20 @@ typedef struct mlx			mlx_t;
 typedef struct mlx_texture	mlx_texture_t;
 typedef struct mlx_image	mlx_image_t;
 
-enum e_axis {
+enum e_axis
+{
 	X,
 	Y,
 	Z
 };
 
-// enum e_axis {
-// 	R,
-// 	G,
-// 	B,
-// 	A
-// };
+enum e_rgba
+{
+	R,
+	G,
+	B,
+	A
+};
 
 typedef struct	s_rt
 {

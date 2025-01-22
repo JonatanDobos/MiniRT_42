@@ -12,13 +12,13 @@
 
 # define FOV_MAX 180.0f
 
-typedef struct s_rgba
-{
-	uint8_t			r;
-	uint8_t			g;
-	uint8_t			b;
-	uint8_t			a;
-}	t_rgba;
+// typedef struct s_rgba
+// {
+// 	uint8_t			r;
+// 	uint8_t			g;
+// 	uint8_t			b;
+// 	uint8_t			a;
+// }	t_vec4;
 
 typedef struct s_light
 {
@@ -73,16 +73,16 @@ typedef struct	s_objs
 	t_obj_type		type;
 	union 
 	{
-		t_camera	camera;
-		t_amblight	ambient;
-		t_light		light;
+		t_camera	c;
+		t_amblight	a;
+		t_light		l;
 
 		t_plane		plane;
 		t_sphere	sphere;
 		t_cylinder	cylinder;
 	};
 	t_vec4			coords;
-	t_rgba			color;
+	t_vec4			color;
 	float			hit;	//	Evt weg pleuren
 }	t_objs;
 
@@ -95,8 +95,8 @@ typedef struct	s_scene
 	bool	render;
 	struct
 	{
-		t_dynarr	obj;
-		t_objs		*objarr;
+		t_dynarr	obj_dynarr;
+		t_objs		*objs;
 		size_t		arr_size;	
 	};
 	// t_object	ambient;
@@ -110,7 +110,7 @@ typedef struct	s_scene
 	// float		scale;
 }	t_scene;
 
-bool	scene_creation(t_rt *rt);
+// bool	scene_creation(t_rt *rt);
 
 
 // t_plane	plane(t_rt *rt);

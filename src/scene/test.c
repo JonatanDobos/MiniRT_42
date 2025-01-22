@@ -101,19 +101,11 @@ void intersect_table(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
 	obj->hit = intersect_obj[obj->type](obj, coords, orientation);
 }
 
-uint32_t	vec_to_uint32(t_vec4 color)
-{
-	return (((uint32_t)(color[0] * 255) & 0xFF) << 24) |
-			(((uint32_t)(color[1] * 255) & 0xFF) << 16) |
-			(((uint32_t)(color[2] * 255) & 0xFF) << 8) |
-			((uint32_t)(color[3] * 255) & 0xFF);
-}
-
-t_rgba	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec4 ray_position, t_cvec4 orientation)
+t_vec4	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec4 ray_position, t_cvec4 orientation)
 {
 	uint32_t	i;
 	t_objs		*obj_closest_vp;
-	t_rgba		color;
+	t_vec4		color;
 
 	obj_closest_vp = NULL;
 	for (i = 0; i < rt->scene->arr_size; ++i)
@@ -130,49 +122,62 @@ t_rgba	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec4 ray_position, t_cvec4 or
 
 		return (color);
 	}
-	return ((t_rgba){0, 0, 0, 255});
+	return ((t_vec4){0, 0, 0, 255});
 }
 
-void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_rgba color)
+void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color)
 {
-	uint8_t	*pixels;
+	uint8_t			*pixels;
+	const t_vec4	multiply = {255.0, 255.0, 255.0, 255.0};
 
+	color *= multiply;
 	pixels = win->img->pixels + (y * WINDOW_WIDTH + x) * 4;
-	*(pixels++) = color.r;
-	*(pixels++) = color.g;
-	*(pixels++) = color.b;
-	*(pixels++) = color.a;
+	*(pixels++) = (uint8_t)color[R];
+	*(pixels++) = (uint8_t)color[G];
+	*(pixels++) = (uint8_t)color[B];
+	*(pixels++) = (uint8_t)color[A];
 }
+
+// typedef struct {
+//     float fov; // Field of view in degrees
+//     float aspect_ratio; // Aspect ratio of the screen (width / height)
+//     float near_plane; // Near clipping plane
+//     float far_plane; // Far clipping plane
+// } t_camera_params;
+
+// void set_perspective_projection_matrix(t_camera_params *camera, float matrix[4][4]) {
+//     float fov_rad = camera->fov * (M_PI / 180.0f); // Convert FOV to radians
+//     float tan_half_fov = tan(fov_rad / 2.0f);
+
+//     matrix[0][0] = 1.0f / (camera->aspect_ratio * tan_half_fov);
+//     matrix[1][1] = 1.0f / tan_half_fov;
+//     matrix[2][2] = -(camera->far_plane + camera->near_plane) / (camera->far_plane - camera->near_plane);
+//     matrix[2][3] = -1.0f;
+//     matrix[3][2] = -(2.0f * camera->far_plane * camera->near_plane) / (camera->far_plane - camera->near_plane);
+//     matrix[3][3] = 0.0f;
+// }
+
+#include <math.h>
 
 void render_scene(t_rt *rt, t_scene *scn)
 {
-	t_cvec4		ray_position = scn->camera.coords;
-	t_cuint32	bg_color = 0xFF0000;
-	t_cfloat	scale = tan(scn->camera.camera.fov * 0.5F * (M_PI / 180.0F));
-	t_cfloat	aspect_ratio_scale = ASPECT_RATIO * scale;
-	float		x;
-	float		y;
-	
-	for (uint32_t j = 0; j < WINDOW_HEIGHT; j++)
-	{
-		for (uint32_t i = 0; i < WINDOW_WIDTH; i++)
-		{
-			x = (2.0F * (i + 0.5F) / (float)WINDOW_WIDTH - 1) * aspect_ratio_scale;
-			y = (1.0F - 2.0F * (j + 0.5F) / (float)WINDOW_HEIGHT) * scale;
-			t_vec4 orientation = normalize((t_vec4){x, y, -1.0F} + scn->camera.camera.orientation);
-			t_rgba color = obj_nearest_vp(rt, scn->objarr, ray_position, orientation);
+    t_cvec4 ray_position = scn->camera.coords;
+    t_cuint32 bg_color = 0xFF0000;
+    float aspect_ratio = ASPECT_RATIO;
+    float x;
+    float y;
 
-			// if (color != (t_rgba){0, 0, 0, 0})
-			// {
-				// puts("if");
-				// mlx_put_pixel(rt->img, i, j, color);
-				// printf("r%d\tg%d\tb%d\ta%d\n", color.r, color.g, color.b, color.a);
-				// exit(0);
-				set_pixel(rt->win, i, j, color);
-			// }
-			// else {
-			// 	// puts("else");
-			// }
-		}
-	}
+    for (uint32_t j = 0; j < WINDOW_HEIGHT; j++)
+    {
+        for (uint32_t i = 0; i < WINDOW_WIDTH; i++)
+        {
+            x = (2.0F * (i + 0.5F) / (float)WINDOW_WIDTH - 1) * aspect_ratio;
+            y = 1.0F - 2.0F * (j + 0.5F) / (float)WINDOW_HEIGHT;
+            t_vec4 direction = normalize((t_vec4){x, y, -scn->camera.c.zvp_dist} + scn->camera.c.orientation);
+
+            t_vec4 color = obj_nearest_vp(rt, scn->objs, ray_position, direction);
+
+            set_pixel(rt->win, i, j, color);
+        }
+    }
 }

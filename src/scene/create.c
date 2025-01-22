@@ -42,8 +42,8 @@
 // 	dynarr_insert(arr, &sphere1);
 
 // 	scn->camera.coords = (t_vec4){0.0F, 0.0F, 55.0F};
-// 	scn->camera.camera.orientation = (t_vec4){0.0F, 0.0F, 0.0F};
-// 	scn->camera.camera.fov = 80.0F;
+// 	scn->camera.cam.orientation = (t_vec4){0.0F, 0.0F, 0.0F};
+// 	scn->camera.cam.fov = 80.0F;
 // }
 
 // void	sphere_behind_another_sphere(t_dynarr *arr, t_scene *scn)
@@ -66,10 +66,10 @@
 // 	dynarr_insert(arr, &sphere1);
 
 // 	// scn->camera.coords = (t_vec4){0.0F, 0.0F, 55.0F};
-// 	// scn->camera.camera.orientation = (t_vec4){0.0F, 0.0F, -1.0F};
+// 	// scn->camera.cam.orientation = (t_vec4){0.0F, 0.0F, -1.0F};
 // 	scn->camera.coords = (t_vec4){-133.0F, 0.0F, 135.0F};
-// 	scn->camera.camera.orientation = (t_vec4){2.0F, 0.0F, -1.0F};
-// 	scn->camera.camera.fov = 80.0F;
+// 	scn->camera.cam.orientation = (t_vec4){2.0F, 0.0F, -1.0F};
+// 	scn->camera.cam.fov = 80.0F;
 // }
 
 // void	spheres_next_to_eachother(t_dynarr *arr, t_scene *scn)
@@ -92,8 +92,8 @@
 // 	dynarr_insert(arr, &sphere1);
 
 // 	scn->camera.coords = (t_vec4){0.0F, 0.0F, 55.0F};
-// 	scn->camera.camera.orientation = (t_vec4){0.0F, 0.0F, -1.0F};
-// 	scn->camera.camera.fov = 80.0F;
+// 	scn->camera.cam.orientation = (t_vec4){0.0F, 0.0F, -1.0F};
+// 	scn->camera.cam.fov = 80.0F;
 // }
 
 // void	cylinder(t_dynarr *arr, t_scene *scn)
@@ -112,8 +112,8 @@
 
 
 // 	scn->camera.coords = (t_vec4){0.0F, 0.0F, 55.0F};
-// 	scn->camera.camera.orientation = (t_vec4){0.0F, 0.0F, -1.0F};
-// 	scn->camera.camera.fov = 80.0F;
+// 	scn->camera.cam.orientation = (t_vec4){0.0F, 0.0F, -1.0F};
+// 	scn->camera.cam.fov = 80.0F;
 // }
 
 // void	create_each_obj(t_dynarr *arr, t_rt *rt, t_scene *scn)
