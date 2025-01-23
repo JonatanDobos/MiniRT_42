@@ -201,11 +201,12 @@ void	render(t_minirt *m)
 		x = 0;
 		while (x < m->win.rndr_wdth)
 		{
-			ndc_x = (2 * ((x + 0.5f) / (float)m->win.rndr_wdth) - 1) * m->win.ratio_w;
+			ndc_x = (2 * ((x + 0.5f) / (float)m->win.rndr_wdth) - 1) * m->win.aspectratio_w;
 			ndc_y = 1 - 2 * ((y + 0.5f) / (float)m->win.rndr_hght);
 			ray.origin = m->scene.cam.point;
 			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, m->scene.z_dist, 0}, m->scene.cam.orient);
-			set_pixel(&m->win, x, y, trace_ray(&m->scene, ray));
+			// set_pixel(&m->win, x, y, trace_ray(&m->scene, ray));
+			scaled_res_set_pixel(&m->win, x, y, trace_ray(&m->scene, ray));
 			++x;
 		}
 		++y;

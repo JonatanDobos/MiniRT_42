@@ -3,23 +3,21 @@
 
 // defines and enums
 
-# define WIN_HEIGHT 450
-# define WIN_WIDTH 800
+# define WIN_HEIGHT 900
+# define WIN_WIDTH 1600
 
-# define FOV_MAX 180.0
+# define FOV_MAX 180.0f
 
-// Custom in-program rendering resolution
-
-# define RNDR_RES 360
+# define RES_STEP_SIZE 1.0f
+# define RES_RATIO_MAX 10.0f
 
 // Camera manipulation speeds
 
-# define FOV_SCROLL_SPEED 1.0f
+# define FOV_SCROLL_SPEED 20.0f
 
-# define CAM_ROTATION_SPEED 0.05f
+# define CAM_ROTATION_SPEED 1.8f
 
-# define CMS 0.8f
-# define CAM_MOVE_SPEED (t_vec4){CMS, CMS, CMS, CMS}
+# define CAM_MOVE_SPEED 15.0f
 
 // Math
 

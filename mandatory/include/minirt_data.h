@@ -90,6 +90,10 @@ typedef struct s_scene
 	t_uin16			cylinder_count;
 	float			z_dist;
 	float			realtime_fov;
+	float			cam_r_speed;
+	float			cam_m_speed;
+	float			cam_fov_speed;
+	float			delta_time;
 	bool			render;
 }	t_scene;
 
@@ -101,8 +105,10 @@ typedef struct s_window
 	t_short			id;
 	t_uin16			rndr_wdth;
 	t_uin16			rndr_hght;
-	t_uin16			set_rndr_hght;
-	float			ratio_w;
+	t_uin16			window_wdth;
+	t_uin16			window_hght;
+	float			res_ratio;
+	float			aspectratio_w;
 	bool			resize;
 }	t_window;
 
@@ -114,6 +120,14 @@ typedef struct s_minirt
 }	t_minirt;
 
 // Unique structs
+
+// Nested loops
+
+typedef struct s_axis2_16
+{
+	t_uin16			x;
+	t_uin16			y;
+}	t_axis2;
 
 // Parsing
 

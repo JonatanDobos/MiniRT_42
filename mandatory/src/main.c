@@ -3,7 +3,6 @@
 void	render_loop(t_minirt *m)
 {
 	init_hooks(m);
-	render(m);
 	mlx_loop(m->win.mlx);
 }
 

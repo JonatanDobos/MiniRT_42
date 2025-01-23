@@ -28,7 +28,7 @@ t_short	window_init(t_window *win, t_uint wdth, t_uint hght, const char *name)
 		mlx_terminate(win->mlx);
 		return (errset(perrmlx("mlx_image_to_window", mlx_errno)));
 	}
-	win->ratio_w = (float)wdth / (float)hght;
+	win->aspectratio_w = (float)wdth / (float)hght;
 	win->pixels = (t_uint8 *)win->img->pixels;
 	if (win->rndr_hght == 0 && win->rndr_wdth == 0)
 	{

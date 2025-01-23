@@ -60,6 +60,9 @@ void		exit_clean(t_minirt *m, t_short errnum);
 
 float		render_scale_x(t_window *win, float val);
 float		render_scale_y(t_window *win, float val);
+void		scaled_res_set_pixel(t_window *w, t_uin16 x, t_uin16 y, t_vec4 color);
+void		res_upscale(t_minirt *m);
+void		res_downscale(t_minirt *m);
 
 // parse_peripherals.c
 
