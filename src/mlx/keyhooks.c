@@ -1,19 +1,17 @@
 #include <miniRT.h>
 #include <RTmlx.h>
 #include <scene.h>
+#include <debug.h>
 
-void	my_keyhook(mlx_key_data_t keydata, t_window *win)
+void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 {
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS) {
-		mlx_close_window(win->mlx);
-
+		mlx_close_window(rt->win->mlx);
 	}
-	// if (keydata.key == MLX_KEY_1 && keydata.action == MLX_PRESS)
-	// {
-	// 	rt->plane->direction.x += 0.1;
-	// 	printf("x value = %f\n", rt->plane->direction.x);
-	// 	render_plane(rt->img, rt->plane, &rt->ray_origin);
-	// }
+	if (keydata.key == MLX_KEY_1 && keydata.action == MLX_PRESS)
+	{
+		print_camera(rt->scene->camera);
+	}
 	// if (keydata.key == MLX_KEY_Q && keydata.action == MLX_PRESS)
 	// {
 	// 	rt->plane->direction.x -= 0.1;
@@ -52,7 +50,7 @@ void	my_keyhook(mlx_key_data_t keydata, t_window *win)
 void	init_hooks(t_rt *rt)
 {
 
-	mlx_key_hook(rt->win->mlx, (mlx_keyfunc)my_keyhook, rt->win);
+	mlx_key_hook(rt->win->mlx, (mlx_keyfunc)my_keyhook, rt);
 	mlx_loop_hook(rt->win->mlx, loop_hook, rt);
 	mlx_scroll_hook(rt->win->mlx, fov_hook, rt->scene);
 }

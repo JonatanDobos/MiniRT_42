@@ -14,7 +14,7 @@ typedef struct	s_window	t_window;
 
 
 bool	windows_setup_mlx(t_rt *rt);
-void	my_keyhook(mlx_key_data_t keydata, t_window *win);
+void	my_keyhook(mlx_key_data_t keydata, t_rt *rt);
 void	init_hooks(t_rt *m);
 
 void	loop_hook(void *param);

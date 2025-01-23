@@ -12,14 +12,6 @@
 
 # define FOV_MAX 180.0f
 
-// typedef struct s_rgba
-// {
-// 	uint8_t			r;
-// 	uint8_t			g;
-// 	uint8_t			b;
-// 	uint8_t			a;
-// }	t_vec4;
-
 typedef struct s_light
 {
 	float		brightness;
@@ -39,18 +31,20 @@ typedef enum e_obj_types
 
 typedef struct	s_plane
 {
-	t_vec4	direction;
+	t_vec4	orientation;
 }	t_plane;
 
 typedef struct	s_sphere
 {
 	float radius;
+	float diameter;
 }	t_sphere;
 
 typedef struct	s_cylinder
 {
-	t_vec4	direction;
+	t_vec4	orientation;
 	float	radius;
+	float	diameter;
 	float	height;
 }	t_cylinder;
 
@@ -85,7 +79,6 @@ typedef struct	s_objs
 	t_vec4			color;
 	float			hit;	//	Evt weg pleuren
 }	t_objs;
-
 
 typedef struct	s_scene
 {

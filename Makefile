@@ -1,7 +1,16 @@
 NAME			:=	miniRT
 
-# COMPILER		:=   cc
-COMPILER		:=   gcc
+# Get the number of logical processors (threads)
+N_JOBS			:=	$(shell nproc)
+
+# (-j) Specify the number of jobs (commands) to run simultaneously
+MULTI_THREADED	:=	-j $(N_JOBS)
+
+# MAKEFLAGS will automatically apply the specified options (e.g., parallel execution) when 'make' is invoked
+MAKEFLAGS		+=	$(MULTI_THREADED)
+
+# COMPILER		:=	cc
+COMPILER		:=	gcc
 RM				:=	rm -rf
 PRINT_NO_DIR	:=	--no-print-directory
 
@@ -76,6 +85,8 @@ UTILS			:=	utils.c					math.c
 
 ERROR			:=	error.c					print.c
 
+DEBUG			:=	print_info.c
+
 # plane.c										
 # sphere.c										
 
@@ -85,7 +96,8 @@ SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))			\
 					$(addprefix $(SRC_DIR)error/, $(ERROR))		\
 					$(addprefix $(SRC_DIR)mlx/, $(MLX))			\
 					$(addprefix $(SRC_DIR)scene/, $(SCENE))		\
-					$(addprefix $(SRC_DIR)utils/, $(UTILS))
+					$(addprefix $(SRC_DIR)utils/, $(UTILS))		\
+					$(addprefix $(SRC_DIR)debug/, $(DEBUG))
 
 #		Generate object file names
 OBJS 			:=	$(SRCP:%.c=$(BUILD_DIR)%.o)
@@ -93,7 +105,7 @@ OBJS 			:=	$(SRCP:%.c=$(BUILD_DIR)%.o)
 DEPS			:=	$(OBJS:.o=.d)
 
 #		HEADERS
-INCS			:=	miniRT.h		parsing.h		RTerror.h			scene.h				RTmlx.h					utils.h
+INCS			:=	miniRT.h		parsing.h		RTerror.h			scene.h				RTmlx.h					utils.h			debug.h
 INCP			:=	$(addprefix $(INCD), $(INCS))
 HEADERS			:=	$(INCP)
 INCLUDE_RT		:=	-I $(INCD)
@@ -138,13 +150,13 @@ $(BUILD_DIR)%.o: %.c $(HEADERS)
 	$(BUILD) $(INCLUDE_RT) -c $< -o $@
 
 $(LIBFT_L):
-	@$(MAKE) -j $(PRINT_NO_DIR) -C $(LIBFT_D) OFLAGS="$(OFLAGS)"
+	@$(MAKE) $(MULTI_THREADED) $(PRINT_NO_DIR) -C $(LIBFT_D) OFLAGS="$(OFLAGS)"
 
 $(MLX42_L):
-	# @cmake $(MLX42_D) -B $(MLX42_D)/build && cmake --build $(MLX42_D)/build --parallel
-	@printf "MLX is being built..."
-	@cmake $(MLX42_D) -B $(MLX42_D)/build > /dev/null 2>&1 && cmake --build $(MLX42_D)/build --parallel > /dev/null 2>&1
-	@printf "\rMLX has been built!  \n"
+	@cmake $(MLX42_D) -B $(MLX42_D)/build && cmake --build $(MLX42_D)/build --parallel $(N_JOBS)
+	# @printf "MLX is being built...\n"
+	# @cmake $(MLX42_D) -B $(MLX42_D)/build > /dev/null 2>&1 && cmake --build $(MLX42_D)/build --parallel $(N_JOBS) > /dev/null 2>&1
+	# @printf "\rMLX has been built!  \n"
 
 cln:
 	@$(RM) $(BUILD_DIR) $(DELETE)
@@ -172,7 +184,13 @@ test: all
 	./$(NAME) ./test1.rt
 
 test2: all
-	./$(NAME) ./test2.rt
+	./$(NAME) ./plane_sphere.rt
+
+test3: all
+	./$(NAME) ./sphere_behind_sphere.rt
+
+test4: all
+	./$(NAME) ./cylinder.rt
 
 valgrind: all
 	valgrind --leak-check=full -s ./$(NAME)

@@ -4,14 +4,14 @@
 #include <scene.h>
 #include <RTmlx.h>
 
-float	intersect_plane(t_objs *obj, t_cvec4 ray_position, t_cvec4 orientation)
+float	intersect_plane(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
 {
-	t_cfloat	denom = dot_product(obj->plane.direction, orientation);
-	t_cvec4		ray_to_plane_vector = obj->coords - ray_position;
+	t_cfloat	denom = dot_product(obj->plane.orientation, orientation);
+	t_cvec4		ray_to_plane_vector = obj->coords - coords;
 	float		intersection_distance;
 
 	if (fabsf(denom) > 1e-6F) {
-		intersection_distance = dot_product(ray_to_plane_vector, obj->plane.direction) / denom;
+		intersection_distance = dot_product(ray_to_plane_vector, obj->plane.orientation) / denom;
 		if (intersection_distance >= 0.0F) {
 			return (intersection_distance);
 		}
@@ -19,18 +19,18 @@ float	intersect_plane(t_objs *obj, t_cvec4 ray_position, t_cvec4 orientation)
 	return (-1.0F);
 }
 
-float	intersect_sphere(t_objs *obj, t_cvec4 ray_position, t_cvec4 orientation)
+float	intersect_sphere(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
 {
-	t_cvec4		oc = ray_position - obj->coords;
+	t_cvec4		oc = coords - obj->coords;
 	t_cfloat	a = dot_product(orientation, orientation);
 	t_cfloat	b = 2.0F * dot_product(oc, orientation);
-	t_cfloat	c = dot_product(oc, oc) - obj->sphere.radius * obj->sphere.radius;
+	t_cfloat	c = dot_product(oc, oc) - obj->sphere.diameter;
 	t_cfloat	discriminant = b * b - 4.0F * a * c;
 
 	if (discriminant > 0.0F)
 	{
-		float t0 = (-b - fast_sqrt(discriminant)) / (2.0F * a);
-		float t1 = (-b + fast_sqrt(discriminant)) / (2.0F * a);
+		float t0 = (-b - sqrt(discriminant)) / (2.0F * a);
+		float t1 = (-b + sqrt(discriminant)) / (2.0F * a);
 		if (t0 > 0.0F && t1 > 0.0F)
 		{
 			return ((t0 < t1) ? t0 : t1); // Choose the closest positive t value
@@ -40,54 +40,123 @@ float	intersect_sphere(t_objs *obj, t_cvec4 ray_position, t_cvec4 orientation)
 }
 
 // Function to check if the intersection point is within the height of the cylinder
-bool	check_height(const t_objs *obj, const t_cylinder *cyl, t_cvec4 ray_position, t_cvec4 orientation, float t)
+bool	check_height(const t_objs *obj, const t_cylinder *cyl, t_cvec4 coords, t_cvec4 orientation, float t)
 {
-	t_cvec4		intersection_point = ray_position + orientation * t;
+	t_cvec4		intersection_point = coords + orientation * t;
 	t_cvec4		base_to_intersection = intersection_point - obj->coords;
-	t_cfloat	height = dot_product(base_to_intersection, normalize(cyl->direction));
+	t_cfloat	height = dot_product(base_to_intersection, normalize(cyl->orientation));
 
 	return (height >= 0.0F && height <= cyl->height);
 }
 
-float	intersect_cylinder(t_objs *obj, t_cvec4 ray_position, t_cvec4 orientation)
+// float	intersect_cylinder(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
+// {
+// 	t_cylinder	*cylinder = &obj->cylinder;
+// 	t_cvec4		oc = coords - obj->coords; // Use obj->coords as the base center
+// 	t_cvec4		d = normalize(cylinder->orientation); // Ensure the direction is normalized
+// 	t_cvec4		rd = orientation - d * dot_product(orientation, d);
+// 	t_cvec4		oc_d = oc - d * dot_product(oc, d);
+
+// 	t_cfloat	a = dot_product(rd, rd);
+// 	t_cfloat	b = 2.0F * dot_product(rd, oc_d);
+// 	t_cfloat	c = dot_product(oc_d, oc_d) - cylinder->diameter;
+
+// 	t_cfloat	discriminant = b * b - 4.0F * a * c;
+
+// 	// Debugging information
+// 	// printf("oc: (%f, %f, %f)\n", oc[0], oc[1], oc[2]);
+// 	// printf("d: (%f, %f, %f)\n", d[0], d[1], d[2]);
+// 	// printf("rd: (%f, %f, %f)\n", rd[0], rd[1], rd[2]);
+// 	// printf("oc_d: (%f, %f, %f)\n", oc_d[0], oc_d[1], oc_d[2]);
+// 	// printf("a: %f, b: %f, c: %f\n", a, b, c);
+// 	// printf("discriminant: %f\n", discriminant);
+
+// 	if (discriminant < 0) {
+// 		return (-1.0F);
+// 	}
+
+// 	t_cfloat	fast_sqrt_discriminant = sqrt(discriminant);
+// 	t_cfloat	t1 = (-b - fast_sqrt_discriminant) / (2.0F * a);
+// 	t_cfloat	t2 = (-b + fast_sqrt_discriminant) / (2.0F * a);
+
+// 	// More debugging information
+// 	// printf("t1: %f, t2: %f\n", t1, t2);
+
+// 	if (t1 >= 0.0F && check_height(obj, cylinder, coords, orientation, t1)) {
+// 		return (t1);
+// 	} else if (t2 >= 0.0F && check_height(obj, cylinder, coords, orientation, t2)) {
+// 		return (t2);
+// 	}
+// 	return (-1.0F);
+// }
+
+bool intersect_cylinder_caps(t_vec4 coords, t_vec4 orientation, t_vec4 plane_point, t_vec4 plane_normal, float *t)
 {
-	t_cylinder	*cylinder = &obj->cylinder;
-	t_cvec4		oc = ray_position - obj->coords; // Use obj->coords as the base center
-	t_cvec4		d = normalize(cylinder->direction); // Ensure the direction is normalized
-	t_cvec4		rd = orientation - d * dot_product(orientation, d);
-	t_cvec4		oc_d = oc - d * dot_product(oc, d);
+    float denom = dot_product(plane_normal, orientation);
+    if (fabs(denom) > 1e-6) {
+        t_vec4 p0l0 = plane_point - coords;
+        *t = dot_product(p0l0, plane_normal) / denom;
+        return (*t >= 0);
+    }
+    return false;
+}
+float length(t_vec4 v)
+{
+    return sqrt(dot_product(v, v));
+}
+float intersect_cylinder(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
+{
+    t_cylinder *cylinder = &obj->cylinder;
+    t_cvec4 oc = coords - obj->coords; // Use obj->coords as the base center
+    t_cvec4 d = normalize(cylinder->orientation); // Ensure the direction is normalized
+    t_cvec4 rd = orientation - d * dot_product(orientation, d);
+    t_cvec4 oc_d = oc - d * dot_product(oc, d);
 
-	t_cfloat	a = dot_product(rd, rd);
-	t_cfloat	b = 2.0F * dot_product(rd, oc_d);
-	t_cfloat	c = dot_product(oc_d, oc_d) - cylinder->radius * cylinder->radius;
+    t_cfloat a = dot_product(rd, rd);
+    t_cfloat b = 2.0F * dot_product(rd, oc_d);
+    t_cfloat c = dot_product(oc_d, oc_d) - cylinder->diameter;
 
-	t_cfloat	discriminant = b * b - 4.0F * a * c;
+    t_cfloat discriminant = b * b - 4.0F * a * c;
 
-	// Debugging information
-	// printf("oc: (%f, %f, %f)\n", oc[0], oc[1], oc[2]);
-	// printf("d: (%f, %f, %f)\n", d[0], d[1], d[2]);
-	// printf("rd: (%f, %f, %f)\n", rd[0], rd[1], rd[2]);
-	// printf("oc_d: (%f, %f, %f)\n", oc_d[0], oc_d[1], oc_d[2]);
-	// printf("a: %f, b: %f, c: %f\n", a, b, c);
-	// printf("discriminant: %f\n", discriminant);
+    if (discriminant < 0) {
+        return (-1.0F);
+    }
 
-	if (discriminant < 0) {
-		return (-1.0F);
-	}
+    t_cfloat fast_sqrt_discriminant = sqrt(discriminant);
+    t_cfloat t1 = (-b - fast_sqrt_discriminant) / (2.0F * a);
+    t_cfloat t2 = (-b + fast_sqrt_discriminant) / (2.0F * a);
 
-	t_cfloat	fast_sqrt_discriminant = fast_sqrt(discriminant);
-	t_cfloat	t1 = (-b - fast_sqrt_discriminant) / (2.0F * a);
-	t_cfloat	t2 = (-b + fast_sqrt_discriminant) / (2.0F * a);
+    // Check if the intersection points are within the height of the cylinder
+    if (check_height(obj, cylinder, coords, orientation, t1)) {
+        return t1;
+    }
+    if (check_height(obj, cylinder, coords, orientation, t2)) {
+        return t2;
+    }
 
-	// More debugging information
-	// printf("t1: %f, t2: %f\n", t1, t2);
+    // Calculate top and bottom cap centers
+    t_vec4 top_cap = obj->coords + d * cylinder->height;
+    t_vec4 bottom_cap = obj->coords;
 
-	if (t1 >= 0.0F && check_height(obj, cylinder, ray_position, orientation, t1)) {
-		return (t1);
-	} else if (t2 >= 0.0F && check_height(obj, cylinder, ray_position, orientation, t2)) {
-		return (t2);
-	}
-	return (-1.0F);
+    // Check intersection with top cap
+    float t_top;
+    if (intersect_cylinder_caps(coords, orientation, top_cap, d, &t_top)) {
+        t_vec4 p = coords + t_top * orientation;
+        if (length(p - top_cap) <= cylinder->radius) {
+            return t_top;
+        }
+    }
+
+    // Check intersection with bottom cap
+    float t_bottom;
+    if (intersect_cylinder_caps(coords, orientation, bottom_cap, d, &t_bottom)) {
+        t_vec4 p = coords + t_bottom * orientation;
+        if (length(p - bottom_cap) <= cylinder->radius) {
+            return t_bottom;
+        }
+    }
+
+    return (-1.0F);
 }
 
 void intersect_table(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
@@ -101,7 +170,7 @@ void intersect_table(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
 	obj->hit = intersect_obj[obj->type](obj, coords, orientation);
 }
 
-t_vec4	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec4 ray_position, t_cvec4 orientation)
+t_vec4	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec4 coords, t_cvec4 orientation)
 {
 	uint32_t	i;
 	t_objs		*obj_closest_vp;
@@ -110,7 +179,7 @@ t_vec4	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec4 ray_position, t_cvec4 or
 	obj_closest_vp = NULL;
 	for (i = 0; i < rt->scene->arr_size; ++i)
 	{
-		intersect_table(&objarr[i], ray_position, orientation);
+		intersect_table(&objarr[i], coords, orientation);
 		if (objarr[i].hit > 0 && (obj_closest_vp == NULL || objarr[i].hit < obj_closest_vp->hit))
 		{
 			obj_closest_vp = &objarr[i];
@@ -161,7 +230,7 @@ void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color)
 
 void render_scene(t_rt *rt, t_scene *scn)
 {
-    t_cvec4 ray_position = scn->camera.coords;
+    t_cvec4 coords = scn->camera.coords;
     t_cuint32 bg_color = 0xFF0000;
     float aspect_ratio = ASPECT_RATIO;
     float x;
@@ -175,7 +244,7 @@ void render_scene(t_rt *rt, t_scene *scn)
             y = 1.0F - 2.0F * (j + 0.5F) / (float)WINDOW_HEIGHT;
             t_vec4 direction = normalize((t_vec4){x, y, -scn->camera.c.zvp_dist} + scn->camera.c.orientation);
 
-            t_vec4 color = obj_nearest_vp(rt, scn->objs, ray_position, direction);
+            t_vec4 color = obj_nearest_vp(rt, scn->objs, coords, direction);
 
             set_pixel(rt->win, i, j, color);
         }
