@@ -12,7 +12,7 @@ t_vec4	vec_cross(t_vec4 a, t_vec4 b)
 
 t_vec4	vec_normalize(t_vec4 v)
 {
-	const t_vec4	len = vcast(vec_len(v));
+	const t_vec4	len = bcast4(vec_len(v));
 
 	if (len[0] < EPSILON)
 		return (v);

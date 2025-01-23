@@ -3,8 +3,8 @@
 
 // defines and enums
 
-# define WIN_HEIGHT 900
-# define WIN_WIDTH 1600
+# define WIN_HEIGHT 450
+# define WIN_WIDTH 800
 
 # define FOV_MAX 180.0
 

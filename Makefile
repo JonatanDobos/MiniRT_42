@@ -62,7 +62,7 @@ all: $(LIBS) $(NAME)
 #bonus
 
 $(LIBFT):
-	make -C $(LFTDIR) all
+	make -j -C $(LFTDIR) all
 
 $(LIBMLX):
 	cmake $(LMLXDIR) -B $(LMLXDIR)/build && make -C $(LMLXDIR)/build -j4

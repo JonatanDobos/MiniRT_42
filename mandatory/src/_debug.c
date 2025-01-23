@@ -24,12 +24,12 @@ void	_print_parsing(t_scene *sc)
 	   sc->light.brightness,
 	   sc->light.color[R], sc->light.color[G], sc->light.color[B], sc->light.color[A]);
 	printf("\n\033[0;32m");
-	t_uin16	i = 0;
+	int	i = 0;
 	t_plane pl;
 	while (i < sc->plane_count)
 	{
 		pl = sc->plane[i];
-		printf("\nPlane [%ld]:\n"
+		printf("\nPlane [%d]:\n"
 	   "  Point: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Normal: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Color: (r: %.2f, g: %.2f, b: %.2f, a: %.2f)\n",
@@ -44,7 +44,7 @@ void	_print_parsing(t_scene *sc)
 	while (i < sc->sphere_count)
 	{
 		sp = sc->sphere[i];
-		printf("\nSphere [%ld]:\n"
+		printf("\nSphere [%d]:\n"
 	   "  Center: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Radius: %.2f\n"
 	   "  Color: (r: %.2f, g: %.2f, b: %.2f, a: %.2f)\n",
@@ -59,7 +59,7 @@ void	_print_parsing(t_scene *sc)
 	while (i < sc->cylinder_count)
 	{
 		cy = sc->cylinder[i];
-		printf("\nCylinder [%ld]:\n"
+		printf("\nCylinder [%d]:\n"
 	   "  Center: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Normal: (x: %.2f, y: %.2f, z: %.2f)\n"
 	   "  Radius: %.2f\n"

@@ -12,7 +12,7 @@ t_vec4	vec_sub(t_vec4 a, t_vec4 b)
 
 t_vec4	vec_scale(t_vec4 v, float scalar)
 {
-	const t_vec4	scale_vec = vcast(scalar);
+	const t_vec4	scale_vec = bcast4(scalar);
 
 	return (v * scale_vec);
 }
@@ -27,7 +27,7 @@ float	vec_dot(t_vec4 a, t_vec4 b)
 // ! Where is this one used? isnt vec_scale the same?
 t_vec4	vec_mul(t_vec4 a, float s)
 {
-	const t_vec4	scale_vec = vcast(s);
+	const t_vec4	scale_vec = bcast4(s);
 
 	return (a * scale_vec);
 }

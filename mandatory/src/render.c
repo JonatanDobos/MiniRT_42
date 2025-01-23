@@ -56,9 +56,9 @@ bool	ray_intersect_sphere(t_ray ray, t_sphere *sphere, float *t)
 t_vec4	calculate_lighting(
 	t_scene *scene, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
 {
-	const t_vec4	scalar_amb = ccast(scene->ambient.ratio);
+	const t_vec4	scalar_amb = bcast3(scene->ambient.ratio);
 	t_vec4			scalar_light;
-	t_vec4 			result = {0, 0, 0, 1.0};
+	t_vec4 			result;
 
 	// Ambient lighting
 	result = obj_color * scene->ambient.color * scalar_amb;
@@ -67,10 +67,9 @@ t_vec4	calculate_lighting(
 	t_vec4 light_dir = vec_normalize(vec_sub(scene->light.point, point));
 	float diff = clamp(vec_dot(normal, light_dir), 0.0f, 1.0f) * scene->light.brightness;
 
-	scalar_light = ccast(diff);
-	result += vec_clamp(obj_color * scene->light.color * scalar_light, 0.0f, 1.0f);
-
-	return result;
+	scalar_light = bcast3(diff);
+	result += (obj_color * scene->light.color * scalar_light);
+	return (vec_clamp(result, 0.0f, 1.0f));
 }
 
 // Trace a ray through the scene
@@ -88,7 +87,6 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 			pixel_color = scene->plane[i].color;
 		}
 	}
-
 	// Check sphere intersections
 	for (t_uin16 i = 0; i < scene->sphere_count; i++) {
 		if (ray_intersect_sphere(ray, &scene->sphere[i], &t) && t < closest_t) {
@@ -97,13 +95,11 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 			pixel_color = scene->sphere[i].color;
 		}
 	}
-
 	// Apply lighting if an object was hit
 	if (closest_t < INFINITY) {
 		t_vec4 hit_point = vec_add(ray.origin, vec_mul(ray.vec, closest_t));
 		return calculate_lighting(scene, hit_point, normal, pixel_color);
 	}
-
 	return pixel_color; // Background color
 }
 

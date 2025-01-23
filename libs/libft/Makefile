@@ -84,7 +84,7 @@ SRC		=	$(SRCDIR)/ft_abs.c \
 			$(SRCDIR)/ft_vfree.c \
 			$(SRCDIR)/ft_void_array.c \
 			$(SRCDIR)/ft_cpy.c \
-			$(SRCDIR)/get_next_line.c \
+			$(SRCDIR)/get_next_line.c
 
 OBJDIR	=	./obj
 OBJ		=	$(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
