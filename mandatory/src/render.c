@@ -52,6 +52,55 @@ bool	ray_intersect_sphere(t_ray ray, t_sphere *sphere, float *t)
 	return (*t >= 0);
 }
 
+bool	ray_intersect_cylinder(t_ray ray, t_cylinder *cylinder, float *t)
+{
+	// Step 1: Compute vectors for the cylinder's axis
+	t_vec4 ca = vec_normalize(cylinder->normal); // Cylinder axis (normalized)
+	t_vec4 oc = vec_sub(ray.origin, cylinder->center); // Vector from ray origin to cylinder center
+
+	// Step 2: Project ray direction and oc onto plane perpendicular to the cylinder axis
+	t_vec4 rd = vec_sub(ray.vec, vec_mul(ca, vec_dot(ray.vec, ca))); // Projected ray direction
+	t_vec4 oc_proj = vec_sub(oc, vec_mul(ca, vec_dot(oc, ca)));     // Projected oc
+
+	// Step 3: Solve quadratic equation for the intersection
+	float a = vec_dot(rd, rd);
+	float b = 2.0f * vec_dot(rd, oc_proj);
+	float c = vec_dot(oc_proj, oc_proj) - (cylinder->radius * cylinder->radius);
+	float discriminant = b * b - 4 * a * c;
+
+	if (discriminant < 0.0f)
+		return false; // No intersection
+
+	// Compute the roots of the quadratic
+	float sqrt_d = sqrtf(discriminant);
+	float t0 = (-b - sqrt_d) / (2.0f * a);
+	float t1 = (-b + sqrt_d) / (2.0f * a);
+
+	// Step 4: Determine the valid intersection point
+	if (t0 > t1) // Ensure t0 is the smaller value
+	{
+		float temp = t0;
+		t0 = t1;
+		t1 = temp;
+	}
+
+	// Check if the intersection is within the finite height of the cylinder
+	float y0 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t0)));
+	float y1 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t1)));
+	if (y0 < 0.0f || y0 > cylinder->height) // t0 is outside the height limits
+	{
+		if (y1 < 0.0f || y1 > cylinder->height) // t1 is also outside height limits
+			return false;
+		t0 = t1; // Use t1 instead
+	}
+
+	// Return the closest valid intersection
+	if (t0 < 0.0f) // Intersection is behind the ray origin
+		return false;
+	*t = t0;
+	return true;
+}
+
 // Lighting calculation (ambient + diffuse)
 t_vec4	calculate_lighting(
 	t_scene *scene, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
@@ -93,6 +142,15 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 			closest_t = t;
 			normal = vec_normalize(vec_sub(vec_add(ray.origin, vec_mul(ray.vec, t)), scene->sphere[i].center));
 			pixel_color = scene->sphere[i].color;
+		}
+	}
+	// Check cylinder intersections
+	for (t_uin16 i = 0; i < scene->cylinder_count; i++) {
+		if (ray_intersect_cylinder(ray, &scene->cylinder[i], &t) && t < closest_t) {
+			closest_t = t;
+			t_vec4 hit_point = vec_add(ray.origin, vec_mul(ray.vec, t));
+			normal = vec_normalize(vec_sub(hit_point, vec_add(scene->cylinder[i].center, vec_mul(scene->cylinder[i].normal, vec_dot(vec_sub(hit_point, scene->cylinder[i].center), scene->cylinder[i].normal)))));
+			pixel_color = scene->cylinder[i].color;
 		}
 	}
 	// Apply lighting if an object was hit
