@@ -1,7 +1,4 @@
 *.o
+*.a
 miniRT
-libft.a
-obj
-build
-.DS_Store
-.vscode
+.build
