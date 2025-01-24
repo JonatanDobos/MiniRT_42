@@ -93,6 +93,7 @@ typedef struct s_scene
 	float			cam_r_speed;
 	float			cam_m_speed;
 	float			cam_fov_speed;
+	float			cam_sens;
 	float			delta_time;
 	bool			render;
 }	t_scene;
@@ -109,6 +110,7 @@ typedef struct s_window
 	t_uin16			window_hght;
 	float			res_ratio;
 	float			aspectratio_w;
+	bool			mouse_integration;
 	bool			resize;
 }	t_window;
 

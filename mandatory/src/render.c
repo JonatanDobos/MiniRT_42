@@ -57,25 +57,20 @@ bool	ray_intersect_cylinder(t_ray ray, t_cylinder *cylinder, float *t)
 	// Step 1: Compute vectors for the cylinder's axis
 	t_vec4 ca = vec_normalize(cylinder->normal); // Cylinder axis (normalized)
 	t_vec4 oc = vec_sub(ray.origin, cylinder->center); // Vector from ray origin to cylinder center
-
 	// Step 2: Project ray direction and oc onto plane perpendicular to the cylinder axis
 	t_vec4 rd = vec_sub(ray.vec, vec_mul(ca, vec_dot(ray.vec, ca))); // Projected ray direction
 	t_vec4 oc_proj = vec_sub(oc, vec_mul(ca, vec_dot(oc, ca)));     // Projected oc
-
 	// Step 3: Solve quadratic equation for the intersection
 	float a = vec_dot(rd, rd);
 	float b = 2.0f * vec_dot(rd, oc_proj);
 	float c = vec_dot(oc_proj, oc_proj) - (cylinder->radius * cylinder->radius);
 	float discriminant = b * b - 4 * a * c;
-
 	if (discriminant < 0.0f)
 		return false; // No intersection
-
 	// Compute the roots of the quadratic
 	float sqrt_d = sqrtf(discriminant);
 	float t0 = (-b - sqrt_d) / (2.0f * a);
 	float t1 = (-b + sqrt_d) / (2.0f * a);
-
 	// Step 4: Determine the valid intersection point
 	if (t0 > t1) // Ensure t0 is the smaller value
 	{
@@ -83,7 +78,6 @@ bool	ray_intersect_cylinder(t_ray ray, t_cylinder *cylinder, float *t)
 		t0 = t1;
 		t1 = temp;
 	}
-
 	// Check if the intersection is within the finite height of the cylinder
 	float y0 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t0)));
 	float y1 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t1)));
@@ -93,7 +87,6 @@ bool	ray_intersect_cylinder(t_ray ray, t_cylinder *cylinder, float *t)
 			return false;
 		t0 = t1; // Use t1 instead
 	}
-
 	// Return the closest valid intersection
 	if (t0 < 0.0f) // Intersection is behind the ray origin
 		return false;

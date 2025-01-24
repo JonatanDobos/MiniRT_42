@@ -3,8 +3,8 @@
 
 // defines and enums
 
-# define WIN_HEIGHT 900
-# define WIN_WIDTH 1600
+# define WIN_HEIGHT 1080
+# define WIN_WIDTH 1920
 
 # define FOV_MAX 180.0f
 
@@ -13,11 +13,13 @@
 
 // Camera manipulation speeds
 
-# define FOV_SCROLL_SPEED 20.0f
+# define FOV_SCROLL_SPEED 40.0f
 
 # define CAM_ROTATION_SPEED 1.8f
 
-# define CAM_MOVE_SPEED 15.0f
+# define CAM_MOVE_SPEED 20.0f
+
+# define SENS 0.05f
 
 // Math
 

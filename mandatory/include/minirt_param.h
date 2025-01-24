@@ -27,6 +27,12 @@ t_short		window_init(t_window *win, t_uint wdth, t_uint hght, const char *name);
 
 void		init_hooks(t_minirt *m);
 
+// mlx_hook_utils.c
+
+void		switch_bool(bool *value);
+bool		cursor_inboud(mlx_t *mlx);
+bool		axis2_inboud(t_axis2 val, t_axis2 xlim, t_axis2 ylim);
+
 // parsing.c
 
 t_short		input_parse(t_minirt *m, const char *file);
@@ -111,6 +117,7 @@ t_vec4		vec_normalize(t_vec4 v)__attribute__((const, hot));
 t_vec4		vec_project(t_vec4 a, t_vec4 b)__attribute__((const, hot));
 t_vec4		vec_reflect(t_vec4 v, t_vec4 n)__attribute__((const, hot));
 float		vec_len(t_vec4 v)__attribute__((const, hot));
+t_vec4		vec_rotate(t_vec4 v, t_vec4 axis, float angle);
 
 // vec_math.c
 
