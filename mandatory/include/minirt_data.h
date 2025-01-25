@@ -111,6 +111,7 @@ typedef struct s_window
 	float			res_ratio;
 	float			aspectratio_w;
 	bool			mouse_integration;
+	bool			mouse_pos_re_init;
 	bool			resize;
 }	t_window;
 

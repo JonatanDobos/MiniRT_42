@@ -1,19 +1,5 @@
 #include "../include/minirt_param.h"
 
-float	render_scale_x(t_window *win, float val)
-{
-	const float	max_x = (float)win->rndr_wdth;
-
-	return (max_x * val / win->mlx->width);
-}
-
-float	render_scale_y(t_window *win, float val)
-{
-	const float	max_y = (float)win->rndr_hght;
-
-	return (max_y * val / win->mlx->height);
-}
-
 void	scaled_res_set_pixel(t_window *w, t_uin16 x, t_uin16 y, t_vec4 color)
 {
 	const t_vec4	to_rgba = {255.0f, 255.0f, 255.0f, 255.0f};
@@ -55,8 +41,8 @@ void	res_downscale(t_minirt *m)
 	m->scene.render = true;
 
 	perc = (1.0f / m->win.res_ratio) * 100;
-	printf("\033[0;34m DOWNSCALE: %.0f%% (%dx%d)\033[0m\n",
-		perc, m->win.rndr_wdth, m->win.rndr_hght);
+	printf("\033[0;34m DOWNSCALE: %.0f%% (%dx%d) ~ (%dx%d)\033[0m\n",
+		perc, m->win.rndr_wdth, m->win.rndr_hght, m->win.mlx->width, m->win.mlx->height);
 }
 
 void	res_upscale(t_minirt *m)
@@ -71,6 +57,19 @@ void	res_upscale(t_minirt *m)
 	m->scene.render = true;
 
 	perc = (1.0f / m->win.res_ratio) * 100;
-	printf("\033[0;34m UPSCALE: %.0f%% (%dx%d)\033[0m\n",
-		perc, m->win.rndr_wdth, m->win.rndr_hght);
+	printf("\033[0;34m UPSCALE: %.0f%% (%dx%d) ~ (%dx%d)\033[0m\n",
+		perc, m->win.rndr_wdth, m->win.rndr_hght, m->win.mlx->width, m->win.mlx->height);
+}
+
+void	res_rescale(t_minirt *m)
+{
+	float	perc;
+
+	m->win.rndr_hght = (float)m->win.mlx->height / m->win.res_ratio;
+	m->win.rndr_wdth = (float)m->win.mlx->width / m->win.res_ratio;
+	m->scene.render = true;
+
+	perc = (1.0f / m->win.res_ratio) * 100;
+	printf("\033[0;34m RESCALE: %.0f%% (%dx%d) ~ (%dx%d)\033[0m\n",
+		perc, m->win.rndr_wdth, m->win.rndr_hght, m->win.mlx->width, m->win.mlx->height);
 }

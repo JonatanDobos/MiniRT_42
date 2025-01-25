@@ -22,30 +22,6 @@ static void	key_mlx(mlx_key_data_t key, void *param)
 		return (res_downscale(m));
 }
 
-void	mouse_hook(
-	mouse_key_t but, action_t act, modifier_key_t mods, void *param)
-{
-	t_minirt	*m;
-
-	m = (t_minirt *)param;
-
-	if (but == MLX_MOUSE_BUTTON_LEFT && act == MLX_PRESS)
-	{
-		switch_bool(&m->win.mouse_integration);
-		if (m->win.mouse_integration == true)
-		{
-			mlx_set_cursor_mode(m->win.mlx, MLX_MOUSE_HIDDEN);
-			// mlx_set_mouse_pos(m->win.mlx, m->win.mlx->width / 2, m->win.mlx->height / 2);
-			printf("\033[0;33m cursor cam ON\033[0m\n");
-		}
-		else
-		{
-			mlx_set_cursor_mode(m->win.mlx, MLX_MOUSE_NORMAL);
-			printf("\033[0;33m cursor cam OFF\033[0m\n");
-		}
-	}
-}
-
 static void	resize_mlx(int32_t nhght, int32_t nwdth, void *param)
 {
 	t_minirt	*m;
@@ -55,76 +31,7 @@ static void	resize_mlx(int32_t nhght, int32_t nwdth, void *param)
 		exit_clean(m, perrmlx("resize_mlx", mlx_errno));
 	m->win.pixels = m->win.img->pixels;
 	m->win.aspectratio_w = (float)nwdth / (float)nhght;
-	m->win.rndr_hght = nhght;
-	m->win.rndr_wdth = nwdth;
-	m->win.res_ratio = 1.0f;
-}
-
-void	fov_hook(double xdelta, double ydelta, void *param)
-{
-	t_scene	*sc;
-
-	(void)(xdelta);
-	sc = (t_scene *)param;
-	if (ydelta > 0 && sc->realtime_fov > 0.1f)
-	{
-		sc->realtime_fov = range(sc->realtime_fov - sc->cam_fov_speed, 0.1f, 180.0f);
-		sc->z_dist = 1.0f / tanf((sc->realtime_fov * M_PI / 180.0f) / 2.0f);
-		sc->render = true;
-		printf("\033[0;34m FOV DOWN: %.2f\033[0m\n", sc->realtime_fov);
-		return ;
-	}
-	if (ydelta < 0 && sc->realtime_fov < FOV_MAX)
-	{
-		sc->realtime_fov = range(sc->realtime_fov + sc->cam_fov_speed, 0.1f, 180.0f);
-		sc->z_dist = 1.0f / tanf((sc->realtime_fov * M_PI / 180.0f) / 2.0f);
-		sc->render = true;
-		printf("\033[0;34m FOV UP: %.2f\033[0m\n", sc->realtime_fov);
-		return ;
-	}
-}
-
-void	cam_cursor_move(t_int x, t_int y, t_minirt *m)
-{
-	static double	prev_x = WIN_WIDTH / 2;
-	static double	prev_y = WIN_HEIGHT / 2;
-	double			delta_x;
-	double			delta_y;
-
-	// Get the mouse position (relative to the window)
-	mlx_get_mouse_pos(m->win.mlx, &x, &y);
-
-	// Calculate the movement delta
-	delta_x = (double)x - prev_x;
-	delta_y = (double)y - prev_y;
-	prev_x = (double)x;
-	prev_y = (double)y;
-	printf("Mouse Position: x = %d, y = %d | Delta X: %.2f, Delta Y: %.2f\n",
-		x, y, delta_x, delta_y);//t
-	if (!cursor_inboud(m->win.mlx))
-	{
-		printf("IN Mouse Position: x = %d, y = %d | Delta X: %.2f, Delta Y: %.2f\n",
-			x, y, delta_x, delta_y);//t
-		mlx_set_mouse_pos(m->win.mlx, m->win.mlx->width / 2, m->win.mlx->height / 2);
-		prev_x = m->win.mlx->width / 2;
-		prev_y = m->win.mlx->height / 2;
-		return ;
-	}
-	// Rotate camera orientation based on cursor movement
-	// Horizontal movement (yaw)
-	m->scene.cam.orient = vec_rotate(m->scene.cam.orient, (t_vec4){0, 1, 0}, delta_x * m->scene.cam_sens);
-
-	// Vertical movement (pitch), limiting pitch to avoid flipping
-	t_vec4	right = vec_normalize(vec_cross((t_vec4){0, 1, 0}, m->scene.cam.orient));
-	m->scene.cam.orient = vec_rotate(m->scene.cam.orient, right, delta_y * m->scene.cam_sens);
-
-	// Clamp the camera's orientation to prevent extreme pitch
-	if (fabs(m->scene.cam.orient[Y]) > 0.99) // Avoid near-vertical orientations
-		m->scene.cam.orient[Y] = (m->scene.cam.orient[Y] > 0 ? 0.99 : -0.99);
-	m->scene.cam.orient = vec_normalize(m->scene.cam.orient);
-
-	// Mark the scene for re-rendering
-	m->scene.render = true;
+	res_rescale(m);
 }
 
 void	cam_hook(t_minirt *m)
@@ -153,43 +60,6 @@ void	cam_hook(t_minirt *m)
 		cam_rotate_down(&m->scene);
 }
 
-// void	cursor_hook(double x, double y, void *param)
-// {
-// 	t_minirt		*m;
-// 	static double	prev_x = 0;
-// 	static double	prev_y = 0;
-// 	const double	delta_x = x - prev_x;
-// 	const double	delta_y = y - prev_y;
-
-// 	m = (t_minirt *)param;
-// 	if (m->win.mouse_integration == false)
-// 		return ;
-// 	mlx_get_mouse_pos(m->win.mlx, &x, &y);
-// 	printf("Mouse Position: x = %d, y = %d | Delta X: %.2f, Delta Y: %.2f\n",
-// 		x, y, delta_x, delta_y);//t
-// 	if (cursor_inboud(m->win.mlx) == false)
-// 	{
-// 		puts("SET\n");
-// 		mlx_set_mouse_pos(m->win.mlx, m->win.mlx->width / 2, m->win.mlx->height / 2);
-// 		x = m->win.mlx->width / 2;
-// 		y = m->win.mlx->height / 2;
-// 	}
-// 	prev_x = x;
-// 	prev_y = y;
-// 	// Rotate camera orientation based on cursor movement
-// 	// Horizontal movement (yaw)
-// 	m->scene.cam.orient = vec_rotate(m->scene.cam.orient, (t_vec4){0, 1, 0}, delta_x * m->scene.cam_sens);
-// 	// Vertical movement (pitch), limiting pitch to avoid flipping
-// 	t_vec4	right = vec_normalize(vec_cross((t_vec4){0, 1, 0}, m->scene.cam.orient));
-// 	m->scene.cam.orient = vec_rotate(m->scene.cam.orient, right, delta_y * m->scene.cam_sens);
-// 	// Clamp the camera's orientation to prevent extreme pitch
-// 	if (fabs(m->scene.cam.orient[Y]) > 0.99) // Avoid near-vertical orientations
-// 		m->scene.cam.orient[Y] = (m->scene.cam.orient[Y] > 0 ? 0.99 : -0.99);
-// 	m->scene.cam.orient = vec_normalize(m->scene.cam.orient);
-// 	// Mark the scene for re-rendering
-// 	m->scene.render = true;
-// }
-
 void	loop_hook(void *param)
 {
 	t_minirt	*m;
@@ -214,7 +84,6 @@ void	loop_hook(void *param)
 
 void	init_hooks(t_minirt *m)
 {
-	// mlx_cursor_hook(m->win.mlx, cursor_hook, m);
 	mlx_mouse_hook(m->win.mlx, mouse_hook, m);
 	mlx_close_hook(m->win.mlx, close_mlx, m);
 	mlx_key_hook(m->win.mlx, key_mlx, m);

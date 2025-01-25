@@ -19,7 +19,7 @@
 
 # define CAM_MOVE_SPEED 20.0f
 
-# define SENS 0.05f
+# define SENS 0.1f
 
 // Math
 

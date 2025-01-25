@@ -27,9 +27,17 @@ t_short		window_init(t_window *win, t_uint wdth, t_uint hght, const char *name);
 
 void		init_hooks(t_minirt *m);
 
+// mlx_hook_mouse.c
+
+void		cursor_cam_switch(t_minirt *m, bool state);
+void		mouse_hook(mouse_key_t but, action_t act, modifier_key_t mods, void *param);
+void		fov_hook(double xdelta, double ydelta, void *param);
+void		cam_cursor_move(t_int x, t_int y, t_minirt *m);
+
+
 // mlx_hook_utils.c
 
-void		switch_bool(bool *value);
+bool		switch_bool(bool *value);
 bool		cursor_inboud(mlx_t *mlx);
 bool		axis2_inboud(t_axis2 val, t_axis2 xlim, t_axis2 ylim);
 
@@ -64,11 +72,10 @@ void		exit_clean(t_minirt *m, t_short errnum);
 
 // scaling.c
 
-float		render_scale_x(t_window *win, float val);
-float		render_scale_y(t_window *win, float val);
 void		scaled_res_set_pixel(t_window *w, t_uin16 x, t_uin16 y, t_vec4 color);
 void		res_upscale(t_minirt *m);
 void		res_downscale(t_minirt *m);
+void		res_rescale(t_minirt *m);
 
 // parse_peripherals.c
 

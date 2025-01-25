@@ -39,6 +39,7 @@ SRC		=	$(SRCDIR)/main.c \
 			$(SRCDIR)/error.c \
 			$(SRCDIR)/exit.c \
 			$(SRCDIR)/init.c \
+			$(SRCDIR)/mlx_hook_mouse.c \
 			$(SRCDIR)/mlx_hook_utils.c \
 			$(SRCDIR)/mlx_hook.c \
 			$(SRCDIR)/mlx_init.c \

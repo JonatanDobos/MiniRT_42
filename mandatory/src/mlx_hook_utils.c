@@ -1,11 +1,10 @@
 #include "../include/minirt_param.h"
 
-void	switch_bool(bool *value)
+bool	switch_bool(bool *value)
 {
 	if (*value == true)
-		*value = false;
-	else
-		*value = true;
+		return (*value = false, false);
+	return (*value = true, true);
 }
 
 bool	cursor_inboud(mlx_t *mlx)
