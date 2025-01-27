@@ -36,7 +36,8 @@ int main(int argc, char **argv)
 	{
 		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	}
-	render_scene(&rt, rt.scene);
+	// render_scene(&rt, rt.scene);
+	render(&rt);
 
 	printf("miniRT finished rendering %f\n", mlx_get_time());
 

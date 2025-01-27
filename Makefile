@@ -20,6 +20,7 @@ CFLAGS			 =	-MMD -MP
 # CFLAGS			+=	-Wall -Wextra
 # # Werror cannot go together with fsanitize, because fsanitize won't work correctly.
 # CFLAGS			+=	-Werror
+CFLAGS			+=	-g
 # CFLAGS			+=	-g -Og
 # CFLAGS			+=	-fsanitize=address
 # CFLAGS			+=	-Wunused -Wuninitialized -Wunreachable-code

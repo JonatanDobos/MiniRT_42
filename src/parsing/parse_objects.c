@@ -21,7 +21,7 @@ int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 		return (errset(perr("parse_pl", errno)));
 	sc->arr_size++;
 	vc->obj_amount++;
-	sc->objs->intersect_ptr = &ray_intersect_plane;
+	// sc->objs->intersect_ptr = &ray_intersect_plane;
 	return (SUCCESS);
 }
 

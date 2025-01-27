@@ -35,7 +35,8 @@ static bool	img_to_window(t_window *win)
 	win->img = mlx_new_image(win->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	if (win->img == NULL)
 		return (false);
-	if (mlx_image_to_window(win->mlx, win->img, 0, 0) == -1)
+	win->id = mlx_image_to_window(win->mlx, win->img, 0, 0);
+	if (win->id == -1)
 		return (false);
 	return (true);
 }
@@ -64,7 +65,12 @@ static void	center_window(t_window *win)
 	win->rndr_hght = window_y;
 	win->rndr_wdth = window_x;
 	win->ratio_w = (float)window_x / (float)window_y;
+	win->pixels = (uint8_t *)win->img->pixels;
+
+
 	printf("x %d\ny = %d\n", window_x, window_y);
+	printf("win->ratio_w = %d\n", (uint8_t)win->ratio_w);		//	joni	1?
+	// exit(0);
 	window_x = (window_x - WINDOW_WIDTH) / 2;
 	window_y = (window_y - WINDOW_HEIGHT) / 2;
 	mlx_set_window_pos(win->mlx, window_x, window_y);
