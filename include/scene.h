@@ -12,6 +12,14 @@
 
 # define FOV_MAX 180.0f
 
+typedef bool(*t_fintersect)(t_ray ray, t_objs *objs, float *t);
+
+typedef struct s_ray
+{
+	t_vec4		origin;
+	t_vec4		vec;
+}	t_ray;
+
 typedef struct s_light
 {
 	float		brightness;
@@ -77,6 +85,7 @@ typedef struct	s_objs
 	};
 	t_vec4			coords;
 	t_vec4			color;
+	t_fintersect	*intersect_ptr;
 	float			hit;	//	Evt weg pleuren
 }	t_objs;
 

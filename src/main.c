@@ -21,7 +21,6 @@ void	init_main(t_rt *rt, t_scene *scn, t_window *win)
 	errset((int64_t)rt->errnum);
 	rt->scene = scn;
 	rt->win = win;
-
 }
 
 int main(int argc, char **argv)
