@@ -15,7 +15,7 @@ void	print_camera(t_objs cam)
 void	print_ambient(t_objs amb)
 {
 	printf("Ambient\n     "
-		"Ratio:	%f)\n    "
+		"Ratio: %f\n    "
 		"Colour: (%f, %f, %f, %f)\n",
 		amb.a.ratio,
 		amb.color[0], amb.color[1], amb.color[2], amb.color[3]);

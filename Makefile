@@ -2,6 +2,7 @@ NAME			:=	miniRT
 
 # Get the number of logical processors (threads)
 N_JOBS			:=	$(shell nproc)
+# N_JOBS			:=	1
 
 # (-j) Specify the number of jobs (commands) to run simultaneously
 MULTI_THREADED	:=	-j $(N_JOBS)
@@ -19,27 +20,42 @@ CFLAGS			 =	-MMD -MP
 # CFLAGS			+=	-Wall -Wextra
 # # Werror cannot go together with fsanitize, because fsanitize won't work correctly.
 # CFLAGS			+=	-Werror
+# CFLAGS			+=	-g -Og
 # CFLAGS			+=	-fsanitize=address
 # CFLAGS			+=	-Wunused -Wuninitialized -Wunreachable-code
 
+#		Temporary CFLAGS
+CFLAGS			+=	-Wno-unused-result
 #		Optimization flags
 # Generate code optimized for the host machine's CPU
 OFLAGS			 =	-march=native
-# Disable setting errno after math functions for better performance
-OFLAGS			+=	-fno-math-errno
-# This flag allows the compiler to use reciprocal approximations for division operations, which can improve performance but may reduce precision.
-OFLAGS			+=	-freciprocal-math
-# This flag allows the compiler to ignore the distinction between positive and negative zero, which can enable more aggressive optimizations.
-OFLAGS			+=	-fno-signed-zeros
-# This flag tells the compiler that floating-point operations cannot generate traps (such as overflow or division by zero), allowing for more aggressive optimizations.
-OFLAGS			+=	-fno-trapping-math
+# # Disable setting errno after math functions for better performance
+# OFLAGS			+=	-fno-math-errno
+# # This flag allows the compiler to use reciprocal approximations for division operations, which can improve performance but may reduce precision.
+# OFLAGS			+=	-freciprocal-math
+# # This flag allows the compiler to ignore the distinction between positive and negative zero, which can enable more aggressive optimizations.
+# OFLAGS			+=	-fno-signed-zeros
+# # This flag tells the compiler that floating-point operations cannot generate traps (such as overflow or division by zero), allowing for more aggressive optimizations.
+# OFLAGS			+=	-fno-trapping-math
 
-ifdef DEBUG
-	CFLAGS += -g
-	OFLAGS += -Og
-else
-	OFLAGS += -Ofast
-# OFLAGS += -O3
+OFLAGS += -Ofast
+OFLAGS += -O3
+# ifeq ($(shell uname -s),Linux)
+# 	ifeq ($(MAKECMDGOALS),malloc_wrap)
+# 		WRAP_MALLOC	:= -Wl,--wrap=malloc
+# 		OFLAGS := $(filter-out -Ofast, $(OFLAGS))
+# 		OFLAGS := $(filter-out -O3, $(OFLAGS))
+# 	endif
+# endif
+
+ifeq ($(MAKECMDGOALS),malloc_wrap)
+	CFLAGS	+=	-D MALLOC_WRAP=true
+	OFLAGS	:= 	$(filter-out -Ofast, $(OFLAGS))
+	OFLAGS	:= 	$(filter-out -O3, $(OFLAGS))
+	LIBWRAP :=	malloc_wrap
+	ifeq ($(shell uname -s),Linux)
+		WRAP_MALLOC	:= -Wl,--wrap=malloc
+	endif
 endif
 
 #	macOS = Darwin
@@ -51,7 +67,7 @@ ifeq ($(shell uname -s), Darwin)
 else
 # LINKER_FLAGS += -ldl
 # CORE_COUNT = $(shell grep '^processor' /proc/cpuinfo | wc -l)
-	OFLAGS += -fsingle-precision-constant -flto=auto -fuse-linker-plugin
+	# OFLAGS += -fsingle-precision-constant -flto=auto -fuse-linker-plugin
 endif
 CFLAGS += $(OFLAGS)
 
@@ -142,7 +158,7 @@ DELETE			 =	*.out										\
 all:	$(NAME)
 
 $(NAME): $(LIBS) $(OBJS)
-	$(BUILD) $(OBJS) $(LIBS) $(LINKER_FLAGS) -o $(NAME)
+	$(BUILD) $(WRAP_MALLOC) $(OBJS) $(LIBS) $(LINKER_FLAGS) -o $(NAME)
 	@printf "$(CREATED)" $@ $(CUR_DIR)
 
 $(BUILD_DIR)%.o: %.c $(HEADERS)
@@ -150,7 +166,7 @@ $(BUILD_DIR)%.o: %.c $(HEADERS)
 	$(BUILD) $(INCLUDE_RT) -c $< -o $@
 
 $(LIBFT_L):
-	@$(MAKE) $(MULTI_THREADED) $(PRINT_NO_DIR) -C $(LIBFT_D) OFLAGS="$(OFLAGS)"
+	@$(MAKE) $(MULTI_THREADED) $(PRINT_NO_DIR) -C $(LIBFT_D) $(LIBWRAP) OFLAGS="$(OFLAGS)"
 
 $(MLX42_L):
 	@cmake $(MLX42_D) -B $(MLX42_D)/build && cmake --build $(MLX42_D)/build --parallel $(N_JOBS)
@@ -179,6 +195,7 @@ fcln:	cln
 
 re:		fclean all
 
+malloc_wrap: all
 
 test: all
 	./$(NAME) ./test1.rt

@@ -4,6 +4,7 @@
 // # include <libft.h>
 // # include <MLX42/MLX42.h>
 // #include <math.h>
+# define _GNU_SOURCE
 
 //	temporary include for debugging.
 # include <stdio.h>

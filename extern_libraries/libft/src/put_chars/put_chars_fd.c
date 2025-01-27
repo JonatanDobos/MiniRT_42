@@ -6,7 +6,7 @@
 /*   By: jdobos <jdobos@student.42.fr>                +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 20:31:50 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/17 18:54:06 by jdobos        ########   odam.nl         */
+/*   Updated: 2025/01/27 02:14:47 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	ft_putnbr_fd(int n, int fd)
 /*
 	Used functions:
 	- write
+	- ft_strlen
 */
 void	ft_putstr_fd(t_cchr *s, int fd)
 {

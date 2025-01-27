@@ -1,6 +1,7 @@
 #include <parsing.h>
 #include <math.h>
 #include <utils.h>
+#include <debug.h>
 
 int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line)
 {

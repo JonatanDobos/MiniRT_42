@@ -4,17 +4,24 @@ COMPILER		:=	gcc
 RM				:=	rm -rf
 
 #		Compiler flags
-CFLAGS			 =	-flto -Ofast
-
-#		CFLAGS for testing
 CFLAGS			+=	-MMD -MP
-CFLAGS			+=	-Wall -Wextra
+# CFLAGS			+=	-Wall -Wextra
 # # Werror cannot go together with fsanitize, because fsanitize won't work correctly.
-CFLAGS			+=	-Werror
+# CFLAGS			+=	-Werror
+CFLAGS			+=	-g
 # CFLAGS			+=	-fsanitize=address
-CFLAGS			+=	-Wunused -Wuninitialized -Wunreachable-code
+# CFLAGS			+=	-Wunused -Wuninitialized -Wunreachable-code
 # OFLAGS are optimization flags that might have been passed from the parent Makefile.
 CFLAGS			+=	$(OFLAGS)
+
+ifeq ($(MAKECMDGOALS),malloc_wrap)
+	CFLAGS	+= -D MALLOC_WRAP=true
+	CFLAGS := $(filter-out -Ofast, $(CFLAGS))
+	CFLAGS := $(filter-out -O3, $(CFLAGS))
+	ifeq ($(shell uname -s),Linux)
+		WRAP_MALLOC	:= -Wl,--wrap=malloc
+	endif
+endif
 
 #		Build directory for objects and dependencies
 BUILD_DIR		:=	.build/
@@ -35,6 +42,8 @@ MRKUP			:=	markup.c
 MATH_			:=	sign.c						digit_counter.c
 MEDIT			:=	mem_edit.c
 MSRCH			:=	mem_search.c
+FWRAP			:=	dynamic_symbols.c			linux_malloc_wrapper.c			mac_malloc_wrapper.c	\
+					malloc_handlers.c
 PRNTF			:=	printf.c					printf_process_format.c			printf_char.c			\
 					printf_count.c				printf_flags.c					printf_int.c			\
 					printf_sort_spec.c			printf_str_count.c				printf_str.c			\
@@ -59,6 +68,7 @@ SRCS			:=	$(addprefix $(SRC_DIR)alloc_functions/, $(ALLOC)) 								\
 					$(addprefix $(SRC_DIR)math/, $(MATH_))							 				\
 					$(addprefix $(SRC_DIR)memory_edit/, $(MEDIT)) 									\
 					$(addprefix $(SRC_DIR)memory_search/, $(MSRCH))									\
+					$(addprefix $(SRC_DIR)wrap_functions/, $(FWRAP))								\
 					$(addprefix $(SRC_DIR)printf/, $(PRNTF)) 										\
 					$(addprefix $(SRC_DIR)put_chars/, $(PTCHR))										\
 					$(addprefix $(SRC_DIR)string_create/, $(SCRTE))									\
@@ -72,7 +82,7 @@ DEPS			:=	$(OBJS:.o=.d)
 #		Header files
 HEADERS_FILES	:=	libft.h						common_defs.h					ft_printf.h				\
 					dynarr.h					is_ctype1.h						is_ctype2.h				\
-					validate_ptr.h				terminal_markup.h
+					validate_ptr.h				terminal_markup.h				wrap_functions.h
 HEADERS			:=	$(addprefix $(INC_DIR), $(HEADERS_FILES))
 
 #		Remove these created files
@@ -86,13 +96,18 @@ all: $(NAME)
 #		Main target
 $(NAME): $(OBJS)
 	@ar rcs $(NAME) $(OBJS)
-
 	@printf "$(CREATED)" $@ $(CUR_DIR)
 
 #		Compile .c files to .o files
 $(BUILD_DIR)%.o: %.c $(HEADERS)
 	@mkdir -p $(@D)
 	$(COMPILER) $(CFLAGS) -I $(INC_DIR) -c $< -o $@
+
+$(BUILD_DIR)src/wrap_functions/linux_malloc_wrapper.o: src/wrap_functions/linux_malloc_wrapper.c $(HEADERS)
+	@mkdir -p $(@D)
+	$(COMPILER) $(CFLAGS) -D MALLOC_WRAP=true -I $(INC_DIR) -c $< -o $@
+
+malloc_wrap:	all
 
 clean:
 	@$(RM) $(BUILD_DIR) $(DELETE)
@@ -117,7 +132,7 @@ print-%:
 #		Include dependencies
 -include $(DEPS)
 
-.PHONY: all clean no_print_clean fclean no_print_fclean re print-%
+.PHONY: all malloc_wrap clean no_print_clean fclean no_print_fclean re print-%
 
 # ----------------------------------- colors --------------------------------- #
 BOLD			=	\033[1m

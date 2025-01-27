@@ -92,71 +92,71 @@ bool	check_height(const t_objs *obj, const t_cylinder *cyl, t_cvec4 coords, t_cv
 
 bool intersect_cylinder_caps(t_vec4 coords, t_vec4 orientation, t_vec4 plane_point, t_vec4 plane_normal, float *t)
 {
-    float denom = dot_product(plane_normal, orientation);
-    if (fabs(denom) > 1e-6) {
-        t_vec4 p0l0 = plane_point - coords;
-        *t = dot_product(p0l0, plane_normal) / denom;
-        return (*t >= 0);
-    }
-    return false;
+	float denom = dot_product(plane_normal, orientation);
+	if (fabs(denom) > 1e-6) {
+		t_vec4 p0l0 = plane_point - coords;
+		*t = dot_product(p0l0, plane_normal) / denom;
+		return (*t >= 0);
+	}
+	return false;
 }
 float length(t_vec4 v)
 {
-    return sqrt(dot_product(v, v));
+	return sqrt(dot_product(v, v));
 }
 float intersect_cylinder(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
 {
-    t_cylinder *cylinder = &obj->cylinder;
-    t_cvec4 oc = coords - obj->coords; // Use obj->coords as the base center
-    t_cvec4 d = normalize(cylinder->orientation); // Ensure the direction is normalized
-    t_cvec4 rd = orientation - d * dot_product(orientation, d);
-    t_cvec4 oc_d = oc - d * dot_product(oc, d);
+	t_cylinder *cylinder = &obj->cylinder;
+	t_cvec4 oc = coords - obj->coords; // Use obj->coords as the base center
+	t_cvec4 d = normalize(cylinder->orientation); // Ensure the direction is normalized
+	t_cvec4 rd = orientation - d * dot_product(orientation, d);
+	t_cvec4 oc_d = oc - d * dot_product(oc, d);
 
-    t_cfloat a = dot_product(rd, rd);
-    t_cfloat b = 2.0F * dot_product(rd, oc_d);
-    t_cfloat c = dot_product(oc_d, oc_d) - cylinder->diameter;
+	t_cfloat a = dot_product(rd, rd);
+	t_cfloat b = 2.0F * dot_product(rd, oc_d);
+	t_cfloat c = dot_product(oc_d, oc_d) - cylinder->diameter;
 
-    t_cfloat discriminant = b * b - 4.0F * a * c;
+	t_cfloat discriminant = b * b - 4.0F * a * c;
 
-    if (discriminant < 0) {
-        return (-1.0F);
-    }
+	if (discriminant < 0) {
+		return (-1.0F);
+	}
 
-    t_cfloat fast_sqrt_discriminant = sqrt(discriminant);
-    t_cfloat t1 = (-b - fast_sqrt_discriminant) / (2.0F * a);
-    t_cfloat t2 = (-b + fast_sqrt_discriminant) / (2.0F * a);
+	t_cfloat fast_sqrt_discriminant = sqrt(discriminant);
+	t_cfloat t1 = (-b - fast_sqrt_discriminant) / (2.0F * a);
+	t_cfloat t2 = (-b + fast_sqrt_discriminant) / (2.0F * a);
 
-    // Check if the intersection points are within the height of the cylinder
-    if (check_height(obj, cylinder, coords, orientation, t1)) {
-        return t1;
-    }
-    if (check_height(obj, cylinder, coords, orientation, t2)) {
-        return t2;
-    }
+	// Check if the intersection points are within the height of the cylinder
+	if (check_height(obj, cylinder, coords, orientation, t1)) {
+		return t1;
+	}
+	if (check_height(obj, cylinder, coords, orientation, t2)) {
+		return t2;
+	}
 
-    // Calculate top and bottom cap centers
-    t_vec4 top_cap = obj->coords + d * cylinder->height;
-    t_vec4 bottom_cap = obj->coords;
+	// Calculate top and bottom cap centers
+	t_vec4 top_cap = obj->coords + d * cylinder->height;
+	t_vec4 bottom_cap = obj->coords;
 
-    // Check intersection with top cap
-    float t_top;
-    if (intersect_cylinder_caps(coords, orientation, top_cap, d, &t_top)) {
-        t_vec4 p = coords + t_top * orientation;
-        if (length(p - top_cap) <= cylinder->radius) {
-            return t_top;
-        }
-    }
+	// Check intersection with top cap
+	float t_top;
+	if (intersect_cylinder_caps(coords, orientation, top_cap, d, &t_top)) {
+		t_vec4 p = coords + t_top * orientation;
+		if (length(p - top_cap) <= cylinder->radius) {
+			return t_top;
+		}
+	}
 
-    // Check intersection with bottom cap
-    float t_bottom;
-    if (intersect_cylinder_caps(coords, orientation, bottom_cap, d, &t_bottom)) {
-        t_vec4 p = coords + t_bottom * orientation;
-        if (length(p - bottom_cap) <= cylinder->radius) {
-            return t_bottom;
-        }
-    }
+	// Check intersection with bottom cap
+	float t_bottom;
+	if (intersect_cylinder_caps(coords, orientation, bottom_cap, d, &t_bottom)) {
+		t_vec4 p = coords + t_bottom * orientation;
+		if (length(p - bottom_cap) <= cylinder->radius) {
+			return t_bottom;
+		}
+	}
 
-    return (-1.0F);
+	return (-1.0F);
 }
 
 void intersect_table(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
@@ -191,7 +191,7 @@ t_vec4	obj_nearest_vp(t_rt *rt, t_objs *objarr, t_cvec4 coords, t_cvec4 orientat
 
 		return (color);
 	}
-	return ((t_vec4){0, 0, 0, 255});
+	return ((t_vec4){-1.0F, -1.0F, -1.0F, -1.0F});
 }
 
 void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color)
@@ -230,23 +230,28 @@ void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color)
 
 void render_scene(t_rt *rt, t_scene *scn)
 {
-    t_cvec4 coords = scn->camera.coords;
-    t_cuint32 bg_color = 0xFF0000;
-    float aspect_ratio = ASPECT_RATIO;
-    float x;
-    float y;
+	t_cvec4 coords = scn->camera.coords;
+	t_cuint32 bg_color = 0xFF0000;
+	float aspect_ratio = ASPECT_RATIO;
+	float x;
+	float y;
+	
+	t_vec4 ambient_color = scn->ambient.color * scn->ambient.a.ratio;
+	for (uint32_t j = 0; j < WINDOW_HEIGHT; j++)
+	{
+		for (uint32_t i = 0; i < WINDOW_WIDTH; i++)
+		{
+			x = (2.0F * (i + 0.5F) / (float)WINDOW_WIDTH - 1) * aspect_ratio;
+			y = 1.0F - 2.0F * (j + 0.5F) / (float)WINDOW_HEIGHT;
+			t_vec4 direction = normalize((t_vec4){x, y, -scn->camera.c.zvp_dist} + scn->camera.c.orientation);
 
-    for (uint32_t j = 0; j < WINDOW_HEIGHT; j++)
-    {
-        for (uint32_t i = 0; i < WINDOW_WIDTH; i++)
-        {
-            x = (2.0F * (i + 0.5F) / (float)WINDOW_WIDTH - 1) * aspect_ratio;
-            y = 1.0F - 2.0F * (j + 0.5F) / (float)WINDOW_HEIGHT;
-            t_vec4 direction = normalize((t_vec4){x, y, -scn->camera.c.zvp_dist} + scn->camera.c.orientation);
-
-            t_vec4 color = obj_nearest_vp(rt, scn->objs, coords, direction);
-
-            set_pixel(rt->win, i, j, color);
-        }
-    }
+			t_vec4 color = obj_nearest_vp(rt, scn->objs, coords, direction);
+			if (color[X] == -1.0F)
+			{
+				continue ;
+			}
+			color *= ambient_color * scn->ambient.a.ratio;
+			set_pixel(rt->win, i, j, color);
+		}
+	}
 }

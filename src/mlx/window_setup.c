@@ -60,6 +60,8 @@ static void	center_window(t_window *win)
 	// window_x = (SCREEN_WINDOW_WIDTH - WINDOW_WIDTH) / 2;
 	// window_y = (SCREEN_WINDOW_HEIGHT - WINDOW_HEIGHT) / 2;
 	mlx_get_monitor_size(0, &window_x, &window_y);
+
+	printf("x %d\ny = %d\n", window_x, window_y);
 	window_x = (window_x - WINDOW_WIDTH) / 2;
 	window_y = (window_y - WINDOW_HEIGHT) / 2;
 	mlx_set_window_pos(win->mlx, window_x, window_y);

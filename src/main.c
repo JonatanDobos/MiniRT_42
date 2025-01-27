@@ -23,6 +23,7 @@ void	init_main(t_rt *rt, t_scene *scn, t_window *win)
 	rt->win = win;
 
 }
+
 int main(int argc, char **argv)
 {
 	t_rt		rt;
@@ -46,4 +47,3 @@ int main(int argc, char **argv)
 	printf("exiting miniRT\n");
 	return (EXIT_SUCCESS);
 }
-
