@@ -52,10 +52,10 @@ void	fov_hook(double xdelta, double ydelta, void *param)
 	}
 }
 
-void	cam_cursor_move(t_int x, t_int y, t_minirt *m)
+void	cam_cursor_move(int32_t x, int32_t y, t_minirt *m)
 {
-	static double	prev_x = WIN_WIDTH / 2;
-	static double	prev_y = WIN_HEIGHT / 2;
+	static double	prev_x = 0.0;
+	static double	prev_y = 0.0;
 	double			delta_x;
 	double			delta_y;
 
@@ -72,7 +72,15 @@ void	cam_cursor_move(t_int x, t_int y, t_minirt *m)
 	prev_y = (double)y;
 	if (delta_x == 0.0 && delta_y == 0.0)
 		return ;
-	if (!cursor_inboud(m->win.mlx))
+	if (!cursor_inboud(m->win.mlx, 10))
+	{
+		prev_x = (double)m->win.mlx->width / 2;
+		prev_y = (double)m->win.mlx->height / 2;
+		mlx_set_mouse_pos(m->win.mlx, m->win.mlx->width / 2, m->win.mlx->height / 2);
+		return ;
+	}
+	// Use this when set_mouse_pos() isn't working.
+	if (!cursor_inboud(m->win.mlx, 0))
 	{
 		printf("\033[0;31m cursor out of bounds\033[0m\n");
 		cursor_cam_switch(m, false);

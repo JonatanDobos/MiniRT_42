@@ -31,6 +31,8 @@ static void	resize_mlx(int32_t nhght, int32_t nwdth, void *param)
 		exit_clean(m, perrmlx("resize_mlx", mlx_errno));
 	m->win.pixels = m->win.img->pixels;
 	m->win.aspectratio_w = (float)nwdth / (float)nhght;
+	m->win.window_hght = nhght;
+	m->win.window_wdth = nwdth;
 	res_rescale(m);
 }
 

@@ -15,13 +15,13 @@ void		render(t_minirt *m);
 
 // render_utils.c
 
-void		set_pixel(t_window *w, t_uin16 x, t_uin16 y, t_vec4 color)__attribute__((hot));
+void		set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color)__attribute__((hot));
 t_vec4		bcast4(float scalar)__attribute__((const, hot));
 t_vec4		bcast3(float scalar)__attribute__((const, hot));
 
 // mlx_init.c
 
-t_short		window_init(t_window *win, t_uint wdth, t_uint hght, const char *name);
+int16_t		window_init(t_window *win, uint32_t wdth, uint32_t hght, const char *name);
 
 // mlx_hook.c
 
@@ -32,18 +32,18 @@ void		init_hooks(t_minirt *m);
 void		cursor_cam_switch(t_minirt *m, bool state);
 void		mouse_hook(mouse_key_t but, action_t act, modifier_key_t mods, void *param);
 void		fov_hook(double xdelta, double ydelta, void *param);
-void		cam_cursor_move(t_int x, t_int y, t_minirt *m);
+void		cam_cursor_move(int32_t x, int32_t y, t_minirt *m);
 
 
 // mlx_hook_utils.c
 
 bool		switch_bool(bool *value);
-bool		cursor_inboud(mlx_t *mlx);
+bool		cursor_inboud(mlx_t *mlx, uint16_t margin);
 bool		axis2_inboud(t_axis2 val, t_axis2 xlim, t_axis2 ylim);
 
 // parsing.c
 
-t_short		input_parse(t_minirt *m, const char *file);
+int16_t		input_parse(t_minirt *m, const char *file);
 
 // init.c
 
@@ -51,9 +51,9 @@ void		init_struct_m(t_minirt *m);
 
 // print.c
 
-t_short		perr(char *place, t_short num);
-t_short		perrmlx(char *place, const t_short num);
-t_short		perr_msg(char *place, const t_short errnum, char *msg);
+int16_t		perr(char *place, int16_t num);
+int16_t		perrmlx(char *place, const int16_t num);
+int16_t		perr_msg(char *place, const int16_t errnum, char *msg);
 
 // cleanup.c
 
@@ -63,31 +63,31 @@ void		clean_all(t_minirt *m);
 
 // error.c
 
-t_long		errset(const t_long errnum);
-t_short		nsave(const t_short num);
+int64_t		errset(const int64_t errnum);
+int16_t		nsave(const int16_t num);
 
 // exit.c
 
-void		exit_clean(t_minirt *m, t_short errnum);
+void		exit_clean(t_minirt *m, int16_t errnum);
 
 // scaling.c
 
-void		scaled_res_set_pixel(t_window *w, t_uin16 x, t_uin16 y, t_vec4 color);
+void		scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
 void		res_upscale(t_minirt *m);
 void		res_downscale(t_minirt *m);
 void		res_rescale(t_minirt *m);
 
 // parse_peripherals.c
 
-t_short		parse_amb(t_scene *sc, t_value_check *vc, char *line);
-t_short		parse_cam(t_scene *sc, t_value_check *vc, char *line);
-t_short		parse_light(t_scene *sc, t_value_check *vc, char *line);
+int16_t		parse_amb(t_scene *sc, t_value_check *vc, char *line);
+int16_t		parse_cam(t_scene *sc, t_value_check *vc, char *line);
+int16_t		parse_light(t_scene *sc, t_value_check *vc, char *line);
 
 // parse_objects.c
 
-t_short		parse_pl(t_scene *sc, t_value_check *vc, char *line);
-t_short		parse_sp(t_scene *sc, t_value_check *vc, char *line);
-t_short		parse_cy(t_scene *sc, t_value_check *vc, char *line);
+int16_t		parse_pl(t_scene *sc, t_value_check *vc, char *line);
+int16_t		parse_sp(t_scene *sc, t_value_check *vc, char *line);
+int16_t		parse_cy(t_scene *sc, t_value_check *vc, char *line);
 
 // parsing_utils.c
 
@@ -113,7 +113,7 @@ void		cam_rotate_down(t_scene *sc);
 // string_utils.c
 
 float		rt_atof(const char *str);
-t_int		rt_atoi(const char *str);
+int32_t		rt_atoi(const char *str);
 char		*nxtv(char *str);
 char		*nxtvp(char **str);
 

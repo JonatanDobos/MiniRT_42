@@ -5,7 +5,7 @@
  * @param m Pointer to t_minirt struct to be cleaned.
  * @param errnum Error code to exit with.
  */
-void	exit_clean(t_minirt *m, t_short errnum)
+void	exit_clean(t_minirt *m, int16_t errnum)
 {
 	clean_all(m);
 	exit(errnum);

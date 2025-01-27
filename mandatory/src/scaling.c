@@ -1,28 +1,28 @@
 #include "../include/minirt_param.h"
 
-void	scaled_res_set_pixel(t_window *w, t_uin16 x, t_uin16 y, t_vec4 color)
+void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color)
 {
 	const t_vec4	to_rgba = {255.0f, 255.0f, 255.0f, 255.0f};
-	t_uint8			*pixels;
+	uint8_t			*pixels;
 	t_axis2			i;
 	t_axis2			pixel;
 
 	color *= to_rgba;
 	i.y = 0;
-	while (i.y < (t_uin16)w->res_ratio)
+	while (i.y < (uint16_t)w->res_ratio)
 	{
 		i.x = 0;
-		pixel.y = y * (t_uin16)w->res_ratio + i.y;
-		while (i.x < (t_uin16)w->res_ratio)
+		pixel.y = y * (uint16_t)w->res_ratio + i.y;
+		while (i.x < (uint16_t)w->res_ratio)
 		{
-			pixel.x = x * (t_uin16)w->res_ratio + i.x;
+			pixel.x = x * (uint16_t)w->res_ratio + i.x;
 			if (pixel.x > w->mlx->width || pixel.y > w->mlx->height)
 				continue ;
 			pixels = w->pixels + (pixel.y * w->mlx->width + pixel.x) * 4;
-			*(pixels++) = (t_uint8)color[R];
-			*(pixels++) = (t_uint8)color[G];
-			*(pixels++) = (t_uint8)color[B];
-			*(pixels++) = (t_uint8)color[A];
+			*(pixels++) = (uint8_t)color[R];
+			*(pixels++) = (uint8_t)color[G];
+			*(pixels++) = (uint8_t)color[B];
+			*(pixels++) = (uint8_t)color[A];
 			++i.x;
 		}
 		++i.y;

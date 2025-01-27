@@ -122,7 +122,7 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 	t_vec4 normal;
 
 	// Check plane intersections
-	for (t_uin16 i = 0; i < scene->plane_count; i++) {
+	for (uint16_t i = 0; i < scene->plane_count; i++) {
 		if (ray_intersect_plane(ray, &scene->plane[i], &t) && t < closest_t) {
 			closest_t = t;
 			normal = scene->plane[i].normal;
@@ -130,7 +130,7 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 		}
 	}
 	// Check sphere intersections
-	for (t_uin16 i = 0; i < scene->sphere_count; i++) {
+	for (uint16_t i = 0; i < scene->sphere_count; i++) {
 		if (ray_intersect_sphere(ray, &scene->sphere[i], &t) && t < closest_t) {
 			closest_t = t;
 			normal = vec_normalize(vec_sub(vec_add(ray.origin, vec_mul(ray.vec, t)), scene->sphere[i].center));
@@ -138,7 +138,7 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 		}
 	}
 	// Check cylinder intersections
-	for (t_uin16 i = 0; i < scene->cylinder_count; i++) {
+	for (uint16_t i = 0; i < scene->cylinder_count; i++) {
 		if (ray_intersect_cylinder(ray, &scene->cylinder[i], &t) && t < closest_t) {
 			closest_t = t;
 			t_vec4 hit_point = vec_add(ray.origin, vec_mul(ray.vec, t));
@@ -182,8 +182,8 @@ t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
 // Render the scene
 void	render(t_minirt *m)
 {
-	t_uin16	y;
-	t_uin16	x;
+	uint16_t	y;
+	uint16_t	x;
 	t_ray	ray;
 	float	ndc_x;
 	float	ndc_y;

@@ -25,10 +25,10 @@ float	rt_atof(const char *str)
 	return (num * sign);
 }
 
-t_int	rt_atoi(const char *str)
+int32_t	rt_atoi(const char *str)
 {
 	int		sign;
-	t_int	num;
+	int32_t	num;
 	size_t	i;
 
 	sign = 1;

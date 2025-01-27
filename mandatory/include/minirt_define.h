@@ -3,8 +3,17 @@
 
 // defines and enums
 
-# define WIN_HEIGHT 1080
-# define WIN_WIDTH 1920
+# define WIN_HEIGHT_FHD 1080
+# define WIN_WIDTH_FHD 1920
+
+# define WIN_HEIGHT_2K 1440
+# define WIN_WIDTH_2K 2560
+
+# define WIN_HEIGHT_HD 900
+# define WIN_WIDTH_HD 1600
+
+# define WIN_HEIGHT_4K 2160
+# define WIN_WIDTH_4K 3840
 
 # define FOV_MAX 180.0f
 

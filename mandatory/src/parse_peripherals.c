@@ -1,6 +1,6 @@
 #include "../include/minirt_param.h"
 
-t_short	parse_amb(t_scene *sc, t_value_check *vc, char *line)
+int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line)
 {
 	sc->ambient.ratio = range(rt_atof(line), 0.0f, 1.0f);
 	sc->ambient.color[R] = (float)(range(rt_atoi(nxtvp(&line)), 0, 255)) / 255.0f;
@@ -11,7 +11,7 @@ t_short	parse_amb(t_scene *sc, t_value_check *vc, char *line)
 	return (SUCCESS);
 }
 
-t_short	parse_cam(t_scene *sc, t_value_check *vc, char *line)
+int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
 {
 	sc->cam.point[X] = rt_atof(line);
 	sc->cam.point[Y] = rt_atof(nxtvp(&line));
@@ -28,7 +28,7 @@ t_short	parse_cam(t_scene *sc, t_value_check *vc, char *line)
 	return (SUCCESS);
 }
 
-t_short	parse_light(t_scene *sc, t_value_check *vc, char *line)
+int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 {
 	sc->light.point[X] = rt_atof(line);
 	sc->light.point[Y] = rt_atof(nxtvp(&line));

@@ -1,6 +1,6 @@
 #include "../include/minirt_param.h"
 
-static t_short	check_values(t_value_check *vc)
+static int16_t	check_values(t_value_check *vc)
 {
 	if (vc->amb_amount != 1)
 		return (errset(perr_msg("check_values", ERRFORM, EMSG_4A)));
@@ -13,7 +13,7 @@ static t_short	check_values(t_value_check *vc)
 	return (SUCCESS);
 }
 
-static t_short	input_line_check(char *line)
+static int16_t	input_line_check(char *line)
 {
 	size_t			i;
 	const size_t	len = ft_strlen(line);
@@ -36,7 +36,7 @@ static t_short	input_line_check(char *line)
 	return (SUCCESS);
 }
 
-static t_short	input_type_parse(t_minirt *m, t_value_check *vc, char *line)
+static int16_t	input_type_parse(t_minirt *m, t_value_check *vc, char *line)
 {
 	if (!ft_strncmp(line, "A", 1))
 		return (parse_amb(&m->scene, vc, nxtv(line)));
@@ -53,7 +53,7 @@ static t_short	input_type_parse(t_minirt *m, t_value_check *vc, char *line)
 	return (SUCCESS);
 }
 
-t_short	input_parse(t_minirt *m, const char *file)
+int16_t	input_parse(t_minirt *m, const char *file)
 {
 	const int		fd = open(file, O_RDONLY);
 	char			*line;

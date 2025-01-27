@@ -3,17 +3,6 @@
 
 // Data structures and types
 
-// Fast integer types
-
-typedef int_fast32_t	t_int;
-typedef int_fast64_t	t_long;
-typedef int_fast16_t	t_short;
-typedef int_fast8_t		t_int8;
-typedef uint_fast8_t	t_uint8;
-typedef uint_fast16_t	t_uin16;
-typedef uint_fast32_t	t_uint;
-typedef uint_fast64_t	t_ulong;
-
 typedef float	t_vec4 __attribute__((vector_size(16), aligned(16)));
 
 // Small struct types
@@ -58,7 +47,7 @@ typedef struct s_cam
 {
 	t_vec4			point;
 	t_vec4			orient;
-	t_uint8			fov;
+	uint8_t			fov;
 }	t_cam;
 
 typedef struct s_amblight
@@ -83,11 +72,11 @@ typedef struct s_scene
 	t_cam			cam;
 	t_light			light;
 	t_plane			*plane;
-	t_uin16			plane_count;
+	uint16_t		plane_count;
 	t_sphere		*sphere;
-	t_uin16			sphere_count;
+	uint16_t		sphere_count;
 	t_cylinder		*cylinder;
-	t_uin16			cylinder_count;
+	uint16_t		cylinder_count;
 	float			z_dist;
 	float			realtime_fov;
 	float			cam_r_speed;
@@ -102,12 +91,12 @@ typedef struct s_window
 {
 	mlx_t			*mlx;
 	mlx_image_t		*img;
-	t_uint8			*pixels;
-	t_short			id;
-	t_uin16			rndr_wdth;
-	t_uin16			rndr_hght;
-	t_uin16			window_wdth;
-	t_uin16			window_hght;
+	uint8_t			*pixels;
+	int16_t			id;
+	uint16_t		rndr_wdth;
+	uint16_t		rndr_hght;
+	uint16_t		window_wdth;
+	uint16_t		window_hght;
 	float			res_ratio;
 	float			aspectratio_w;
 	bool			mouse_integration;
@@ -119,7 +108,7 @@ typedef struct s_minirt
 {
 	t_window		win;
 	t_scene			scene;
-	t_short			errnum;
+	int16_t			errnum;
 }	t_minirt;
 
 // Unique structs
@@ -128,18 +117,18 @@ typedef struct s_minirt
 
 typedef struct s_axis2_16
 {
-	t_uin16			x;
-	t_uin16			y;
+	uint16_t		x;
+	uint16_t		y;
 }	t_axis2;
 
 // Parsing
 
 typedef struct s_parsing_value_check
 {
-	t_uin16			cam_amount;
-	t_uin16			light_amount;
-	t_uin16			amb_amount;
-	t_uin16			obj_amount;
+	uint16_t		cam_amount;
+	uint16_t		light_amount;
+	uint16_t		amb_amount;
+	uint16_t		obj_amount;
 }	t_value_check;
 
 #endif

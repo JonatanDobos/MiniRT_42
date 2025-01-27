@@ -7,8 +7,13 @@ CC		=	gcc
 CFLAGS	=	-Wall -Werror -Wextra
 CFLAGS	=	-flto -Ofast
 # CFLAGS	+=	-Wunused -Wconversion -Wimplicit
-# CFLAGS	+=	-g
+CFLAGS	+=	-g
 # CFLAGS	+=	-fsanitize=address
+# CFLAGS	+=	-fsanitize=undefined
+
+# The -no-pie flag tells the compiler it shouldn't require position indipendant code (less secure, more efficient)
+# If -no-pie is disabled: enable -fPIC when compiling .c files for used archive files.
+# CFLAGS	+=	-no-pie
 
 #		Optimization flags
 # Generate code optimized for the host machine's CPU

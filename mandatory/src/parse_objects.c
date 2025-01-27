@@ -1,6 +1,6 @@
 #include "../include/minirt_param.h"
 
-t_short	parse_pl(t_scene *sc, t_value_check *vc, char *line)
+int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_plane	pl;
 
@@ -23,7 +23,7 @@ t_short	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 	return (SUCCESS);
 }
 
-t_short	parse_sp(t_scene *sc, t_value_check *vc, char *line)
+int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_sphere	sp;
 
@@ -43,7 +43,7 @@ t_short	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 	return (SUCCESS);
 }
 
-t_short	parse_cy(t_scene *sc, t_value_check *vc, char *line)
+int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_cylinder	cy;
 

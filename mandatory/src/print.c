@@ -1,8 +1,8 @@
 #include "../include/minirt_param.h"
 
-static void	perr_custom(const t_short errnum)
+static void	perr_custom(const int16_t errnum)
 {
-	const t_short	index = (errnum * -1) - 2;
+	const int16_t	index = (errnum * -1) - 2;
 	const char		msg[CUST_ERR_AMOUNT][30] = \
 		{
 			"Waiting for errnum address",
@@ -23,7 +23,7 @@ static void	perr_custom(const t_short errnum)
  * @param errnum Error code.
  * @return errnum
  */
-t_short	perr(char *place, const t_short errnum)
+int16_t	perr(char *place, const int16_t errnum)
 {
 	if (errnum == 0)
 		return (errnum);
@@ -49,7 +49,7 @@ t_short	perr(char *place, const t_short errnum)
  * @param msg Message following the error message.
  * @return errnum
  */
-t_short	perr_msg(char *place, const t_short errnum, char *msg)
+int16_t	perr_msg(char *place, const int16_t errnum, char *msg)
 {
 	perr(place, errnum);
 	if (msg)
@@ -64,7 +64,7 @@ t_short	perr_msg(char *place, const t_short errnum, char *msg)
  * @param errnum Mlx error code.
  * @return errnum
  */
-t_short	perrmlx(char *place, const t_short errnum)
+int16_t	perrmlx(char *place, const int16_t errnum)
 {
 	ft_putstr_fd("miniRT: ", STDERR_FILENO);
 	if (place)

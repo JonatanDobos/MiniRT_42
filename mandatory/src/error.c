@@ -13,16 +13,16 @@
  * @note Use ERTRN (-1) to return last errnum without overwriting.
  * @note Use ESET (-2) to set the shared_errnum address in the next call.
  */
-t_long	errset(const t_long errnum)
+int64_t	errset(const int64_t errnum)
 {
-	static t_long	*shared_errnum = NULL;
+	static int64_t	*shared_errnum = NULL;
 	static bool		set_address = true;
 
 	if (set_address == true)
 	{
 		if (errnum >= 0)
 		{
-			shared_errnum = (t_long *)errnum;
+			shared_errnum = (int64_t *)errnum;
 			set_address = false;
 			return (errnum);
 		}
@@ -45,9 +45,9 @@ t_long	errset(const t_long errnum)
  * @return saved number.
  * @note Use ERTRN (-1) retreive saved_num without overwriting it.
  */
-t_short	nsave(const t_short num)
+int16_t	nsave(const int16_t num)
 {
-	static t_short	saved_num;
+	static int16_t	saved_num;
 
 	if (saved_num != ENOMEM && num != ERTRN)
 		saved_num = num;

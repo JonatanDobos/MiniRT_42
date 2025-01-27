@@ -3,7 +3,11 @@ NAME	=	libft.a
 CC		=	cc
 
 CFLAGS	=	-Wall -Wextra -Werror
-CFLAGS	+=	-Ofast -flto
+# CFLAGS	+=	-Ofast -flto
+
+# The -fPIC flag tells the compiler its position indipendant code (secure but may be less efficient)
+# If -fPIC is disabled use the -no-pie flag in the makefile of the main program.
+CFLAGS	+=	-fPIC
 
 SRCDIR	=	./src
 SRC		=	$(SRCDIR)/ft_abs.c \
