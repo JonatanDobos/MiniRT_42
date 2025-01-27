@@ -3,35 +3,39 @@
 // Doesnt work (gets wrong monitor size)!
 void	set_resolution(t_window *w)
 {
-	int32_t	x;
-	int32_t	y;
+	int32_t	wdth;
+	int32_t	hght;
 
-	mlx_get_monitor_size(0, &x, &y);
-	printf("RESSET: x:%d y:%d\n");
-	if (!(x > 100 && y > 100))
-		return (w->window_hght = WIN_HEIGHT_HD, w->window_wdth = WIN_WIDTH_HD);
-	if ((float)(x / y) > (float)(16 / 9 - 0.2) &&
-		(float)(x / y) < (float)(16 / 9 + 0.2))
+	mlx_get_monitor_size(0, &wdth, &hght);
+	printf("Get monitor size: wdth:%d hght:%d\n", wdth, hght);
+	if (!(wdth > 100 && hght > 100))
 	{
-		if (x <= WIN_WIDTH_4K && x > WIN_WIDTH_2K)
+		w->window_hght = WIN_HEIGHT_HD;
+		w->window_wdth = WIN_WIDTH_HD;
+		return ;
+	}
+	if ((float)(wdth / hght) > (float)(16 / 9 - 0.2) &&
+		(float)(wdth / hght) < (float)(16 / 9 + 0.2))
+	{
+		if (wdth <= WIN_WIDTH_4K && wdth > WIN_WIDTH_2K)
 		{
 			w->window_hght = WIN_HEIGHT_2K;
 			w->window_wdth = WIN_WIDTH_2K;
 		}
-		else if (x <= WIN_WIDTH_2K && x > WIN_WIDTH_FHD)
+		else if (wdth <= WIN_WIDTH_2K && wdth > WIN_WIDTH_FHD)
 		{
 			w->window_hght = WIN_HEIGHT_FHD;
 			w->window_wdth = WIN_WIDTH_FHD;
 		}
-		else if (x <= WIN_WIDTH_FHD && x > WIN_WIDTH_HD)
+		else if (wdth <= WIN_WIDTH_FHD && wdth > WIN_WIDTH_HD)
 		{
 			w->window_hght = WIN_HEIGHT_HD;
 			w->window_wdth = WIN_WIDTH_HD;
 		}
 		return ;
 	}
-	w->window_hght = y - 10;
-	w->window_wdth = x - 10;
+	w->window_hght = hght - 10;
+	w->window_wdth = wdth - 10;
 }
 
 void	init_struct_m(t_minirt *m)
