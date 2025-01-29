@@ -53,7 +53,7 @@ t_vec4	calculate_lighting(
 }
 
 // Ray-plane intersection
-bool	ray_intersect_plane(t_ray ray, t_objs *obj, float *t)
+uint8_t	ray_intersect_plane(t_ray ray, t_objs *obj, float *t)
 {
 	const float	denom = vec_dot(ray.vec, obj->plane.orientation);
 	t_vec4		diff;
@@ -68,7 +68,7 @@ bool	ray_intersect_plane(t_ray ray, t_objs *obj, float *t)
 }
 
 // Ray-sphere intersection
-bool	ray_intersect_sphere(t_ray ray, t_objs *obj, float *t)
+uint8_t	ray_intersect_sphere(t_ray ray, t_objs *obj, float *t)
 {
 	t_vec4	oc = vec_sub(ray.origin, obj->coords);
 	float	a = vec_dot(ray.vec, ray.vec);
@@ -99,7 +99,7 @@ bool intersect_cylinder_caps(t_vec4 coords, t_vec4 orientation, t_vec4 plane_poi
 	return false;
 }
 
-bool ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
+uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 {
 	// Step 1: Compute vectors for the cylinder's axis
 	t_vec4 ca = vec_normalize(obj->cylinder.orientation); // Cylinder axis (normalized)
@@ -131,19 +131,27 @@ bool ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	}
 
 	// Check if the intersection is within the finite height of the cylinder
-	float y0 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t0)));
-	float y1 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t1)));
+	float y0 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t0))) - obj->cylinder.height / 2;
+	float y1 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t1))) - obj->cylinder.height / 2;
 
 	float valid_t = -1;
+	uint8_t hit_type = 0;
 
-	if (y0 >= 0.0f && y0 <= obj->cylinder.height) // t0 is inside the height limits
+	if (y0 >= -obj->cylinder.height / 2 && y0 <= obj->cylinder.height / 2)
+	{
 		valid_t = t0;
-	else if (y1 >= 0.0f && y1 <= obj->cylinder.height) // t1 is inside the height limits
+		hit_type = 1; // Cylinder body
+	}
+	else if (y1 >= -obj->cylinder.height / 2 && y1 <= obj->cylinder.height / 2)
+	{
 		valid_t = t1;
+		hit_type = 1; // Cylinder body
+	}
 
 	// Step 5: Check caps if the body intersections are invalid
 	t_vec4 top_cap = vec_add(obj->coords, vec_mul(ca, obj->cylinder.height));
 	t_vec4 bottom_cap = obj->coords;
+
 
 	float t_top, t_bottom;
 	bool hit_top = intersect_cylinder_caps(ray.origin, ray.vec, top_cap, ca, &t_top);
@@ -154,28 +162,38 @@ bool ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	{
 		t_vec4 p = vec_add(ray.origin, vec_mul(ray.vec, t_top));
 		if (vec_len(vec_sub(p, top_cap)) <= obj->cylinder.radius)
-			valid_t = (valid_t < 0 || t_top < valid_t) ? t_top : valid_t;
+		{
+			if (valid_t < 0 || t_top < valid_t)
+			{
+				valid_t = t_top;
+				hit_type = 2; // Cylinder cap
+			}
+		}
 	}
 
 	if (hit_bottom)
 	{
 		t_vec4 p = vec_add(ray.origin, vec_mul(ray.vec, t_bottom));
 		if (vec_len(vec_sub(p, bottom_cap)) <= obj->cylinder.radius)
-			valid_t = (valid_t < 0 || t_bottom < valid_t) ? t_bottom : valid_t;
+		{
+			if (valid_t < 0 || t_bottom < valid_t)
+			{
+				valid_t = t_bottom;
+				hit_type = 3; // Cylinder cap
+			}
+		}
 	}
 
 	if (valid_t < 0)
 		return false;
 
 	*t = valid_t;
-	return true;
+	return hit_type;
 }
 
-// GPT END
-
-bool ray_intersect_table(t_ray ray, t_objs *obj, float *t)
+uint8_t ray_intersect_table(t_ray ray, t_objs *obj, float *t)
 {
-	static bool	(*intersect_obj[NUM_OBJ_TYPES])(t_ray, t_objs *, float *) = {
+	static uint8_t	(*intersect_obj[NUM_OBJ_TYPES])(t_ray, t_objs *, float *) = {
 		ray_intersect_plane,
 		ray_intersect_sphere,
 		ray_intersect_cylinder
@@ -191,12 +209,14 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 	t_vec4 normal;
 	t_objs	*obj_closest_vp;
 	uint32_t i;
+	uint8_t	intersect;
 
 	obj_closest_vp = NULL;
 	i = 0;
 	while (i < scene->arr_size)
 	{
-		if (ray_intersect_table(ray, scene->objs + i, &t) && t < closest_t)
+		intersect = ray_intersect_table(ray, scene->objs + i, &t);
+		if (intersect && t < closest_t)
 		{
 			obj_closest_vp = scene->objs + i;
 			closest_t = t;
@@ -211,9 +231,16 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 			}
 			else if (scene->objs[i].type == CYLINDER)
 			{
-				t_vec4 hit_point = vec_add(ray.origin, vec_mul(ray.vec, t));
-				normal = vec_normalize(vec_sub(hit_point, vec_add(scene->objs[i].coords, vec_mul(scene->objs[i].cylinder.orientation, \
-					vec_dot(vec_sub(hit_point, scene->objs[i].coords), scene->objs[i].cylinder.orientation)))));
+				if (intersect == 1)
+				{
+					t_vec4 hit_point = vec_add(ray.origin, vec_mul(ray.vec, t));
+					normal = vec_normalize(vec_sub(hit_point, vec_add(scene->objs[i].coords, vec_mul(scene->objs[i].cylinder.orientation, \
+						vec_dot(vec_sub(hit_point, scene->objs[i].coords), scene->objs[i].cylinder.orientation)))));
+				}
+				else if (intersect == 2)
+					normal = vec_normalize(scene->objs[i].cylinder.orientation);
+				else
+					normal = vec_negate(vec_normalize(scene->objs[i].cylinder.orientation));
 			}
 		}
 		++i;

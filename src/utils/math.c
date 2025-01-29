@@ -170,3 +170,9 @@ t_vec4	vec_mul(t_vec4 a, float s)
 
 	return (a * scale_vec);
 }
+
+t_vec4 vec_negate(t_vec4 v)
+{
+	return (t_vec4){-v[X], -v[Y], -v[Z]};
+}
+

@@ -38,6 +38,7 @@ t_vec4		vec_sub(t_vec4 a, t_vec4 b)__attribute__((const, hot));
 t_vec4		vec_scale(t_vec4 v, float scalar)__attribute__((const, hot));
 float		vec_dot(t_vec4 a, t_vec4 b)__attribute__((const, hot));
 t_vec4		vec_mul(t_vec4 a, float s)__attribute__((const, hot));
+t_vec4		vec_negate(t_vec4 v)__attribute__((const, hot));
 
 static inline float	rt_minf(float a, float b)
 {
