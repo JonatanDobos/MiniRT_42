@@ -54,12 +54,18 @@ void	cam_hook(t_rt *rt)
 void	loop_hook(void *param)
 {
 	t_rt	*rt;
+	double	time;
 
 	rt = (t_rt *)param;
+	time = mlx_get_time();
 	cam_hook(rt);
 	if (rt->scene->render == true)
 	{
 		render(rt);
+		rt->win->delta_time = time - mlx_get_time();
+		// m->scene.cam_fov_speed = FOV_SCROLL_SPEED * time;
+		rt->scene->cam_m_speed = CAM_MOVE_SPEED * time;
+		rt->scene->cam_r_speed = CAM_ROTATION_SPEED * time;
 		rt->scene->render = false;
 	}
 }

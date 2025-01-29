@@ -28,34 +28,34 @@ t_vec4 rotate_vector(t_vec4 v, t_vec4 axis, float angle)
 }
 
 // Rotate the camera orientation up
-void	cam_rotate_up(t_scene *scene)
+void	cam_rotate_up(t_scene *sc)
 {
 	// printf("KEY: UP\n");
-	t_vec4 right = cross(scene->camera.c.orientation, (t_vec4){0, 1, 0});
-	scene->camera.c.orientation = vec_normalize(rotate_vector(scene->camera.c.orientation, right, CAM_ROTATION_SPEED));
-	scene->render = true;
+	t_vec4 right = cross(sc->camera.c.orientation, (t_vec4){0, 1, 0});
+	sc->camera.c.orientation = vec_normalize(rotate_vector(sc->camera.c.orientation, right, sc->cam_r_speed));
+	sc->render = true;
 }
 
 // Rotate the camera orientation down
-void	cam_rotate_down(t_scene *scene)
+void	cam_rotate_down(t_scene *sc)
 {
 	// printf("KEY: DOWN\n");
-	t_vec4 right = cross(scene->camera.c.orientation, (t_vec4){0, 1, 0});
-	scene->camera.c.orientation = vec_normalize(rotate_vector(scene->camera.c.orientation, right, -CAM_ROTATION_SPEED));
-	scene->render = true;
+	t_vec4 right = cross(sc->camera.c.orientation, (t_vec4){0, 1, 0});
+	sc->camera.c.orientation = vec_normalize(rotate_vector(sc->camera.c.orientation, right, -sc->cam_r_speed));
+	sc->render = true;
 }
 
 // Rotate the camera orientation left
-void	cam_rotate_left(t_scene *scene)
+void	cam_rotate_left(t_scene *sc)
 {
 	// printf("KEY: LEFT\n");
-	scene->camera.c.orientation = vec_normalize(rotate_vector(scene->camera.c.orientation, (t_vec4){0, 1, 0}, -CAM_ROTATION_SPEED));
-	scene->render = true;
+	sc->camera.c.orientation = vec_normalize(rotate_vector(sc->camera.c.orientation, (t_vec4){0, 1, 0}, -sc->cam_r_speed));
+	sc->render = true;
 }
 
 void	cam_rotate_right(t_scene *sc)
 {
 	// printf("\033[0;36m RIGHT\033[0m\n");
-	sc->camera.c.orientation = vec_normalize(vec_rotate(sc->camera.c.orientation, (t_vec4){0, 1, 0}, CAM_ROTATION_SPEED));
+	sc->camera.c.orientation = vec_normalize(vec_rotate(sc->camera.c.orientation, (t_vec4){0, 1, 0}, sc->cam_r_speed));
 	sc->render = true;
 }

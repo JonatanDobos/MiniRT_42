@@ -6,9 +6,11 @@
 
 # define LOGO_PATH "images/glasses.png"
 
-# define CAM_ROTATION_SPEED 0.2f
+// Maybe scrool FOV hook speed??
 
-# define CAM_MOVE_SPEED 3.0f
+# define CAM_ROTATION_SPEED 0.1f
+
+# define CAM_MOVE_SPEED 0.1f
 
 typedef struct	s_rt		t_rt;
 typedef struct	s_scene		t_scene;
@@ -59,6 +61,7 @@ typedef struct s_window
 	uint16_t		set_rndr_hght;
 	float			aspectrat;
 	float			res_ratio;
+	float			delta_time;
 	bool			resize;
 	mlx_texture_t	*logo;
 }	t_window;

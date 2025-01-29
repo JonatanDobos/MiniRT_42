@@ -104,6 +104,8 @@ typedef struct	s_scene
 		t_objs		*objs;
 		size_t		arr_size;	
 	};
+	float	cam_m_speed;
+	float	cam_r_speed;
 	// t_object	ambient;
 	// t_object	*lights;
 	// size_t		lights_len;

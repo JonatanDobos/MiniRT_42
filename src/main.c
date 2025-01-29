@@ -38,8 +38,8 @@ int main(int argc, char **argv)
 		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	}
 	// render_scene(&rt, rt.scene);
-	render(&rt);
-
+	// render(&rt);
+	rt.scene->render = true;
 	printf("miniRT finished rendering %f\n", mlx_get_time());
 
 	mlx_loop(rt.win->mlx); // Start the MLX loop
