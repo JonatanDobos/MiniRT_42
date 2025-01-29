@@ -211,14 +211,9 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 			}
 			else if (scene->objs[i].type == CYLINDER)
 			{
-				// printf("[x:%.1f, y:%.1f, z:%.1f]\n"
-				// 		"[x:%.1f, y:%.1f, z:%.1f]\n"
-				// 		"hallo\n\n",
-				// 		ray.origin[X], ray.origin[Y], ray.origin[Z], ray.vec[X], ray.vec[Y], ray.vec[Z]);
-				// exit(0);
 				t_vec4 hit_point = vec_add(ray.origin, vec_mul(ray.vec, t));
-				normal = vec_normalize(vec_sub(hit_point, vec_add(scene->objs[i].cylinder.orientation, vec_mul(scene->objs[i].cylinder.orientation, \
-					vec_dot(vec_sub(hit_point, scene->objs[i].cylinder.orientation), scene->objs[i].cylinder.orientation)))));
+				normal = vec_normalize(vec_sub(hit_point, vec_add(scene->objs[i].coords, vec_mul(scene->objs[i].cylinder.orientation, \
+					vec_dot(vec_sub(hit_point, scene->objs[i].coords), scene->objs[i].cylinder.orientation)))));
 			}
 		}
 		++i;
@@ -227,14 +222,7 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 	// Apply lighting if an object was hit
 	if (closest_t < INFINITY)
 	{
-		static int i = 0;
 		t_vec4 hit_point = vec_add(ray.origin, vec_mul(ray.vec, closest_t));
-		if (obj_closest_vp->type == CYLINDER && i % 300 == 0)
-			printf("CalcLight(hit_pt: [x:%.1f, y:%.1f, z:%.1f]\n"
-				   "          normal: [x:%.1f, y:%.1f, z:%.1f]\n"
-			       "       pixel_col: [r:%.1f, g:%.1f, b:%.1f, a:%.1f])\n\n", \
-		hit_point[X], hit_point[Y], hit_point[Z], normal[X], normal[Y], normal[Z], pixel_color[R], pixel_color[G], pixel_color[B], pixel_color[A]);
-		++i;
 		return (calculate_lighting(scene, hit_point, normal, pixel_color));
 	}
 	return (pixel_color); // Background color

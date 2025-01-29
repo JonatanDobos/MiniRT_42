@@ -46,7 +46,6 @@ int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 		return (errset(perr("parse_sp", errno)));
 	sc->arr_size++;
 	vc->obj_amount++;
-	print_sphere(sp);
 	return (SUCCESS);
 }
 
