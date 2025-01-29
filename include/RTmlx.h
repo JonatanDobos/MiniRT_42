@@ -4,9 +4,9 @@
 # include <common_defs.h>
 # define LOGO_PATH "images/glasses.png"
 
-# define CAM_ROTATION_SPEED 0.1f
+# define CAM_ROTATION_SPEED 0.2f
 
-# define CMS 0.5f
+# define CMS 3.0f
 # define CAM_MOVE_SPEED (t_vec4){CMS, CMS, CMS, CMS}
 typedef struct	s_rt		t_rt;
 typedef struct	s_scene		t_scene;

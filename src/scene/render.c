@@ -84,14 +84,29 @@ bool	ray_intersect_sphere(t_ray ray, t_objs *obj, float *t)
 	return (*t >= 0);
 }
 
-bool	ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
+// GPT START
+
+bool intersect_cylinder_caps(t_vec4 coords, t_vec4 orientation, t_vec4 plane_point, t_vec4 plane_normal, float *t)
+{
+	float denom = dot_product(plane_normal, orientation);
+	if (fabs(denom) > 1e-6) {
+		t_vec4 p0l0 = plane_point - coords;
+		*t = dot_product(p0l0, plane_normal) / denom;
+		return (*t >= 0);
+	}
+	return false;
+}
+
+bool ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 {
 	// Step 1: Compute vectors for the cylinder's axis
 	t_vec4 ca = vec_normalize(obj->cylinder.orientation); // Cylinder axis (normalized)
 	t_vec4 oc = vec_sub(ray.origin, obj->coords); // Vector from ray origin to obj->cylinder center
-	// Step 2: Project ray direction and oc onto plane perpendicular to the obj->cylinder axis
+	
+	// Step 2: Project ray direction and oc onto plane perpendicular to the cylinder axis
 	t_vec4 rd = vec_sub(ray.vec, vec_mul(ca, vec_dot(ray.vec, ca))); // Projected ray direction
 	t_vec4 oc_proj = vec_sub(oc, vec_mul(ca, vec_dot(oc, ca)));     // Projected oc
+
 	// Step 3: Solve quadratic equation for the intersection
 	float a = vec_dot(rd, rd);
 	float b = 2.0f * vec_dot(rd, oc_proj);
@@ -99,10 +114,12 @@ bool	ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	float discriminant = b * b - 4 * a * c;
 	if (discriminant < 0.0f)
 		return false; // No intersection
+
 	// Compute the roots of the quadratic
 	float sqrt_d = sqrtf(discriminant);
 	float t0 = (-b - sqrt_d) / (2.0f * a);
 	float t1 = (-b + sqrt_d) / (2.0f * a);
+
 	// Step 4: Determine the valid intersection point
 	if (t0 > t1) // Ensure t0 is the smaller value
 	{
@@ -110,25 +127,49 @@ bool	ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 		t0 = t1;
 		t1 = temp;
 	}
-	// Check if the intersection is within the finite height of the obj->cylinder
+
+	// Check if the intersection is within the finite height of the cylinder
 	float y0 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t0)));
 	float y1 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t1)));
-	if (y0 < 0.0f || y0 > obj->cylinder.height) // t0 is outside the height limits
+
+	float valid_t = -1;
+
+	if (y0 >= 0.0f && y0 <= obj->cylinder.height) // t0 is inside the height limits
+		valid_t = t0;
+	else if (y1 >= 0.0f && y1 <= obj->cylinder.height) // t1 is inside the height limits
+		valid_t = t1;
+
+	// Step 5: Check caps if the body intersections are invalid
+	t_vec4 top_cap = vec_add(obj->coords, vec_mul(ca, obj->cylinder.height));
+	t_vec4 bottom_cap = obj->coords;
+
+	float t_top, t_bottom;
+	bool hit_top = intersect_cylinder_caps(ray.origin, ray.vec, top_cap, ca, &t_top);
+	bool hit_bottom = intersect_cylinder_caps(ray.origin, ray.vec, bottom_cap, ca, &t_bottom);
+
+	// Validate cap intersections
+	if (hit_top)
 	{
-		if (y1 < 0.0f || y1 > obj->cylinder.height) // t1 is also outside height limits
-			return false;
-		t0 = t1; // Use t1 instead
+		t_vec4 p = vec_add(ray.origin, vec_mul(ray.vec, t_top));
+		if (vec_len(vec_sub(p, top_cap)) <= obj->cylinder.radius)
+			valid_t = (valid_t < 0 || t_top < valid_t) ? t_top : valid_t;
 	}
-	// Return the closest valid intersection
-	if (t0 < 0.0f) // Intersection is behind the ray origin
+
+	if (hit_bottom)
+	{
+		t_vec4 p = vec_add(ray.origin, vec_mul(ray.vec, t_bottom));
+		if (vec_len(vec_sub(p, bottom_cap)) <= obj->cylinder.radius)
+			valid_t = (valid_t < 0 || t_bottom < valid_t) ? t_bottom : valid_t;
+	}
+
+	if (valid_t < 0)
 		return false;
-	*t = t0;
+
+	*t = valid_t;
 	return true;
 }
 
-
-// DIT MOET VERANDERD WORDEN OM MET t_objs TE WERKEN (de intersect functies callen uit de struct zelf!
-// Or jumptable...
+// GPT END
 
 bool ray_intersect_table(t_ray ray, t_objs *obj, float *t)
 {
@@ -207,6 +248,19 @@ t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
 		x_axis[Z] * ndc_dir[X] + y_axis[Z] * ndc_dir[Y] + z_axis[Z] * ndc_dir[Z]
 	};
 	return vec_normalize(world_dir);
+}
+
+void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color)
+{
+	uint8_t			*pixels;
+	const t_vec4	multiply = {255.0, 255.0, 255.0, 255.0};
+
+	color *= multiply;
+	pixels = win->img->pixels + (y * WINDOW_WIDTH + x) * 4;
+	*(pixels++) = (uint8_t)color[R];
+	*(pixels++) = (uint8_t)color[G];
+	*(pixels++) = (uint8_t)color[B];
+	*(pixels++) = (uint8_t)color[A];
 }
 
 // Render the scene
