@@ -20,16 +20,16 @@ void	cam_move_right(t_scene *sc)
 {
 	const t_vec4	right = normalize(cross(sc->camera.c.orientation, (t_vec4){0, 1, 0}));
 
-	sc->camera.coords += right * CAM_MOVE_SPEED;
+	sc->camera.coords -= right * CAM_MOVE_SPEED;
 	// printf("KEY: D\n");
 	sc->render = true;
 }
 
 void	cam_move_left(t_scene *sc)
 {
-	const t_vec4	right = normalize(cross(sc->camera.c.orientation, (t_vec4){0, 1, 0}));
+	const t_vec4	left = normalize(cross(sc->camera.c.orientation, (t_vec4){0, 1, 0}));
 
-	sc->camera.coords -= right * CAM_MOVE_SPEED;
+	sc->camera.coords += left * CAM_MOVE_SPEED;
 	// printf("KEY: A\n");
 	sc->render = true;
 }

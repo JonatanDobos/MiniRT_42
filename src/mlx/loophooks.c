@@ -59,7 +59,7 @@ void	loop_hook(void *param)
 	cam_hook(rt);
 	if (rt->scene->render == true)
 	{
-		render_scene(rt, rt->scene);
+		render(rt);
 		rt->scene->render = false;
 	}
 }

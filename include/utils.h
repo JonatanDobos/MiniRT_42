@@ -21,6 +21,8 @@ t_vec4	cross(t_vec4 a, t_vec4 b);
 
 // render.c:
 
+void		set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color);
+
 t_vec4		bcast4(float scalar)__attribute__((const, hot));
 t_vec4		bcast3(float scalar)__attribute__((const, hot));
 
