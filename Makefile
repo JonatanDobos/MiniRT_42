@@ -96,7 +96,7 @@ PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_
 
 MLX				:=	window_setup.c			keyhooks.c		loophooks.c	camera_move.c	camera_rotate.c
 
-SCENE			:=	create.c				test.c			render.c
+SCENE			:=	create.c				test.c			render.c			scaling.c
 
 UTILS			:=	utils.c					math.c
 

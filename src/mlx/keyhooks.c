@@ -12,6 +12,10 @@ void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 	{
 		print_camera(rt->scene->camera);
 	}
+	if (keydata.key == MLX_KEY_EQUAL && keydata.action == MLX_PRESS)
+		return (res_upscale(rt));
+	if (keydata.key == MLX_KEY_MINUS && keydata.action == MLX_PRESS)
+		return (res_downscale(rt));
 	// if (keydata.key == MLX_KEY_Q && keydata.action == MLX_PRESS)
 	// {
 	// 	rt->plane->direction.x -= 0.1;

@@ -2,12 +2,14 @@
 # define RTMLX_H
 # include <MLX42/MLX42.h>
 # include <common_defs.h>
+# include <miniRT.h>
+
 # define LOGO_PATH "images/glasses.png"
 
 # define CAM_ROTATION_SPEED 0.2f
 
-# define CMS 3.0f
-# define CAM_MOVE_SPEED (t_vec4){CMS, CMS, CMS, CMS}
+# define CAM_MOVE_SPEED 3.0f
+
 typedef struct	s_rt		t_rt;
 typedef struct	s_scene		t_scene;
 typedef struct	s_window	t_window;
@@ -19,6 +21,14 @@ void	init_hooks(t_rt *m);
 
 void	loop_hook(void *param);
 void	fov_hook(double xdelta, double ydelta, void *param);
+
+// scaling.c
+
+void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
+void	res_downscale(t_rt *rt);
+void	res_upscale(t_rt *rt);
+void	res_rescale(t_rt *rt);
+
 
 // camera_move.c
 
@@ -44,8 +54,11 @@ typedef struct s_window
 	int16_t			id;
 	uint16_t		rndr_wdth;
 	uint16_t		rndr_hght;
+	uint16_t		window_wdth;
+	uint16_t		window_hght;
 	uint16_t		set_rndr_hght;
-	float			ratio_w;
+	float			aspectrat;
+	float			res_ratio;
 	bool			resize;
 	mlx_texture_t	*logo;
 }	t_window;

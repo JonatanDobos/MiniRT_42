@@ -39,7 +39,7 @@ typedef struct s_parsing_value_check
 // 	t_uin16			rndr_wdth;
 // 	t_uin16			rndr_hght;
 // 	t_uin16			set_rndr_hght;
-// 	float			ratio_w;
+// 	float			aspectrat;
 // 	bool			resize;
 // }	t_window;
 

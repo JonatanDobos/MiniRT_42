@@ -10,6 +10,9 @@
 # define M_PI 3.14159265358979323846
 #endif
 
+# define RES_STEP_SIZE 1.0f
+# define RES_RATIO_MAX 10.0f
+
 t_cint32	cleanup(t_rt *rt);
 
 //	if many more math functions come, create ft_math.h

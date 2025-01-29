@@ -24,7 +24,8 @@ bool	windows_setup_mlx(t_rt *rt)
 
 static bool	init_mlx(t_window *win)
 {
-	win->mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT is setting up MLX", true);
+	// resize = false!
+	win->mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT is setting up MLX", false);
 	if (win->mlx == NULL)
 		return (false);
 	return (true);
@@ -64,11 +65,13 @@ static void	center_window(t_window *win)
 
 	win->rndr_hght = WINDOW_HEIGHT;
 	win->rndr_wdth = WINDOW_WIDTH;
-	win->ratio_w = (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT;
+	win->window_hght = WINDOW_HEIGHT;
+	win->window_wdth = WINDOW_WIDTH;
+	win->aspectrat = (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT;
 	win->pixels = (uint8_t *)win->img->pixels;
 
 	printf("x %d\ny = %d\n", window_x, window_y);
-	printf("win->ratio_w = %f\n", win->ratio_w);
+	printf("win->aspectrat = %f\n", win->aspectrat);
 	window_x = (window_x - WINDOW_WIDTH) / 2;
 	window_y = (window_y - WINDOW_HEIGHT) / 2;
 	mlx_set_window_pos(win->mlx, window_x, window_y);
