@@ -44,8 +44,8 @@ t_vec4	calculate_lighting(
 	result = obj_color * scene->ambient.color * scalar_amb;
 
 	// Diffuse lighting
-	light_dir = vec_normalize(vec_sub(scene->light.coords, point));
-	diff = clamp(vec_dot(normal, light_dir), 0.0f, 1.0f) * scene->light.l.brightness;
+	light_dir = vnorm(vsub(scene->light.coords, point));
+	diff = clamp(vdot(normal, light_dir), 0.0f, 1.0f) * scene->light.l.brightness;
 
 	scalar_light = bcast3(diff);
 	result += (obj_color * scene->light.color * scalar_light);
@@ -55,13 +55,13 @@ t_vec4	calculate_lighting(
 // Ray-plane intersection
 uint8_t	ray_intersect_plane(t_ray ray, t_objs *obj, float *t)
 {
-	const float	denom = vec_dot(ray.vec, obj->plane.orientation);
+	const float	denom = vdot(ray.vec, obj->plane.orientation);
 	t_vec4		diff;
 
 	if (fabs(denom) > EPSILON)
 	{
-		diff = vec_sub(obj->coords, ray.origin);
-		*t = vec_dot(diff, obj->plane.orientation) / denom;
+		diff = vsub(obj->coords, ray.origin);
+		*t = vdot(diff, obj->plane.orientation) / denom;
 		return (*t >= 0);
 	}
 	return false;
@@ -70,10 +70,10 @@ uint8_t	ray_intersect_plane(t_ray ray, t_objs *obj, float *t)
 // Ray-sphere intersection
 uint8_t	ray_intersect_sphere(t_ray ray, t_objs *obj, float *t)
 {
-	t_vec4	oc = vec_sub(ray.origin, obj->coords);
-	float	a = vec_dot(ray.vec, ray.vec);
-	float	b = 2.0f * vec_dot(oc, ray.vec);
-	float	c = vec_dot(oc, oc) - obj->sphere.radius * obj->sphere.radius;
+	t_vec4	oc = vsub(ray.origin, obj->coords);
+	float	a = vdot(ray.vec, ray.vec);
+	float	b = 2.0f * vdot(oc, ray.vec);
+	float	c = vdot(oc, oc) - obj->sphere.radius * obj->sphere.radius;
 	float	discriminant = b * b - 4 * a * c;
 	float	sqrt_d;
 
@@ -90,10 +90,10 @@ uint8_t	ray_intersect_sphere(t_ray ray, t_objs *obj, float *t)
 
 bool intersect_cylinder_caps(t_vec4 coords, t_vec4 orientation, t_vec4 plane_point, t_vec4 plane_normal, float *t)
 {
-	float denom = dot_product(plane_normal, orientation);
+	float denom = vdot(plane_normal, orientation);
 	if (fabs(denom) > 1e-6) {
 		t_vec4 p0l0 = plane_point - coords;
-		*t = dot_product(p0l0, plane_normal) / denom;
+		*t = vdot(p0l0, plane_normal) / denom;
 		return (*t >= 0);
 	}
 	return false;
@@ -102,17 +102,17 @@ bool intersect_cylinder_caps(t_vec4 coords, t_vec4 orientation, t_vec4 plane_poi
 uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 {
 	// Step 1: Compute vectors for the cylinder's axis
-	t_vec4 ca = vec_normalize(obj->cylinder.orientation); // Cylinder axis (normalized)
-	t_vec4 oc = vec_sub(ray.origin, obj->coords); // Vector from ray origin to obj->cylinder center
+	t_vec4 ca = vnorm(obj->cylinder.orientation); // Cylinder axis (normalized)
+	t_vec4 oc = vsub(ray.origin, obj->coords); // Vector from ray origin to obj->cylinder center
 	
 	// Step 2: Project ray direction and oc onto plane perpendicular to the cylinder axis
-	t_vec4 rd = vec_sub(ray.vec, vec_mul(ca, vec_dot(ray.vec, ca))); // Projected ray direction
-	t_vec4 oc_proj = vec_sub(oc, vec_mul(ca, vec_dot(oc, ca)));     // Projected oc
+	t_vec4 rd = vsub(ray.vec, vmul(ca, vdot(ray.vec, ca))); // Projected ray direction
+	t_vec4 oc_proj = vsub(oc, vmul(ca, vdot(oc, ca)));     // Projected oc
 
 	// Step 3: Solve quadratic equation for the intersection
-	float a = vec_dot(rd, rd);
-	float b = 2.0f * vec_dot(rd, oc_proj);
-	float c = vec_dot(oc_proj, oc_proj) - (obj->cylinder.radius * obj->cylinder.radius);
+	float a = vdot(rd, rd);
+	float b = 2.0f * vdot(rd, oc_proj);
+	float c = vdot(oc_proj, oc_proj) - (obj->cylinder.radius * obj->cylinder.radius);
 	float discriminant = b * b - 4 * a * c;
 	if (discriminant < 0.0f)
 		return false; // No intersection
@@ -131,8 +131,8 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	}
 
 	// Check if the intersection is within the finite height of the cylinder
-	float y0 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t0))) - obj->cylinder.height / 2;
-	float y1 = vec_dot(ca, vec_add(oc, vec_mul(ray.vec, t1))) - obj->cylinder.height / 2;
+	float y0 = vdot(ca, vadd(oc, vmul(ray.vec, t0))) - obj->cylinder.height / 2;
+	float y1 = vdot(ca, vadd(oc, vmul(ray.vec, t1))) - obj->cylinder.height / 2;
 
 	float valid_t = -1;
 	uint8_t hit_type = 0;
@@ -149,7 +149,7 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	}
 
 	// Step 5: Check caps if the body intersections are invalid
-	t_vec4 top_cap = vec_add(obj->coords, vec_mul(ca, obj->cylinder.height));
+	t_vec4 top_cap = vadd(obj->coords, vmul(ca, obj->cylinder.height));
 	t_vec4 bottom_cap = obj->coords;
 
 
@@ -160,8 +160,8 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	// Validate cap intersections
 	if (hit_top)
 	{
-		t_vec4 p = vec_add(ray.origin, vec_mul(ray.vec, t_top));
-		if (vec_len(vec_sub(p, top_cap)) <= obj->cylinder.radius)
+		t_vec4 p = vadd(ray.origin, vmul(ray.vec, t_top));
+		if (vlen(vsub(p, top_cap)) <= obj->cylinder.radius)
 		{
 			if (valid_t < 0 || t_top < valid_t)
 			{
@@ -173,8 +173,8 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 
 	if (hit_bottom)
 	{
-		t_vec4 p = vec_add(ray.origin, vec_mul(ray.vec, t_bottom));
-		if (vec_len(vec_sub(p, bottom_cap)) <= obj->cylinder.radius)
+		t_vec4 p = vadd(ray.origin, vmul(ray.vec, t_bottom));
+		if (vlen(vsub(p, bottom_cap)) <= obj->cylinder.radius)
 		{
 			if (valid_t < 0 || t_bottom < valid_t)
 			{
@@ -227,20 +227,20 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 			}
 			else if (scene->objs[i].type == SPHERE)
 			{
-				normal = vec_normalize(vec_sub(vec_add(ray.origin, vec_mul(ray.vec, t)), scene->objs[i].coords));
+				normal = vnorm(vsub(vadd(ray.origin, vmul(ray.vec, t)), scene->objs[i].coords));
 			}
 			else if (scene->objs[i].type == CYLINDER)
 			{
 				if (intersect == 1)
 				{
-					t_vec4 hit_point = vec_add(ray.origin, vec_mul(ray.vec, t));
-					normal = vec_normalize(vec_sub(hit_point, vec_add(scene->objs[i].coords, vec_mul(scene->objs[i].cylinder.orientation, \
-						vec_dot(vec_sub(hit_point, scene->objs[i].coords), scene->objs[i].cylinder.orientation)))));
+					t_vec4 hit_point = vadd(ray.origin, vmul(ray.vec, t));
+					normal = vnorm(vsub(hit_point, vadd(scene->objs[i].coords, vmul(scene->objs[i].cylinder.orientation, \
+						vdot(vsub(hit_point, scene->objs[i].coords), scene->objs[i].cylinder.orientation)))));
 				}
 				else if (intersect == 2)
-					normal = vec_normalize(scene->objs[i].cylinder.orientation);
+					normal = vnorm(scene->objs[i].cylinder.orientation);
 				else
-					normal = vec_negate(vec_normalize(scene->objs[i].cylinder.orientation));
+					normal = vneg(vnorm(scene->objs[i].cylinder.orientation));
 			}
 		}
 		++i;
@@ -249,7 +249,7 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 	// Apply lighting if an object was hit
 	if (closest_t < INFINITY)
 	{
-		t_vec4 hit_point = vec_add(ray.origin, vec_mul(ray.vec, closest_t));
+		t_vec4 hit_point = vadd(ray.origin, vmul(ray.vec, closest_t));
 		return (calculate_lighting(scene, hit_point, normal, pixel_color));
 	}
 	return (pixel_color); // Background color
@@ -258,7 +258,7 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
 {
 	// Normalize the camera orientation vector (forward direction)
-	t_vec4	z_axis = vec_normalize(cam_orient);
+	t_vec4	z_axis = vnorm(cam_orient);
 
 	// Create an "up" vector (default is Y-axis in world space)
 	t_vec4	up = {0, 1, 0};
@@ -266,10 +266,10 @@ t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
 		up = (z_axis[Y] > 0) ? (t_vec4){0, 0, -1} : (t_vec4){0, 0, 1};
 
 	// Calculate the right vector (x-axis of the camera)
-	t_vec4	x_axis = vec_normalize(vec_cross(up, z_axis));
+	t_vec4	x_axis = vnorm(vcross(up, z_axis));
 
 	// Calculate the up vector (y-axis of the camera, perpendicular to both)
-	t_vec4	y_axis = vec_cross(z_axis, x_axis);
+	t_vec4	y_axis = vcross(z_axis, x_axis);
 
 	// Apply the rotation matrix to the direction vector
 	t_vec4 world_dir = {
@@ -277,7 +277,7 @@ t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
 		x_axis[Y] * ndc_dir[X] + y_axis[Y] * ndc_dir[Y] + z_axis[Y] * ndc_dir[Z],
 		x_axis[Z] * ndc_dir[X] + y_axis[Z] * ndc_dir[Y] + z_axis[Z] * ndc_dir[Z]
 	};
-	return vec_normalize(world_dir);
+	return vnorm(world_dir);
 }
 
 void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color)

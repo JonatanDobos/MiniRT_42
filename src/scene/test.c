@@ -6,12 +6,12 @@
 
 // float	intersect_plane(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
 // {
-// 	t_cfloat	denom = dot_product(obj->plane.orientation, orientation);
+// 	t_cfloat	denom = vdot(obj->plane.orientation, orientation);
 // 	t_cvec4		ray_to_plane_vector = obj->coords - coords;
 // 	float		intersection_distance;
 
 // 	if (fabsf(denom) > 1e-6F) {
-// 		intersection_distance = dot_product(ray_to_plane_vector, obj->plane.orientation) / denom;
+// 		intersection_distance = vdot(ray_to_plane_vector, obj->plane.orientation) / denom;
 // 		if (intersection_distance >= 0.0F) {
 // 			return (intersection_distance);
 // 		}
@@ -22,9 +22,9 @@
 // float	intersect_sphere(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
 // {
 // 	t_cvec4		oc = coords - obj->coords;
-// 	t_cfloat	a = dot_product(orientation, orientation);
-// 	t_cfloat	b = 2.0F * dot_product(oc, orientation);
-// 	t_cfloat	c = dot_product(oc, oc) - obj->sphere.diameter;
+// 	t_cfloat	a = vdot(orientation, orientation);
+// 	t_cfloat	b = 2.0F * vdot(oc, orientation);
+// 	t_cfloat	c = vdot(oc, oc) - obj->sphere.diameter;
 // 	t_cfloat	discriminant = b * b - 4.0F * a * c;
 
 // 	if (discriminant > 0.0F)
@@ -44,7 +44,7 @@
 // {
 // 	t_cvec4		intersection_point = coords + orientation * t;
 // 	t_cvec4		base_to_intersection = intersection_point - obj->coords;
-// 	t_cfloat	height = dot_product(base_to_intersection, normalize(cyl->orientation));
+// 	t_cfloat	height = vdot(base_to_intersection, vnorm(cyl->orientation));
 
 // 	return (height >= 0.0F && height <= cyl->height);
 // }
@@ -53,13 +53,13 @@
 // // {
 // // 	t_cylinder	*cylinder = &obj->cylinder;
 // // 	t_cvec4		oc = coords - obj->coords; // Use obj->coords as the base center
-// // 	t_cvec4		d = normalize(cylinder->orientation); // Ensure the direction is normalized
-// // 	t_cvec4		rd = orientation - d * dot_product(orientation, d);
-// // 	t_cvec4		oc_d = oc - d * dot_product(oc, d);
+// // 	t_cvec4		d = vnorm(cylinder->orientation); // Ensure the direction is normalized
+// // 	t_cvec4		rd = orientation - d * vdot(orientation, d);
+// // 	t_cvec4		oc_d = oc - d * vdot(oc, d);
 
-// // 	t_cfloat	a = dot_product(rd, rd);
-// // 	t_cfloat	b = 2.0F * dot_product(rd, oc_d);
-// // 	t_cfloat	c = dot_product(oc_d, oc_d) - cylinder->diameter;
+// // 	t_cfloat	a = vdot(rd, rd);
+// // 	t_cfloat	b = 2.0F * vdot(rd, oc_d);
+// // 	t_cfloat	c = vdot(oc_d, oc_d) - cylinder->diameter;
 
 // // 	t_cfloat	discriminant = b * b - 4.0F * a * c;
 
@@ -92,29 +92,29 @@
 
 // bool intersect_cylinder_caps(t_vec4 coords, t_vec4 orientation, t_vec4 plane_point, t_vec4 plane_normal, float *t)
 // {
-// 	float denom = dot_product(plane_normal, orientation);
+// 	float denom = vdot(plane_normal, orientation);
 // 	if (fabs(denom) > 1e-6) {
 // 		t_vec4 p0l0 = plane_point - coords;
-// 		*t = dot_product(p0l0, plane_normal) / denom;
+// 		*t = vdot(p0l0, plane_normal) / denom;
 // 		return (*t >= 0);
 // 	}
 // 	return false;
 // }
 // float length(t_vec4 v)
 // {
-// 	return sqrt(dot_product(v, v));
+// 	return sqrt(vdot(v, v));
 // }
 // float intersect_cylinder(t_objs *obj, t_cvec4 coords, t_cvec4 orientation)
 // {
 // 	t_cylinder *cylinder = &obj->cylinder;
 // 	t_cvec4 oc = coords - obj->coords; // Use obj->coords as the base center
-// 	t_cvec4 d = normalize(cylinder->orientation); // Ensure the direction is normalized
-// 	t_cvec4 rd = orientation - d * dot_product(orientation, d);
-// 	t_cvec4 oc_d = oc - d * dot_product(oc, d);
+// 	t_cvec4 d = vnorm(cylinder->orientation); // Ensure the direction is normalized
+// 	t_cvec4 rd = orientation - d * vdot(orientation, d);
+// 	t_cvec4 oc_d = oc - d * vdot(oc, d);
 
-// 	t_cfloat a = dot_product(rd, rd);
-// 	t_cfloat b = 2.0F * dot_product(rd, oc_d);
-// 	t_cfloat c = dot_product(oc_d, oc_d) - cylinder->diameter;
+// 	t_cfloat a = vdot(rd, rd);
+// 	t_cfloat b = 2.0F * vdot(rd, oc_d);
+// 	t_cfloat c = vdot(oc_d, oc_d) - cylinder->diameter;
 
 // 	t_cfloat discriminant = b * b - 4.0F * a * c;
 
@@ -243,7 +243,7 @@
 // 		{
 // 			x = (2.0F * (i + 0.5F) / (float)WINDOW_WIDTH - 1) * aspect_ratio;
 // 			y = 1.0F - 2.0F * (j + 0.5F) / (float)WINDOW_HEIGHT;
-// 			t_vec4 direction = normalize((t_vec4){x, y, -scn->camera.c.zvp_dist} + scn->camera.c.orientation);
+// 			t_vec4 direction = vnorm((t_vec4){x, y, -scn->camera.c.zvp_dist} + scn->camera.c.orientation);
 
 // 			t_vec4 color = obj_nearest_vp(rt, scn->objs, coords, direction);
 // 			if (color[X] == -1.0F)

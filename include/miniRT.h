@@ -38,7 +38,8 @@ enum e_axis
 {
 	X,
 	Y,
-	Z
+	Z,
+	W
 };
 
 enum e_rgba

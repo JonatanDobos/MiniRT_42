@@ -62,10 +62,12 @@ void	loop_hook(void *param)
 	if (rt->scene->render == true)
 	{
 		render(rt);
-		rt->win->delta_time = time - mlx_get_time();
+		time = mlx_get_time() - time;
+		rt->win->delta_time = time;
 		// m->scene.cam_fov_speed = FOV_SCROLL_SPEED * time;
 		rt->scene->cam_m_speed = CAM_MOVE_SPEED * time;
 		rt->scene->cam_r_speed = CAM_ROTATION_SPEED * time;
 		rt->scene->render = false;
+		printf("   > render: %.5f sec.\n", rt->win->delta_time);
 	}
 }

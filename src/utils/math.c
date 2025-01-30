@@ -31,38 +31,6 @@ float	fast_sqrt(float number)
 	return (number * y);
 }
 
-t_vec4	normalize(t_vec4 v)
-{
-	const float	length = sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-
-	if (length < EPSILON)
-		return (v);
-	return (v / length);
-}
-
-t_vec4	subtract(t_vec4 a, t_vec4 b)
-{
-	return (a - b);
-}
-
-float	dot_product(t_vec4 a, t_vec4 b)
-{
-	t_cvec4 result = a * b;
-	return (result[0] + result[1] + result[2]);
-}
-
-t_vec4	cross(t_vec4 a, t_vec4 b)
-{
-	return ((t_vec4)
-	{
-		a[Y] * b[Z] - a[Z] * b[Y],
-		a[Z] * b[X] - a[X] * b[Z],
-		a[X] * b[Y] - a[Y] * b[X]
-	});
-}
-
-// Bij render.c:
-
 /**
  * @brief Broadcasts scalar value to all four indexes of the t_vec4.
  * @param scalar Value to broadcast to vector[X, Y, Z, W].
@@ -80,10 +48,11 @@ t_vec4	bcast4(float scalar)
  */
 t_vec4	bcast3(float scalar)
 {
-	return ((t_vec4){scalar, scalar, scalar, 1.0f});
+	return ((t_vec4){scalar, scalar, scalar, 1.0F});
 }
 
-t_vec4	vec_cross(t_vec4 a, t_vec4 b)
+// Vector cross-product.
+t_vec4	vcross(t_vec4 a, t_vec4 b)
 {
 	return ((t_vec4)
 	{
@@ -93,34 +62,38 @@ t_vec4	vec_cross(t_vec4 a, t_vec4 b)
 	});
 }
 
-t_vec4	vec_normalize(t_vec4 v)
+// Vector normalization.
+t_vec4	vnorm(t_vec4 v)
 {
-	const t_vec4	len = bcast4(vec_len(v));
+	const t_vec4	len = bcast4(vlen(v));
 
 	if (len[0] < EPSILON)
 		return (v);
 	return (v / len);
 }
 
-t_vec4	vec_project(t_vec4 a, t_vec4 b)
+// Vector projection.
+t_vec4	vproj(t_vec4 a, t_vec4 b)
 {
-	return (vec_scale(b, vec_dot(a, b) / vec_dot(b, b)));
+	return (vscale(b, vdot(a, b) / vdot(b, b)));
 }
 
-t_vec4	vec_reflect(t_vec4 v, t_vec4 n)
+// Vector reflection.
+t_vec4	vrefl(t_vec4 v, t_vec4 n)
 {
-	return (vec_sub(v, vec_scale(n, 2.0f * vec_dot(v, n))));
+	return (vsub(v, vscale(n, 2.0F * vdot(v, n))));
 }
 
-float	vec_len(t_vec4 v)
+// Vector length.
+float	vlen(t_vec4 v)
 {
 	const t_vec4	vsquared = v * v;
 
 	return (sqrtf(vsquared[X] + vsquared[Y] + vsquared[Z]));
 }
 
-// Function to rotate a vector around an axis
-t_vec4	vec_rotate(t_vec4 v, t_vec4 axis, float angle)
+// Vector rotate around an axis.
+t_vec4	vrotate(t_vec4 v, t_vec4 axis, float angle)
 {
 	const float cos_angle = cosf(angle);
 	const float sin_angle = sinf(angle);
@@ -135,43 +108,48 @@ t_vec4	vec_rotate(t_vec4 v, t_vec4 axis, float angle)
 			 v[Z] * (axis[Y] * axis[Z] * (1 - cos_angle) - axis[X] * sin_angle),
 		v[X] * (axis[Z] * axis[X] * (1 - cos_angle) - axis[Y] * sin_angle) +
 			 v[Y] * (axis[Z] * axis[Y] * (1 - cos_angle) + axis[X] * sin_angle) +
-			 v[Z] * (cos_angle + axis[Z] * axis[Z] * (1 - cos_angle))
+			 v[Z] * (cos_angle + axis[Z] * axis[Z] * (1 - cos_angle)),
+		v[W]
 	});
 }
 
-t_vec4	vec_add(t_vec4 a, t_vec4 b)
+// Vector addition.
+t_vec4	vadd(t_vec4 a, t_vec4 b)
 {
 	return (a + b);
 }
 
-t_vec4	vec_sub(t_vec4 a, t_vec4 b)
+// Vector substraction.
+t_vec4	vsub(t_vec4 a, t_vec4 b)
 {
 	return (a - b);
 }
 
-t_vec4	vec_scale(t_vec4 v, float scalar)
+// Vector scaling.
+t_vec4	vscale(t_vec4 v, float scalar)
 {
-	const t_vec4	scale_vec = bcast4(scalar);
-
-	return (v * scale_vec);
+	return (v * bcast4(scalar));
 }
 
-float	vec_dot(t_vec4 a, t_vec4 b)
+// Vector dot-product.
+float	vdot(t_vec4 a, t_vec4 b)
 {
 	const t_vec4	vmult = a * b;
 
 	return (vmult[X] + vmult[Y] + vmult[Z]);
 }
 
-// ! Where is this one used? isnt vec_scale the same?
-t_vec4	vec_mul(t_vec4 a, float s)
+// ! Where is this one used? isnt vscale the same?
+// Vector multiply.
+t_vec4	vmul(t_vec4 a, float s)
 {
 	const t_vec4	scale_vec = bcast4(s);
 
 	return (a * scale_vec);
 }
 
-t_vec4 vec_negate(t_vec4 v)
+// Vector negate.
+t_vec4 vneg(t_vec4 v)
 {
 	return (t_vec4){-v[X], -v[Y], -v[Z]};
 }

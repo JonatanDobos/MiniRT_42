@@ -9,7 +9,7 @@
 // 	return (plane);
 // }
 
-// // t_vec subtract(t_vec a, t_vec b)
+// // t_vec vsub(t_vec a, t_vec b)
 // // {
 // //     t_vec result = {
 // //         .x = a.x - b.x,
@@ -19,17 +19,17 @@
 // //     return result;
 // // }
 
-// // double dot_product(t_vec a, t_vec b)
+// // double vdot(t_vec a, t_vec b)
 // // {
 // //     return a.x * b.x + a.y * b.y + a.z * b.z;
 // // }
 
 // // bool intersect_plane(const t_plane *plane, const t_vec *ray_dir, const t_vec *ray_pos, double *t)
 // // {
-// //     double denom = dot_product(plane->direction, *ray_dir);
+// //     double denom = vdot(plane->direction, *ray_dir);
 // //     if (fabs(denom) > 1e-6) {
-// //         t_vec p0l0 = subtract(plane->point, *ray_pos);
-// //         *t = dot_product(p0l0, plane->direction) / denom;
+// //         t_vec p0l0 = vsub(plane->point, *ray_pos);
+// //         *t = vdot(p0l0, plane->direction) / denom;
 // //         return (*t >= 0);
 // //     }
 // //     return false;
@@ -51,7 +51,7 @@
 // // 	return (false);
 // // }
 
-// t_vec normalize(t_vec v)
+// t_vec vnorm(t_vec v)
 // {
 // 	double length = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 // 	if (length > 0)
@@ -92,7 +92,7 @@
 // 				.y = base_ray_dir->y + (1.0 - 2.0 * ((j + 0.5) / WINDOW_HEIGHT)),
 // 				.z = base_ray_dir->z
 // 			};
-// 			coords = normalize(coords);
+// 			coords = vnorm(coords);
 
 
 // 			double t;
@@ -113,7 +113,7 @@
 // {
 // 	t_vec point = {.x = 0.0, .y = 0.0, .z = 0.0};  // Point on the plane
 // 	t_vec direction = {.x = 0.0, .y = 1.0, .z = 0.0};
-// 	direction = normalize(direction);
+// 	direction = vnorm(direction);
 // 	t_vec color = {.r = 1.0, .g = 0.0, .b = 1.0};  // Blue color
 // 	t_plane plane = create_plane(point, direction, color);
 
