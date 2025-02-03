@@ -1,11 +1,5 @@
-#include <math.h>
-#include <utils.h>
-#include <MLX42/MLX42.h>
 #include <scene.h>
-#include <RTmlx.h>
-#include <sys/param.h>
 #include <mathRT.h>
-#include <render.h>
 
 // Ray-plane intersection
 uint8_t	ray_intersect_plane(t_ray ray, t_objs *obj, float *t)

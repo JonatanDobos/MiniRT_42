@@ -1,7 +1,7 @@
-#include <miniRT.h>
 #include <RTmlx.h>
 #include <scene.h>
 #include <utils.h>
+#include <mathRT.h>
 
 void	fov_hook(double xdelta, double ydelta, void *param)
 {

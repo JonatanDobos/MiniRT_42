@@ -1,4 +1,3 @@
-#include <RTmlx.h>
 #include <scene.h>
 #include <utils.h>
 #include <mathRT.h>

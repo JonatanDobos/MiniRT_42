@@ -1,9 +1,4 @@
-#include <math.h>
-#include <utils.h>
-#include <MLX42/MLX42.h>
 #include <scene.h>
-#include <RTmlx.h>
-#include <sys/param.h>
 #include <mathRT.h>
 #include <render.h>
 
