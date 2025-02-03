@@ -18,6 +18,11 @@ void		set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color);
 t_vec4		calculate_lighting(
 	t_scene *scene, t_vec4 point, t_vec4 normal, t_vec4 obj_color);
 
+// obj_intersect.c
+
+uint8_t		ray_intersect_plane(t_ray ray, t_objs *obj, float *t);
+uint8_t		ray_intersect_sphere(t_ray ray, t_objs *obj, float *t);
+
 // cylinder.c
 
 uint8_t		ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t);
@@ -26,5 +31,9 @@ uint8_t		ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t);
 
 void		set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color);
 void		scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
+
+// trace_ray.c
+
+t_vec4		trace_ray(t_scene *scene, t_ray ray);
 
 #endif

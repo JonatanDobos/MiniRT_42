@@ -98,11 +98,11 @@ MLX				:=	window_setup.c			keyhooks.c		loophooks.c	camera_move.c	camera_rotate.c
 
 UTILS			:=	utils.c
 
-ERROR			:=	error.c					print.c
+ERROR			:=	error.c			print.c
 
 DEBUG			:=	print_info.c
 
-RENDER			:=	render.c		scaling.c	cylinder.c	lighting.c	set_pixel.c
+RENDER			:=	render.c		scaling.c	cylinder.c	lighting.c	set_pixel.c		obj_intersect.c		trace_ray.c
 
 MATH			:=	math.c		vec_arithmetic.c		vec_geometry.c		vec_transform.c
 
