@@ -39,6 +39,10 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 			else if (scene->objs[i].type == SPHERE)
 			{
 				normal = vnorm(vsub(vadd(ray.origin, vscale(ray.vec, t)), scene->objs[i].coords));
+
+
+
+
 			}
 			else if (scene->objs[i].type == CYLINDER)
 			{
