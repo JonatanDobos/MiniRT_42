@@ -4,6 +4,8 @@
 #include <scene.h>
 #include <RTmlx.h>
 #include <sys/param.h>
+#include <mathRT.h>
+#include <render.h>
 
 
 #define MAX_DEPTH 5
@@ -106,8 +108,8 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	t_vec4 oc = vsub(ray.origin, obj->coords); // Vector from ray origin to obj->cylinder center
 	
 	// Step 2: Project ray direction and oc onto plane perpendicular to the cylinder axis
-	t_vec4 rd = vsub(ray.vec, vmul(ca, vdot(ray.vec, ca))); // Projected ray direction
-	t_vec4 oc_proj = vsub(oc, vmul(ca, vdot(oc, ca)));     // Projected oc
+	t_vec4 rd = vsub(ray.vec, vscale(ca, vdot(ray.vec, ca))); // Projected ray direction
+	t_vec4 oc_proj = vsub(oc, vscale(ca, vdot(oc, ca)));     // Projected oc
 
 	// Step 3: Solve quadratic equation for the intersection
 	float a = vdot(rd, rd);
@@ -131,8 +133,8 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	}
 
 	// Check if the intersection is within the finite height of the cylinder
-	float y0 = vdot(ca, vadd(oc, vmul(ray.vec, t0))) - obj->cylinder.height / 2;
-	float y1 = vdot(ca, vadd(oc, vmul(ray.vec, t1))) - obj->cylinder.height / 2;
+	float y0 = vdot(ca, vadd(oc, vscale(ray.vec, t0))) - obj->cylinder.height / 2;
+	float y1 = vdot(ca, vadd(oc, vscale(ray.vec, t1))) - obj->cylinder.height / 2;
 
 	float valid_t = -1;
 	uint8_t hit_type = 0;
@@ -149,7 +151,7 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	}
 
 	// Step 5: Check caps if the body intersections are invalid
-	t_vec4 top_cap = vadd(obj->coords, vmul(ca, obj->cylinder.height));
+	t_vec4 top_cap = vadd(obj->coords, vscale(ca, obj->cylinder.height));
 	t_vec4 bottom_cap = obj->coords;
 
 
@@ -160,7 +162,7 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	// Validate cap intersections
 	if (hit_top)
 	{
-		t_vec4 p = vadd(ray.origin, vmul(ray.vec, t_top));
+		t_vec4 p = vadd(ray.origin, vscale(ray.vec, t_top));
 		if (vlen(vsub(p, top_cap)) <= obj->cylinder.radius)
 		{
 			if (valid_t < 0 || t_top < valid_t)
@@ -173,7 +175,7 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 
 	if (hit_bottom)
 	{
-		t_vec4 p = vadd(ray.origin, vmul(ray.vec, t_bottom));
+		t_vec4 p = vadd(ray.origin, vscale(ray.vec, t_bottom));
 		if (vlen(vsub(p, bottom_cap)) <= obj->cylinder.radius)
 		{
 			if (valid_t < 0 || t_bottom < valid_t)
@@ -227,14 +229,14 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 			}
 			else if (scene->objs[i].type == SPHERE)
 			{
-				normal = vnorm(vsub(vadd(ray.origin, vmul(ray.vec, t)), scene->objs[i].coords));
+				normal = vnorm(vsub(vadd(ray.origin, vscale(ray.vec, t)), scene->objs[i].coords));
 			}
 			else if (scene->objs[i].type == CYLINDER)
 			{
 				if (intersect == 1)
 				{
-					t_vec4 hit_point = vadd(ray.origin, vmul(ray.vec, t));
-					normal = vnorm(vsub(hit_point, vadd(scene->objs[i].coords, vmul(scene->objs[i].cylinder.orientation, \
+					t_vec4 hit_point = vadd(ray.origin, vscale(ray.vec, t));
+					normal = vnorm(vsub(hit_point, vadd(scene->objs[i].coords, vscale(scene->objs[i].cylinder.orientation, \
 						vdot(vsub(hit_point, scene->objs[i].coords), scene->objs[i].cylinder.orientation)))));
 				}
 				else if (intersect == 2)
@@ -249,7 +251,7 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 	// Apply lighting if an object was hit
 	if (closest_t < INFINITY)
 	{
-		t_vec4 hit_point = vadd(ray.origin, vmul(ray.vec, closest_t));
+		t_vec4 hit_point = vadd(ray.origin, vscale(ray.vec, closest_t));
 		return (calculate_lighting(scene, hit_point, normal, pixel_color));
 	}
 	return (pixel_color); // Background color

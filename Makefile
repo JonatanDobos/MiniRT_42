@@ -96,13 +96,17 @@ PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_
 
 MLX				:=	window_setup.c			keyhooks.c		loophooks.c	camera_move.c	camera_rotate.c
 
-SCENE			:=	create.c				test.c			render.c			scaling.c
+SCENE			:=	create.c				test.c			scaling.c
 
-UTILS			:=	utils.c					math.c
+UTILS			:=	utils.c
 
 ERROR			:=	error.c					print.c
 
 DEBUG			:=	print_info.c
+
+RENDER			:=	render.c
+
+MATH			:=	math.c		vec_arithmetic.c		vec_geometry.c		vec_transform.c
 
 # plane.c										
 # sphere.c										
@@ -114,6 +118,8 @@ SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))			\
 					$(addprefix $(SRC_DIR)mlx/, $(MLX))			\
 					$(addprefix $(SRC_DIR)scene/, $(SCENE))		\
 					$(addprefix $(SRC_DIR)utils/, $(UTILS))		\
+					$(addprefix $(SRC_DIR)render/, $(RENDER))	\
+					$(addprefix $(SRC_DIR)math/, $(MATH))		\
 					$(addprefix $(SRC_DIR)debug/, $(DEBUG))
 
 #		Generate object file names
@@ -122,7 +128,8 @@ OBJS 			:=	$(SRCP:%.c=$(BUILD_DIR)%.o)
 DEPS			:=	$(OBJS:.o=.d)
 
 #		HEADERS
-INCS			:=	miniRT.h		parsing.h		RTerror.h			scene.h				RTmlx.h					utils.h			debug.h
+INCS			:=	miniRT.h		parsing.h		RTerror.h			scene.h				RTmlx.h \
+					utils.h		debug.h		render.h		mathRT.h
 INCP			:=	$(addprefix $(INCD), $(INCS))
 HEADERS			:=	$(INCP)
 INCLUDE_RT		:=	-I $(INCD)
