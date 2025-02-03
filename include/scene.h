@@ -10,8 +10,6 @@
 //	3 objects, Plane Sphere Cylinder
 # define NUM_OBJ_TYPES 3
 
-# define FOV_MAX 180.0f
-
 typedef struct s_axis2_16
 {
 	uint16_t		x;
@@ -106,6 +104,7 @@ typedef struct	s_scene
 	};
 	float	cam_m_speed;
 	float	cam_r_speed;
+	float	cam_fov_speed;
 	// t_object	ambient;
 	// t_object	*lights;
 	// size_t		lights_len;
@@ -117,14 +116,6 @@ typedef struct	s_scene
 	// float		scale;
 }	t_scene;
 
-// bool	scene_creation(t_rt *rt);
-
-
-// t_plane	plane(t_rt *rt);
-// t_sphere sphere(t_rt *rt);
-
-// void render_scene(t_rt *rt, mlx_image_t *img, t_objs *objarr, t_vp *vp);
-void	render_scene(t_rt *rt, t_scene *scn);
 void	render(t_rt *rt);
 
 #endif

@@ -9,8 +9,10 @@
 // Maybe scrool FOV hook speed??
 
 # define CAM_ROTATION_SPEED 2.6f
-
 # define CAM_MOVE_SPEED 18.0f
+# define FOV_SCROLL_SPEED 90.0f
+
+# define FOV_MAX 180.0f
 
 typedef struct	s_rt		t_rt;
 typedef struct	s_scene		t_scene;

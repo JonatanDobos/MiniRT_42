@@ -9,20 +9,20 @@ void	fov_hook(double xdelta, double ydelta, void *param)
 
 	(void)(xdelta);
 	sc = (t_scene *)param;
-	if (ydelta > 0 && sc->camera.c.realtime_fov > 1.0f)
+	if (ydelta > 0 && sc->camera.c.realtime_fov > 0.1f)
 	{
-		sc->camera.c.realtime_fov -= 0.5f;
+		sc->camera.c.realtime_fov = clamp(sc->camera.c.realtime_fov - sc->cam_fov_speed, 0.0f, 180.0f);
 		sc->camera.c.zvp_dist = 1.0f / tanf((sc->camera.c.realtime_fov * M_PI / 180.0f) / 2.0f);
 		sc->render = true;
-		printf("FOV: %.2f\n", sc->camera.c.realtime_fov);
+		printf("\033[0;34m FOV DOWN: %.2f\033[0m\n", sc->camera.c.realtime_fov);
 		return ;
 	}
 	if (ydelta < 0 && sc->camera.c.realtime_fov < FOV_MAX)
 	{
-		sc->camera.c.realtime_fov += 0.5f;
+		sc->camera.c.realtime_fov = clamp(sc->camera.c.realtime_fov + sc->cam_fov_speed, 0.0f, 180.0f);
 		sc->camera.c.zvp_dist = 1.0f / tanf((sc->camera.c.realtime_fov * M_PI / 180.0f) / 2.0f);
 		sc->render = true;
-		printf("FOV: %.2f\n", sc->camera.c.realtime_fov);
+		printf("\033[0;34m FOV UP: %.2f\033[0m\n", sc->camera.c.realtime_fov);
 		return ;
 	}
 }
@@ -64,7 +64,7 @@ void	loop_hook(void *param)
 		render(rt);
 		time = mlx_get_time() - time;
 		rt->win->delta_time = time;
-		// m->scene.cam_fov_speed = FOV_SCROLL_SPEED * time;
+		rt->scene->cam_fov_speed = FOV_SCROLL_SPEED * time;
 		rt->scene->cam_m_speed = CAM_MOVE_SPEED * time;
 		rt->scene->cam_r_speed = CAM_ROTATION_SPEED * time;
 		rt->scene->render = false;
