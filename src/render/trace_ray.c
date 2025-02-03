@@ -2,7 +2,7 @@
 #include <mathRT.h>
 #include <render.h>
 
-uint8_t ray_intersect_table(t_ray ray, t_objs *obj, float *t)
+uint8_t	ray_intersect_table(t_ray ray, t_objs *obj, float *t)
 {
 	static uint8_t	(*intersect_obj[NUM_OBJ_TYPES])(t_ray, t_objs *, float *) = {
 		ray_intersect_plane,
@@ -61,7 +61,7 @@ t_vec4	trace_ray(t_scene *scene, t_ray ray)
 	if (closest_t < INFINITY)
 	{
 		t_vec4 hit_point = vadd(ray.origin, vscale(ray.vec, closest_t));
-		return (calculate_lighting(scene, hit_point, normal, pixel_color));
+		return (calc_lighting(scene, hit_point, normal, pixel_color));
 	}
 	return (pixel_color); // Background color
 }
