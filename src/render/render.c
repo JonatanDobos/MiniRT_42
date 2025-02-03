@@ -7,53 +7,6 @@
 #include <mathRT.h>
 #include <render.h>
 
-
-#define MAX_DEPTH 5
-
-// Clamp a value between min and max
-float	clamp(float value, float min, float max)
-{
-	if (value < min)
-		return (min);
-	if (value > max)
-		return (max);
-	return (value);
-}
-
-// Clamp a vector between min and max
-t_vec4	vec_clamp(t_vec4 value, float min, float max)
-{
-	return (t_vec4)
-	{
-		clamp(value[0], min, max),
-		clamp(value[1], min, max),
-		clamp(value[2], min, max),
-		clamp(value[3], min, max)
-	};
-}
-
-// Lighting calculation (ambient + diffuse)
-t_vec4	calculate_lighting(
-	t_scene *scene, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
-{
-	const t_vec4	scalar_amb = bcast3(scene->ambient.a.ratio);
-	t_vec4			scalar_light;
-	t_vec4			result;
-	t_vec4			light_dir;
-	float			diff;
-
-	// Ambient lighting
-	result = obj_color * scene->ambient.color * scalar_amb;
-
-	// Diffuse lighting
-	light_dir = vnorm(vsub(scene->light.coords, point));
-	diff = clamp(vdot(normal, light_dir), 0.0f, 1.0f) * scene->light.l.brightness;
-
-	scalar_light = bcast3(diff);
-	result += (obj_color * scene->light.color * scalar_light);
-	return (vec_clamp(result, 0.0f, 1.0f));
-}
-
 // Ray-plane intersection
 uint8_t	ray_intersect_plane(t_ray ray, t_objs *obj, float *t)
 {
@@ -86,111 +39,6 @@ uint8_t	ray_intersect_sphere(t_ray ray, t_objs *obj, float *t)
 	if (*t < 0)
 		*t = (-b + sqrt_d) / (2.0f * a);
 	return (*t >= 0);
-}
-
-// GPT START
-
-bool intersect_cylinder_caps(t_vec4 coords, t_vec4 orientation, t_vec4 plane_point, t_vec4 plane_normal, float *t)
-{
-	float denom = vdot(plane_normal, orientation);
-	if (fabs(denom) > 1e-6) {
-		t_vec4 p0l0 = plane_point - coords;
-		*t = vdot(p0l0, plane_normal) / denom;
-		return (*t >= 0);
-	}
-	return false;
-}
-
-uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
-{
-	// Step 1: Compute vectors for the cylinder's axis
-	t_vec4 ca = vnorm(obj->cylinder.orientation); // Cylinder axis (normalized)
-	t_vec4 oc = vsub(ray.origin, obj->coords); // Vector from ray origin to obj->cylinder center
-	
-	// Step 2: Project ray direction and oc onto plane perpendicular to the cylinder axis
-	t_vec4 rd = vsub(ray.vec, vscale(ca, vdot(ray.vec, ca))); // Projected ray direction
-	t_vec4 oc_proj = vsub(oc, vscale(ca, vdot(oc, ca)));     // Projected oc
-
-	// Step 3: Solve quadratic equation for the intersection
-	float a = vdot(rd, rd);
-	float b = 2.0f * vdot(rd, oc_proj);
-	float c = vdot(oc_proj, oc_proj) - (obj->cylinder.radius * obj->cylinder.radius);
-	float discriminant = b * b - 4 * a * c;
-	if (discriminant < 0.0f)
-		return false; // No intersection
-
-	// Compute the roots of the quadratic
-	float sqrt_d = sqrtf(discriminant);
-	float t0 = (-b - sqrt_d) / (2.0f * a);
-	float t1 = (-b + sqrt_d) / (2.0f * a);
-
-	// Step 4: Determine the valid intersection point
-	if (t0 > t1) // Ensure t0 is the smaller value
-	{
-		float temp = t0;
-		t0 = t1;
-		t1 = temp;
-	}
-
-	// Check if the intersection is within the finite height of the cylinder
-	float y0 = vdot(ca, vadd(oc, vscale(ray.vec, t0))) - obj->cylinder.height / 2;
-	float y1 = vdot(ca, vadd(oc, vscale(ray.vec, t1))) - obj->cylinder.height / 2;
-
-	float valid_t = -1;
-	uint8_t hit_type = 0;
-
-	if (y0 >= -obj->cylinder.height / 2 && y0 <= obj->cylinder.height / 2)
-	{
-		valid_t = t0;
-		hit_type = 1; // Cylinder body
-	}
-	else if (y1 >= -obj->cylinder.height / 2 && y1 <= obj->cylinder.height / 2)
-	{
-		valid_t = t1;
-		hit_type = 1; // Cylinder body
-	}
-
-	// Step 5: Check caps if the body intersections are invalid
-	t_vec4 top_cap = vadd(obj->coords, vscale(ca, obj->cylinder.height));
-	t_vec4 bottom_cap = obj->coords;
-
-
-	float t_top, t_bottom;
-	bool hit_top = intersect_cylinder_caps(ray.origin, ray.vec, top_cap, ca, &t_top);
-	bool hit_bottom = intersect_cylinder_caps(ray.origin, ray.vec, bottom_cap, ca, &t_bottom);
-
-	// Validate cap intersections
-	if (hit_top)
-	{
-		t_vec4 p = vadd(ray.origin, vscale(ray.vec, t_top));
-		if (vlen(vsub(p, top_cap)) <= obj->cylinder.radius)
-		{
-			if (valid_t < 0 || t_top < valid_t)
-			{
-				valid_t = t_top;
-				hit_type = 2; // Cylinder cap
-			}
-		}
-	}
-
-	if (hit_bottom)
-	{
-		t_vec4 p = vadd(ray.origin, vscale(ray.vec, t_bottom));
-		if (vlen(vsub(p, bottom_cap)) <= obj->cylinder.radius)
-		{
-			if (valid_t < 0 || t_bottom < valid_t)
-			{
-				valid_t = t_bottom;
-				hit_type = 3; // Cylinder cap
-			}
-		}
-	}
-
-	if (valid_t < 0)
-		return false;
-
-	*t = valid_t;
-	return hit_type;
 }
 
 uint8_t ray_intersect_table(t_ray ray, t_objs *obj, float *t)
@@ -282,19 +130,6 @@ t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
 	return vnorm(world_dir);
 }
 
-void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color)
-{
-	uint8_t			*pixels;
-	const t_vec4	multiply = {255.0, 255.0, 255.0, 255.0};
-
-	color *= multiply;
-	pixels = win->img->pixels + (y * WINDOW_WIDTH + x) * 4;
-	*(pixels++) = (uint8_t)color[R];
-	*(pixels++) = (uint8_t)color[G];
-	*(pixels++) = (uint8_t)color[B];
-	*(pixels++) = (uint8_t)color[A];
-}
-
 // Render the scene
 void	render(t_rt *rt)
 {
@@ -315,7 +150,6 @@ void	render(t_rt *rt)
 			ray.origin = rt->scene->camera.coords;
 			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, rt->scene->camera.c.zvp_dist, 0}, rt->scene->camera.c.orientation);
 			scaled_res_set_pixel(rt->win, x, y, trace_ray(rt->scene, ray));
-			// set_pixel(rt->win, x, y, trace_ray(rt->scene, ray));
 			++x;
 		}
 		++y;

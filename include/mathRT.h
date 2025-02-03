@@ -1,7 +1,7 @@
 #ifndef MATHRT_H
 # define MATHRT_H
 # include <common_defs.h>
-# include <mathRT.h>
+# include <math.h>
 # include <miniRT.h>
 
 # define EPSILON 1e-6f

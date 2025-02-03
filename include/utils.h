@@ -18,5 +18,7 @@ static inline float	rt_minf(float a, float b)
 
 t_vec4		bcast4(float scalar);
 t_vec4		bcast3(float scalar);
+float		clamp(float value, float min, float max);
+t_vec4		vec_clamp(t_vec4 value, float min, float max);
 
 #endif

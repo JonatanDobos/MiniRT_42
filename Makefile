@@ -96,15 +96,13 @@ PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_
 
 MLX				:=	window_setup.c			keyhooks.c		loophooks.c	camera_move.c	camera_rotate.c
 
-SCENE			:=	create.c				test.c			scaling.c
-
 UTILS			:=	utils.c
 
 ERROR			:=	error.c					print.c
 
 DEBUG			:=	print_info.c
 
-RENDER			:=	render.c
+RENDER			:=	render.c		scaling.c	cylinder.c	lighting.c	set_pixel.c
 
 MATH			:=	math.c		vec_arithmetic.c		vec_geometry.c		vec_transform.c
 
@@ -116,7 +114,6 @@ SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))			\
 					$(addprefix $(SRC_DIR)parsing/, $(PARSE))	\
 					$(addprefix $(SRC_DIR)error/, $(ERROR))		\
 					$(addprefix $(SRC_DIR)mlx/, $(MLX))			\
-					$(addprefix $(SRC_DIR)scene/, $(SCENE))		\
 					$(addprefix $(SRC_DIR)utils/, $(UTILS))		\
 					$(addprefix $(SRC_DIR)render/, $(RENDER))	\
 					$(addprefix $(SRC_DIR)math/, $(MATH))		\
