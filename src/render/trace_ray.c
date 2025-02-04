@@ -16,7 +16,7 @@ uint8_t	ray_intersect_table(t_ray ray, t_objs *obj, float *t)
 t_vec4	trace_ray(t_scene *scene, t_ray ray)
 {
 	float t, closest_t = INFINITY;
-	t_vec4 pixel_color = {0, 0, 0, 1.0};
+	t_vec4 pixel_color = {0.0F, 0.0F, 0.0F, 1.0F};
 	t_vec4 normal;
 	t_objs	*obj_closest_vp;
 	uint32_t i;

@@ -8,7 +8,7 @@ float	rt_atof(const char *str)
 	int		sign;
 	int		place;
 
-	num = 0;
+	num = 0.0F;
 	i = 0;
 	sign = 1;
 	while (!ft_isdigit(str[i]) || str[i] == '.')
@@ -16,7 +16,7 @@ float	rt_atof(const char *str)
 	if (i > 0 && str[i - 1] == '-')
 		sign = -1;
 	while (str[i] && ft_isdigit(str[i]))
-		num = (num * 10) + (str[i++] - '0');
+		num = (num * 10.0F) + (str[i++] - '0');
 	if (str[i] != '.')
 		return (num * sign);
 	++i;

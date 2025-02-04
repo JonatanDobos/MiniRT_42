@@ -18,6 +18,24 @@ typedef struct	s_rt		t_rt;
 typedef struct	s_scene		t_scene;
 typedef struct	s_window	t_window;
 
+typedef struct s_window
+{
+	mlx_t			*mlx;
+	mlx_image_t		*img;
+	uint8_t			*pixels;
+	int16_t			id;
+	uint16_t		rndr_wdth;
+	uint16_t		rndr_hght;
+	uint16_t		window_wdth;
+	uint16_t		window_hght;
+	uint16_t		set_rndr_hght;
+	float			aspectrat;
+	float			res_ratio;
+	float			delta_time;
+	bool			resize;
+	mlx_texture_t	*logo;
+}	t_window;
+
 
 bool	windows_setup_mlx(t_rt *rt);
 void	my_keyhook(mlx_key_data_t keydata, t_rt *rt);
@@ -50,22 +68,6 @@ void		cam_rotate_left(t_scene *sc);
 void		cam_rotate_up(t_scene *sc);
 void		cam_rotate_down(t_scene *sc);
 
-typedef struct s_window
-{
-	mlx_t			*mlx;
-	mlx_image_t		*img;
-	uint8_t			*pixels;
-	int16_t			id;
-	uint16_t		rndr_wdth;
-	uint16_t		rndr_hght;
-	uint16_t		window_wdth;
-	uint16_t		window_hght;
-	uint16_t		set_rndr_hght;
-	float			aspectrat;
-	float			res_ratio;
-	float			delta_time;
-	bool			resize;
-	mlx_texture_t	*logo;
-}	t_window;
+bool		handle_object_modification(const keys_t key, t_scene *sc);
 
 #endif

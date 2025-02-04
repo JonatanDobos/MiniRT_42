@@ -94,7 +94,8 @@ MAIN			:=	main.c
 
 PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c _debug.c
 
-MLX				:=	window_setup.c			keyhooks.c		loophooks.c	camera_move.c	camera_rotate.c
+MLX				:=	window_setup.c			keyhooks.c		loophooks.c	camera_move.c	camera_rotate.c	\
+					object_modification.c
 
 UTILS			:=	utils.c
 
@@ -213,6 +214,9 @@ test3: all
 
 test4: all
 	./$(NAME) ./cylinder.rt
+
+test5: all
+	./$(NAME) ./resizing.rt
 
 valgrind: all
 	valgrind --leak-check=full -s ./$(NAME)

@@ -68,6 +68,5 @@ void	loop_hook(void *param)
 		rt->scene->cam_m_speed = CAM_MOVE_SPEED * time;
 		rt->scene->cam_r_speed = CAM_ROTATION_SPEED * time;
 		rt->scene->render = false;
-		printf("   > render: %.5f sec.\n", rt->win->delta_time);
 	}
 }

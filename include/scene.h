@@ -5,7 +5,6 @@
 # include <miniRT.h>
 # include <dynarr.h>
 
-// typedef union u_vec			t_vec;
 
 //	3 objects, Plane Sphere Cylinder
 # define NUM_OBJ_TYPES 3
@@ -87,7 +86,6 @@ typedef struct	s_objs
 	};
 	t_vec4			coords;
 	t_vec4			color;
-	float			hit;	//	Evt weg pleuren
 }	t_objs;
 
 typedef struct	s_scene
@@ -102,18 +100,11 @@ typedef struct	s_scene
 		t_objs		*objs;
 		size_t		arr_size;	
 	};
+	t_objs	*selected_obj;
+	ssize_t	sel_obj_index;
 	float	cam_m_speed;
 	float	cam_r_speed;
 	float	cam_fov_speed;
-	// t_object	ambient;
-	// t_object	*lights;
-	// size_t		lights_len;
-	// t_object	*objects;
-	// size_t		objects_len;
-	// t_bvh		bvh;
-	// t_mtl		*materials;
-	// size_t		materials_len;
-	// float		scale;
 }	t_scene;
 
 void	render(t_rt *rt);

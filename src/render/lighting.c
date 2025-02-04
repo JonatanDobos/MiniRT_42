@@ -17,14 +17,14 @@ t_vec4	calc_lighting(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
 
 	// Diffuse lighting
 	light_dir = vnorm(vsub(sc->light.coords, point));
-	diff = clamp(vdot(normal, light_dir), 0.0f, 1.0f) * sc->light.l.brightness;
+	diff = clamp(vdot(normal, light_dir), 0.0F, 1.0F) * sc->light.l.brightness;
 
 	scalar_light = bcast3(diff);
 	result += (obj_color * sc->light.color * scalar_light);
 
 	// Shadow calculation
 	result *= calc_shadow(sc, point, light_dir);
-	return (vec_clamp(result, 0.0f, 1.0f));
+	return (vec_clamp(result, 0.0F, 1.0F));
 }
 
 t_vec4	calc_shadow(t_scene *sc, t_vec4 point, t_vec4 light_dir)
