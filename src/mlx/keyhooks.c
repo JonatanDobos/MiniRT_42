@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/05 15:12:14 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/02/05 15:25:40 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/02/05 16:54:14 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,28 @@
 
 #include <stdio.h>
 # include <MLX42/MLX42.h>
+
+// t_vec4 trace_ray(t_scene *scene, t_ray ray)
+// {
+// 	float	closest_t;
+// 	uint8_t	closest_intersect_type;
+// 	t_vec4	pixel_color;
+// 	t_vec4	normal;
+// 	t_objs	*closest_obj;
+// 	t_vec4	hit_point;
+
+// 	pixel_color = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
+// 	closest_obj = find_closest_object(scene, ray, &closest_t, &closest_intersect_type);
+// 	if (closest_t < INFINITY)
+// 	{
+// 		pixel_color = closest_obj->color;
+// 		normal = calculate_normal(closest_obj, &ray, closest_t, closest_intersect_type);
+// 		hit_point = vadd(ray.origin, vscale(ray.vec, closest_t));
+// 		return (calc_lighting(scene, hit_point, normal, pixel_color));
+// 	}
+// 	return (pixel_color);
+// }
+
 
 void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *rt)
 {

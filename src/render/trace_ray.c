@@ -34,14 +34,14 @@ t_vec4 calculate_normal_cylinder(t_objs *obj, t_ray ray, float t, uint8_t inters
 	}
 }
 
-t_objs *find_closest_object(t_scene *scene, t_ray ray, float *closest_t, uint8_t *closest_intersect_type)
+uint32_t	find_closest_object(t_scene *scene, t_ray ray, float *closest_t, uint8_t *closest_intersect_type)
 {
-	t_objs		*obj_closest;
+	uint32_t	closest_obj;
 	uint32_t	i;
 	float		t;
 	uint8_t		intersect_type;
 
-	obj_closest = NULL;
+	closest_obj = 0;
 	i = 0;
 	*closest_t = INFINITY;
 	*closest_intersect_type = 0;
@@ -50,13 +50,13 @@ t_objs *find_closest_object(t_scene *scene, t_ray ray, float *closest_t, uint8_t
 		intersect_type = ray_intersect_table(ray, scene->objs + i, &t);
 		if (intersect_type && t < *closest_t)
 		{
-			obj_closest = scene->objs + i;
+			closest_obj = i;
 			*closest_t = t;
 			*closest_intersect_type = intersect_type;
 		}
 		++i;
 	}
-	return (obj_closest);
+	return (closest_obj);
 }
 
 t_vec4 calculate_normal(t_objs *obj, t_ray *ray, float t, uint8_t intersect_type)
@@ -86,7 +86,7 @@ t_vec4 trace_ray(t_scene *scene, t_ray ray)
 	t_vec4	hit_point;
 
 	pixel_color = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
-	closest_obj = find_closest_object(scene, ray, &closest_t, &closest_intersect_type);
+	closest_obj = scene->objs + find_closest_object(scene, ray, &closest_t, &closest_intersect_type);
 	if (closest_t < INFINITY)
 	{
 		pixel_color = closest_obj->color;
