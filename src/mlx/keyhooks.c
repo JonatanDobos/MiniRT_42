@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/05 15:12:14 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/02/05 18:14:55 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/02/05 18:29:29 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *
 	if (iets == false)
 	{
 		mlx_get_mouse_pos(rt->win->mlx, &x, &y);
+		y = (float)y / rt->win->res_ratio;
+		x = (float)x / rt->win->res_ratio;
 		ndc_x = (2.0F * ((x + 0.5F) / (float)rt->win->rndr_wdth) - 1.0F) * rt->win->aspectrat;
 		ndc_y = 1.0F - 2.0F * ((y + 0.5F) / (float)rt->win->rndr_hght);
 		ray.origin = rt->scene->camera.coords;
