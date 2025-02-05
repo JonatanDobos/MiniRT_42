@@ -1,9 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   keyhooks.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/02/05 15:12:14 by rde-brui      #+#    #+#                 */
+/*   Updated: 2025/02/05 15:25:40 by rde-brui      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT.h>
 #include <RTmlx.h>
 #include <scene.h>
 #include <debug.h>
 
 #include <stdio.h>
+# include <MLX42/MLX42.h>
+
+void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *rt)
+{
+	if (button == MLX_MOUSE_BUTTON_LEFT)
+		printf("check\n");
+	
+	int32_t	x;
+	int32_t	y;
+	
+	mlx_get_mouse_pos(rt->win->mlx, &x, &y);
+
+	printf("x = %d\ty = %d\n", x, y);
+}
 
 void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 {
@@ -29,6 +55,6 @@ void	init_hooks(t_rt *rt)
 
 	mlx_key_hook(rt->win->mlx, (mlx_keyfunc)my_keyhook, rt);
 	mlx_loop_hook(rt->win->mlx, (mlx_closefunc)loop_hook, rt);
-	// mlx_mouse_hook(rt->win->mlx, loop_hook, rt);
+	mlx_mouse_hook(rt->win->mlx, (mlx_mousefunc)mouse_hook, rt);
 	mlx_scroll_hook(rt->win->mlx, (mlx_cursorfunc)fov_hook, rt->scene);
 }

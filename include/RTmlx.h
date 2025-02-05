@@ -44,6 +44,7 @@ void	init_hooks(t_rt *m);
 void	loop_hook(t_rt *rt);
 void	fov_hook(double xdelta, double ydelta, t_scene *sc);
 
+void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *rt);
 // scaling.c
 
 void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
