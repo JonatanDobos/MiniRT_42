@@ -3,7 +3,7 @@
 #include <mathRT.h>
 #include <render.h>
 
-static t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
+t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
 {
 	// Normalize the camera orientation vector (forward direction)
 	t_vec4	z_axis = vnorm(cam_orient);

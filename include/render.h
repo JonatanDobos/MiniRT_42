@@ -35,6 +35,8 @@ void		scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
 // trace_ray.c
 
 t_vec4		trace_ray(t_scene *scene, t_ray ray);
+t_vec4		transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient);
 uint8_t		ray_intersect_table(t_ray ray, t_objs *obj, float *t);
+uint32_t	find_closest_object(t_scene *scene, t_ray ray, float *closest_t, uint8_t *closest_intersect_type);
 
 #endif
