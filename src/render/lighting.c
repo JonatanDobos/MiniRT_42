@@ -17,17 +17,16 @@ t_vec4	calc_lighting(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
 
 	// Diffuse lighting
 	light_dir = vnorm(vsub(sc->light.coords, point));
+	if (calc_shadow(sc, point, normal, light_dir) == true)
+		return (result);
 	diff = clamp(vdot(normal, light_dir), 0.0F, 1.0F) * sc->light.l.brightness;
 
 	scalar_light = bcast3(diff);
 	result += (obj_color * sc->light.color * scalar_light);
-
-	// Shadow calculation
-	result *= calc_shadow(sc, point, light_dir);
 	return (vec_clamp(result, 0.0F, 1.0F));
 }
 
-t_vec4	calc_shadow(t_scene *sc, t_vec4 point, t_vec4 light_dir)
+bool	calc_shadow(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 light_dir)
 {
 	t_vec4		origin;
 	float		shadow;
@@ -39,12 +38,14 @@ t_vec4	calc_shadow(t_scene *sc, t_vec4 point, t_vec4 light_dir)
 	t = 0.0F;
 	origin = vadd(point, vscale(light_dir, SHADOW_EPSILON));
 	distance = vlen(vsub(sc->light.coords, point));
+	if (vdot(normal, light_dir) < 0.0F)
+		return (true);
 	while (i < sc->arr_size)
 	{
 		if (ray_intersect_table((t_ray){origin, light_dir}, &sc->objs[i], &t)
 			&& t > SHADOW_EPSILON && t < distance)
-			return (bcast3(0.1F));
+			return (true);
 		++i;
 	}
-	return (bcast3(1.0F));
+	return (false);
 }

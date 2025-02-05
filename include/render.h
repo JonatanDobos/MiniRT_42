@@ -16,7 +16,7 @@ void		set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color);
 // lighting.c
 
 t_vec4		calc_lighting(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 obj_color);
-t_vec4		calc_shadow(t_scene *sc, t_vec4 point, t_vec4 light_dir);
+bool		calc_shadow(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 light_dir);
 
 // obj_intersect.c
 

@@ -87,7 +87,7 @@ t_vec4 trace_ray(t_scene *scene, t_ray ray)
 
 	pixel_color = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
 	closest_obj = scene->objs + find_closest_object(scene, ray, &closest_t, &closest_intersect_type);
-	if (closest_t < INFINITY)
+	if (closest_t < INFINITY && closest_t > 0.0F)
 	{
 		pixel_color = closest_obj->color;
 		normal = calculate_normal(closest_obj, &ray, closest_t, closest_intersect_type);
