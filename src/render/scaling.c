@@ -2,47 +2,47 @@
 #include <RTmlx.h>
 #include <render.h>
 
-void	res_downscale(t_rt *rt)
+bool	res_downscale(t_window *win)
 {
 	float	perc;
 
-	rt->win->res_ratio += RES_STEP_SIZE;
-	if (rt->win->res_ratio > RES_RATIO_MAX)
-		rt->win->res_ratio = RES_RATIO_MAX;
-	rt->win->rndr_hght = (float)rt->win->mlx->height / rt->win->res_ratio;
-	rt->win->rndr_wdth = (float)rt->win->mlx->width / rt->win->res_ratio;
-	rt->scene->render = true;
+	win->res_ratio += RES_STEP_SIZE;
+	if (win->res_ratio > RES_RATIO_MAX)
+		win->res_ratio = RES_RATIO_MAX;
+	win->rndr_hght = (float)win->mlx->height / win->res_ratio;
+	win->rndr_wdth = (float)win->mlx->width / win->res_ratio;
 
-	perc = (1.0F / rt->win->res_ratio) * 100;
+	perc = (1.0F / win->res_ratio) * 100;
 	printf("\033[0;34m DOWNSCALE: %.0f%% (%dx%d) ~ (%dx%d)\033[0m\n",
-		perc, rt->win->rndr_wdth, rt->win->rndr_hght, rt->win->mlx->width, rt->win->mlx->height);
+		perc, win->rndr_wdth, win->rndr_hght, win->mlx->width, win->mlx->height);
+		return (true);
 }
 
-void	res_upscale(t_rt *rt)
+bool	res_upscale(t_window *win)
 {
 	float	perc;
 
-	rt->win->res_ratio -= RES_STEP_SIZE;
-	if (rt->win->res_ratio < 1.0F)
-		rt->win->res_ratio = 1.0F;
-	rt->win->rndr_hght = (float)rt->win->mlx->height / rt->win->res_ratio;
-	rt->win->rndr_wdth = (float)rt->win->mlx->width / rt->win->res_ratio;
-	rt->scene->render = true;
+	win->res_ratio -= RES_STEP_SIZE;
+	if (win->res_ratio < 1.0F)
+		win->res_ratio = 1.0F;
+	win->rndr_hght = (float)win->mlx->height / win->res_ratio;
+	win->rndr_wdth = (float)win->mlx->width / win->res_ratio;
 
-	perc = (1.0F / rt->win->res_ratio) * 100.0F;
+	perc = (1.0F / win->res_ratio) * 100.0F;
 	printf("\033[0;34m UPSCALE: %.0f%% (%dx%d) ~ (%dx%d)\033[0m\n",
-		perc, rt->win->rndr_wdth, rt->win->rndr_hght, rt->win->mlx->width, rt->win->mlx->height);
+		perc, win->rndr_wdth, win->rndr_hght, win->mlx->width, win->mlx->height);
+	return (true);
 }
 
-void	res_rescale(t_rt *rt)
-{
-	float	perc;
+// void	res_rescale(t_window *win)
+// {
+// 	float	perc;
 
-	rt->win->rndr_hght = (float)rt->win->mlx->height / rt->win->res_ratio;
-	rt->win->rndr_wdth = (float)rt->win->mlx->width / rt->win->res_ratio;
-	rt->scene->render = true;
+// 	win->rndr_hght = (float)win->mlx->height / win->res_ratio;
+// 	win->rndr_wdth = (float)win->mlx->width / win->res_ratio;
+// 	rt->scene->render = true;
 
-	perc = (1.0F / rt->win->res_ratio) * 100.0F;
-	printf("\033[0;34m RESCALE: %.0f%% (%dx%d) ~ (%dx%d)\033[0m\n",
-		perc, rt->win->rndr_wdth, rt->win->rndr_hght, rt->win->mlx->width, rt->win->mlx->height);
-}
+// 	perc = (1.0F / win->res_ratio) * 100.0F;
+// 	printf("\033[0;34m RESCALE: %.0f%% (%dx%d) ~ (%dx%d)\033[0m\n",
+// 		perc, win->rndr_wdth, win->rndr_hght, win->mlx->width, win->mlx->height);
+// }

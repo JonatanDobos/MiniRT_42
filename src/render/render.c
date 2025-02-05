@@ -11,7 +11,7 @@ static t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
 	// Create an "up" vector (default is Y-axis in world space)
 	t_vec4	up = {0, 1, 0};
 	if (fabsf(z_axis[X]) == 0.0F && fabsf(z_axis[Z]) == 0.0F) // Handle edge case where cam_orient is vertical
-		up = (z_axis[Y] > 0.0F) ? (t_vec4){0, 0, -1} : (t_vec4){0, 0, 1};
+		up = (z_axis[Y] > 0.0F) ? (t_vec4){0.0F, 0.0F, -1.0F} : (t_vec4){0.0F, 0.0F, 1.0F};
 
 	// Calculate the right vector (x-axis of the camera)
 	t_vec4	x_axis = vnorm(vcross(up, z_axis));

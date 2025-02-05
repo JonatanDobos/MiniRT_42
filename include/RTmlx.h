@@ -41,15 +41,15 @@ bool	windows_setup_mlx(t_rt *rt);
 void	my_keyhook(mlx_key_data_t keydata, t_rt *rt);
 void	init_hooks(t_rt *m);
 
-void	loop_hook(void *param);
-void	fov_hook(double xdelta, double ydelta, void *param);
+void	loop_hook(t_rt *rt);
+void	fov_hook(double xdelta, double ydelta, t_scene *sc);
 
 // scaling.c
 
 void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
-void	res_downscale(t_rt *rt);
-void	res_upscale(t_rt *rt);
-void	res_rescale(t_rt *rt);
+bool	res_downscale(t_window *win);
+bool	res_upscale(t_window *win);
+// bool	res_rescale(t_window *win);
 
 
 // camera_move.c

@@ -3,12 +3,10 @@
 #include <utils.h>
 #include <mathRT.h>
 
-void	fov_hook(double xdelta, double ydelta, void *param)
+void	fov_hook(double xdelta, double ydelta, t_scene *sc)
 {
-	t_scene	*sc;
 
 	(void)(xdelta);
-	sc = (t_scene *)param;
 	if (ydelta > 0 && sc->camera.c.realtime_fov > 0.1f)
 	{
 		sc->camera.c.realtime_fov = clamp(sc->camera.c.realtime_fov - sc->cam_fov_speed, 0.0f, 180.0f);
@@ -51,12 +49,10 @@ void	cam_hook(t_rt *rt)
 		cam_rotate_down(rt->scene);
 }
 
-void	loop_hook(void *param)
+void	loop_hook(t_rt *rt)
 {
-	t_rt	*rt;
 	double	time;
 
-	rt = (t_rt *)param;
 	time = mlx_get_time();
 	cam_hook(rt);
 	if (rt->scene->render == true)
