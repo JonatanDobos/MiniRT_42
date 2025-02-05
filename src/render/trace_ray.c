@@ -81,7 +81,6 @@ t_vec4 trace_ray(t_scene *scene, t_ray ray)
 	float	closest_t;
 	uint8_t	closest_intersect_type;
 	t_vec4	pixel_color;
-	t_vec4	normal;
 	t_objs	*closest_obj;
 	t_vec4	hit_point;
 
@@ -90,9 +89,10 @@ t_vec4 trace_ray(t_scene *scene, t_ray ray)
 	if (closest_t < INFINITY)
 	{
 		pixel_color = closest_obj->color;
-		normal = calculate_normal(closest_obj, &ray, closest_t, closest_intersect_type);
 		hit_point = vadd(ray.origin, vscale(ray.vec, closest_t));
-		return (calc_lighting(scene, hit_point, normal, pixel_color));
+		return (calc_lighting(scene, hit_point,
+				calculate_normal(closest_obj, &ray, closest_t,
+				closest_intersect_type), pixel_color));
 	}
 	return (pixel_color);
 }

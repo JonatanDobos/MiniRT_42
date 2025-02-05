@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/05 15:12:14 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/02/05 18:01:19 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/02/05 18:14:55 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,17 @@ t_vec4 mouse_clicks_on_obj(t_scene *scene, t_ray ray)
 void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *rt)
 {
 	static bool iets = false;
-	t_axis2 pos;
+	int32_t	x;
+	int32_t	y;
 	float	ndc_x;
 	float	ndc_y;
 	t_ray	ray;
 
 	if (iets == false)
 	{
-		mlx_get_mouse_pos(rt->win->mlx, &pos.x, &pos.y);
-		ndc_x = (2.0F * ((pos.x + 0.5F) / (float)rt->win->rndr_wdth) - 1.0F) * rt->win->aspectrat;
-		ndc_y = 1.0F - 2.0F * ((pos.y + 0.5F) / (float)rt->win->rndr_hght);
+		mlx_get_mouse_pos(rt->win->mlx, &x, &y);
+		ndc_x = (2.0F * ((x + 0.5F) / (float)rt->win->rndr_wdth) - 1.0F) * rt->win->aspectrat;
+		ndc_y = 1.0F - 2.0F * ((y + 0.5F) / (float)rt->win->rndr_hght);
 		ray.origin = rt->scene->camera.coords;
 		ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, rt->scene->camera.c.zvp_dist, 0.0F}, rt->scene->camera.c.orientation);
 		mouse_clicks_on_obj(rt->scene, ray);
