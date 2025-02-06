@@ -45,7 +45,7 @@ int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 	l.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 	l.color[A] = 1.0F;
 	// Hardcoded raduis, implement parsing later.
-	l.sphere.radius = 1.0F;
+	l.l.radius = 1.0F;
 	if (dynarr_insert(&sc->light_dynarr, &l) == false)
 		return (errset(perr("parse_light", errno)));
 	++sc->l_arr_size;

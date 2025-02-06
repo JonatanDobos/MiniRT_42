@@ -9,6 +9,13 @@
 
 # define SHADOW_EPSILON 1e-3F
 
+typedef enum e_intersect_types
+{
+	CYL_BODY = 1,
+	CYL_TOP,
+	CYL_BOTTOM
+}	t_intersect_type;
+
 // set_pixel.c
 
 void		set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color);
@@ -17,6 +24,7 @@ void		set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color);
 
 t_vec4		calc_lighting(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 obj_color);
 bool		calc_shadow(t_scene *sc, t_ray ray, t_vec4 light_dir, uint32_t light);
+t_objs		*render_light(t_scene *scene, t_ray ray, float *closest_t, t_objs *closest_obj);
 
 // obj_intersect.c
 

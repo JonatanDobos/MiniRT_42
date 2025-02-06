@@ -18,7 +18,7 @@ t_vec4 calculate_normal_cylinder(t_objs *obj, t_ray ray, float t, uint8_t inters
 	t_vec4	hit_point = vadd(ray.origin, vscale(ray.vec, t));
 	t_vec4	normal;
 
-	if (intersect_type == 1)
+	if (intersect_type == CYL_BODY)
 	{
 		normal = vsub(hit_point, 
 				vadd(obj->coords, 
@@ -32,7 +32,7 @@ t_vec4 calculate_normal_cylinder(t_objs *obj, t_ray ray, float t, uint8_t inters
 			normal = vscale(normal, -1.0F);
 		return (normal);
 	} 
-	else if (intersect_type == 2)
+	else if (intersect_type == CYL_TOP)
 	{
 		return (vnorm(obj->cylinder.orientation));
 	}
@@ -42,7 +42,7 @@ t_vec4 calculate_normal_cylinder(t_objs *obj, t_ray ray, float t, uint8_t inters
 	}
 }
 
-uint32_t	find_closest_object(t_scene *scene, t_ray ray, float *closest_t, uint8_t *closest_intersect_type)
+uint32_t	find_closest_object(t_scene *sc, t_ray ray, float *closest_t, uint8_t *closest_intersect_type)
 {
 	uint32_t	closest_obj;
 	uint32_t	i;
@@ -53,9 +53,9 @@ uint32_t	find_closest_object(t_scene *scene, t_ray ray, float *closest_t, uint8_
 	i = 0;
 	*closest_t = INFINITY;
 	*closest_intersect_type = 0;
-	while (i < scene->o_arr_size)
+	while (i < sc->o_arr_size)
 	{
-		intersect_type = ray_intersect_table(ray, scene->objs + i, &t);
+		intersect_type = ray_intersect_table(ray, sc->objs + i, &t);
 		if (intersect_type && t < *closest_t)
 		{
 			closest_obj = i;
@@ -84,7 +84,7 @@ t_vec4 calculate_normal(t_objs *obj, t_ray *ray, float t, uint8_t intersect_type
 	return (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
 }
 
-t_vec4 trace_ray(t_scene *scene, t_ray ray)
+t_vec4 trace_ray(t_scene *sc, t_ray ray)
 {
 	float	closest_t;
 	uint8_t	closest_intersect_type;
@@ -93,12 +93,15 @@ t_vec4 trace_ray(t_scene *scene, t_ray ray)
 	t_vec4	hit_point;
 
 	pixel_color = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
-	closest_obj = scene->objs + find_closest_object(scene, ray, &closest_t, &closest_intersect_type);
+	closest_obj = sc->objs + find_closest_object(sc, ray, &closest_t, &closest_intersect_type);
+	closest_obj = render_light(sc, ray, &closest_t, closest_obj);
 	if (closest_t < INFINITY && closest_t > 0.0F)
 	{
 		pixel_color = closest_obj->color;
+		if (closest_obj->type == LIGHT)
+			return (pixel_color);
 		hit_point = vadd(ray.origin, vscale(ray.vec, closest_t));
-		return (calc_lighting(scene, hit_point,
+		return (calc_lighting(sc, hit_point,
 				calculate_normal(closest_obj, &ray, closest_t,
 				closest_intersect_type), pixel_color));
 	}

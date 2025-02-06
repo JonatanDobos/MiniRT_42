@@ -56,12 +56,12 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	if (y0 >= -obj->cylinder.height / 2.0F && y0 <= obj->cylinder.height / 2.0F)
 	{
 		valid_t = t0;
-		hit_type = 1; // Cylinder body
+		hit_type = CYL_BODY; // Cylinder body
 	}
 	else if (y1 >= -obj->cylinder.height / 2.0F && y1 <= obj->cylinder.height / 2.0F)
 	{
 		valid_t = t1;
-		hit_type = 1; // Cylinder body
+		hit_type = CYL_BODY; // Cylinder body
 	}
 
 	// Step 5: Check caps if the body intersections are invalid
@@ -81,7 +81,7 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 			if (valid_t < 0.0F || t_top < valid_t)
 			{
 				valid_t = t_top;
-				hit_type = 2; // Cylinder cap
+				hit_type = CYL_TOP; // Cylinder cap
 			}
 		}
 	}
@@ -94,7 +94,7 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 			if (valid_t < 0.0F || t_bottom < valid_t)
 			{
 				valid_t = t_bottom;
-				hit_type = 3; // Cylinder cap
+				hit_type = CYL_BOTTOM; // Cylinder cap
 			}
 		}
 	}
