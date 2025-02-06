@@ -1,4 +1,15 @@
-#include <stdlib.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: rjw <rjw@student.codam.nl>                   +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/02/06 15:45:34 by rjw           #+#    #+#                 */
+/*   Updated: 2025/02/06 17:40:44 by rjw           ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <miniRT.h>
 #include <parsing.h>
 #include <scene.h>
@@ -22,7 +33,30 @@ void	init_main(t_rt *rt, t_scene *scn, t_window *win)
 	rt->scene = scn;
 	rt->win = win;
 	rt->win->res_ratio = 1.0F;
+	rt->thread_creation_check = true;
 }
+
+
+
+
+
+
+
+
+void	my_screw_you_joni_render(t_rt *rt)
+{
+	pthread_mutex_lock(rt->mtx + MTX_SYNC);
+	pthread_mutex_unlock(rt->mtx + MTX_SYNC);
+	pthread_mutex_lock(rt->mtx + MTX_CREATION_CHECK);
+	if (rt->thread_creation_check == false)
+	{
+		pthread_mutex_unlock(rt->mtx + MTX_CREATION_CHECK);
+		return ;
+	}
+	pthread_mutex_unlock(rt->mtx + MTX_CREATION_CHECK);
+	printf("threads are created\n");
+}
+
 
 int main(int argc, char **argv)
 {
@@ -31,6 +65,21 @@ int main(int argc, char **argv)
 	t_window	win;
 
 	init_main(&rt, &sc, &win);
+
+	if (init_pthread_mutex(&rt) == false ||
+		launch_pthreads(&rt) == false)
+	{
+		return (EXIT_FAILURE);
+	}
+	pthread_mutex_unlock(rt.mtx + MTX_SYNC);
+	sleep(3);
+	pthread_mutex_lock(rt.mtx + MTX_PRINT);
+	puts("Yuuuur");
+	pthread_mutex_unlock(rt.mtx + MTX_PRINT);
+	destroy_mutexes(&rt, MTX_AMOUNT);
+	destroy_threads(&rt, THREADS);
+	return (EXIT_SUCCESS);
+	
 	if (check_input(&rt, argc, argv) == EXIT_FAILURE || \
 		input_parse(&rt, argv[1]) != 0 || \
 		windows_setup_mlx(&rt) == EXIT_FAILURE)

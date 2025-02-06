@@ -7,8 +7,10 @@
 # define _GNU_SOURCE
 
 //	temporary include for debugging.
+# include <stdbool.h>
 # include <stdio.h>
 # include <errno.h>
+# include <pthread.h>
 
 # ifndef SCREEN_WIDTH
 #  define SCREEN_WIDTH 2000
@@ -23,6 +25,10 @@
 # define ASPECT_RATIO (16.0 / 9.0)
 # define WINDOW_HEIGHT ((int)(WINDOW_WIDTH / ASPECT_RATIO))
 
+# ifndef THREADS
+#  define THREADS 1
+# endif
+
 typedef float				t_vec4 __attribute__ ((vector_size(16)));
 
 typedef const t_vec4		t_cvec4;
@@ -33,6 +39,8 @@ typedef struct mlx			mlx_t;
 typedef struct mlx_texture	mlx_texture_t;
 typedef struct mlx_image	mlx_image_t;
 
+typedef pthread_mutex_t		t_mtx;
+typedef void				*(*t_cast)(void *);
 enum e_axis
 {
 	X,
@@ -49,11 +57,30 @@ enum e_rgba
 	A
 };
 
+enum e_mtx
+{
+	MTX_PRINT,
+	MTX_SYNC,
+	MTX_CREATION_CHECK,
+	MTX_AMOUNT
+};
+
 typedef struct	s_rt
 {
 	t_scene			*scene;
 	t_window		*win;
+	t_mtx			*mtx;
+	pthread_t		*thread;
+	bool			thread_creation_check;
 	int				errnum;
 }	t_rt;
+
+bool	init_pthread_mutex(t_rt *rt);
+bool	launch_pthreads(t_rt *rt);
+void	destroy_threads(t_rt *rt, size_t thread_amount);
+void	destroy_mutexes(t_rt *rt, size_t amount);
+
+// tmp
+void	my_screw_you_joni_render(t_rt *rt);
 
 #endif
