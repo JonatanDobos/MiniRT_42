@@ -5,33 +5,40 @@
 
 void	obj_move_forw(t_scene *sc)
 {
-	double	time;
+	const t_vec4	speed = bcast3(sc->cam_m_speed);
 
-	time = mlx_get_time();
-	sc->selected_obj->coords[Z] += 0.3F * time;
+	sc->selected_obj->coords += sc->camera.c.orientation * speed;
 }
 
 void	obj_move_backw(t_scene *sc)
 {
-	sc->selected_obj->coords[Z] -= 0.3F;
+	const t_vec4	speed = bcast3(sc->cam_m_speed);
+
+	sc->selected_obj->coords -= sc->camera.c.orientation * speed;
 }
 
 void	obj_move_left(t_scene *sc)
 {
-	sc->selected_obj->coords[X] -= 0.3F;
+	const t_vec4	speed = bcast3(sc->cam_m_speed);
+	const t_vec4	left = vnorm(vcross(sc->camera.c.orientation, (t_vec4){0.0F, 1.0F, 0.0F}));
+
+	sc->selected_obj->coords += left * speed;
 }
 
 void	obj_move_right(t_scene *sc)
 {
-	sc->selected_obj->coords[X] += 0.3F;
+	const t_vec4	speed = bcast3(sc->cam_m_speed);
+	const t_vec4	right = vnorm(vcross(sc->camera.c.orientation, (t_vec4){0.0F, 1.0F, 0.0F}));
+
+	sc->selected_obj->coords -= right * speed;
 }
 
 void	obj_move_up(t_scene *sc)
 {
-	sc->selected_obj->coords[Y] += 0.3F;
+	sc->selected_obj->coords[Y] += sc->cam_m_speed;
 }
 
 void	obj_move_down(t_scene *sc)
 {
-	sc->selected_obj->coords[Y] -= 0.3F;
+	sc->selected_obj->coords[Y] -= sc->cam_m_speed;
 }
