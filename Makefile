@@ -16,7 +16,7 @@ RM				:=	rm -rf
 PRINT_NO_DIR	:=	--no-print-directory
 
 #		CFLAGS for testing
-CFLAGS			 =	-MMD -MP
+CFLAGS			 =	-MMD -MP -std=c99
 # CFLAGS			+=	-Wall -Wextra
 # # Werror cannot go together with fsanitize, because fsanitize won't work correctly.
 # CFLAGS			+=	-Werror
@@ -26,7 +26,7 @@ CFLAGS			+=	-g
 # CFLAGS			+=	-Wunused -Wuninitialized -Wunreachable-code
 
 #		Temporary CFLAGS
-CFLAGS			+=	-pthread -D THREAD=$(N_JOBS)
+CFLAGS			+=	-pthread -D THREADS=$(N_JOBS)
 CFLAGS			+=	-Wno-unused-result
 #		Optimization flags
 # Generate code optimized for the host machine's CPU
@@ -93,6 +93,8 @@ SRC_DIR			:=	src/
 
 MAIN			:=	main.c
 
+INITIALIZE		:=	threads_and_mutexes.c
+
 PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c _debug.c
 
 MLX				:=	window_setup.c			keyhooks.c		loophooks.c	camera_move.c	camera_rotate.c	\
@@ -113,13 +115,14 @@ MATH			:=	math.c		vec_arithmetic.c		vec_geometry.c		vec_transform.c
 # sphere.c										
 
 #		Find all .c files in the specified directories
-SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))			\
-					$(addprefix $(SRC_DIR)parsing/, $(PARSE))	\
-					$(addprefix $(SRC_DIR)error/, $(ERROR))		\
-					$(addprefix $(SRC_DIR)mlx/, $(MLX))			\
-					$(addprefix $(SRC_DIR)utils/, $(UTILS))		\
-					$(addprefix $(SRC_DIR)render/, $(RENDER))	\
-					$(addprefix $(SRC_DIR)math/, $(MATH))		\
+SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))					\
+					$(addprefix $(SRC_DIR)initialize/, $(INITIALIZE))	\
+					$(addprefix $(SRC_DIR)parsing/, $(PARSE))			\
+					$(addprefix $(SRC_DIR)error/, $(ERROR))				\
+					$(addprefix $(SRC_DIR)mlx/, $(MLX))					\
+					$(addprefix $(SRC_DIR)utils/, $(UTILS))				\
+					$(addprefix $(SRC_DIR)render/, $(RENDER))			\
+					$(addprefix $(SRC_DIR)math/, $(MATH))				\
 					$(addprefix $(SRC_DIR)debug/, $(DEBUG))
 
 #		Generate object file names
