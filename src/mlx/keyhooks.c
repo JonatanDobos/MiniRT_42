@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/05 15:12:14 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/02/05 18:29:29 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/02/06 11:47:03 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 // 	return (pixel_color);
 // }
 
-t_vec4 mouse_clicks_on_obj(t_scene *scene, t_ray ray)
+void	 mouse_clicks_on_obj(t_scene *scene, t_ray ray)
 {
 	float		closest_t;
 	uint8_t		closest_intersect_type;

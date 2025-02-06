@@ -24,6 +24,7 @@ typedef struct s_ray
 typedef struct s_light
 {
 	float		brightness;
+	float		radius;
 }	t_light;
 
 typedef struct s_amblight
@@ -35,7 +36,8 @@ typedef enum e_obj_types
 {
 	PLANE,
 	SPHERE,
-	CYLINDER
+	CYLINDER,
+	LIGHT
 }	t_obj_type;
 
 typedef struct	s_plane
@@ -91,14 +93,20 @@ typedef struct	s_objs
 typedef struct	s_scene
 {
 	t_objs	camera;
-	t_objs	light;
+	// t_objs	light;
 	t_objs	ambient;
 	bool	render;
 	struct
 	{
 		t_dynarr	obj_dynarr;
 		t_objs		*objs;
-		size_t		arr_size;	
+		size_t		o_arr_size;	
+	};
+	struct
+	{
+		t_dynarr	light_dynarr;
+		t_objs		*lights;
+		size_t		l_arr_size;	
 	};
 	t_objs	*selected_obj;
 	ssize_t	sel_obj_index;

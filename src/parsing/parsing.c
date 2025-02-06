@@ -7,7 +7,7 @@ static int16_t	check_values(t_value_check *vc)
 	// 	return (errset(perr_msg("check_values", ERRFORM, EMSG_4A)));
 	// if (vc->cam_amount != 1)
 	// 	return (errset(perr_msg("check_values", ERRFORM, EMSG_4C)));
-	// if (vc->light_amount != 1)
+	// if (vc->light_amount < 1)
 	// 	return (errset(perr_msg("check_values", ERRFORM, EMSG_4L)));
 	// if (vc->obj_amount < 1)
 	// 	return (errset(perr_msg("check_values", ERRFORM, EMSG_4O)));
@@ -66,6 +66,7 @@ int16_t	input_parse(t_rt *m, const char *file)
 		return (close(fd), errset(perr("input_parse", ERRFEXT)));
 	ft_bzero(&vc, sizeof(t_value_check));
 	dynarr_create(&m->scene->obj_dynarr, 5, sizeof(t_objs));
+	dynarr_create(&m->scene->light_dynarr, 5, sizeof(t_objs));
 	while (true)
 	{
 		line = gnl(fd);
@@ -82,7 +83,9 @@ int16_t	input_parse(t_rt *m, const char *file)
 	if (check_values(&vc) != SUCCESS)
 		return (close(fd), free_str(&line), cleanup(m), errset(ERTRN));
 	dynarr_shrink_to_fit(&m->scene->obj_dynarr);
+	dynarr_shrink_to_fit(&m->scene->light_dynarr);
 	m->scene->objs = (t_objs *)dynarr_take_arr(&m->scene->obj_dynarr);
+	m->scene->lights = (t_objs *)dynarr_take_arr(&m->scene->light_dynarr);
 	// _print_parsing(m->scene);//test
 	return (close(fd), free_str(&line), SUCCESS);
 }

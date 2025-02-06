@@ -15,14 +15,22 @@ uint8_t	ray_intersect_table(t_ray ray, t_objs *obj, float *t)
 
 t_vec4 calculate_normal_cylinder(t_objs *obj, t_ray ray, float t, uint8_t intersect_type)
 {
-	t_vec4 hit_point = vadd(ray.origin, vscale(ray.vec, t));
-	
+	t_vec4	hit_point = vadd(ray.origin, vscale(ray.vec, t));
+	t_vec4	normal;
+
 	if (intersect_type == 1)
 	{
-		return (vnorm(vsub(hit_point, 
+		normal = vsub(hit_point, 
 				vadd(obj->coords, 
 				vscale(obj->cylinder.orientation, 
-				vdot(vsub(hit_point, obj->coords), obj->cylinder.orientation))))));
+				vdot(vsub(hit_point, obj->coords), obj->cylinder.orientation))));
+		
+		normal = vnorm(normal);
+
+		// **Ensure normal is correctly oriented**?????
+		if (vdot(normal, ray.vec) > 0.0F)
+			normal = vscale(normal, -1.0F);
+		return (normal);
 	} 
 	else if (intersect_type == 2)
 	{
@@ -45,7 +53,7 @@ uint32_t	find_closest_object(t_scene *scene, t_ray ray, float *closest_t, uint8_
 	i = 0;
 	*closest_t = INFINITY;
 	*closest_intersect_type = 0;
-	while (i < scene->arr_size)
+	while (i < scene->o_arr_size)
 	{
 		intersect_type = ray_intersect_table(ray, scene->objs + i, &t);
 		if (intersect_type && t < *closest_t)

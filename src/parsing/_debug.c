@@ -30,8 +30,8 @@ void	_print_parsing(t_scene *sc)
 	// int	isp = 1;
 	// int	icy = 1;
 	// t_objs		ob;
-	// printf("\t%zu\n", sc->arr_size);
-	// while (i < sc->arr_size)
+	// printf("\t%zu\n", sc->o_arr_size);
+	// while (i < sc->o_arr_size)
 	// {
 	// 	if (sc->objarr[i].type == PLANE)
 	// 	{

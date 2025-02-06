@@ -21,7 +21,7 @@ int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 	pl.color[A] = 1.0F;
 	if (dynarr_insert(&sc->obj_dynarr, &pl) == false)
 		return (errset(perr("parse_pl", errno)));
-	++sc->arr_size;
+	++sc->o_arr_size;
 	++vc->obj_amount;
 	return (SUCCESS);
 }
@@ -43,7 +43,7 @@ int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 	sp.color[A] = 1.0F;
 	if (dynarr_insert(&sc->obj_dynarr, &sp) == false)
 		return (errset(perr("parse_sp", errno)));
-	++sc->arr_size;
+	++sc->o_arr_size;
 	++vc->obj_amount;
 	return (SUCCESS);
 }
@@ -70,7 +70,7 @@ int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 	cy.color[A] = 1.0F;
 	if (dynarr_insert(&sc->obj_dynarr, &cy) == false)
 		return (errset(perr("parse_cy", errno)));
-	++sc->arr_size;
+	++sc->o_arr_size;
 	++vc->obj_amount;
 	return (SUCCESS);
 }
