@@ -95,7 +95,7 @@ MAIN			:=	main.c
 PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c _debug.c
 
 MLX				:=	window_setup.c			keyhooks.c		loophooks.c	camera_move.c	camera_rotate.c	\
-					object_modification.c
+					object_modification.c	object_move.c
 
 UTILS			:=	utils.c
 

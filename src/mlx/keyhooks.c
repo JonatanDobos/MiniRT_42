@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/05 15:12:14 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/02/06 11:47:03 by joni          ########   odam.nl         */
+/*   Updated: 2025/02/06 13:03:54 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,6 @@
 #include <mathRT.h>
 #include <stdio.h>
 # include <MLX42/MLX42.h>
-
-// t_vec4 trace_ray(t_scene *scene, t_ray ray)
-// {
-// 	float	closest_t;
-// 	uint8_t	closest_intersect_type;
-// 	t_vec4	pixel_color;
-// 	t_vec4	normal;
-// 	t_objs	*closest_obj;
-// 	t_vec4	hit_point;
-
-// 	pixel_color = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
-// 	closest_obj = find_closest_object(scene, ray, &closest_t, &closest_intersect_type);
-// 	if (closest_t < INFINITY)
-// 	{
-// 		pixel_color = closest_obj->color;
-// 		normal = calculate_normal(closest_obj, &ray, closest_t, closest_intersect_type);
-// 		hit_point = vadd(ray.origin, vscale(ray.vec, closest_t));
-// 		return (calc_lighting(scene, hit_point, normal, pixel_color));
-// 	}
-// 	return (pixel_color);
-// }
 
 void	 mouse_clicks_on_obj(t_scene *scene, t_ray ray)
 {
@@ -68,14 +47,13 @@ void	 mouse_clicks_on_obj(t_scene *scene, t_ray ray)
 
 void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *rt)
 {
-	static bool iets = false;
 	int32_t	x;
 	int32_t	y;
 	float	ndc_x;
 	float	ndc_y;
 	t_ray	ray;
 
-	if (iets == false)
+	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS)
 	{
 		mlx_get_mouse_pos(rt->win->mlx, &x, &y);
 		y = (float)y / rt->win->res_ratio;
@@ -85,11 +63,6 @@ void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *
 		ray.origin = rt->scene->camera.coords;
 		ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, rt->scene->camera.c.zvp_dist, 0.0F}, rt->scene->camera.c.orientation);
 		mouse_clicks_on_obj(rt->scene, ray);
-		iets = true;
-	}
-	else
-	{
-		iets = false;
 	}
 }
 

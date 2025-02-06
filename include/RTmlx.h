@@ -69,6 +69,14 @@ void		cam_rotate_left(t_scene *sc);
 void		cam_rotate_up(t_scene *sc);
 void		cam_rotate_down(t_scene *sc);
 
+
+void		obj_move_forw(t_scene *sc);
+void		obj_move_backw(t_scene *sc);
+void		obj_move_left(t_scene *sc);
+void		obj_move_right(t_scene *sc);
+void		obj_move_up(t_scene *sc);
+void		obj_move_down(t_scene *sc);
+
 bool		handle_object_modification(const keys_t key, t_scene *sc);
 
 #endif

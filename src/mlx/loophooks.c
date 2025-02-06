@@ -49,12 +49,78 @@ void	cam_hook(t_rt *rt)
 		cam_rotate_down(rt->scene);
 }
 
+// void	obj_rotate_up(t_scene *sc)
+// {
+// 	t_vec4 right = vcross(sc->camera.c.orientation, (t_vec4){0.0F, 1.0F, 0.0F});
+// 	sc->camera.c.orientation = vnorm(vrotate(sc->camera.c.orientation, right, sc->cam_r_speed));
+// 	sc->render = true;
+// }
+
+// void	obj_rotate_down(t_scene *sc)
+// {
+// 	t_vec4 right = vcross(sc->selected_obj.orientation, (t_vec4){0.0F, 1.0F, 0.0F});
+// 	sc->camera.c.orientation = vnorm(vrotate(sc->camera.c.orientation, right, -sc->cam_r_speed));
+// 	sc->render = true;
+// }
+
+// void	obj_rotate_left(t_scene *sc)
+// {
+// 	sc->camera.c.orientation = vnorm(vrotate(sc->camera.c.orientation, (t_vec4){0.0F, 1.0F, 0.0F}, -sc->cam_r_speed));
+// 	sc->render = true;
+// }
+
+// void	obj_rotate_right(t_scene *sc)
+// {
+// 	sc->camera.c.orientation = vnorm(vrotate(sc->camera.c.orientation, (t_vec4){0.0F, 1.0F, 0.0F}, sc->cam_r_speed));
+// 	sc->render = true;
+// }
+
+bool	obj_hook(t_rt *rt)
+{
+	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_W))
+		return (obj_move_forw(rt->scene), true);
+	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_S))
+		return (obj_move_backw(rt->scene), true);
+	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_A))
+		return (obj_move_left(rt->scene), true);
+	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_D))
+		return (obj_move_right(rt->scene), true);
+	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_SPACE))
+		return (obj_move_up(rt->scene), true);
+	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_LEFT_SHIFT))
+		return (obj_move_down(rt->scene), true);
+	if (rt->scene->selected_obj->type != SPHERE)
+	{
+		// if (mlx_is_key_down(rt->win->mlx, MLX_KEY_LEFT))
+		// 	obj_rotate_left(rt->scene);
+		// if (mlx_is_key_down(rt->win->mlx, MLX_KEY_RIGHT))
+		// 	obj_rotate_right(rt->scene);
+		// if (mlx_is_key_down(rt->win->mlx, MLX_KEY_UP))
+		// 	obj_rotate_up(rt->scene);
+		// if (mlx_is_key_down(rt->win->mlx, MLX_KEY_DOWN))
+		// 	obj_rotate_down(rt->scene);
+	}
+	return (false);
+}
+
+void	movement(t_rt *rt)
+{
+	if (rt->scene->selected_obj == NULL)
+	{
+		cam_hook(rt);
+	}
+	else
+	{
+		rt->scene->render = obj_hook(rt);
+	}
+}
+
 void	loop_hook(t_rt *rt)
 {
 	double	time;
 
 	time = mlx_get_time();
-	cam_hook(rt);
+	movement(rt);
 	if (rt->scene->render == true)
 	{
 		render(rt);
