@@ -6,6 +6,8 @@
 
 # define RES_STEP_SIZE 1.0F
 # define RES_RATIO_MAX 10.0F
+# define RES_R_LOW 6.0F
+# define RES_R_FULL 1.0F
 
 # define SHADOW_EPSILON 1e-3F
 
@@ -46,5 +48,9 @@ t_vec4		trace_ray(t_scene *scene, t_ray ray);
 t_vec4		transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient);
 uint8_t		ray_intersect_table(t_ray ray, t_objs *obj, float *t);
 uint32_t	find_closest_object(t_scene *scene, t_ray ray, float *closest_t, uint8_t *closest_intersect_type);
+
+// render_upscale.c
+
+void		render_manager(t_rt *rt);
 
 #endif

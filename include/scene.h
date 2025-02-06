@@ -96,6 +96,7 @@ typedef struct	s_scene
 	// t_objs	light;
 	t_objs	ambient;
 	bool	render;
+	bool	render_ongiong;
 	struct
 	{
 		t_dynarr	obj_dynarr;

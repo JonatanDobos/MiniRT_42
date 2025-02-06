@@ -2,6 +2,7 @@
 #include <scene.h>
 #include <utils.h>
 #include <mathRT.h>
+#include <render.h>
 
 void	fov_hook(double xdelta, double ydelta, t_scene *sc)
 {
@@ -77,6 +78,7 @@ void	cam_hook(t_rt *rt)
 
 bool	obj_hook(t_rt *rt)
 {
+	// Als je gelijk returnt kan hij niet meerdere keys tegelijk detecteren, en dus niet schuin bewegen!
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_W))
 		return (obj_move_forw(rt->scene), true);
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_S))
@@ -121,11 +123,12 @@ void	loop_hook(t_rt *rt)
 
 	time = mlx_get_time();
 	movement(rt);
-	if (rt->scene->render == true)
+	if (rt->scene->render == true || rt->scene->render_ongiong == true)
 	{
-		render(rt);
+		render_manager(rt);
 		time = mlx_get_time() - time;
 		rt->win->delta_time = time;
+		time = 0.01;// testing!
 		rt->scene->cam_fov_speed = FOV_SCROLL_SPEED * time;
 		rt->scene->cam_m_speed = CAM_MOVE_SPEED * time;
 		rt->scene->cam_r_speed = CAM_ROTATION_SPEED * time;

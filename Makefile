@@ -104,7 +104,8 @@ ERROR			:=	error.c			print.c
 
 DEBUG			:=	print_info.c
 
-RENDER			:=	render.c		scaling.c	cylinder.c	lighting.c	set_pixel.c		obj_intersect.c		trace_ray.c
+RENDER			:=	render.c		scaling.c	cylinder.c	lighting.c	set_pixel.c		obj_intersect.c		trace_ray.c \
+					render_upscale.c
 
 MATH			:=	math.c		vec_arithmetic.c		vec_geometry.c		vec_transform.c
 

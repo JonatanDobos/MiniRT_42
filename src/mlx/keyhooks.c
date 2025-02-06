@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/05 15:12:14 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/02/06 13:03:54 by rjw           ########   odam.nl         */
+/*   Updated: 2025/02/06 16:07:44 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	 mouse_clicks_on_obj(t_scene *scene, t_ray ray)
 		{
 			scene->selected_obj = NULL;
 		}
+		scene->render = true;
 	}
 }
 
@@ -73,7 +74,10 @@ void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 	if (pressed_key == true)
 	{
 		if (handle_object_modification(keydata.key, rt->scene) == true)
+		{
+			rt->scene->render = true;
 			return ;
+		}
 		if (keydata.key == MLX_KEY_1)
 			print_camera(rt->scene->camera);
 		if (keydata.key == MLX_KEY_EQUAL)
