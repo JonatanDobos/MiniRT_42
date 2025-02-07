@@ -18,7 +18,6 @@ bool	windows_setup_mlx(t_rt *rt)
 	center_window(rt->win);
 	res_setscale(rt->win, RES_R_LOW);
 	mlx_set_window_title(rt->win->mlx, "miniRT");
-	// mlx_set_window_title(win->mlx, "miniRT is still rendering!");
 	init_hooks(rt);
 
 	return (EXIT_SUCCESS);

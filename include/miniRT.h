@@ -20,11 +20,6 @@
 #  define SCREEN_HEIGHT 450
 # endif
 
-//	Norminette doesn't allow our macros
-// # define WINDOW_WIDTH 1600
-// # define ASPECT_RATIO (16.0 / 9.0)
-// # define WINDOW_HEIGHT ((int)(WINDOW_WIDTH / ASPECT_RATIO))
-
 # ifndef THREADS
 #  define THREADS 1
 # endif

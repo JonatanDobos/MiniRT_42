@@ -36,15 +36,27 @@ typedef struct s_window
 	mlx_texture_t	*logo;
 }	t_window;
 
+// window_setup.c
 
 bool	windows_setup_mlx(t_rt *rt);
 void	my_keyhook(mlx_key_data_t keydata, t_rt *rt);
-void	init_hooks(t_rt *m);
 
+// hooks.c
+
+void	init_hooks(t_rt *m);
+void	my_keyhook(mlx_key_data_t keydata, t_rt *rt);
 void	loop_hook(t_rt *rt);
 void	fov_hook(double xdelta, double ydelta, t_scene *sc);
 
+// hooks_move.c
+
+void	movement(t_rt *rt);
 void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *rt);
+
+// object_modification.c
+
+bool	handle_object_modification(const keys_t key, t_scene *sc);
+
 // scaling.c
 
 void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
@@ -77,6 +89,5 @@ bool		obj_move_right(t_scene *sc);
 bool		obj_move_up(t_scene *sc);
 bool		obj_move_down(t_scene *sc);
 
-bool		handle_object_modification(const keys_t key, t_scene *sc);
 
 #endif

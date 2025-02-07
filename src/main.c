@@ -24,27 +24,19 @@ void	init_main(t_rt *rt, t_scene *scn, t_window *win)
 	rt->thread_creation_check = true;
 }
 
-
-
-
-
-
-
-
-void	my_screw_you_joni_render(t_rt *rt)
-{
-	pthread_mutex_lock(rt->mtx + MTX_SYNC);
-	pthread_mutex_unlock(rt->mtx + MTX_SYNC);
-	pthread_mutex_lock(rt->mtx + MTX_CREATION_CHECK);
-	if (rt->thread_creation_check == false)
-	{
-		pthread_mutex_unlock(rt->mtx + MTX_CREATION_CHECK);
-		return ;
-	}
-	pthread_mutex_unlock(rt->mtx + MTX_CREATION_CHECK);
-	printf("threads are created\n");
-}
-
+// void	my_screw_you_joni_render(t_rt *rt)
+// {
+// 	pthread_mutex_lock(rt->mtx + MTX_SYNC);
+// 	pthread_mutex_unlock(rt->mtx + MTX_SYNC);
+// 	pthread_mutex_lock(rt->mtx + MTX_CREATION_CHECK);
+// 	if (rt->thread_creation_check == false)
+// 	{
+// 		pthread_mutex_unlock(rt->mtx + MTX_CREATION_CHECK);
+// 		return ;
+// 	}
+// 	pthread_mutex_unlock(rt->mtx + MTX_CREATION_CHECK);
+// 	printf("threads are created\n");
+// }
 
 int main(int argc, char **argv)
 {
@@ -59,11 +51,11 @@ int main(int argc, char **argv)
 	{
 		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	}
-	if (init_pthread_mutex(&rt) == false ||
-		launch_pthreads(&rt) == false)
-	{
-		return (perr("Pthread", errset(ERTRN)), cleanup(&rt));
-	}
+	// if (init_pthread_mutex(&rt) == false ||
+	// 	launch_pthreads(&rt) == false)
+	// {
+	// 	return (perr("Pthread", errset(ERTRN)), cleanup(&rt));
+	// }
 	rt.scene->render = true;
 	printf("miniRT finished rendering %f\n", mlx_get_time());
 	mlx_loop(rt.win->mlx);

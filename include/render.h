@@ -7,7 +7,7 @@
 
 # define RES_STEP_SIZE 1.0F
 # define RES_RATIO_MAX 20.0F
-# define RES_R_LOW 10.0F
+# define RES_R_LOW 18.0F
 # define RES_R_FULL 1.0F
 
 # define SHADOW_EPSILON 1e-3F
