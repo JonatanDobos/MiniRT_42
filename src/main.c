@@ -4,6 +4,8 @@
 #include <RTmlx.h>
 #include <utils.h>
 
+#include <stdio.h>
+
 bool	check_input(t_rt *rt, int argc, char **argv)
 {
 	(void)rt;
@@ -41,6 +43,14 @@ void	init_main(t_rt *rt, t_scene *scn, t_window *win)
 
 int main(int argc, char **argv)
 {
+	float i = 1.3F;
+
+	convert((unsigned int)i);
+	// char *str = ft_ftoa(0.2F);
+	// printf("%s\n", str);;
+	// free(str);
+	// printf("%f\n",1.1F);
+	exit(0);
 	t_rt		rt;
 	t_scene		sc;
 	t_window	win;
