@@ -33,6 +33,7 @@ typedef struct s_window		t_window;
 typedef struct mlx			mlx_t;
 typedef struct mlx_texture	mlx_texture_t;
 typedef struct mlx_image	mlx_image_t;
+typedef struct s_thread		t_thread;
 
 typedef pthread_mutex_t		t_mtx;
 typedef void				*(*t_cast)(void *);
@@ -65,7 +66,7 @@ typedef struct	s_rt
 	t_scene			*scene;
 	t_window		*win;
 	t_mtx			mtx[MTX_AMOUNT];
-	pthread_t		*thread;
+	t_thread		*threads;
 	bool			thread_creation_check;
 	int				errnum;
 }	t_rt;

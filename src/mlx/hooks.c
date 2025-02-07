@@ -59,7 +59,7 @@ void	fov_hook(double xdelta, double ydelta, t_scene *sc)
 void	loop_hook(t_rt *rt)
 {
 	double	time;
-	
+
 	time = mlx_get_time();
 	movement(rt);
 	if (rt->scene->render == true || rt->scene->render_ongoing == true)

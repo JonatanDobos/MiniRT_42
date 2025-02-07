@@ -38,6 +38,20 @@ void	init_main(t_rt *rt, t_scene *scn, t_window *win)
 // 	printf("threads are created\n");
 // }
 
+void	multithreaded(t_rt *rt)
+{
+	if (init_pthread_mutex(rt) == false ||
+		launch_pthreads(rt) == false)
+	{
+		return (perr("Pthread", errset(ERTRN)), cleanup(rt));
+	}
+}
+
+void	singlethreaded(t_rt *rt)
+{
+	
+}
+
 int main(int argc, char **argv)
 {
 	t_rt		rt;
@@ -51,13 +65,13 @@ int main(int argc, char **argv)
 	{
 		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	}
-	// if (init_pthread_mutex(&rt) == false ||
-	// 	launch_pthreads(&rt) == false)
-	// {
-	// 	return (perr("Pthread", errset(ERTRN)), cleanup(&rt));
-	// }
+	if (THREADS == 1)
+		singlethreaded(&rt);
+	else if (THREADS > 1)
+		multithreaded(&rt);
+	else
+		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	rt.scene->render = true;
-	printf("miniRT finished rendering %f\n", mlx_get_time());
 	mlx_loop(rt.win->mlx);
 	cleanup(&rt);
 	printf("exiting miniRT\n");
