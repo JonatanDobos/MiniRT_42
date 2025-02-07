@@ -54,19 +54,19 @@ int main(int argc, char **argv)
 
 	init_main(&rt, &sc, &win);
 
-	if (init_pthread_mutex(&rt) == false ||
-		launch_pthreads(&rt) == false)
-	{
-		return (EXIT_FAILURE);
-	}
-	pthread_mutex_unlock(rt.mtx + MTX_SYNC);
-	sleep(3);
-	pthread_mutex_lock(rt.mtx + MTX_PRINT);
-	puts("Yuuuur");
-	pthread_mutex_unlock(rt.mtx + MTX_PRINT);
-	destroy_mutexes(&rt, MTX_AMOUNT);
-	destroy_threads(&rt, THREADS);
-	return (EXIT_SUCCESS);
+	// if (init_pthread_mutex(&rt) == false ||
+	// 	launch_pthreads(&rt) == false)
+	// {
+	// 	return (EXIT_FAILURE);
+	// }
+	// pthread_mutex_unlock(rt.mtx + MTX_SYNC);
+	// sleep(3);
+	// pthread_mutex_lock(rt.mtx + MTX_PRINT);
+	// puts("Yuuuur");
+	// pthread_mutex_unlock(rt.mtx + MTX_PRINT);
+	// destroy_mutexes(&rt, MTX_AMOUNT);
+	// destroy_threads(&rt, THREADS);
+	// return (EXIT_SUCCESS);
 	
 	if (check_input(&rt, argc, argv) == EXIT_FAILURE || \
 		input_parse(&rt, argv[1]) != 0 || \
