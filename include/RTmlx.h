@@ -89,5 +89,10 @@ bool		obj_move_right(t_scene *sc);
 bool		obj_move_up(t_scene *sc);
 bool		obj_move_down(t_scene *sc);
 
+void		obj_rotate_up(t_scene *sc);
+void		obj_rotate_down(t_scene *sc);
+void		obj_rotate_left(t_scene *sc);
+void		obj_rotate_right(t_scene *sc);
+
 
 #endif

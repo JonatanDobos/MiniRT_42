@@ -12,6 +12,13 @@
 # include <errno.h>
 # include <pthread.h>
 
+# ifndef BUFF
+#  define BUFF 1
+# elif BUFF < 1
+#  undef BUFF
+#  define BUFF 1
+# endif
+
 # ifndef SCREEN_WIDTH
 #  define SCREEN_WIDTH 800
 # endif
