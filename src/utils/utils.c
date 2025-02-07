@@ -14,7 +14,7 @@ t_cint32	cleanup(t_rt *rt)
 	if (THREADS > 1)
 	{
 		destroy_mutexes(rt, MTX_AMOUNT);
-		destroy_threads(rt, THREADS);
+		destroy_threads(rt, THREADS - 1);
 	}
 	return (rt->errnum);
 }

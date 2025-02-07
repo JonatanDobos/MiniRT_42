@@ -2,37 +2,56 @@
 #include <miniRT.h>
 #include <RTmlx.h>
 #include <render.h>
+#include <miniRT.h>
+#include <threadsRT.h>
 
-//	Static Functions
-static bool	init_mlx(t_window *win);
-static bool	img_to_window(t_window *win);
-static bool	windows_logo(t_window *win);
-static void	center_window(t_window *win);
-
-bool	windows_setup_mlx(t_rt *rt)
+static void	init_img_size(t_rt *rt)
 {
-	if (init_mlx(rt->win) == false || \
-		img_to_window(rt->win) == false || \
-		windows_logo(rt->win) == false)
-		return (EXIT_FAILURE);
-	center_window(rt->win);
-	res_setscale(rt->win, RES_R_LOW);
-	mlx_set_window_title(rt->win->mlx, "miniRT");
-	init_hooks(rt);
+	const uint16_t	height = rt->win->window_hght / (THREADS - 1);
+	const uint16_t	remainder = rt->win->window_hght % (THREADS - 1);
+	uint16_t		i;
 
-	return (EXIT_SUCCESS);
+	i = 0;
+	while (i < THREADS - 1)
+	{
+		rt->threads[i].height = height;
+		rt->threads[i].width = rt->win->window_wdth;
+		rt->threads[i].aspectr = (float)rt->win->window_wdth / (float)height;
+		++i;
+	}
+	rt->threads[i - 1].height += remainder;
+	rt->threads[i].aspectr = (float)rt->win->window_wdth / (float)(height + remainder);
 }
 
-
-static bool	img_to_window(t_window *win)
+bool	img_multithreaded(t_rt *rt)
 {
-	// thread amount of img
-	win->img = mlx_new_image(win->mlx, (int32_t)win->window_wdth, (int32_t)win->window_hght);
-	if (win->img == NULL)
-		return (false);
-	win->id = mlx_image_to_window(win->mlx, win->img, 0, 0);
-	if (win->id == -1)
-		return (false);
-	win->pixels = (uint8_t *)win->img->pixels;
+	uint16_t	i;
+
+	i = 0;
+	void	init_img_size(t_rt *rt);
+	while (i < THREADS - 1)
+	{
+		rt->threads[i].img = mlx_new_image(rt->win->mlx, (int32_t)rt->threads[i].width, (int32_t)rt->threads[i].height);
+		if (rt->threads[i].img == NULL)
+		{
+			return (img_deletion(rt, i), false);
+		}
+		rt->win->id = mlx_image_to_window(rt->win->mlx, rt->threads[i].img, 0, 0);
+		if (rt->win->id == -1)
+			return (img_deletion(rt, i), false);
+		rt->threads[i].pixels = (uint8_t *)rt->threads[i].img->pixels;
+	}
 	return (true);
+}
+
+void	img_deletion(t_rt *rt, uint16_t img_amount)
+{
+	uint16_t	i;
+
+	i = 0;
+	while (i < img_amount)
+	{
+		mlx_delete_image(rt->threads[i].img, rt->win->img);
+		++i;
+	}
 }

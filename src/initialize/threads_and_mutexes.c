@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <threadsRT.h>
+#include <render.h>
 #include <libft.h>
 
 //	Static Functions
@@ -12,7 +13,7 @@ bool	init_pthread_mutex(t_rt *rt)
 {
 	if (create_and_launch_mutex(rt) == false)
 		return (false);
-	rt->threads = (t_thread *)malloc(sizeof(t_thread) * THREADS);
+	rt->threads = (t_thread *)malloc(sizeof(t_thread) * THREADS - 1);
 	if (rt->threads == NULL)
 	{
 		write(STDERR_FILENO, "malloc: Pthread creation failed\n", 32);
@@ -28,9 +29,13 @@ bool	launch_pthreads(t_rt *rt)
 
 	i = 0;
 	pthread_mutex_lock(rt->mtx + MTX_SYNC);
-	while (i < THREADS)
+	while (i < THREADS - 1)
 	{
-		if (pthread_create(&rt->threads[i].thread, NULL, (t_cast)my_screw_you_joni_render, rt) != 0)
+		rt->threads[i].rt = rt;
+		rt->threads[i].scene = rt->scene;
+		rt->threads[i].win = rt->win;
+		rt->threads[i].id = i + 1;
+		if (pthread_create(&rt->threads[i].thread, NULL, (t_cast)thread_render, rt) != 0)
 		{
 			pthread_mutex_lock(rt->mtx + MTX_PRINT);
 			printf("pthread_create: philosophers\n");

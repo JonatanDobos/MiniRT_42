@@ -54,4 +54,6 @@ uint32_t	find_closest_object(t_scene *scene, t_ray ray, float *closest_t, uint8_
 
 void		render_manager(t_rt *rt);
 
+void		thread_render(t_thread *th);
+
 #endif

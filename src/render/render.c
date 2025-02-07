@@ -2,6 +2,7 @@
 #include <RTmlx.h>
 #include <mathRT.h>
 #include <render.h>
+#include <threadsRT.h>
 
 t_vec4	transform_ray_dir(t_vec4 ndc_dir, t_vec4 cam_orient)
 {
@@ -37,6 +38,7 @@ void	render(t_rt *rt)
 	float		ndc_x;
 	float		ndc_y;
 
+	ray.origin = rt->scene->camera.coords;
 	y = 0;
 	while (y < rt->win->rndr_hght)
 	{
@@ -45,9 +47,34 @@ void	render(t_rt *rt)
 		{
 			ndc_x = (2.0F * ((x + 0.5F) / (float)rt->win->rndr_wdth) - 1.0F) * rt->win->aspectrat;
 			ndc_y = 1.0F - 2.0F * ((y + 0.5F) / (float)rt->win->rndr_hght);
-			ray.origin = rt->scene->camera.coords;
 			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, rt->scene->camera.c.zvp_dist, 0.0F}, rt->scene->camera.c.orientation);
 			scaled_res_set_pixel(rt->win, x, y, trace_ray(rt->scene, ray));
+			++x;
+		}
+		++y;
+	}
+}
+
+// Render the scene (1 thread)
+void	thread_render(t_thread *th)
+{
+	uint16_t	y;
+	uint16_t	x;
+	t_ray		ray;
+	float		ndc_x;
+	float		ndc_y;
+
+	ray.origin = th->scene->camera.coords;
+	y = 0;
+	while (y < th->height)
+	{
+		x = 0;
+		while (x < th->width)
+		{
+			ndc_x = (2.0F * ((x + 0.5F) / (float)th->width) - 1.0F) * th->aspectr;
+			ndc_y = 1.0F - 2.0F * ((y + 0.5F) / (float)th->height);
+			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, th->scene->camera.c.zvp_dist, 0.0F}, th->scene->camera.c.orientation);
+			scaled_res_set_pixel(th->win, x, y, trace_ray(th->scene, ray));
 			++x;
 		}
 		++y;

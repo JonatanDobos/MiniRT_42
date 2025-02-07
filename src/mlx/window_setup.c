@@ -12,9 +12,18 @@ static void	center_window(t_window *win);
 bool	windows_setup_mlx(t_rt *rt)
 {
 	if (init_mlx(rt->win) == false || \
-		img_to_window(rt->win) == false || \
 		windows_logo(rt->win) == false)
 		return (EXIT_FAILURE);
+	if (THREADS > 1)
+	{
+		if (img_multithreaded(rt))
+			return (EXIT_FAILURE);
+	}
+	else
+	{
+		if (img_to_window(rt->win) == false)
+			return (EXIT_FAILURE);
+	}
 	center_window(rt->win);
 	res_setscale(rt->win, RES_R_LOW);
 	mlx_set_window_title(rt->win->mlx, "miniRT");

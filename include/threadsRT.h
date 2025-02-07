@@ -22,10 +22,15 @@ typedef struct	s_thread
 {
 	uint16_t		id;
 	t_rt			*rt;
+	t_scene			*scene;
+	t_window		*win;
 	mlx_image_t		*img;
+	uint8_t			*pixels;
+	uint16_t		width;
+	uint16_t		height;
+	float			aspectr;
 	t_mtx			mtx;
 	pthread_t		thread;
-	int				errnum;
 }	t_thread;
 
 bool	init_pthread_mutex(t_rt *rt);
@@ -33,7 +38,7 @@ bool	launch_pthreads(t_rt *rt);
 void	destroy_threads(t_rt *rt, size_t thread_amount);
 void	destroy_mutexes(t_rt *rt, size_t amount);
 
-// tmp
-void	my_screw_you_joni_render(t_rt *rt);
+void	img_deletion(t_rt *rt, uint16_t img_amount);
+
 
 #endif
