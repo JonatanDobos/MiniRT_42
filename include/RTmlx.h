@@ -50,7 +50,7 @@ void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *
 void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
 bool	res_downscale(t_window *win);
 bool	res_upscale(t_window *win);
-// bool	res_rescale(t_window *win);
+bool	res_setscale(t_window *win, const float scale);
 
 
 // camera_move.c
@@ -70,12 +70,12 @@ void		cam_rotate_up(t_scene *sc);
 void		cam_rotate_down(t_scene *sc);
 
 
-void		obj_move_forw(t_scene *sc);
-void		obj_move_backw(t_scene *sc);
-void		obj_move_left(t_scene *sc);
-void		obj_move_right(t_scene *sc);
-void		obj_move_up(t_scene *sc);
-void		obj_move_down(t_scene *sc);
+bool		obj_move_forw(t_scene *sc);
+bool		obj_move_backw(t_scene *sc);
+bool		obj_move_left(t_scene *sc);
+bool		obj_move_right(t_scene *sc);
+bool		obj_move_up(t_scene *sc);
+bool		obj_move_down(t_scene *sc);
 
 bool		handle_object_modification(const keys_t key, t_scene *sc);
 

@@ -76,21 +76,20 @@ void	cam_hook(t_rt *rt)
 // 	sc->render = true;
 // }
 
-bool	obj_hook(t_rt *rt)
+void	obj_hook(t_rt *rt)
 {
-	// Als je gelijk returnt kan hij niet meerdere keys tegelijk detecteren, en dus niet schuin bewegen!
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_W))
-		return (obj_move_forw(rt->scene), true);
+		rt->scene->render = obj_move_forw(rt->scene);
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_S))
-		return (obj_move_backw(rt->scene), true);
+		rt->scene->render = obj_move_backw(rt->scene);
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_A))
-		return (obj_move_left(rt->scene), true);
+		rt->scene->render = obj_move_left(rt->scene);
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_D))
-		return (obj_move_right(rt->scene), true);
+		rt->scene->render = obj_move_right(rt->scene);
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_SPACE))
-		return (obj_move_up(rt->scene), true);
+		rt->scene->render = obj_move_up(rt->scene);
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_LEFT_SHIFT))
-		return (obj_move_down(rt->scene), true);
+		rt->scene->render = obj_move_down(rt->scene);
 	if (rt->scene->selected_obj->type != SPHERE)
 	{
 		// if (mlx_is_key_down(rt->win->mlx, MLX_KEY_LEFT))
@@ -102,7 +101,6 @@ bool	obj_hook(t_rt *rt)
 		// if (mlx_is_key_down(rt->win->mlx, MLX_KEY_DOWN))
 		// 	obj_rotate_down(rt->scene);
 	}
-	return (false);
 }
 
 void	movement(t_rt *rt)
@@ -113,17 +111,17 @@ void	movement(t_rt *rt)
 	}
 	else
 	{
-		rt->scene->render = obj_hook(rt);
+		obj_hook(rt);
 	}
 }
 
 void	loop_hook(t_rt *rt)
 {
 	double	time;
-
+	
 	time = mlx_get_time();
 	movement(rt);
-	if (rt->scene->render == true || rt->scene->render_ongiong == true)
+	if (rt->scene->render == true || rt->scene->render_ongoing == true)
 	{
 		render_manager(rt);
 		time = mlx_get_time() - time;

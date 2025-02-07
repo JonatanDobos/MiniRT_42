@@ -9,7 +9,7 @@ void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color)
 	uint8_t				*pixels;
 
 	color *= multiply;
-	pixels = win->img->pixels + (y * WINDOW_WIDTH + x) * 4;
+	pixels = win->img->pixels + (y * win->window_wdth + x) * 4;
 	*(pixels++) = (uint8_t)color[R];
 	*(pixels++) = (uint8_t)color[G];
 	*(pixels++) = (uint8_t)color[B];

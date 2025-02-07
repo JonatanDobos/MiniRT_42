@@ -13,17 +13,17 @@
 # include <pthread.h>
 
 # ifndef SCREEN_WIDTH
-#  define SCREEN_WIDTH 2000
+#  define SCREEN_WIDTH 800
 # endif
 
 # ifndef SCREEN_HEIGHT
-#  define SCREEN_HEIGHT ((int)(SCREEN_WIDTH / ASPECT_RATIO))
+#  define SCREEN_HEIGHT 450
 # endif
 
 //	Norminette doesn't allow our macros
-# define WINDOW_WIDTH 1600
-# define ASPECT_RATIO (16.0 / 9.0)
-# define WINDOW_HEIGHT ((int)(WINDOW_WIDTH / ASPECT_RATIO))
+// # define WINDOW_WIDTH 1600
+// # define ASPECT_RATIO (16.0 / 9.0)
+// # define WINDOW_HEIGHT ((int)(WINDOW_WIDTH / ASPECT_RATIO))
 
 # ifndef THREADS
 #  define THREADS 1
@@ -69,7 +69,7 @@ typedef struct	s_rt
 {
 	t_scene			*scene;
 	t_window		*win;
-	t_mtx			*mtx;
+	t_mtx			mtx[MTX_AMOUNT];
 	pthread_t		*thread;
 	bool			thread_creation_check;
 	int				errnum;

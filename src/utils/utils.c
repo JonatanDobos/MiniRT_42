@@ -11,6 +11,8 @@ t_cint32	cleanup(t_rt *rt)
 		mlx_terminate(rt->win->mlx);
 	if (rt->scene->objs)
 		free(rt->scene->objs);
+	// destroy_mutexes(rt, MTX_AMOUNT);
+	// destroy_threads(rt, THREADS);
 	return (rt->errnum);
 }
 

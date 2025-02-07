@@ -65,10 +65,7 @@ void	destroy_mutexes(t_rt *rt, size_t amount)
 {
 	ssize_t	i;
 
-	if (amount == MTX_AMOUNT)
-		i = MTX_AMOUNT - 1;
-	else
-		i = amount - 1;
+	i = amount - 1;
 	while (i != -1)
 	{
 		if (pthread_mutex_destroy(rt->mtx + i) != 0)
@@ -90,12 +87,6 @@ static bool	create_and_launch_mutex(t_rt *rt)
 {
 	size_t	i;
 
-	rt->mtx = (t_mtx *)malloc(sizeof(t_mtx) * MTX_AMOUNT);
-	if (rt->mtx == NULL)
-	{
-		write(STDERR_FILENO, "malloc: Mutex creation failed\n", 30);
-		return (false);
-	}
 	i = 0;
 	while (i < MTX_AMOUNT)
 	{

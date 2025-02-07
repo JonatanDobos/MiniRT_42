@@ -21,6 +21,7 @@ void	 mouse_clicks_on_obj(t_scene *scene, t_ray ray)
 	closest_obj = find_closest_object(scene, ray, &closest_t, &closest_intersect_type);
 	if (closest_obj != 0)
 	{
+		scene->render = true;
 		if (scene->selected_obj == NULL || closest_obj != scene->sel_obj_index)
 		{
 			scene->sel_obj_index = closest_obj;
@@ -30,7 +31,6 @@ void	 mouse_clicks_on_obj(t_scene *scene, t_ray ray)
 		{
 			scene->selected_obj = NULL;
 		}
-		scene->render = true;
 	}
 }
 
