@@ -43,9 +43,10 @@ void	my_keyhook(mlx_key_data_t keydata, t_rt *rt);
 
 // hooks.c
 
-void	init_hooks(t_rt *m);
-void	my_keyhook(mlx_key_data_t keydata, t_rt *rt);
+void	init_hooks(t_rt *rt);
 void	loop_hook(t_rt *rt);
+void	loop_hook_threaded(t_rt *rt);
+void	my_keyhook(mlx_key_data_t keydata, t_rt *rt);
 void	fov_hook(double xdelta, double ydelta, t_scene *sc);
 
 // hooks_move.c
@@ -89,5 +90,9 @@ bool		obj_move_right(t_scene *sc);
 bool		obj_move_up(t_scene *sc);
 bool		obj_move_down(t_scene *sc);
 
+void		obj_rotate_up(t_scene *sc);
+void		obj_rotate_down(t_scene *sc);
+void		obj_rotate_left(t_scene *sc);
+void		obj_rotate_right(t_scene *sc);
 
 #endif

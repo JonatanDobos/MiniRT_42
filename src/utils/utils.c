@@ -5,17 +5,22 @@
 
 t_cint32	cleanup(t_rt *rt)
 {
-	if (rt->win->img != NULL)
+	if (THREADS > 1)
+	{
+		// Wat gebeurt er bij mutex SYNC?
+		toggle_bool(rt->mtx + MTX_QUIT_ROUTINE, &rt->quit_routine, true);
+		pthread_mutex_unlock(rt->mtx + MTX_SYNC);
+		destroy_threads(rt, THREADS - 1);
+		destroy_mutexes(rt, MTX_AMOUNT);
+	}
+	else if (rt->win->img != NULL)
 		mlx_delete_image(rt->win->mlx, rt->win->img);
 	if (rt->win->mlx != NULL)
 		mlx_terminate(rt->win->mlx);
 	if (rt->scene->objs)
 		free(rt->scene->objs);
-	if (THREADS > 1)
-	{
-		destroy_mutexes(rt, MTX_AMOUNT);
-		destroy_threads(rt, THREADS - 1);
-	}
+	if (rt->scene->lights)
+		free(rt->scene->lights);
 	return (rt->errnum);
 }
 

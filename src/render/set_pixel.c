@@ -44,3 +44,36 @@ void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color)
 		++i.y;
 	}
 }
+
+// For multithreading.
+void	set_pixel_multi(mlx_image_t *img, float res_ratio, t_axis2 inp, t_vec4 color)
+{
+	static const t_vec4	to_rgba = {255.0F, 255.0F, 255.0F, 255.0F};
+	uint8_t				*pixels;
+	t_axis2				i;
+	t_axis2				pix;
+
+	color *= to_rgba;
+	i.y = 0;
+	while (i.y < (uint16_t)res_ratio)
+	{
+		// puts("first");
+		i.x = 0;
+		pix.y = inp.y * (uint16_t)res_ratio + i.y;
+		while (i.x < (uint16_t)res_ratio)
+		{
+			// puts("second");
+			pix.x = inp.x * (uint16_t)res_ratio + i.x;
+			if (pix.x > img->width || pix.y > img->height)
+				continue ;
+			// printf("inp [x: %d, y: %d] pix [x: %d, y: %d], resrat: %f\n", inp.x, inp.y, pix.x, pix.y, res_ratio);
+			pixels = img->pixels + (pix.y * img->width + pix.x) * 4;
+			*(pixels++) = (uint8_t)color[R];
+			*(pixels++) = (uint8_t)color[G];
+			*(pixels++) = (uint8_t)color[B];
+			*(pixels++) = (uint8_t)color[A];
+			++i.x;
+		}
+		++i.y;
+	}
+}

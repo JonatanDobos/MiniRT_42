@@ -4,6 +4,7 @@
 #include <mathRT.h>
 #include <render.h>
 #include <debug.h>
+#include <unistd.h>
 
 void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 {
@@ -29,8 +30,11 @@ void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 
 void	init_hooks(t_rt *rt)
 {
+	if (THREADS > 1)
+		mlx_loop_hook(rt->win->mlx, (mlx_closefunc)loop_hook_threaded, rt);
+	else
+		mlx_loop_hook(rt->win->mlx, (mlx_closefunc)loop_hook, rt);
 	mlx_key_hook(rt->win->mlx, (mlx_keyfunc)my_keyhook, rt);
-	mlx_loop_hook(rt->win->mlx, (mlx_closefunc)loop_hook, rt);
 	mlx_mouse_hook(rt->win->mlx, (mlx_mousefunc)mouse_hook, rt);
 	mlx_scroll_hook(rt->win->mlx, (mlx_cursorfunc)fov_hook, rt->scene);
 }
@@ -72,5 +76,27 @@ void	loop_hook(t_rt *rt)
 		rt->scene->cam_m_speed = CAM_MOVE_SPEED * time;
 		rt->scene->cam_r_speed = CAM_ROTATION_SPEED * time;
 		rt->scene->render = false;
+	}
+}
+
+void	loop_hook_threaded(t_rt *rt)
+{
+	double	time;
+
+	time = mlx_get_time();
+	movement(rt);
+	if (rt->scene->render == true || rt->scene->render_ongoing == true)
+	{
+		render_manager_thread(rt);
+		time = mlx_get_time() - time;
+		rt->win->delta_time = time;
+		time = 0.01F;// maybe change to delta time!
+		rt->scene->cam_fov_speed = FOV_SCROLL_SPEED * time;
+		rt->scene->cam_m_speed = CAM_MOVE_SPEED * time;
+		rt->scene->cam_r_speed = CAM_ROTATION_SPEED * time;
+		rt->scene->render = false;
+		// conditional lock?
+		// pthread_cond_broadcast
+		usleep(100);
 	}
 }

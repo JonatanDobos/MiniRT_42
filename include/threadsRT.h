@@ -13,6 +13,7 @@ typedef struct s_window		t_window;
 typedef struct mlx			mlx_t;
 typedef struct mlx_texture	mlx_texture_t;
 typedef struct mlx_image	mlx_image_t;
+typedef struct s_rt			t_rt;
 
 typedef pthread_mutex_t		t_mtx;
 typedef void				*(*t_cast)(void *);
@@ -28,17 +29,25 @@ typedef struct	s_thread
 	uint8_t			*pixels;
 	uint16_t		width;
 	uint16_t		height;
+	uint16_t		rend_width;
+	uint16_t		rend_height;
+	uint16_t		start_y;
 	float			aspectr;
 	t_mtx			mtx;
 	pthread_t		thread;
 }	t_thread;
 
-bool	init_pthread_mutex(t_rt *rt);
+// bool	init_pthread_mutex(t_rt *rt);
 bool	launch_pthreads(t_rt *rt);
 void	destroy_threads(t_rt *rt, size_t thread_amount);
 void	destroy_mutexes(t_rt *rt, size_t amount);
+bool	create_and_launch_mutex(t_rt *rt);
 
+bool	img_multithreaded(t_rt *rt);
+void	thread_routine_init(t_thread *th);
 void	img_deletion(t_rt *rt, uint16_t img_amount);
 
+bool	check_bool(t_mtx *mutex, bool to_check);
+bool	toggle_bool(t_mtx *mutex, bool *to_toggle, bool new_value);
 
 #endif

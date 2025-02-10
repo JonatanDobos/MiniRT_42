@@ -11,6 +11,7 @@
 # include <stdio.h>
 # include <errno.h>
 # include <pthread.h>
+# include <threadsRT.h>
 
 # ifndef SCREEN_WIDTH
 #  define SCREEN_WIDTH 800
@@ -24,6 +25,8 @@
 #  define THREADS 1
 # endif
 
+// # define THREADS 2
+
 typedef float				t_vec4 __attribute__ ((vector_size(16)));
 
 typedef const t_vec4		t_cvec4;
@@ -33,8 +36,6 @@ typedef struct s_window		t_window;
 typedef struct mlx			mlx_t;
 typedef struct mlx_texture	mlx_texture_t;
 typedef struct mlx_image	mlx_image_t;
-typedef struct s_thread		t_thread;
-
 typedef pthread_mutex_t		t_mtx;
 typedef void				*(*t_cast)(void *);
 enum e_axis
@@ -58,6 +59,8 @@ enum e_mtx
 	MTX_PRINT,
 	MTX_SYNC,
 	MTX_CREATION_CHECK,
+	MTX_QUIT_ROUTINE,
+	MTX_RENDER,
 	MTX_AMOUNT
 };
 
@@ -66,8 +69,9 @@ typedef struct	s_rt
 	t_scene			*scene;
 	t_window		*win;
 	t_mtx			mtx[MTX_AMOUNT];
-	t_thread		*threads;
+	t_thread		threads[THREADS];
 	bool			thread_creation_check;
+	bool			quit_routine;
 	int				errnum;
 }	t_rt;
 

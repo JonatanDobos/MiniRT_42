@@ -97,8 +97,10 @@ INITIALIZE		:=	threads_and_mutexes.c
 
 PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c _debug.c
 
+THREADING		:=	init_mlx_images.c		utils_thread.c
+
 MLX				:=	window_setup.c			hooks.c		camera_move.c	camera_rotate.c	\
-					object_modification.c	object_move.c		hooks_move.c
+					object_modification.c	object_move.c	object_rotate.c		hooks_move.c
 
 UTILS			:=	utils.c
 
@@ -123,6 +125,7 @@ SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))					\
 					$(addprefix $(SRC_DIR)utils/, $(UTILS))				\
 					$(addprefix $(SRC_DIR)render/, $(RENDER))			\
 					$(addprefix $(SRC_DIR)math/, $(MATH))				\
+					$(addprefix $(SRC_DIR)multi_threading/, $(THREADING))				\
 					$(addprefix $(SRC_DIR)debug/, $(DEBUG))
 
 #		Generate object file names

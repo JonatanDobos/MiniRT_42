@@ -6,27 +6,24 @@
 #include <render.h>
 #include <libft.h>
 
-//	Static Functions
-static bool	create_and_launch_mutex(t_rt *rt);
-
-bool	init_pthread_mutex(t_rt *rt)
-{
-	if (create_and_launch_mutex(rt) == false)
-		return (false);
-	rt->threads = (t_thread *)malloc(sizeof(t_thread) * THREADS - 1);
-	if (rt->threads == NULL)
-	{
-		write(STDERR_FILENO, "malloc: Pthread creation failed\n", 32);
-		destroy_mutexes(rt, MTX_AMOUNT);
-		return (false);
-	}
-	return (true);
-}
+// bool	init_pthread_mutex(t_rt *rt)
+// {
+// 	if (create_and_launch_mutex(rt) == false)
+// 		return (false);
+// 	rt->threads = (t_thread *)malloc(sizeof(t_thread) * THREADS - 1);
+// 	if (rt->threads == NULL)
+// 	{
+// 		write(STDERR_FILENO, "malloc: Pthread creation failed\n", 32);
+// 		destroy_mutexes(rt, MTX_AMOUNT);
+// 		return (false);
+// 	}
+// 	return (true);
+// }
 
 bool	launch_pthreads(t_rt *rt)
 {
 	ssize_t	i;
-
+	
 	i = 0;
 	pthread_mutex_lock(rt->mtx + MTX_SYNC);
 	while (i < THREADS - 1)
@@ -35,7 +32,7 @@ bool	launch_pthreads(t_rt *rt)
 		rt->threads[i].scene = rt->scene;
 		rt->threads[i].win = rt->win;
 		rt->threads[i].id = i + 1;
-		if (pthread_create(&rt->threads[i].thread, NULL, (t_cast)thread_render, rt) != 0)
+		if (pthread_create(&rt->threads[i].thread, NULL, (t_cast)thread_routine_init, &rt->threads[i]) != 0)
 		{
 			pthread_mutex_lock(rt->mtx + MTX_PRINT);
 			printf("pthread_create: philosophers\n");
@@ -66,7 +63,6 @@ void	destroy_threads(t_rt *rt, size_t thread_amount)
 		}
 		++i;
 	}
-	free_ptr(&rt->threads);
 }
 
 void	destroy_mutexes(t_rt *rt, size_t amount)
@@ -81,23 +77,26 @@ void	destroy_mutexes(t_rt *rt, size_t amount)
 			if (i > 0)
 			{
 				pthread_mutex_lock(rt->mtx + MTX_PRINT);
-				write(STDERR_FILENO, "pthread_mutex_destroy: Failed\n", 30);	//	also this write does need lock protection
+				printf("%zu\n", i);
+				perror("huh");
+				write(STDERR_FILENO, "1pthread_mutex_destroy: Failed\n", 31);	//	also this write does need lock protection
 				pthread_mutex_unlock(rt->mtx + MTX_PRINT);
 			}
 			else
-				write(STDERR_FILENO, "pthread_mutex_destroy: Failed\n", 30);	//	also this write does need lock protection
+				write(STDERR_FILENO, "2pthread_mutex_destroy: Failed\n", 31);	//	also this write does need lock protection
 		}
 		--i;
 	}
 }
 
-static bool	create_and_launch_mutex(t_rt *rt)
+bool	create_and_launch_mutex(t_rt *rt)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < MTX_AMOUNT)
 	{
+		printf("%zu\n", i);
 		if (pthread_mutex_init(rt->mtx + i, NULL) != 0)
 		{
 			write(STDERR_FILENO, "pthread_mutex_init: Failed\n", 27);

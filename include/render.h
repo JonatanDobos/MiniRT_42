@@ -7,7 +7,7 @@
 
 # define RES_STEP_SIZE 1.0F
 # define RES_RATIO_MAX 20.0F
-# define RES_R_LOW 18.0F
+# define RES_R_LOW 1.0F	// thread 1.0F, mandatory 18.0F
 # define RES_R_FULL 1.0F
 
 # define SHADOW_EPSILON 1e-3F
@@ -42,6 +42,7 @@ uint8_t		ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t);
 
 void		set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color);
 void		scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
+void		set_pixel_multi(mlx_image_t *img, float res_ratio, t_axis2 inp, t_vec4 color);
 
 // trace_ray.c
 
@@ -54,6 +55,9 @@ uint32_t	find_closest_object(t_scene *scene, t_ray ray, float *closest_t, uint8_
 
 void		render_manager(t_rt *rt);
 
-void		thread_render(t_thread *th);
+void		render_manager_thread(t_rt *rt);
+void		render_upscale_thread(t_thread *th);
+void		thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img);
+void		render_routine(t_thread *th, uint16_t y);
 
 #endif
