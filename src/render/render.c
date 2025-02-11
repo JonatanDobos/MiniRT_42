@@ -55,34 +55,10 @@ void	render(t_rt *rt)
 	}
 }
 
-void	thread_routine_init(t_thread *th)
-{
-	pthread_mutex_lock(th->rt->mtx + MTX_SYNC);
-	pthread_mutex_unlock(th->rt->mtx + MTX_SYNC);
-	if (check_bool(th->rt->mtx + MTX_CREATION_CHECK, th->rt->thread_creation_check) == false)
-	{
-		puts("exit");
-		return ;
-	}
-	printf("Start thread %d\n", th->id);
-	render_routine(th, th->start_y);
-	printf("Stop thread %d\n", th->id);
-}
 
-void	render_routine(t_thread *th, uint16_t y)
-{
-	while (check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, th->rt->quit_routine) == false)
-	{
-		if (check_bool(th->rt->mtx + MTX_RENDER, th->rt->scene->render_ongoing) == true)
-			render_upscale_thread(th);
-		thread_render(th, y, 0);
-		pthread_mutex_lock(th->rt->mtx + MTX_SYNC);
-		pthread_mutex_unlock(th->rt->mtx + MTX_SYNC);
-	}
-}
 
 // Render the scene (1 thread)
-void	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
+bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 {
 	const uint16_t	total_height = th->rend_height + ((float)th->start_y / th->rt->win->res_ratio);
 	uint16_t		x;
@@ -95,7 +71,7 @@ void	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 	while (y_rend < total_height)
 	{
 		if (check_bool(th->rt->mtx + MTX_RENDER, th->rt->scene->render) == true)
-			return ;
+			return (true);
 		x = 0;
 		while (x < th->rend_width)
 		{
@@ -108,4 +84,5 @@ void	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 		++y_img;
 		++y_rend;
 	}
+	return (false);
 }

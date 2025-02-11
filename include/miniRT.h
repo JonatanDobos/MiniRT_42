@@ -58,8 +58,12 @@ enum e_mtx
 {
 	MTX_PRINT,
 	MTX_SYNC,
+	MTX_RESYNC,
+	MTX_DONE_RENDERING,
 	MTX_CREATION_CHECK,
 	MTX_QUIT_ROUTINE,
+	MTX_STOPPED_THREADS,
+	MTX_RES_RATIO,
 	MTX_RENDER,
 	MTX_AMOUNT
 };
@@ -70,17 +74,13 @@ typedef struct	s_rt
 	t_window		*win;
 	t_mtx			mtx[MTX_AMOUNT];
 	t_thread		threads[THREADS];
+	pthread_cond_t	cond;
+	uint16_t		finished_rendering;
+	uint16_t		stopped_threads;
+	bool			pressed_key;
 	bool			thread_creation_check;
 	bool			quit_routine;
 	int				errnum;
 }	t_rt;
-
-bool	init_pthread_mutex(t_rt *rt);
-bool	launch_pthreads(t_rt *rt);
-void	destroy_threads(t_rt *rt, size_t thread_amount);
-void	destroy_mutexes(t_rt *rt, size_t amount);
-
-// tmp
-void	my_screw_you_joni_render(t_rt *rt);
 
 #endif

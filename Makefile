@@ -93,11 +93,9 @@ SRC_DIR			:=	src/
 
 MAIN			:=	main.c
 
-INITIALIZE		:=	threads_and_mutexes.c
-
 PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c _debug.c
 
-THREADING		:=	init_mlx_images.c		utils_thread.c
+THREADING		:=	thread_setup.c	thread_terminate.c	routine.c	init_mlx_images.c		utils_thread.c
 
 MLX				:=	window_setup.c			hooks.c		camera_move.c	camera_rotate.c	\
 					object_modification.c	object_move.c	object_rotate.c		hooks_move.c
@@ -117,15 +115,14 @@ MATH			:=	math.c		vec_arithmetic.c		vec_geometry.c		vec_transform.c
 # sphere.c										
 
 #		Find all .c files in the specified directories
-SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))					\
-					$(addprefix $(SRC_DIR)initialize/, $(INITIALIZE))	\
-					$(addprefix $(SRC_DIR)parsing/, $(PARSE))			\
-					$(addprefix $(SRC_DIR)error/, $(ERROR))				\
-					$(addprefix $(SRC_DIR)mlx/, $(MLX))					\
-					$(addprefix $(SRC_DIR)utils/, $(UTILS))				\
-					$(addprefix $(SRC_DIR)render/, $(RENDER))			\
-					$(addprefix $(SRC_DIR)math/, $(MATH))				\
-					$(addprefix $(SRC_DIR)multi_threading/, $(THREADING))				\
+SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))						\
+					$(addprefix $(SRC_DIR)parsing/, $(PARSE))				\
+					$(addprefix $(SRC_DIR)error/, $(ERROR))					\
+					$(addprefix $(SRC_DIR)mlx/, $(MLX))						\
+					$(addprefix $(SRC_DIR)utils/, $(UTILS))					\
+					$(addprefix $(SRC_DIR)render/, $(RENDER))				\
+					$(addprefix $(SRC_DIR)math/, $(MATH))					\
+					$(addprefix $(SRC_DIR)multi_threading/, $(THREADING))	\
 					$(addprefix $(SRC_DIR)debug/, $(DEBUG))
 
 #		Generate object file names

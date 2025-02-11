@@ -8,7 +8,7 @@ t_cint32	cleanup(t_rt *rt)
 	if (THREADS > 1)
 	{
 		// Wat gebeurt er bij mutex SYNC?
-		toggle_bool(rt->mtx + MTX_QUIT_ROUTINE, &rt->quit_routine, true);
+		// toggle_bool(rt->mtx + MTX_QUIT_ROUTINE, &rt->quit_routine, true);
 		pthread_mutex_unlock(rt->mtx + MTX_SYNC);
 		destroy_threads(rt, THREADS - 1);
 		destroy_mutexes(rt, MTX_AMOUNT);

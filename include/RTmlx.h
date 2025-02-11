@@ -49,6 +49,8 @@ void	loop_hook_threaded(t_rt *rt);
 void	my_keyhook(mlx_key_data_t keydata, t_rt *rt);
 void	fov_hook(double xdelta, double ydelta, t_scene *sc);
 
+bool	keybindings_used_in_loophook(const keys_t key);
+
 // hooks_move.c
 
 void	movement(t_rt *rt);
