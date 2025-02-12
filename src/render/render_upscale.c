@@ -44,13 +44,7 @@ void	render_manager_thread(t_rt *rt)
 		rt->scene->render_ongoing = false;
 		mlx_set_window_title(rt->win->mlx, "miniRT");
 	}
+	rt->win->rndr_hght = (float)rt->win->mlx->height / rt->win->res_ratio;
+	rt->win->rndr_wdth = (float)rt->win->mlx->width / rt->win->res_ratio;
 	// pthread_mutex_unlock(rt->mtx + MTX_RENDER);
-}
-
-void	render_upscale_thread(t_thread *th)
-{
-	pthread_mutex_lock(th->rt->mtx + MTX_RES_RATIO);
-	th->rend_height = (float)th->height / th->rt->win->res_ratio;
-	th->rend_width = (float)th->width / th->rt->win->res_ratio;
-	pthread_mutex_unlock(th->rt->mtx + MTX_RES_RATIO);
 }

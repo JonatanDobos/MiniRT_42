@@ -23,12 +23,6 @@ static void	render_routine(t_thread *th, uint16_t y)
 {
 	while (check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, th->rt->quit_routine) == false)
 	{
-		pthread_mutex_lock(th->rt->mtx + MTX_RENDER);
-		if (th->rt->scene->render_ongoing == true)
-		{
-			render_upscale_thread(th);
-		}
-		pthread_mutex_unlock(th->rt->mtx + MTX_RENDER);
 		if (thread_render(th, y, 0) == true)
 			continue ;
 		resynchronize_after_rendering(th);

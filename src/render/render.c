@@ -60,7 +60,7 @@ void	render(t_rt *rt)
 // Render the scene (1 thread)
 bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 {
-	const uint16_t	total_height = th->rend_height + ((float)th->start_y / th->rt->win->res_ratio);
+	const uint16_t	total_height = th->img_height / th->rt->win->res_ratio + ((float)th->start_y / th->rt->win->res_ratio);
 	uint16_t		x;
 	t_ray			ray;
 	float			ndc_x;
@@ -70,19 +70,24 @@ bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 	ray.origin = th->scene->camera.coords;
 	while (y_rend < total_height)
 	{
-		if (check_bool(th->rt->mtx + MTX_RENDER, th->rt->scene->render) == true)
+		// printf("id %d\ty_rend %d\ty_img %d\n", th->id, y_rend, y_img);
+		if (check_bool(th->rt->mtx + MTX_RENDER, th->rt->scene->render) == true){
+			print_lock(th->rt->mtx + MTX_PRINT, "rerender");
 			return (true);
+		}
 		x = 0;
-		while (x < th->rend_width)
+		while (x < th->win->rndr_wdth)
 		{
-			ndc_x = (2.0F * ((x + 0.5F) / (float)th->width) - 1.0F) * th->aspectr;
-			ndc_y = 1.0F - 2.0F * ((y_rend + 0.5F) / (float)th->height);
+			ndc_x = (2.0F * ((x + 0.5F) / (float)th->win->rndr_wdth) - 1.0F) * th->rt->win->aspectrat;
+			ndc_y = 1.0F - 2.0F * ((y_rend + 0.5F) / (float)th->win->rndr_hght);
 			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, th->scene->camera.c.zvp_dist, 0.0F}, th->scene->camera.c.orientation);
 			set_pixel_multi(th->img, th->win->res_ratio, (t_axis2){x, y_img}, trace_ray(th->scene, ray));
 			++x;
 		}
 		++y_img;
 		++y_rend;
+		if (y_img == 1)
+			printf("id %d\ty_rend %d\ty_img %d\taspectwin %.3f\taspectthread %.3f\ntot_height %d\n\n", th->id, y_rend, y_img, th->rt->win->aspectrat, th->aspectr, total_height);
 	}
 	return (false);
 }

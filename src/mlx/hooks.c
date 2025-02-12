@@ -18,6 +18,20 @@ bool	keybindings_used_in_loophook(const keys_t key)
 	return (false);
 }
 
+void	mlx_closing_cleanup_threads(t_rt *rt)
+{
+	pthread_mutex_lock(rt->mtx + MTX_QUIT_ROUTINE);
+	pthread_mutex_unlock(rt->mtx + MTX_RESYNC);
+	rt->quit_routine = true;
+	pthread_mutex_unlock(rt->mtx + MTX_QUIT_ROUTINE);
+	pthread_mutex_lock(rt->mtx + MTX_STOPPED_THREADS);
+	while (rt->stopped_threads < THREADS - 1)
+	{
+		pthread_cond_wait(&rt->cond, rt->mtx + MTX_STOPPED_THREADS);
+	}
+	pthread_mutex_unlock(rt->mtx + MTX_STOPPED_THREADS);
+}
+
 bool	handle_custom_key(const keys_t key, t_rt *rt)
 {
 	if (handle_object_modification(key, rt->scene) == true)
@@ -29,17 +43,7 @@ bool	handle_custom_key(const keys_t key, t_rt *rt)
 	else if (key == MLX_KEY_MINUS)
 		rt->scene->render = res_downscale(rt->win);
 	else if (key == MLX_KEY_ESCAPE) {
-		pthread_mutex_lock(rt->mtx + MTX_QUIT_ROUTINE);
-		pthread_mutex_unlock(rt->mtx + MTX_RESYNC);
-		rt->quit_routine = true;
-		pthread_mutex_unlock(rt->mtx + MTX_QUIT_ROUTINE);
-		pthread_mutex_lock(rt->mtx + MTX_STOPPED_THREADS);
-		while (rt->stopped_threads < THREADS - 1)
-		{
-			pthread_cond_wait(&rt->cond, rt->mtx + MTX_STOPPED_THREADS);
-			// printf("%d\n", rt->stopped_threads - 1);
-		}
-		pthread_mutex_unlock(rt->mtx + MTX_STOPPED_THREADS);
+		mlx_closing_cleanup_threads(rt);
 		mlx_close_window(rt->win->mlx);
 	}
 	else if (keybindings_used_in_loophook(key) == false)
@@ -69,6 +73,7 @@ void	init_hooks(t_rt *rt)
 	mlx_key_hook(rt->win->mlx, (mlx_keyfunc)my_keyhook, rt);
 	mlx_mouse_hook(rt->win->mlx, (mlx_mousefunc)mouse_hook, rt);
 	mlx_scroll_hook(rt->win->mlx, (mlx_cursorfunc)fov_hook, rt->scene);
+	mlx_close_hook(rt->win->mlx, (mlx_closefunc)mlx_closing_cleanup_threads, rt);
 }
 
 void	fov_hook(double xdelta, double ydelta, t_scene *sc)
@@ -117,6 +122,24 @@ void	loop_hook_threaded(t_rt *rt)
 
 	time = mlx_get_time();
 	movement(rt);
+
+	pthread_mutex_lock(rt->mtx + MTX_DONE_RENDERING);
+	if (rt->scene->render == true && rt->finished_rendering == THREADS - 1)
+	{
+		rt->pressed_key = false;
+		pthread_mutex_lock(rt->mtx + MTX_SYNC);
+		while (rt->finished_rendering != 0)
+		{
+			pthread_cond_wait(&rt->cond, rt->mtx + MTX_RESYNC);
+		}
+		// printf("huh %d\n", rt->finished_rendering);
+		pthread_mutex_unlock(rt->mtx + MTX_RESYNC);
+		pthread_mutex_lock(rt->mtx + MTX_RESYNC);
+		pthread_mutex_unlock(rt->mtx + MTX_SYNC);
+	}
+	pthread_mutex_unlock(rt->mtx + MTX_DONE_RENDERING);
+
+
 	pthread_mutex_lock(rt->mtx + MTX_RENDER);
 	if (rt->scene->render == true || rt->scene->render_ongoing == true)
 	{
@@ -133,21 +156,4 @@ void	loop_hook_threaded(t_rt *rt)
 		usleep(100);
 	}
 	pthread_mutex_unlock(rt->mtx + MTX_RENDER);
-
-	pthread_mutex_lock(rt->mtx + MTX_DONE_RENDERING);
-	// printf("rt->finished_rendering %d\n", rt->finished_rendering);
-	if (rt->pressed_key == true && rt->finished_rendering == THREADS - 1)
-	{
-		rt->pressed_key = false;
-		pthread_mutex_lock(rt->mtx + MTX_SYNC);
-		while (rt->finished_rendering != 0)
-		{
-			pthread_cond_wait(&rt->cond, rt->mtx + MTX_RESYNC);
-		}
-		// printf("huh %d\n", rt->finished_rendering);
-		pthread_mutex_unlock(rt->mtx + MTX_RESYNC);
-		pthread_mutex_lock(rt->mtx + MTX_RESYNC);
-		pthread_mutex_unlock(rt->mtx + MTX_SYNC);
-	}
-	pthread_mutex_unlock(rt->mtx + MTX_DONE_RENDERING);
 }

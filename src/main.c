@@ -59,7 +59,6 @@ int main(int argc, char **argv)
 	if (THREADS > 1)
 		multithreaded(&rt);
 	mlx_loop(rt.win->mlx);	// druk op kruisje, hoe de frick gaan we de threads afsluiten
-	puts("drukken op kruisje brengt ons meteen hier.");
 	cleanup(&rt);
 	printf("exiting miniRT\n");
 	return (EXIT_SUCCESS);

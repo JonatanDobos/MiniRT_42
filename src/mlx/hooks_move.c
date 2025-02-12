@@ -11,20 +11,17 @@ static void	mouse_clicks_on_obj(t_scene *scene, t_ray ray);
 
 void	movement(t_rt *rt)
 {
-	if (rt->pressed_key == true)
+	pthread_mutex_lock(rt->mtx + MTX_RENDER);
+	//	before moiving on probably a condition again so threads wait before we are gonna adjust values in here
+	if (rt->scene->selected_obj == NULL)
 	{
-		pthread_mutex_lock(rt->mtx + MTX_RENDER);
-		//	before moiving on probably a condition again so threads wait before we are gonna adjust values in here
-		if (rt->scene->selected_obj == NULL)
-		{
-			cam_hook(rt);
-		}
-		else
-		{
-			obj_hook(rt);
-		}
-		pthread_mutex_unlock(rt->mtx + MTX_RENDER);
+		cam_hook(rt);
 	}
+	else
+	{
+		obj_hook(rt);
+	}
+	pthread_mutex_unlock(rt->mtx + MTX_RENDER);
 }
 
 static void	cam_hook(t_rt *rt)
