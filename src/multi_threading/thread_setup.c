@@ -27,7 +27,7 @@ bool	initialize_mutexes(t_rt *rt)
 
 bool	initialize_conditions(t_rt *rt)
 {
-	if (pthread_cond_init(&rt->cond, NULL) != 0)
+	if (pthread_cond_init(&rt->cond_done_rend, NULL) != 0)
 	{
 		write(STDERR_FILENO, "pthread_cond_init\n", 18);
 		return (false);

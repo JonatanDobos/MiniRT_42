@@ -70,11 +70,21 @@ bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 	ray.origin = th->scene->camera.coords;
 	while (y_rend < total_height)
 	{
-		// printf("id %d\ty_rend %d\ty_img %d\n", th->id, y_rend, y_img);
-		if (check_bool(th->rt->mtx + MTX_RENDER, th->rt->scene->render) == true){
+		pthread_mutex_lock(th->rt->mtx + MTX_RENDER_INTERUPT);
+		printf(">%d<\n", th->rt->scene->render_input);
+		// if (th->rt->scene->render_input == true) {
+		if (th->rt->stopped_threads == true) {
+// 			pthread_mutex_lock(th->rt->mtx + MTX_RENDER_INTERUPT);
+// 			++th->rt->threads_waiting;
+// 			pthread_mutex_unlock(th->rt->mtx + MTX_RENDER_INTERUPT);
+// 			pthread_mutex_lock(th->rt->mtx + MTX_THREADS_WAITING);
+// 			pthread_mutex_unlock(th->rt->mtx + MTX_THREADS_WAITING);
+// sleep(10);
 			print_lock(th->rt->mtx + MTX_PRINT, "rerender");
+			pthread_mutex_unlock(th->rt->mtx + MTX_RENDER_INTERUPT);
 			return (true);
 		}
+		pthread_mutex_unlock(th->rt->mtx + MTX_RENDER_INTERUPT);
 		x = 0;
 		while (x < th->win->rndr_wdth)
 		{
@@ -86,8 +96,6 @@ bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 		}
 		++y_img;
 		++y_rend;
-		if (y_img == 1)
-			printf("id %d\ty_rend %d\ty_img %d\taspectwin %.3f\taspectthread %.3f\ntot_height %d\n\n", th->id, y_rend, y_img, th->rt->win->aspectrat, th->aspectr, total_height);
 	}
 	return (false);
 }

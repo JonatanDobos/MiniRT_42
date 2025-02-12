@@ -19,13 +19,13 @@ bool	handle_object_modification(const keys_t key, t_scene *sc)
 	else if (key == MLX_KEY_B)
 		sc->selected_obj = NULL;
 	else if (key == MLX_KEY_M)
-		sc->render = decrease_obj(sc->selected_obj, HEIGHT);
+		sc->render_input = decrease_obj(sc->selected_obj, HEIGHT);
 	else if (key == MLX_KEY_COMMA)
-		sc->render = decrease_obj(sc->selected_obj, RADIUS);
+		sc->render_input = decrease_obj(sc->selected_obj, RADIUS);
 	else if (key == MLX_KEY_PERIOD)
-		sc->render = increase_obj(sc->selected_obj, RADIUS);
+		sc->render_input = increase_obj(sc->selected_obj, RADIUS);
 	else if (key == MLX_KEY_SLASH)
-		sc->render = increase_obj(sc->selected_obj, HEIGHT);
+		sc->render_input = increase_obj(sc->selected_obj, HEIGHT);
 	else
 		return (false);
 	return (true);

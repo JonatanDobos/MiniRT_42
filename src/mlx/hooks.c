@@ -27,7 +27,7 @@ void	mlx_closing_cleanup_threads(t_rt *rt)
 	pthread_mutex_lock(rt->mtx + MTX_STOPPED_THREADS);
 	while (rt->stopped_threads < THREADS - 1)
 	{
-		pthread_cond_wait(&rt->cond, rt->mtx + MTX_STOPPED_THREADS);
+		pthread_cond_wait(&rt->cond_done_rend, rt->mtx + MTX_STOPPED_THREADS);
 	}
 	pthread_mutex_unlock(rt->mtx + MTX_STOPPED_THREADS);
 }
@@ -35,13 +35,13 @@ void	mlx_closing_cleanup_threads(t_rt *rt)
 bool	handle_custom_key(const keys_t key, t_rt *rt)
 {
 	if (handle_object_modification(key, rt->scene) == true)
-		rt->scene->render = true;
+		rt->scene->render_input = true;
 	else if (key == MLX_KEY_1)
 		print_camera(rt->scene->camera);
 	else if (key == MLX_KEY_EQUAL)
-		rt->scene->render = res_upscale(rt->win);
+		rt->scene->render_input = res_upscale(rt->win);
 	else if (key == MLX_KEY_MINUS)
-		rt->scene->render = res_downscale(rt->win);
+		rt->scene->render_input = res_downscale(rt->win);
 	else if (key == MLX_KEY_ESCAPE) {
 		mlx_closing_cleanup_threads(rt);
 		mlx_close_window(rt->win->mlx);
@@ -49,10 +49,13 @@ bool	handle_custom_key(const keys_t key, t_rt *rt)
 	else if (key == MLX_KEY_L)
 	{
 		rt->scene->intersect_lights = !rt->scene->intersect_lights;
-		rt->scene->render = true;
+		rt->scene->render_input = true;
 	}
-	else if (keybindings_used_in_loophook(key) == false)
+	else if (keybindings_used_in_loophook(key) == false){
+		rt->pressed_key = true;
 		return (false);
+	}
+
 	return (true);
 }
 
@@ -88,7 +91,7 @@ void	fov_hook(double xdelta, double ydelta, t_scene *sc)
 	{
 		sc->camera.c.realtime_fov = clamp(sc->camera.c.realtime_fov - sc->cam_fov_speed, 0.0f, 180.0f);
 		sc->camera.c.zvp_dist = 1.0f / tanf((sc->camera.c.realtime_fov * M_PI / 180.0f) / 2.0f);
-		sc->render = true;
+		sc->render_input = true;
 		// printf("\033[0;34m FOV DOWN: %.2f\033[0m\n", sc->camera.c.realtime_fov);
 		return ;
 	}
@@ -96,7 +99,7 @@ void	fov_hook(double xdelta, double ydelta, t_scene *sc)
 	{
 		sc->camera.c.realtime_fov = clamp(sc->camera.c.realtime_fov + sc->cam_fov_speed, 0.0f, 180.0f);
 		sc->camera.c.zvp_dist = 1.0f / tanf((sc->camera.c.realtime_fov * M_PI / 180.0f) / 2.0f);
-		sc->render = true;
+		sc->render_input = true;
 		// printf("\033[0;34m FOV UP: %.2f\033[0m\n", sc->camera.c.realtime_fov);
 		return ;
 	}
@@ -108,7 +111,7 @@ void	loop_hook(t_rt *rt)
 
 	time = mlx_get_time();
 	movement(rt);
-	if (rt->scene->render == true || rt->scene->render_ongoing == true)
+	if (rt->scene->render_input == true || rt->scene->render_ongoing == true)
 	{
 		render_manager(rt);
 		time = mlx_get_time() - time;
@@ -117,7 +120,7 @@ void	loop_hook(t_rt *rt)
 		rt->scene->cam_fov_speed = FOV_SCROLL_SPEED * time;
 		rt->scene->cam_m_speed = CAM_MOVE_SPEED * time;
 		rt->scene->cam_r_speed = CAM_ROTATION_SPEED * time;
-		rt->scene->render = false;
+		rt->scene->render_input = false;
 	}
 }
 
@@ -127,15 +130,15 @@ void	loop_hook_threaded(t_rt *rt)
 
 	time = mlx_get_time();
 	movement(rt);
-
+	
+	pthread_mutex_lock(rt->mtx + MTX_RENDER_INPUT);
 	pthread_mutex_lock(rt->mtx + MTX_DONE_RENDERING);
-	if (rt->scene->render == true && rt->finished_rendering == THREADS - 1)
+	if (rt->scene->render_input == true && rt->finished_rendering == THREADS - 1)
 	{
-		rt->pressed_key = false;
 		pthread_mutex_lock(rt->mtx + MTX_SYNC);
 		while (rt->finished_rendering != 0)
 		{
-			pthread_cond_wait(&rt->cond, rt->mtx + MTX_RESYNC);
+			pthread_cond_wait(&rt->cond_done_rend, rt->mtx + MTX_RESYNC);
 		}
 		// printf("huh %d\n", rt->finished_rendering);
 		pthread_mutex_unlock(rt->mtx + MTX_RESYNC);
@@ -143,10 +146,11 @@ void	loop_hook_threaded(t_rt *rt)
 		pthread_mutex_unlock(rt->mtx + MTX_SYNC);
 	}
 	pthread_mutex_unlock(rt->mtx + MTX_DONE_RENDERING);
+	pthread_mutex_unlock(rt->mtx + MTX_RENDER_INPUT);
 
 
-	pthread_mutex_lock(rt->mtx + MTX_RENDER);
-	if (rt->scene->render == true || rt->scene->render_ongoing == true)
+	pthread_mutex_lock(rt->mtx + MTX_RENDER_INPUT);
+	if (rt->scene->render_input == true)
 	{
 		render_manager_thread(rt);
 		time = mlx_get_time() - time;
@@ -155,10 +159,20 @@ void	loop_hook_threaded(t_rt *rt)
 		rt->scene->cam_fov_speed = FOV_SCROLL_SPEED * time;
 		rt->scene->cam_m_speed = CAM_MOVE_SPEED * time;
 		rt->scene->cam_r_speed = CAM_ROTATION_SPEED * time;
-		rt->scene->render = false;
-		// conditional lock?
-		// pthread_cond_broadcast
-		usleep(100);
+		rt->scene->render_input = false;
+		// puts("hel");
 	}
-	pthread_mutex_unlock(rt->mtx + MTX_RENDER);
+	if (rt->scene->render_ongoing == true)
+	{
+		render_manager_thread(rt);
+		time = mlx_get_time() - time;
+		rt->win->delta_time = time;
+		time = 0.01F;// maybe change to delta time!
+		rt->scene->cam_fov_speed = FOV_SCROLL_SPEED * time;
+		rt->scene->cam_m_speed = CAM_MOVE_SPEED * time;
+		rt->scene->cam_r_speed = CAM_ROTATION_SPEED * time;
+		// puts("hel");
+	}
+	pthread_mutex_unlock(rt->mtx + MTX_RENDER_INPUT);
+	// puts("ja");
 }

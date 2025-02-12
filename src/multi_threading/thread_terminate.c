@@ -43,7 +43,7 @@ void	destroy_mutexes(t_rt *rt, size_t amount)
 
 bool	destroy_conditions(t_rt *rt)
 {
-	if (pthread_cond_destroy(&rt->cond) != 0)
+	if (pthread_cond_destroy(&rt->cond_done_rend) != 0)
 	{
 		write(STDERR_FILENO, "pthread_cond_destroy\n", 21);
 		return (false);

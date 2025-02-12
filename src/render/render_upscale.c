@@ -6,7 +6,7 @@
 
 void	render_manager(t_rt *rt)
 {
-	if (rt->scene->render == true)
+	if (rt->scene->render_input == true)
 	{
 		rt->win->res_ratio = RES_R_LOW;
 		rt->scene->render_ongoing = true;
@@ -29,7 +29,7 @@ void	render_manager(t_rt *rt)
 void	render_manager_thread(t_rt *rt)
 {
 	// pthread_mutex_lock(rt->mtx + MTX_RENDER);
-	if (rt->scene->render == true)
+	if (rt->scene->render_input == true)
 	{
 		rt->win->res_ratio = RES_R_LOW;
 		rt->scene->render_ongoing = true;

@@ -94,7 +94,7 @@ typedef struct	s_scene
 {
 	t_objs	camera;
 	t_objs	ambient;
-	bool	render;
+	bool	render_input;
 	bool	render_ongoing;
 	struct
 	{

@@ -14,7 +14,7 @@ void	obj_rotate_up(t_scene *sc)
 	{
 		sc->selected_obj->cylinder.orientation = vnorm(vrotate(sc->selected_obj->cylinder.orientation, right, sc->cam_r_speed));
 	}
-	sc->render = true;
+	sc->render_input = true;
 }
 
 void	obj_rotate_down(t_scene *sc)
@@ -28,7 +28,7 @@ void	obj_rotate_down(t_scene *sc)
 	{
 		sc->selected_obj->cylinder.orientation = vnorm(vrotate(sc->selected_obj->cylinder.orientation, right, -sc->cam_r_speed));
 	}
-	sc->render = true;
+	sc->render_input = true;
 }
 
 void	obj_rotate_left(t_scene *sc)
@@ -41,7 +41,7 @@ void	obj_rotate_left(t_scene *sc)
 	{
 		sc->selected_obj->cylinder.orientation = vnorm(vrotate(sc->selected_obj->cylinder.orientation, (t_vec4){0.0F, 1.0F, 0.0F}, -sc->cam_r_speed));
 	}
-	sc->render = true;
+	sc->render_input = true;
 }
 
 void	obj_rotate_right(t_scene *sc)
@@ -54,5 +54,5 @@ void	obj_rotate_right(t_scene *sc)
 	{
 		sc->selected_obj->cylinder.orientation = vnorm(vrotate(sc->selected_obj->cylinder.orientation, (t_vec4){0.0F, 1.0F, 0.0F}, sc->cam_r_speed));
 	}
-	sc->render = true;
+	sc->render_input = true;
 }

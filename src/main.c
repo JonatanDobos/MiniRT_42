@@ -22,14 +22,14 @@ void	init_main(t_rt *rt, t_scene *scn, t_window *win)
 	rt->win = win;
 	rt->win->res_ratio = 1.0F;
 	rt->thread_creation_check = true;
-	scn->render = true;
+	scn->render_input = true;
 }
 
 int32_t	multithreaded(t_rt *rt)
 {
 	if (initialize_mutexes(rt) == false)
 		return (false);
-	if (pthread_cond_init(&rt->cond, NULL) != 0)
+	if (pthread_cond_init(&rt->cond_done_rend, NULL) != 0)
 	{
 		fprintf(stderr, "Failed to initialize condition variable\n");
 		exit(EXIT_FAILURE);

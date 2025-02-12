@@ -11,17 +11,20 @@ static void	mouse_clicks_on_obj(t_scene *scene, t_ray ray);
 
 void	movement(t_rt *rt)
 {
-	pthread_mutex_lock(rt->mtx + MTX_RENDER);
-	//	before moiving on probably a condition again so threads wait before we are gonna adjust values in here
-	if (rt->scene->selected_obj == NULL)
+	// printf(">%d<\n", rt->pressed_key);
+	if (rt->pressed_key == true)
 	{
-		cam_hook(rt);
+		pthread_mutex_lock(rt->mtx + MTX_RENDER_INTERUPT);
+		if (rt->scene->selected_obj == NULL)
+		{
+			cam_hook(rt);
+		}
+		else
+		{
+			obj_hook(rt);
+		}
+		pthread_mutex_unlock(rt->mtx + MTX_RENDER_INTERUPT);
 	}
-	else
-	{
-		obj_hook(rt);
-	}
-	pthread_mutex_unlock(rt->mtx + MTX_RENDER);
 }
 
 static void	cam_hook(t_rt *rt)
@@ -51,17 +54,17 @@ static void	cam_hook(t_rt *rt)
 static void	obj_hook(t_rt *rt)
 {
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_W))
-		rt->scene->render = obj_move_forw(rt->scene);
+		rt->scene->render_input = obj_move_forw(rt->scene);
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_S))
-		rt->scene->render = obj_move_backw(rt->scene);
+		rt->scene->render_input = obj_move_backw(rt->scene);
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_A))
-		rt->scene->render = obj_move_left(rt->scene);
+		rt->scene->render_input = obj_move_left(rt->scene);
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_D))
-		rt->scene->render = obj_move_right(rt->scene);
+		rt->scene->render_input = obj_move_right(rt->scene);
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_SPACE))
-		rt->scene->render = obj_move_up(rt->scene);
+		rt->scene->render_input = obj_move_up(rt->scene);
 	if (mlx_is_key_down(rt->win->mlx, MLX_KEY_LEFT_SHIFT))
-		rt->scene->render = obj_move_down(rt->scene);
+		rt->scene->render_input = obj_move_down(rt->scene);
 	if (rt->scene->selected_obj->type != SPHERE)
 	{
 		if (mlx_is_key_down(rt->win->mlx, MLX_KEY_LEFT))
@@ -110,7 +113,7 @@ static void	mouse_clicks_on_obj(t_scene *scene, t_ray ray)
 	closest_obj = find_closest_object(scene, ray, &closest_t, &closest_intersect_type);
 	if (closest_t < INFINITY)
 	{
-		scene->render = true;
+		scene->render_input = true;
 		if (scene->selected_obj == NULL || closest_obj != scene->sel_obj_index)
 		{
 			scene->sel_obj_index = closest_obj;

@@ -59,12 +59,14 @@ enum e_mtx
 	MTX_PRINT,
 	MTX_SYNC,
 	MTX_RESYNC,
+	MTX_THREADS_WAITING,
+	MTX_RENDER_INTERUPT,
 	MTX_DONE_RENDERING,
 	MTX_CREATION_CHECK,
 	MTX_QUIT_ROUTINE,
 	MTX_STOPPED_THREADS,
 	MTX_RES_RATIO,
-	MTX_RENDER,
+	MTX_RENDER_INPUT,
 	MTX_AMOUNT
 };
 
@@ -74,9 +76,11 @@ typedef struct	s_rt
 	t_window		*win;
 	t_mtx			mtx[MTX_AMOUNT];
 	t_thread		threads[THREADS];
-	pthread_cond_t	cond;
+	pthread_cond_t	cond_done_rend;
 	uint16_t		finished_rendering;
-	uint16_t		stopped_threads;
+	pthread_cond_t	cond_interupt;
+	uint16_t		threads_waiting;
+	bool			stopped_threads;
 	bool			pressed_key;
 	bool			thread_creation_check;
 	bool			quit_routine;
