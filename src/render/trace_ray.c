@@ -94,7 +94,8 @@ t_vec4 trace_ray(t_scene *sc, t_ray ray)
 
 	pixel_color = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
 	closest_obj = sc->objs + find_closest_object(sc, ray, &closest_t, &closest_intersect_type);
-	closest_obj = render_light(sc, ray, &closest_t, closest_obj);
+	if (sc->intersect_lights == true)
+		closest_obj = render_light(sc, ray, &closest_t, closest_obj);
 	if (closest_t < INFINITY && closest_t > 0.0F)
 	{
 		pixel_color = closest_obj->color;

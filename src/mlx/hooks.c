@@ -46,6 +46,11 @@ bool	handle_custom_key(const keys_t key, t_rt *rt)
 		mlx_closing_cleanup_threads(rt);
 		mlx_close_window(rt->win->mlx);
 	}
+	else if (key == MLX_KEY_L)
+	{
+		rt->scene->intersect_lights = !rt->scene->intersect_lights;
+		rt->scene->render = true;
+	}
 	else if (keybindings_used_in_loophook(key) == false)
 		return (false);
 	return (true);

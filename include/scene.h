@@ -93,7 +93,6 @@ typedef struct	s_objs
 typedef struct	s_scene
 {
 	t_objs	camera;
-	// t_objs	light;
 	t_objs	ambient;
 	bool	render;
 	bool	render_ongoing;
@@ -107,7 +106,8 @@ typedef struct	s_scene
 	{
 		t_dynarr	light_dynarr;
 		t_objs		*lights;
-		size_t		l_arr_size;	
+		size_t		l_arr_size;
+		bool		intersect_lights;
 	};
 	t_objs	*selected_obj;
 	ssize_t	sel_obj_index;
