@@ -71,8 +71,8 @@ bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 	ray.origin = th->scene->camera.coords;
 	while (y_rend < th->rdr_height)
 	{
-		// printf("id %d\ty_rend %d\ty_img %d\n", th->id, y_rend, y_img);//t
-		if (check_bool(th->rt->mtx + MTX_RENDER, th->rt->scene->render) == true)
+		// secure with mutex
+		if (th->win->res_ratio == RES_R_LOW && check_bool(th->rt->mtx + MTX_RENDER, th->rt->scene->render) == true)
 			return (true);
 		x = 0;
 		while (x < th->win->rndr_wdth)
