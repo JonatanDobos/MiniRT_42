@@ -19,11 +19,12 @@ void	thread_routine_init(t_thread *th)
 	render_routine(th, th->start_y);
 }
 
-static void	render_routine(t_thread *th, uint16_t y)
+static void	render_routine(t_thread *th, uint16_t start_y)
 {
 	while (check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, th->rt->quit_routine) == false)
 	{
-		if (thread_render(th, y, 0) == true)
+		printf("render thread %d\n", th->id);
+		if (thread_render(th, start_y, 0) == true)
 			continue ;
 		resynchronize_after_rendering(th);
 	}
@@ -43,9 +44,7 @@ static void	resynchronize_after_rendering(t_thread *th)
 	--th->rt->finished_rendering;
 	pthread_cond_signal(&th->rt->cond);
 	pthread_mutex_unlock(th->rt->mtx + MTX_RESYNC);
-	// print_lock(th->rt->mtx + MTX_RENDER, "check");
 
 	pthread_mutex_lock(th->rt->mtx + MTX_SYNC);
 	pthread_mutex_unlock(th->rt->mtx + MTX_SYNC);
-	puts("whu");
 }

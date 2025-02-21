@@ -38,6 +38,7 @@ typedef struct mlx_texture	mlx_texture_t;
 typedef struct mlx_image	mlx_image_t;
 typedef pthread_mutex_t		t_mtx;
 typedef void				*(*t_cast)(void *);
+
 enum e_axis
 {
 	X,

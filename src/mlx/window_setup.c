@@ -14,6 +14,7 @@ bool	windows_setup_mlx(t_rt *rt)
 	if (init_mlx(rt->win) == false || \
 		windows_logo(rt->win) == false)
 		return (EXIT_FAILURE);
+	res_setscale(rt->win, RES_R_LOW);
 	if (THREADS > 1)
 	{
 		if (img_multithreaded(rt) == false)
@@ -25,7 +26,6 @@ bool	windows_setup_mlx(t_rt *rt)
 			return (EXIT_FAILURE);
 	}
 	center_window(rt->win);
-	res_setscale(rt->win, RES_R_LOW);
 	mlx_set_window_title(rt->win->mlx, "miniRT");
 	return (EXIT_SUCCESS);
 }

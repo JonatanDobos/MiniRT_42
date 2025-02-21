@@ -16,13 +16,16 @@ static void	init_img_size(t_rt *rt)
 	rt->threads[i].img_width = rt->win->window_wdth;
 	rt->threads[i].aspectr = (float)rt->win->window_wdth / (float)(height + remainder);
 	rt->threads[i].start_y = 0;
+	rt->threads[i].rdr_height = rt->threads[i].img_height / rt->win->res_ratio;
 	++i;
 	while (i < THREADS - 1)
 	{
 		rt->threads[i].img_height = height;
 		rt->threads[i].img_width = rt->win->window_wdth;
 		rt->threads[i].aspectr = (float)rt->win->window_wdth / (float)height;
-		rt->threads[i].start_y = rt->threads[i - 1].img_height + rt->threads[i - 1].start_y;
+		rt->threads[i].start_y = (float)(rt->threads[i - 1].img_height / rt->win->res_ratio) + rt->threads[i - 1].start_y;
+		rt->threads[i].rdr_height = (rt->threads[i].img_height / rt->win->res_ratio) + rt->threads[i].start_y;
+		printf("win_res_ratio %f\tstart_y %d\n");//t
 		++i;
 	}
 }
