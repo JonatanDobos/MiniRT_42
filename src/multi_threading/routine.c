@@ -19,6 +19,7 @@ void	thread_routine_init(t_thread *th)
 	render_routine(th, th->start_y);
 }
 
+// Ook iets doen wanneer de render onderbroken wordt?
 static void	render_routine(t_thread *th, uint16_t start_y)
 {
 	while (check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, th->rt->quit_routine) == false)
