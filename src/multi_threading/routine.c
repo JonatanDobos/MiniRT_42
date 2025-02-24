@@ -33,6 +33,7 @@ static void	render_routine(t_thread *th, uint16_t y)
 	++th->rt->stopped_threads;
 	pthread_cond_signal(&th->rt->cond_done_rend);
 	pthread_mutex_unlock(th->rt->mtx + MTX_STOPPED_THREADS);
+	puts("gitOUT");
 }
 
 static void	resynchronize_after_rendering(t_thread *th)

@@ -80,7 +80,7 @@ typedef struct	s_rt
 	uint16_t		finished_rendering;
 	pthread_cond_t	cond_interupt;
 	uint16_t		threads_waiting;
-	bool			stopped_threads;
+	size_t			stopped_threads;
 	bool			pressed_key;
 	bool			thread_creation_check;
 	bool			quit_routine;

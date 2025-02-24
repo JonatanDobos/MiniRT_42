@@ -71,7 +71,7 @@ bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 	while (y_rend < total_height)
 	{
 		pthread_mutex_lock(th->rt->mtx + MTX_RENDER_INTERUPT);
-		printf(">%d<\n", th->rt->scene->render_input);
+		// printf(">%d<\n", th->rt->scene->render_input);
 		// if (th->rt->scene->render_input == true) {
 		if (th->rt->stopped_threads == true) {
 // 			pthread_mutex_lock(th->rt->mtx + MTX_RENDER_INTERUPT);
