@@ -95,7 +95,7 @@ MAIN			:=	main.c
 
 PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c _debug.c
 
-THREADING		:=	thread_setup.c	thread_terminate.c	routine.c	init_mlx_images.c		utils_thread.c
+THREADING		:=	thread_setup.c	thread_terminate.c	routine.c	init_mlx_images.c		utils_thread.c	read_scene.c
 
 MLX				:=	window_setup.c			hooks.c		camera_move.c	camera_rotate.c	\
 					object_modification.c	object_move.c	object_rotate.c		hooks_move.c

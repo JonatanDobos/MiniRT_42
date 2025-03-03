@@ -52,7 +52,7 @@ typedef struct s_parsing_value_check
 
 // parsing.c
 
-int16_t		input_parse(t_rt *m, const char *file);
+int16_t	input_parse(t_rt *m, const char *file, t_scene *dest);
 
 // parse_peripherals.c
 

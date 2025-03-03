@@ -12,6 +12,10 @@ t_cint32	cleanup(t_rt *rt)
 		pthread_mutex_unlock(rt->mtx + MTX_SYNC);
 		destroy_threads(rt, THREADS - 1);
 		destroy_mutexes(rt, MTX_AMOUNT);
+		if (rt->read_scene->objs)
+			free(rt->read_scene->objs);
+		if (rt->read_scene->lights)
+			free(rt->read_scene->lights);
 	}
 	else if (rt->win->img != NULL)
 		mlx_delete_image(rt->win->mlx, rt->win->img);

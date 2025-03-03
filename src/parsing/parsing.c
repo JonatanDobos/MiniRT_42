@@ -37,24 +37,24 @@ static int16_t	input_line_check(char *line)
 	return (SUCCESS);
 }
 
-static int16_t	input_type_parse(t_rt *m, t_value_check *vc, char *line)
+static int16_t	input_type_parse(t_scene *dest, t_value_check *vc, char *line)
 {
 	if (!ft_strncmp(line, "A", 1))
-		return (parse_amb(m->scene, vc, nxtv(line)));
+		return (parse_amb(dest, vc, nxtv(line)));
 	if (!ft_strncmp(line, "C", 1))
-		return (parse_cam(m->scene, vc, nxtv(line)));
+		return (parse_cam(dest, vc, nxtv(line)));
 	if (!ft_strncmp(line, "L", 1))
-		return (parse_light(m->scene, vc, nxtv(line)));
+		return (parse_light(dest, vc, nxtv(line)));
 	if (!ft_strncmp(line, "pl", 2))
-		return (parse_pl(m->scene, vc, nxtv(line)));
+		return (parse_pl(dest, vc, nxtv(line)));
 	if (!ft_strncmp(line, "sp", 2))
-		return (parse_sp(m->scene, vc, nxtv(line)));
+		return (parse_sp(dest, vc, nxtv(line)));
 	if (!ft_strncmp(line, "cy", 2))
-		return (parse_cy(m->scene, vc, nxtv(line)));
+		return (parse_cy(dest, vc, nxtv(line)));
 	return (SUCCESS);
 }
 
-int16_t	input_parse(t_rt *m, const char *file)
+int16_t	input_parse(t_rt *m, const char *file, t_scene *dest)
 {
 	const int		fd = open(file, O_RDONLY);
 	char			*line;
@@ -65,8 +65,8 @@ int16_t	input_parse(t_rt *m, const char *file)
 	if (ft_strncmp(file + (ft_strlen(file) - 3), ".rt", 4))
 		return (close(fd), errset(perr("input_parse", ERRFEXT)));
 	ft_bzero(&vc, sizeof(t_value_check));
-	dynarr_create(&m->scene->obj_dynarr, 5, sizeof(t_objs));
-	dynarr_create(&m->scene->light_dynarr, 5, sizeof(t_objs));
+	dynarr_create(&dest->obj_dynarr, 5, sizeof(t_objs));
+	dynarr_create(&dest->light_dynarr, 5, sizeof(t_objs));
 	while (true)
 	{
 		line = gnl(fd);
@@ -76,16 +76,16 @@ int16_t	input_parse(t_rt *m, const char *file)
 			break ;
 		if (input_line_check(line) != SUCCESS)
 			return (puts("2"), close(fd), free_str(&line), cleanup(m), errset(ERTRN));
-		if (input_type_parse(m, &vc, line) != SUCCESS)
+		if (input_type_parse(dest, &vc, line) != SUCCESS)
 			return (puts("3"), close(fd), free_str(&line), cleanup(m), errset(ERTRN));
 		free_str(&line);
 	}
 	if (check_values(&vc) != SUCCESS)
 		return (close(fd), free_str(&line), cleanup(m), errset(ERTRN));
-	dynarr_shrink_to_fit(&m->scene->obj_dynarr);
-	dynarr_shrink_to_fit(&m->scene->light_dynarr);
-	m->scene->objs = (t_objs *)dynarr_take_arr(&m->scene->obj_dynarr);
-	m->scene->lights = (t_objs *)dynarr_take_arr(&m->scene->light_dynarr);
-	// _print_parsing(m->scene);//test
+	dynarr_shrink_to_fit(&dest->obj_dynarr);
+	dynarr_shrink_to_fit(&dest->light_dynarr);
+	dest->objs = (t_objs *)dynarr_take_arr(&dest->obj_dynarr);
+	dest->lights = (t_objs *)dynarr_take_arr(&dest->light_dynarr);
+	// _print_parsing(dest);//test
 	return (close(fd), free_str(&line), SUCCESS);
 }

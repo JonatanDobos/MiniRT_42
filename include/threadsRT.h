@@ -53,4 +53,7 @@ bool	check_bool(t_mtx *mutex, bool to_check);
 bool	toggle_bool(t_mtx *mutex, bool *to_toggle, bool new_value);
 void	print_lock(t_mtx *print, char *str);
 
+int16_t	init_read_scene(t_scene *src, t_scene *dest);
+int16_t	cpy_scene(t_scene *src, t_scene *dest);
+
 #endif
