@@ -43,6 +43,7 @@ int32_t	multithreaded(t_rt *rt, t_scene *read_scene)
 	}
 	pthread_mutex_lock(rt->mtx + MTX_RESYNC);
 	pthread_mutex_unlock(rt->mtx + MTX_SYNC);
+	return (SUCCESS);
 }
 
 int main(int argc, char **argv)

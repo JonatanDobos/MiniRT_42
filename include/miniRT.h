@@ -74,8 +74,6 @@ typedef struct	s_rt
 	t_scene			*scene;
 	t_scene			*read_scene;
 	t_window		*win;
-	t_mtx			mtx[MTX_AMOUNT];
-	t_thread		threads[THREADS];
 	pthread_cond_t	cond;
 	uint16_t		finished_rendering;
 	uint16_t		stopped_threads;
@@ -83,6 +81,8 @@ typedef struct	s_rt
 	bool			thread_creation_check;
 	bool			quit_routine;
 	int				errnum;
+	t_mtx			mtx[MTX_AMOUNT];
+	t_thread		threads[THREADS];
 }	t_rt;
 
 #endif
