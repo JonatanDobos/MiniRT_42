@@ -149,7 +149,11 @@ void	loop_hook_threaded(t_rt *rt)
 	if (rt->scene->render == true || rt->scene->render_ongoing == true)
 	{
 		if (rt->scene->render == true)
-			cpy_scene(rt->scene, rt->read_scene);//LEFTOFF
+		{
+			pthread_mutex_lock(rt->mtx + MTX_CPYSCENE);
+			cpy_scene(rt->scene, rt->read_scene);
+			pthread_mutex_unlock(rt->mtx + MTX_CPYSCENE);
+		}
 		render_manager_thread(rt);
 		time = mlx_get_time() - time;
 		rt->win->delta_time = time;

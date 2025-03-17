@@ -80,6 +80,7 @@ typedef struct	s_rt
 	uint16_t		stopped_threads;
 	bool			pressed_key;
 	bool			thread_creation_check;
+	bool			mtx_init_check;
 	bool			quit_routine;
 	int				errnum;
 	t_mtx			mtx[MTX_AMOUNT];

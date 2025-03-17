@@ -9,9 +9,13 @@ t_cint32	cleanup(t_rt *rt)
 	{
 		// Wat gebeurt er bij mutex SYNC?
 		// toggle_bool(rt->mtx + MTX_QUIT_ROUTINE, &rt->quit_routine, true);
-		pthread_mutex_unlock(rt->mtx + MTX_SYNC);
-		destroy_threads(rt, THREADS - 1);
-		destroy_mutexes(rt, MTX_AMOUNT);
+		if (rt->mtx_init_check == true)
+		{
+			pthread_mutex_unlock(rt->mtx + MTX_SYNC);
+			destroy_mutexes(rt, MTX_AMOUNT);
+		}
+		if (rt->thread_creation_check == true)
+			destroy_threads(rt, THREADS - 1);
 		if (rt->read_scene->objs)
 			free(rt->read_scene->objs);
 		if (rt->read_scene->lights)

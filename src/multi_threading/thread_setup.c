@@ -18,6 +18,7 @@ bool	initialize_mutexes(t_rt *rt)
 			write(STDERR_FILENO, "pthread_mutex_init: Failed\n", 27);
 			if (i > 0)
 				destroy_mutexes(rt, i);
+			rt->mtx_init_check = false;
 			return (false);
 		}
 		++i;
@@ -44,7 +45,7 @@ bool	launch_pthreads(t_rt *rt)
 	while (i < THREADS - 1)
 	{
 		rt->threads[i].rt = rt;
-		rt->threads[i].scene = rt->scene;
+		rt->threads[i].scene = rt->read_scene;
 		rt->threads[i].win = rt->win;
 		rt->threads[i].id = i + 1;
 		if (pthread_create(&rt->threads[i].thread, NULL, (t_cast)thread_routine_init, &rt->threads[i]) != 0)

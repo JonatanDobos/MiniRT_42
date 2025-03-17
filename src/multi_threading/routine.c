@@ -24,7 +24,7 @@ static void	render_routine(t_thread *th, uint16_t start_y)
 {
 	while (check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, th->rt->quit_routine) == false)
 	{
-		printf("render thread %d\n", th->id);
+		// printf("render thread %d\n", th->id);
 		if (thread_render(th, start_y, 0) == true)
 			continue ;
 		resynchronize_after_rendering(th);
