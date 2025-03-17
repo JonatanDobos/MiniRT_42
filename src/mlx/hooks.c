@@ -121,7 +121,7 @@ void	loop_hook(t_rt *rt)
 	}
 }
 
-void	loop_tasks(t_rt *rt)
+void	render_updates(t_rt *rt)
 {
 	if (rt->scene->render == true)
 		cpy_scene(rt->scene, rt->read_scene);
@@ -155,7 +155,7 @@ void	loop_hook_threaded(t_rt *rt)
 		// printf("huh %d\n", rt->finished_rendering);
 		pthread_mutex_unlock(rt->mtx + MTX_RESYNC);
 		pthread_mutex_lock(rt->mtx + MTX_RESYNC);
-		loop_tasks(rt);
+		render_updates(rt);
 		pthread_mutex_unlock(rt->mtx + MTX_SYNC);
 	}
 	pthread_mutex_unlock(rt->mtx + MTX_DONE_RENDERING);
