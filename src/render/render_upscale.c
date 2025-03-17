@@ -28,9 +28,10 @@ void	render_manager(t_rt *rt)
 
 void	render_manager_thread(t_rt *rt)
 {
-	// pthread_mutex_lock(rt->mtx + MTX_RENDER);
 	if (rt->scene->render == true)
 	{
+		if (rt->win->res_ratio == RES_R_LOW)
+			return ;
 		rt->win->res_ratio = RES_R_LOW;
 		rt->scene->render_ongoing = true;
 		mlx_set_window_title(rt->win->mlx, "Rendering miniRT");
@@ -46,5 +47,4 @@ void	render_manager_thread(t_rt *rt)
 	}
 	rt->win->rndr_hght = (float)rt->win->mlx->height / rt->win->res_ratio;
 	rt->win->rndr_wdth = (float)rt->win->mlx->width / rt->win->res_ratio;
-	// pthread_mutex_unlock(rt->mtx + MTX_RENDER);
 }

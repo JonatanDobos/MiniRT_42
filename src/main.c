@@ -64,6 +64,7 @@ int main(int argc, char **argv)
 	init_hooks(&rt);
 	if (THREADS > 1)
 	{
+		rt.scene->render_ongoing = true;
 		if (multithreaded(&rt, &read_sc))
 			return (errset(ERTRN));
 	}

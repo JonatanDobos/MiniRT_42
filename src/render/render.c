@@ -69,11 +69,9 @@ bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 	ray.origin = th->scene->camera.coords;
 	while (y_rend < th->rdr_height)
 	{
-		// secure with mutex
-		if (th->win->res_ratio != RES_R_LOW && check_bool(th->rt->mtx + MTX_RENDER, th->rt->scene->render) == true)
+		if (th->win->res_ratio != RES_R_LOW && check_bool(th->rt->mtx + MTX_RENDER, th->scene->render) == true)
 			return (true);
 		x = 0;
-		pthread_mutex_lock(th->rt->mtx + MTX_CPYSCENE);
 		while (x < th->win->rndr_wdth)
 		{
 			ndc_x = (2.0F * ((x + 0.5F) / (float)th->win->rndr_wdth) - 1.0F) * th->rt->win->aspectrat;
@@ -82,7 +80,6 @@ bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 			set_pixel_multi(th->img, th->win->res_ratio, (t_axis2){x, y_img}, trace_ray(th->scene, ray));
 			++x;
 		}
-		pthread_mutex_unlock(th->rt->mtx + MTX_CPYSCENE);
 		++y_img;
 		++y_rend;
 	}
