@@ -28,7 +28,9 @@ static void	render_routine(t_thread *th, uint16_t start_y)
 	{
 		time = mlx_get_time();
 		// printf("render thread %d\n", th->id);
-		if (thread_render(th, start_y, 0) == false)
+		if (th->rt->win->res_ratio == RES_R_LOW)
+			thread_first_render(th, start_y, 0);
+		else if (thread_render(th, start_y, 0) == false)
 			th->win->delta_time = mlx_get_time() - time;
 		resynchronize_after_rendering(th);
 	}

@@ -7,7 +7,7 @@
 
 # define RES_STEP_SIZE 1.0F
 # define RES_RATIO_MAX 20.0F
-# define RES_R_LOW 15.0F	// thread 1.0F, mandatory 18.0F
+# define RES_R_LOW 10.0F	// thread 1.0F, mandatory 18.0F
 # define RES_R_FULL 1.0F
 
 # define SHADOW_EPSILON 1e-3F
@@ -58,5 +58,6 @@ void		render_manager(t_rt *rt);
 void		render_manager_thread(t_rt *rt);
 void		render_upscale_thread(t_thread *th);
 bool		thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img);
+void		thread_first_render(t_thread *th, uint16_t y_rend, uint16_t y_img);
 
 #endif

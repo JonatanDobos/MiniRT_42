@@ -152,7 +152,7 @@ void	loop_hook_threaded(t_rt *rt)
 		{
 			pthread_cond_wait(&rt->cond, rt->mtx + MTX_RESYNC);
 		}
-		// printf("huh %d\n", rt->finished_rendering);
+		toggle_bool(rt->mtx + MTX_RENDER, &rt->read_scene->render, false);
 		pthread_mutex_unlock(rt->mtx + MTX_RESYNC);
 		pthread_mutex_lock(rt->mtx + MTX_RESYNC);
 		render_updates(rt);
