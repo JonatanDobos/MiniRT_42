@@ -5,32 +5,28 @@
 #include <threadsRT.h>
 
 //	Static functions
-static void	render_routine(t_thread *th, uint16_t y);
+static void	render_routine(t_thread *th);
 static void	resynchronize_after_rendering(t_thread *th);
 
 void	thread_routine_init(t_thread *th)
 {
 	pthread_mutex_lock(th->rt->mtx + MTX_SYNC);
 	pthread_mutex_unlock(th->rt->mtx + MTX_SYNC);
-	if (check_bool(th->rt->mtx + MTX_CREATION_CHECK, th->rt->thread_creation_check) == false)
+	if (check_bool(th->rt->mtx + MTX_CREATION_CHECK, &th->rt->thread_creation_check) == false)
 	{
 		return ;
 	}
-	render_routine(th, th->start_y);
+	render_routine(th);
 }
 
 // Ook iets doen wanneer de render onderbroken wordt?
-static void	render_routine(t_thread *th, uint16_t start_y)
+static void	render_routine(t_thread *th)
 {
 	double	time;
-
-	while (check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, th->rt->quit_routine) == false)
+	while (check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, &th->rt->quit_routine) == false)
 	{
 		time = mlx_get_time();
-		// printf("render thread %d\n", th->id);
-		if (th->rt->win->res_ratio == RES_R_LOW)
-			thread_first_render(th, start_y, 0);
-		else if (thread_render(th, start_y, 0) == false)
+		if (thread_render(th) == false)
 			th->win->delta_time = mlx_get_time() - time;
 		resynchronize_after_rendering(th);
 	}

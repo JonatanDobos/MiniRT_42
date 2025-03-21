@@ -66,6 +66,7 @@ enum e_mtx
 	MTX_STOPPED_THREADS,
 	MTX_RES_RATIO,
 	MTX_RENDER,
+	MTX_Y_INDEX,
 	MTX_AMOUNT
 };
 
@@ -84,7 +85,7 @@ typedef struct	s_rt
 	bool			quit_routine;
 	int				errnum;
 	t_mtx			mtx[MTX_AMOUNT];
-	t_thread		threads[THREADS];
+	t_thread		threads[THREADS - 1];
 }	t_rt;
 
 #endif
