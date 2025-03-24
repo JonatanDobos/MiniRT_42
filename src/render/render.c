@@ -70,7 +70,8 @@ bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 	ray.origin = th->scene->camera.coords;
 	while (y_rend < th->rdr_height)
 	{
-		if (check_bool(th->rt->mtx + MTX_RENDER, th->scene->render) == true)
+		if (check_bool(th->rt->mtx + MTX_RENDER, th->scene->render) == true
+			|| check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, th->rt->quit_routine) == true)
 			return (true);
 		x = 0;
 		while (x < th->win->rndr_wdth)

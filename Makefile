@@ -26,7 +26,8 @@ CFLAGS			+=	-g
 # CFLAGS			+=	-Wunused -Wuninitialized -Wunreachable-code
 
 #		Temporary CFLAGS
-CFLAGS			+=	-pthread -D THREADS=$(N_JOBS)
+CFLAGS			+=	-pthread -D THREADS=2
+# CFLAGS			+=	-pthread -D THREADS=$(N_JOBS)
 CFLAGS			+=	-Wno-unused-result
 #		Optimization flags
 # Generate code optimized for the host machine's CPU

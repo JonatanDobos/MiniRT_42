@@ -65,5 +65,5 @@ void	render_manager_thread(t_rt *rt)
 
 	rt->win->rndr_hght = (float)rt->win->mlx->height / rt->win->res_ratio;
 	rt->win->rndr_wdth = (float)rt->win->mlx->width / rt->win->res_ratio;
-	// img_size(rt); // LEFTOFF
+	img_size(rt); // LEFTOFF
 }
