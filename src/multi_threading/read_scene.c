@@ -20,9 +20,11 @@ int16_t	init_read_scene(t_scene *src, t_scene *dest)
 
 int16_t	cpy_scene(t_scene *src, t_scene *dest)
 {
-	const t_objs	*dest_obj = dest->objs;
-	const t_objs	*dest_lights = dest->lights;
+	t_objs	*dest_obj;
+	t_objs	*dest_lights;
 
+	dest_obj = dest->objs;
+	dest_lights = dest->lights;
 	ft_memcpy(dest, src, sizeof(t_scene));
 	dest->objs = dest_obj;
 	dest->lights = dest_lights;

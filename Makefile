@@ -206,8 +206,8 @@ fcln:	cln
 	@printf "$(REMOVED)" $(NAME) $(CUR_DIR)
 
 re:
-	$(MAKE) fclean
-	$(MAKE) all
+	$(MAKE) $(PRINT_NO_DIR) fclean
+	$(MAKE) $(PRINT_NO_DIR) all
 
 malloc_wrap: all
 

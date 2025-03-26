@@ -26,7 +26,7 @@ void	render_manager(t_rt *rt)
 	render(rt);
 }
 
-static void	img_size(t_rt *rt)//LEFTOFF DOESNT WORK?
+static void	img_size(t_rt *rt)
 {
 	uint16_t	i;
 
@@ -62,8 +62,7 @@ void	render_manager_thread(t_rt *rt)
 		rt->scene->render_ongoing = false;
 		mlx_set_window_title(rt->win->mlx, "miniRT");
 	}
-
 	rt->win->rndr_hght = (float)rt->win->mlx->height / rt->win->res_ratio;
 	rt->win->rndr_wdth = (float)rt->win->mlx->width / rt->win->res_ratio;
-	img_size(rt); // LEFTOFF
+	img_size(rt);
 }

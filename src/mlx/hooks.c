@@ -155,7 +155,6 @@ void	loop_hook_threaded(t_rt *rt)
 	movement(rt);
 	if (rt->scene->render == true)
 		toggle_bool(rt->mtx + MTX_RENDER, &rt->read_scene->render, true);
-	usleep(100);//does this help?
 	pthread_mutex_lock(rt->mtx + MTX_DONE_RENDERING);
 	if ((rt->scene->render == true || rt->scene->render_ongoing == true)
 		&& rt->finished_rendering == THREADS - 1)
