@@ -28,11 +28,11 @@ typedef struct s_window
 	uint16_t		rndr_hght;
 	uint16_t		window_wdth;
 	uint16_t		window_hght;
+	uint16_t		set_rndr_hght;
 	float			aspectrat;
 	float			res_ratio;
 	float			delta_time;
 	bool			resize;
-	uint16_t		y_shared;
 	mlx_texture_t	*logo;
 }	t_window;
 

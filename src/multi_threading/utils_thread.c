@@ -6,12 +6,12 @@
 #include <threadsRT.h>
 #include <unistd.h>
 
-int	check_bool(t_mtx *mutex, int *to_check)
+bool	check_bool(t_mtx *mutex, bool to_check)
 {
-	int	value;
+	bool	value;
 
 	pthread_mutex_lock(mutex);
-	value = *to_check;
+	value = to_check;
 	pthread_mutex_unlock(mutex);
 	return (value);
 }

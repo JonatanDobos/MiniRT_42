@@ -26,7 +26,8 @@ CFLAGS			+=	-g
 # CFLAGS			+=	-Wunused -Wuninitialized -Wunreachable-code
 
 #		Temporary CFLAGS
-CFLAGS			+=	-pthread -D THREADS=$(N_JOBS)
+CFLAGS			+=	-pthread -D THREADS=2
+# CFLAGS			+=	-pthread -D THREADS=$(N_JOBS)
 CFLAGS			+=	-Wno-unused-result
 #		Optimization flags
 # Generate code optimized for the host machine's CPU
@@ -204,7 +205,9 @@ fcln:	cln
 	@$(RM) $(NAME)
 	@printf "$(REMOVED)" $(NAME) $(CUR_DIR)
 
-re:		fclean all
+re:
+	$(MAKE) $(PRINT_NO_DIR) fclean
+	$(MAKE) $(PRINT_NO_DIR) all
 
 malloc_wrap: all
 

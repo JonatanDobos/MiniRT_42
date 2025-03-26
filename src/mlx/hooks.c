@@ -121,12 +121,26 @@ void	loop_hook(t_rt *rt)
 	}
 }
 
+void	switch_pixelarray(t_rt *rt)
+{
+	if (rt->threads[0].pixels == rt->threads[0].pixels_mlx)
+	{
+		rt->threads[0].img->pixels = rt->threads[0].pixels_mlx;
+		rt->threads[0].pixels = rt->threads[0].pixels_own;
+	}
+	else
+	{
+		rt->threads[0].img->pixels = rt->threads[0].pixels_own;
+		rt->threads[0].pixels = rt->threads[0].pixels_mlx;
+	}
+}
+
 void	render_updates(t_rt *rt)
 {
 	if (rt->scene->render == true)
 		cpy_scene(rt->scene, rt->read_scene);
-	printf("res ratio: %f\n", rt->win->res_ratio);//t
 	render_manager_thread(rt);
+	printf("res ratio: %f\n", rt->win->res_ratio);//t
 	rt->win->delta_time = 0.01F;// temporary!
 	rt->scene->cam_fov_speed = FOV_SCROLL_SPEED * rt->win->delta_time;
 	rt->scene->cam_m_speed = CAM_MOVE_SPEED * rt->win->delta_time;
@@ -138,17 +152,13 @@ void	render_updates(t_rt *rt)
 
 void	loop_hook_threaded(t_rt *rt)
 {
-	// puts("once");
-
 	movement(rt);
 	if (rt->scene->render == true)
 		toggle_bool(rt->mtx + MTX_RENDER, &rt->read_scene->render, true);
-	// usleep(100);//does this help?
 	pthread_mutex_lock(rt->mtx + MTX_DONE_RENDERING);
 	if ((rt->scene->render == true || rt->scene->render_ongoing == true)
 		&& rt->finished_rendering == THREADS - 1)
 	{
-		rt->win->y_shared = 0;
 		rt->pressed_key = false;
 		pthread_mutex_lock(rt->mtx + MTX_SYNC);
 		while (rt->finished_rendering != 0)
@@ -159,6 +169,7 @@ void	loop_hook_threaded(t_rt *rt)
 		pthread_mutex_unlock(rt->mtx + MTX_RESYNC);
 		pthread_mutex_lock(rt->mtx + MTX_RESYNC);
 		render_updates(rt);
+		switch_pixelarray(rt);
 		pthread_mutex_unlock(rt->mtx + MTX_SYNC);
 	}
 	pthread_mutex_unlock(rt->mtx + MTX_DONE_RENDERING);

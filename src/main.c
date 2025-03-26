@@ -55,10 +55,13 @@ int main(int argc, char **argv)
 	t_window	win;
 
 	init_main(&rt, &sc, &win);
+	if (SCREEN_WIDTH < 5 || SCREEN_HEIGHT < 5)
+		return (write(1, "Screensizes are lower than allowed\n", 35), EXIT_SUCCESS);
 	if (check_input(&rt, argc, argv) != 0 || \
 		input_parse(&rt, argv[1], &sc) != 0 || \
 		windows_setup_mlx(&rt) != 0)
 	{
+		puts("hallo>??\n\n\n");
 		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	}
 	init_hooks(&rt);
