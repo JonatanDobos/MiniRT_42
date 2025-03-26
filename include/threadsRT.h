@@ -28,11 +28,13 @@ typedef struct	s_thread
 	t_window		*win;
 	mlx_image_t		*img;
 	uint8_t			*pixels;
+	uint8_t			*pixels_mlx;
+	uint8_t			*pixels_own;
 	uint16_t		img_width;
 	uint16_t		img_height;
 	uint16_t		rdr_height;
 	uint16_t		start_y;
-	float			aspectr;
+	// float			aspectr;
 	t_mtx			mtx;
 	pthread_t		thread;
 }	t_thread;

@@ -73,3 +73,8 @@ t_vec4	vec_clamp(t_vec4 value, float min, float max)
 		clamp(value[3], min, max)
 	};
 }
+
+int32_t	r_down(float value)
+{
+	return ((int32_t)(value - 0.5));
+}

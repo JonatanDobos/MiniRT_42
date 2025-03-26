@@ -42,7 +42,7 @@ uint8_t		ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t);
 
 void		set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color);
 void		scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
-void		set_pixel_multi(mlx_image_t *img, float res_ratio, t_axis2 inp, t_vec4 color);
+void		set_pixel_multi(t_thread *th, uint16_t res_ratio, t_axis2 inp, t_vec4 color);
 
 // trace_ray.c
 

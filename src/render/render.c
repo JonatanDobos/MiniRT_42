@@ -79,7 +79,7 @@ bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 			ndc_x = (2.0F * ((x + 0.5F) / (float)th->win->rndr_wdth) - 1.0F) * th->rt->win->aspectrat;
 			ndc_y = 1.0F - 2.0F * ((y_rend + 0.5F) / (float)th->win->rndr_hght);
 			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, th->scene->camera.c.zvp_dist, 0.0F}, th->scene->camera.c.orientation);
-			set_pixel_multi(th->img, th->win->res_ratio, (t_axis2){x, y_img}, trace_ray(th->scene, ray));
+			set_pixel_multi(th, (uint16_t)th->win->res_ratio, (t_axis2){x, y_img}, trace_ray(th->scene, ray));
 			++x;
 		}
 		++y_img;
@@ -104,7 +104,7 @@ void	thread_first_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 			ndc_x = (2.0F * ((x + 0.5F) / (float)th->win->rndr_wdth) - 1.0F) * th->rt->win->aspectrat;
 			ndc_y = 1.0F - 2.0F * ((y_rend + 0.5F) / (float)th->win->rndr_hght);
 			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, th->scene->camera.c.zvp_dist, 0.0F}, th->scene->camera.c.orientation);
-			set_pixel_multi(th->img, th->win->res_ratio, (t_axis2){x, y_img}, trace_ray(th->scene, ray));
+			set_pixel_multi(th, (uint16_t)th->win->res_ratio, (t_axis2){x, y_img}, trace_ray(th->scene, ray));
 			++x;
 		}
 		++y_img;

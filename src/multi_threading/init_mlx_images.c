@@ -11,22 +11,28 @@ static void	init_img_size(t_rt *rt)
 	const uint16_t	remainder = rt->win->window_hght % (THREADS - 1);
 	uint16_t		i;
 //	render_width nog initializen????
+	printf("Window Height: %u, Window Width: %u, Threads: %d\n", 
+		rt->win->window_hght, rt->win->window_wdth, THREADS);
 	i = 0;
 	rt->threads[i].img_height = height + remainder;
 	rt->threads[i].img_width = rt->win->window_wdth;
-	rt->threads[i].aspectr = (float)rt->win->window_wdth / (float)(height + remainder);
+	// rt->threads[i].aspectr = (float)rt->win->window_wdth / (float)(height + remainder);
 	rt->threads[i].start_y = 0;
-	rt->threads[i].rdr_height = (float)(rt->threads[i].img_height) / rt->win->res_ratio;
-	++i;
-	while (i < THREADS - 1)
-	{
-		rt->threads[i].img_height = height;
-		rt->threads[i].img_width = rt->win->window_wdth;
-		rt->threads[i].aspectr = (float)rt->win->window_wdth / (float)height;
-		rt->threads[i].start_y = (uint16_t)((float)(rt->threads[i - 1].img_height) / rt->win->res_ratio) + rt->threads[i - 1].start_y;
-		rt->threads[i].rdr_height = (uint16_t)((float)(rt->threads[i].img_height) / rt->win->res_ratio) + rt->threads[i].start_y;
-		++i;
-	}
+	rt->threads[i].rdr_height = rt->threads[i].img_height / (uint16_t)(rt->win->res_ratio);
+	printf("Thread %hu: img_height=%hu, img_width=%hu, start_y=%hu, rdr_height=%hu\n",
+		i, rt->threads[i].img_height, rt->threads[i].img_width, rt->threads[i].start_y, rt->threads[i].rdr_height);
+	// ++i;
+	// while (i < THREADS - 1)
+	// {
+	// 	rt->threads[i].img_height = height;
+	// 	rt->threads[i].img_width = rt->win->window_wdth;
+	// 	// rt->threads[i].aspectr = (float)rt->win->window_wdth / (float)height;
+	// 	rt->threads[i].start_y = rt->threads[i - 1].img_height / (uint16_t)(rt->win->res_ratio) + rt->threads[i - 1].start_y;
+	// 	rt->threads[i].rdr_height = rt->threads[i].img_height / (uint16_t)(rt->win->res_ratio) + rt->threads[i].start_y;
+	// 	printf("Thread %hu: img_height=%hu, img_width=%hu, start_y=%hu, rdr_height=%hu\n",
+	// 	i, rt->threads[i].img_height, rt->threads[i].img_width, rt->threads[i].start_y, rt->threads[i].rdr_height);
+	// 	++i;
+	// }
 }
 
 bool	img_multithreaded(t_rt *rt)
@@ -49,8 +55,12 @@ bool	img_multithreaded(t_rt *rt)
 		{
 			return (img_deletion(rt, i), false);
 		}
-		rt->threads[i].pixels = (uint8_t *)rt->threads[i].img->pixels;
+		rt->threads[i].pixels_mlx = (uint8_t *)rt->threads[i].img->pixels;
+		rt->threads[i].pixels_own = (uint8_t *)malloc(sizeof(uint8_t) * (rt->threads[i].img_width * rt->threads[i].img_height * 4));
+		if (rt->threads[i].pixels_own == NULL)
+			return (img_deletion(rt, i), false);
 		last_height += rt->threads[i].img_height;
+		rt->threads[i].pixels = rt->threads[i].pixels_own;
 		++i;
 	}
 	return (true);
