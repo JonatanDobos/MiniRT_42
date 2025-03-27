@@ -94,28 +94,33 @@ void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *
 	}
 }
 
-static void	mouse_clicks_on_obj(t_scene *scene, t_ray ray)
+static void	mouse_clicks_on_obj(t_scene *sc, t_ray ray)
 {
 	float		closest_t;
 	uint8_t		closest_intersect_type;
 	t_vec4		pixel_color;
 	t_vec4		normal;
-	uint32_t	closest_obj;
+	t_objs		*closest_obj;
+	uint32_t	closest_obj_index;
 	t_vec4		hit_point;
 
 	pixel_color = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
-	closest_obj = find_closest_object(scene, ray, &closest_t, &closest_intersect_type);
-	if (closest_t < INFINITY)
+	closest_obj_index = find_closest_object(sc, ray, &closest_t, &closest_intersect_type);
+	closest_obj = sc->objs + closest_obj_index;
+	if (sc->intersect_lights == true)
+		closest_obj = render_light(sc, ray, &closest_t, closest_obj);
+	if (closest_t < INFINITY && closest_t > 0.0F)
 	{
-		scene->render = true;
-		if (scene->selected_obj == NULL || closest_obj != scene->sel_obj_index)
+		sc->render = true;
+		if (sc->selected_obj == NULL || closest_obj != sc->selected_obj)
 		{
-			scene->sel_obj_index = closest_obj;
-			scene->selected_obj = scene->objs + closest_obj;
+			if (closest_obj->type != LIGHT)
+				sc->sel_obj_index = closest_obj_index;
+			sc->selected_obj = closest_obj;
 		}
 		else
 		{
-			scene->selected_obj = NULL;
+			sc->selected_obj = NULL;
 		}
 	}
 }

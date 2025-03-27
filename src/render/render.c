@@ -62,11 +62,11 @@ bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 	t_ray			ray;
 	float			ndc_x;
 	float			ndc_y;
-	puts("\\/");
-	printf("id %d\ty_rend %d\ty_img %d\n", th->id, y_rend, y_img);
-	printf("rend_height %d\timg_height %d\twin_rend %d\twin_height %d\n", th->rdr_height, th->img_height, th->win->rndr_hght, th->win->mlx->height);//t
-	puts("/\\");
-	printf("\n\n");
+	// puts("\\/");
+	// printf("id %d\ty_rend %d\ty_img %d\n", th->id, y_rend, y_img);
+	// printf("rend_height %d\timg_height %d\twin_rend %d\twin_height %d\n", th->rdr_height, th->img_height, th->win->rndr_hght, th->win->mlx->height);//t
+	// puts("/\\");
+	// printf("\n\n");
 	ray.origin = th->scene->camera.coords;
 	while (y_rend < th->rdr_height)
 	{

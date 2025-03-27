@@ -140,7 +140,6 @@ void	render_updates(t_rt *rt)
 	if (rt->scene->render == true)
 		cpy_scene(rt->scene, rt->read_scene);
 	render_manager_thread(rt);
-	printf("res ratio: %f\n", rt->win->res_ratio);//t
 	rt->win->delta_time = 0.01F;// temporary!
 	rt->scene->cam_fov_speed = FOV_SCROLL_SPEED * rt->win->delta_time;
 	rt->scene->cam_m_speed = CAM_MOVE_SPEED * rt->win->delta_time;

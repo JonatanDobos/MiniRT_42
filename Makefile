@@ -74,12 +74,14 @@ else
 endif
 CFLAGS += $(OFLAGS)
 
-SCREEN_RES		:=	$(shell xrandr | grep '*' | uniq | awk '{print $$1}')
-SCREEN_WIDTH	:=	$(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
-SCREEN_HEIGHT	:=	$(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
+# Screen res data uitgecomment omdat het niet werkt op mijn mac...!
+
+# SCREEN_RES		:=	$(shell xrandr | grep '*' | uniq | awk '{print $$1}')
+# SCREEN_WIDTH	:=	$(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
+# SCREEN_HEIGHT	:=	$(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
 
 # Pass screen resolution as defines to the compiler
-CFLAGS += -D SCREEN_WIDTH=$(SCREEN_WIDTH) -D SCREEN_HEIGHT=$(SCREEN_HEIGHT)
+# CFLAGS += -D SCREEN_WIDTH=$(SCREEN_WIDTH) -D SCREEN_HEIGHT=$(SCREEN_HEIGHT)
 
 #		Directories
 BUILD_DIR		:=	.build/
