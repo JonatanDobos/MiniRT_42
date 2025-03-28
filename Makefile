@@ -103,7 +103,7 @@ THREADING		:=	thread_setup.c	thread_terminate.c	routine.c	init_mlx_images.c		uti
 MLX				:=	window_setup.c			hooks.c		camera_move.c	camera_rotate.c	\
 					object_modification.c	object_move.c	object_rotate.c		hooks_move.c
 
-UTILS			:=	utils.c
+UTILS			:=	utils.c		init.c
 
 ERROR			:=	error.c			print.c
 

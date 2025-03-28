@@ -22,4 +22,8 @@ float		clamp(float value, float min, float max);
 t_vec4		vec_clamp(t_vec4 value, float min, float max);
 int32_t		r_down(float value);
 
+// init.c
+
+void		set_starting_res_scale(t_rt *rt);
+
 #endif

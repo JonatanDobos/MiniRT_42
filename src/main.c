@@ -20,7 +20,7 @@ void	init_main(t_rt *rt, t_scene *scn, t_window *win)
 	errset((int64_t)&rt->errnum);
 	rt->scene = scn;
 	rt->win = win;
-	rt->win->res_ratio = 1.0F;
+	rt->win->res_ratio = 1;
 	scn->render = true;
 }
 
@@ -61,13 +61,13 @@ int main(int argc, char **argv)
 		input_parse(&rt, argv[1], &sc) != 0 || \
 		windows_setup_mlx(&rt) != 0)
 	{
-		puts("hallo>??\n\n\n");
 		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	}
+	set_starting_res_scale(&rt);
 	init_hooks(&rt);
 	if (THREADS > 1)
 	{
-		rt.scene->render_ongoing = true;
+		rt.scene->render_ongoing = false;
 		if (multithreaded(&rt, &read_sc))
 			return (errset(ERTRN));
 	}

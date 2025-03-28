@@ -28,12 +28,12 @@ static void	render_routine(t_thread *th, uint16_t start_y)
 	{
 		time = mlx_get_time();
 		// printf("render thread %d\n", th->id);
-		if (th->rt->win->res_ratio == RES_R_LOW)
+		if (th->rt->win->res_ratio == th->win->res_r_start)
 			thread_first_render(th, start_y, 0);
 		else if (thread_render(th, start_y, 0) == false)
 			th->win->delta_time = mlx_get_time() - time;
 		pthread_mutex_lock(th->rt->mtx + MTX_PRINT);
-		printf("> res_ratio: %2hu > DTime: %.4f sec.\n", (uint16_t)th->win->res_ratio, th->win->delta_time);
+		printf("> res_ratio: %2hu > DTime: %.4f sec.\n", th->win->res_ratio, th->win->delta_time);
 		pthread_mutex_unlock(th->rt->mtx + MTX_PRINT);
 		resynchronize_after_rendering(th);
 	}

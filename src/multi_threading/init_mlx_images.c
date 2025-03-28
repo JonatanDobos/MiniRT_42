@@ -18,7 +18,7 @@ static void	init_img_size(t_rt *rt)
 	rt->threads[i].img_width = rt->win->window_wdth;
 	// rt->threads[i].aspectr = (float)rt->win->window_wdth / (float)(height + remainder);
 	rt->threads[i].start_y = 0;
-	rt->threads[i].rdr_height = rt->threads[i].img_height / (uint16_t)(rt->win->res_ratio);
+	rt->threads[i].rdr_height = rt->threads[i].img_height / rt->win->res_ratio;
 	printf("Thread %hu: img_height=%hu, img_width=%hu, start_y=%hu, rdr_height=%hu\n",
 		i, rt->threads[i].img_height, rt->threads[i].img_width, rt->threads[i].start_y, rt->threads[i].rdr_height);
 	// ++i;

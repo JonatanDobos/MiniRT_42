@@ -30,7 +30,8 @@ typedef struct s_window
 	uint16_t		window_hght;
 	uint16_t		set_rndr_hght;
 	float			aspectrat;
-	float			res_ratio;
+	uint16_t		res_ratio;
+	uint16_t		res_r_start;
 	float			delta_time;
 	bool			resize;
 	mlx_texture_t	*logo;

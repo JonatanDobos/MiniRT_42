@@ -8,13 +8,13 @@ void	render_manager(t_rt *rt)
 {
 	if (rt->scene->render == true)
 	{
-		rt->win->res_ratio = RES_R_LOW;
+		rt->win->res_ratio = rt->win->res_r_start;
 		rt->scene->render_ongoing = true;
 		mlx_set_window_title(rt->win->mlx, "Rendering miniRT");
 	}
 	else if (rt->win->res_ratio > RES_R_FULL)
 	{
-		rt->win->res_ratio = clamp(rt->win->res_ratio - RES_STEP_SIZE, RES_R_FULL, RES_R_LOW);
+		rt->win->res_ratio = clamp(rt->win->res_ratio - RES_STEP_SIZE, RES_R_FULL, rt->win->res_r_start);
 	}
 	else
 	{
@@ -47,15 +47,15 @@ void	render_manager_thread(t_rt *rt)
 {
 	if (rt->scene->render == true)
 	{
-		if (rt->win->res_ratio == RES_R_LOW)
+		if (rt->win->res_ratio == rt->win->res_r_start)
 			return ;
-		rt->win->res_ratio = RES_R_LOW;
+		rt->win->res_ratio = rt->win->res_r_start;
 		rt->scene->render_ongoing = true;
 		mlx_set_window_title(rt->win->mlx, "Rendering miniRT");
 	}
 	else if (rt->win->res_ratio > RES_R_FULL)
 	{
-		rt->win->res_ratio = clamp(rt->win->res_ratio - RES_STEP_SIZE, RES_R_FULL, RES_R_LOW);
+		rt->win->res_ratio = clamp(rt->win->res_ratio - RES_STEP_SIZE, RES_R_FULL, rt->win->res_r_start);
 	}
 	else
 	{

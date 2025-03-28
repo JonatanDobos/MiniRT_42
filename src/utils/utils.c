@@ -20,6 +20,9 @@ t_cint32	cleanup(t_rt *rt)
 			free(rt->read_scene->objs);
 		if (rt->read_scene->lights)
 			free(rt->read_scene->lights);
+		if (rt->threads->pixels_own)
+			free(rt->threads->pixels_own);
+		rt->threads->img->pixels = rt->threads->pixels_mlx;
 	}
 	else if (rt->win->img != NULL)
 		mlx_delete_image(rt->win->mlx, rt->win->img);

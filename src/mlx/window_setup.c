@@ -14,7 +14,7 @@ bool	windows_setup_mlx(t_rt *rt)
 	if (init_mlx(rt->win) == false || \
 		windows_logo(rt->win) == false)
 		return (EXIT_FAILURE);
-	res_setscale(rt->win, RES_R_LOW);
+	res_setscale(rt->win, rt->win->res_r_start);
 	if (THREADS > 1)
 	{
 		if (img_multithreaded(rt) == false)
