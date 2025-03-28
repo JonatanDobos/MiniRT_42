@@ -65,6 +65,16 @@ float	clamp(float value, float min, float max)
 	return (value);
 }
 
+// Clamp a value between min and max
+int	intclamp(int value, int min, int max)
+{
+	if (value < min)
+		return (min);
+	if (value > max)
+		return (max);
+	return (value);
+}
+
 // Clamp a vector between min and max
 t_vec4	vec_clamp(t_vec4 value, float min, float max)
 {

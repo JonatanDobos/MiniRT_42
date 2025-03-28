@@ -3,6 +3,7 @@
 #include <scene.h>
 #include <RTmlx.h>
 #include <utils.h>
+#include <render.h>
 
 bool	check_input(t_rt *rt, int argc, char **argv)
 {
@@ -22,6 +23,7 @@ void	init_main(t_rt *rt, t_scene *scn, t_window *win)
 	rt->win = win;
 	rt->win->res_ratio = 1;
 	scn->render = true;
+	rt->win->res_r_start = RES_RATIO_MAX;
 }
 
 int32_t	multithreaded(t_rt *rt, t_scene *read_scene)
@@ -63,11 +65,10 @@ int main(int argc, char **argv)
 	{
 		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	}
-	set_starting_res_scale(&rt);
 	init_hooks(&rt);
 	if (THREADS > 1)
 	{
-		rt.scene->render_ongoing = false;
+		rt.scene->render_ongoing = true;
 		if (multithreaded(&rt, &read_sc))
 			return (errset(ERTRN));
 	}

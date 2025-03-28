@@ -19,11 +19,12 @@ static inline float	rt_minf(float a, float b)
 t_vec4		bcast4(float scalar);
 t_vec4		bcast3(float scalar);
 float		clamp(float value, float min, float max);
+int			intclamp(int value, int min, int max);
 t_vec4		vec_clamp(t_vec4 value, float min, float max);
 int32_t		r_down(float value);
 
 // init.c
 
-void		set_starting_res_scale(t_rt *rt);
+void		set_starting_res_ratio(t_rt *rt, double delta_time);
 
 #endif

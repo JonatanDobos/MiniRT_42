@@ -4,22 +4,16 @@
 #include <RTmlx.h>
 #include <render.h>
 
-void	set_starting_res_scale(t_rt *rt)
+void	set_starting_res_ratio(t_rt *rt, double delta_time)
 {
-	double	time;
+	const double	target_time = 0.018F + ((float)(SCREEN_HEIGHT + SCREEN_WIDTH) * 0.000001F); // Target render time
+	const double	error = delta_time - target_time;
+	const double	adjustment_factor = 7.0F; // Tune this to control sensitivity
+	const double	new_ratio = rt->win->res_r_start * (1.0F + (error * adjustment_factor));
 
-	rt->win->res_r_start = 10;
-	rt->win->res_ratio = 10;
-	if (THREADS > 1)
-	{
-		rt->win->img = rt->threads[0].img;
-		rt->win->pixels = rt->threads[0].pixels_mlx;
-	}
-	rt->scene->render = true;
-	time = mlx_get_time();
-	render_manager(rt);
-	time = mlx_get_time() - time;
-	rt->win->res_r_start += (uint16_t)((time - 0.01F) * 50);
-	printf("rndrscn: %d, resrat: %hu\n", rt->scene->render, rt->win->res_ratio);
-	printf("time: %f,\tstart res_ratio: %hu\n", time, rt->win->res_r_start);
+	rt->win->res_r_start = intclamp((int)new_ratio, 2, 30);
+	pthread_mutex_lock(rt->mtx + MTX_PRINT);
+	printf("\n\\/ DTime: %.4f sec, target: %.4f sec\n|  err: %.4f sec, start res_r: %hu\n", 
+		delta_time, target_time, error, rt->win->res_r_start);
+	pthread_mutex_unlock(rt->mtx + MTX_PRINT);
 }

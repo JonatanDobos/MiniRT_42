@@ -14,11 +14,11 @@
 # include <threadsRT.h>
 
 # ifndef SCREEN_WIDTH
-#  define SCREEN_WIDTH 3000
+#  define SCREEN_WIDTH 5120
 # endif
 
 # ifndef SCREEN_HEIGHT
-#  define SCREEN_HEIGHT 1800
+#  define SCREEN_HEIGHT 2700
 # endif
 
 # ifndef THREADS

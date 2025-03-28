@@ -3,6 +3,7 @@
 #include <mathRT.h>
 #include <render.h>
 #include <threadsRT.h>
+#include <utils.h>
 
 //	Static functions
 static void	render_routine(t_thread *th, uint16_t y);
@@ -27,14 +28,24 @@ static void	render_routine(t_thread *th, uint16_t start_y)
 	while (check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, th->rt->quit_routine) == false)
 	{
 		time = mlx_get_time();
-		// printf("render thread %d\n", th->id);
 		if (th->rt->win->res_ratio == th->win->res_r_start)
+		{
 			thread_first_render(th, start_y, 0);
+			time = mlx_get_time() - time;
+			pthread_mutex_lock(th->rt->mtx + MTX_PRINT);
+			printf("\r\t\t\t\t\t(%2hu) fps", (uint16_t)(1.0 / time));
+			fflush(stdout);
+			pthread_mutex_unlock(th->rt->mtx + MTX_PRINT);
+		}
 		else if (thread_render(th, start_y, 0) == false)
-			th->win->delta_time = mlx_get_time() - time;
-		pthread_mutex_lock(th->rt->mtx + MTX_PRINT);
-		printf("> res_ratio: %2hu > DTime: %.4f sec.\n", th->win->res_ratio, th->win->delta_time);
-		pthread_mutex_unlock(th->rt->mtx + MTX_PRINT);
+		{
+			time = mlx_get_time() - time;
+			if (th->win->res_ratio == th->win->res_r_start - 1)
+				set_starting_res_ratio(th->rt, time);
+			pthread_mutex_lock(th->rt->mtx + MTX_PRINT);
+			printf("   > res_ratio: %2hu > DTime: %.4f sec. (%2hu) fps\n", th->win->res_ratio, time, (uint16_t)(1.0 / time));
+			pthread_mutex_unlock(th->rt->mtx + MTX_PRINT);
+		}
 		resynchronize_after_rendering(th);
 	}
 	pthread_mutex_lock(th->rt->mtx + MTX_STOPPED_THREADS);

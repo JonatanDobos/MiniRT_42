@@ -14,7 +14,7 @@ void	render_manager(t_rt *rt)
 	}
 	else if (rt->win->res_ratio > RES_R_FULL)
 	{
-		rt->win->res_ratio = clamp(rt->win->res_ratio - RES_STEP_SIZE, RES_R_FULL, rt->win->res_r_start);
+		rt->win->res_ratio = intclamp(rt->win->res_ratio - RES_STEP_SIZE, RES_R_FULL, rt->win->res_r_start);
 	}
 	else
 	{
@@ -55,7 +55,7 @@ void	render_manager_thread(t_rt *rt)
 	}
 	else if (rt->win->res_ratio > RES_R_FULL)
 	{
-		rt->win->res_ratio = clamp(rt->win->res_ratio - RES_STEP_SIZE, RES_R_FULL, rt->win->res_r_start);
+		rt->win->res_ratio = intclamp(rt->win->res_ratio - RES_STEP_SIZE, RES_R_FULL, rt->win->res_r_start);
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 # include <scene.h>
 
 # define RES_STEP_SIZE 1
-# define RES_RATIO_MAX 20
+# define RES_RATIO_MAX 12
 # define RES_R_LOW 10
 # define RES_R_FULL 1
 
