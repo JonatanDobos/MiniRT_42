@@ -39,7 +39,7 @@ int32_t	multithreaded(t_rt *rt, t_scene *read_scene)
 		fprintf(stderr, "Failed to initialize condition variable\n");
 		exit(EXIT_FAILURE);
 	}
-	rt->thread_creation_check = true;
+	rt->creation_check = true;
 	if (launch_pthreads(rt) == false)
 	{
 		return (perr("Pthread", errset(ERTRN)), cleanup(rt));

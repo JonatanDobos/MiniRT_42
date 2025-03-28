@@ -14,15 +14,15 @@ t_cint32	cleanup(t_rt *rt)
 			pthread_mutex_unlock(rt->mtx + MTX_SYNC);
 			destroy_mutexes(rt, MTX_AMOUNT);
 		}
-		if (rt->thread_creation_check == true)
+		if (rt->creation_check == true)
 			destroy_threads(rt, THREADS - 1);
 		if (rt->read_scene->objs)
 			free(rt->read_scene->objs);
 		if (rt->read_scene->lights)
 			free(rt->read_scene->lights);
-		if (rt->threads->pixels_own)
-			free(rt->threads->pixels_own);
-		rt->threads->img->pixels = rt->threads->pixels_mlx;
+		if (rt->thread.pixels_own)
+			free(rt->thread.pixels_own);
+		rt->thread.img->pixels = rt->thread.pixels_mlx;
 	}
 	else if (rt->win->img != NULL)
 		mlx_delete_image(rt->win->mlx, rt->win->img);

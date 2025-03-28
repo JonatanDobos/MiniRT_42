@@ -56,19 +56,16 @@ void	render(t_rt *rt)
 }
 
 // Render the scene (threaded)
-bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
+bool	thread_render(t_thread *th, uint16_t y_rend)
 {
 	uint16_t		x;
 	t_ray			ray;
 	float			ndc_x;
 	float			ndc_y;
-	// puts("\\/");
-	// printf("id %d\ty_rend %d\ty_img %d\n", th->id, y_rend, y_img);
-	// printf("rend_height %d\timg_height %d\twin_rend %d\twin_height %d\n", th->rdr_height, th->img_height, th->win->rndr_hght, th->win->mlx->height);//t
-	// puts("/\\");
-	// printf("\n\n");
+	uint16_t		y_img;
+
 	ray.origin = th->scene->camera.coords;
-	while (y_rend < th->rdr_height)
+	while (y_rend < th->win->rndr_hght)
 	{
 		if (check_bool(th->rt->mtx + MTX_RENDER, th->scene->render) == true
 			|| check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, th->rt->quit_routine) == true)
@@ -88,15 +85,16 @@ bool	thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
 	return (false);
 }
 
-void	thread_first_render(t_thread *th, uint16_t y_rend, uint16_t y_img)
+void	thread_fast_render(t_thread *th, uint16_t y_rend)
 {
 	uint16_t		x;
 	t_ray			ray;
 	float			ndc_x;
 	float			ndc_y;
+	uint16_t		y_img;
 
 	ray.origin = th->scene->camera.coords;
-	while (y_rend < th->rdr_height)
+	while (y_rend < th->win->rndr_hght)
 	{
 		x = 0;
 		while (x < th->win->rndr_wdth)

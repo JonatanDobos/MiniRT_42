@@ -53,17 +53,10 @@ bool	destroy_conditions(t_rt *rt)
 
 void	destroy_threads(t_rt *rt, size_t thread_amount)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < thread_amount)
+	if (pthread_join(rt->thread.thread, NULL) != 0)
 	{
-		if (pthread_join(rt->threads[i].thread, NULL) != 0)
-		{
-			pthread_mutex_lock(rt->mtx + MTX_PRINT);
-			printf("pthread_join: Thread %zu failed.", i);
-			pthread_mutex_unlock(rt->mtx + MTX_PRINT);
-		}
-		++i;
+		pthread_mutex_lock(rt->mtx + MTX_PRINT);
+		printf("pthread_join: Thread failed.");
+		pthread_mutex_unlock(rt->mtx + MTX_PRINT);
 	}
 }

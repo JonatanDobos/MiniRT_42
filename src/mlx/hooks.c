@@ -123,15 +123,15 @@ void	loop_hook(t_rt *rt)
 
 void	switch_pixelarray(t_rt *rt)
 {
-	if (rt->threads[0].pixels == rt->threads[0].pixels_mlx)
+	if (rt->thread.pixels == rt->thread.pixels_mlx)
 	{
-		rt->threads[0].img->pixels = rt->threads[0].pixels_mlx;
-		rt->threads[0].pixels = rt->threads[0].pixels_own;
+		rt->thread.img->pixels = rt->thread.pixels_mlx;
+		rt->thread.pixels = rt->thread.pixels_own;
 	}
 	else
 	{
-		rt->threads[0].img->pixels = rt->threads[0].pixels_own;
-		rt->threads[0].pixels = rt->threads[0].pixels_mlx;
+		rt->thread.img->pixels = rt->thread.pixels_own;
+		rt->thread.pixels = rt->thread.pixels_mlx;
 	}
 }
 

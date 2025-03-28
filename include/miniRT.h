@@ -79,12 +79,12 @@ typedef struct	s_rt
 	uint16_t		stopped_threads;
 	uint16_t		thread_rend_step;
 	bool			pressed_key;
-	bool			thread_creation_check;
+	bool			creation_check;
 	bool			mtx_init_check;
 	bool			quit_routine;
 	int				errnum;
 	t_mtx			mtx[MTX_AMOUNT];
-	t_thread		threads[THREADS];
+	t_thread		thread;
 }	t_rt;
 
 #endif

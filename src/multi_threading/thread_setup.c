@@ -38,28 +38,19 @@ bool	initialize_conditions(t_rt *rt)
 
 bool	launch_pthreads(t_rt *rt)
 {
-	ssize_t	i;
-	
-	i = 0;
 	pthread_mutex_lock(rt->mtx + MTX_SYNC);
-	while (i < THREADS - 1)
+	rt->thread.rt = rt;
+	rt->thread.scene = rt->read_scene;
+	rt->thread.win = rt->win;
+	rt->thread.id = 1;
+	if (pthread_create(&rt->thread.thread, NULL, (t_cast)thread_routine_init, &rt->thread) != 0)
 	{
-		rt->threads[i].rt = rt;
-		rt->threads[i].scene = rt->read_scene;
-		rt->threads[i].win = rt->win;
-		rt->threads[i].id = i + 1;
-		if (pthread_create(&rt->threads[i].thread, NULL, (t_cast)thread_routine_init, &rt->threads[i]) != 0)
-		{
-			pthread_mutex_lock(rt->mtx + MTX_PRINT);
-			printf("pthread_create: philosophers\n");
-			pthread_mutex_unlock(rt->mtx + MTX_PRINT);
-			rt->thread_creation_check = false;
-			pthread_mutex_unlock(rt->mtx + MTX_SYNC);
-			if (i > 0)
-				destroy_threads(rt, i);
-			return (false);
-		}
-		++i;
+		pthread_mutex_lock(rt->mtx + MTX_PRINT);
+		printf("pthread_create: philosophers\n");
+		pthread_mutex_unlock(rt->mtx + MTX_PRINT);
+		rt->creation_check = false;
+		pthread_mutex_unlock(rt->mtx + MTX_SYNC);
+		return (false);
 	}
 	return (true);
 }

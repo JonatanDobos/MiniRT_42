@@ -57,7 +57,7 @@ void		render_manager(t_rt *rt);
 
 void		render_manager_thread(t_rt *rt);
 void		render_upscale_thread(t_thread *th);
-bool		thread_render(t_thread *th, uint16_t y_rend, uint16_t y_img);
-void		thread_first_render(t_thread *th, uint16_t y_rend, uint16_t y_img);
+bool		thread_render(t_thread *th, uint16_t y_rend);
+void		thread_fast_render(t_thread *th, uint16_t y_rend);
 
 #endif

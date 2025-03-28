@@ -32,9 +32,6 @@ typedef struct	s_thread
 	uint8_t			*pixels_own;
 	uint16_t		img_width;
 	uint16_t		img_height;
-	uint16_t		rdr_height;
-	uint16_t		start_y;
-	// float			aspectr;
 	t_mtx			mtx;
 	pthread_t		thread;
 }	t_thread;

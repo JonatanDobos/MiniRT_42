@@ -6,22 +6,22 @@
 #include <utils.h>
 
 //	Static functions
-static void	render_routine(t_thread *th, uint16_t y);
+static void	render_routine(t_thread *th);
 static void	resynchronize_after_rendering(t_thread *th);
 
 void	thread_routine_init(t_thread *th)
 {
 	pthread_mutex_lock(th->rt->mtx + MTX_SYNC);
 	pthread_mutex_unlock(th->rt->mtx + MTX_SYNC);
-	if (check_bool(th->rt->mtx + MTX_CREATION_CHECK, th->rt->thread_creation_check) == false)
+	if (check_bool(th->rt->mtx + MTX_CREATION_CHECK, th->rt->creation_check) == false)
 	{
 		return ;
 	}
-	render_routine(th, th->start_y);
+	render_routine(th);
 }
 
 // Ook iets doen wanneer de render onderbroken wordt?
-static void	render_routine(t_thread *th, uint16_t start_y)
+static void	render_routine(t_thread *th)
 {
 	double	time;
 
@@ -30,10 +30,10 @@ static void	render_routine(t_thread *th, uint16_t start_y)
 		time = mlx_get_time();
 		if (th->rt->win->res_ratio == th->win->res_r_start)
 		{
-			thread_first_render(th, start_y, 0);
+			thread_fast_render(th, 0);
 			time = mlx_get_time() - time;
 		}
-		else if (thread_render(th, start_y, 0) == false)
+		else if (thread_render(th, 0) == false)
 		{
 			time = mlx_get_time() - time;
 			if (th->win->res_ratio == th->win->res_r_start - 1)
