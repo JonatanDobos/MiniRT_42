@@ -98,6 +98,8 @@ RENDER			:=	render.c		scaling.c	cylinder.c	lighting.c	set_pixel.c		obj_intersect
 
 MATH			:=	math.c		vec_arithmetic.c		vec_geometry.c		vec_transform.c
 
+PRINT_SCENE		:=	print_scene.c
+
 # plane.c										
 # sphere.c										
 
@@ -110,6 +112,7 @@ SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))						\
 					$(addprefix $(SRC_DIR)render/, $(RENDER))				\
 					$(addprefix $(SRC_DIR)math/, $(MATH))					\
 					$(addprefix $(SRC_DIR)multi_threading/, $(THREADING))	\
+					$(addprefix $(SRC_DIR)print_scene/, $(PRINT_SCENE))		\
 					$(addprefix $(SRC_DIR)debug/, $(DEBUG))
 
 #		Generate object file names

@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/09 20:31:53 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/03/25 14:26:01 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/03/28 17:06:57 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,16 @@
 # define LIBFT_H
 
 /*
+get_next_line
 	BUFFER_SIZE minimum is 1, don't go lower than that.
 	cc -D BUFFER_SIZE=42 <files>.c
 */
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10240
 # endif
+#define FILE_CREATION 256	// (NAME_MAX || MAX_PATH) + 1
+
+
 # ifndef KILOBYTE
 #  define KILOBYTE 1024
 # endif

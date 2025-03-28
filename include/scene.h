@@ -118,4 +118,5 @@ typedef struct	s_scene
 
 void	render(t_rt *rt);
 
+void	create_scene_rt_file(t_scene *sc);
 #endif

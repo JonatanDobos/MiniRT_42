@@ -16,7 +16,7 @@
 //	Static functions
 static uint16_t	dbltoa_convert(double value, t_dbl *strings, bool trim);
 
-uint16_t	dbltoa_buff_prec(t_dbltoa_params dbl)
+uint16_t	dbltoa_buff_prec(t_dbltoa dbl)
 {
 	char		result[MAX_DBL_BUFF];
 	t_dbl		strings;

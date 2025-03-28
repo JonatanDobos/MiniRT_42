@@ -6,7 +6,7 @@
 /*   By: rjw <rjw@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/12 01:38:30 by rjw           #+#    #+#                 */
-/*   Updated: 2025/03/28 16:39:38 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/03/28 18:28:51 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ typedef struct s_dbltoa_params
 	uint16_t	buff_size;
 	uint16_t	precision;
 	bool		trim_trailing_zeros;
-}	t_dbltoa_params;
+}	t_dbltoa;
 
 /**
  * struct s_dbl - Structure to hold double conversion information
@@ -106,7 +106,7 @@ typedef union u_double_bitcast
 	int64_t	i;
 }	t_bitcast;
 
-uint16_t	dbltoa_buff_prec(t_dbltoa_params dbl);
+uint16_t	dbltoa_buff_prec(t_dbltoa dbl);
 
 //	Conversions
 bool		fraction_conversion(double value, t_dbl *strings, bool *is_neg);
