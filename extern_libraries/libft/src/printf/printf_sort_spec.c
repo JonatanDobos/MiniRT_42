@@ -6,11 +6,10 @@
 /*   By: rjw <rjw@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/12 16:05:47 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/13 16:54:35 by rjw           ########   odam.nl         */
+/*   Updated: 2025/03/24 23:08:18 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
 #include <ft_printf.h>
 
 //	Static Functions
@@ -24,14 +23,14 @@ void	flag_check(t_p *c, t_fl *f)
 	count_flags = f->f_len + f->width + f->dot;
 	if (c->count_or_str == true && count_flags == 0)
 	{
-		if (c_in_str(f->sp, "csdi") == true)
+		if (f->sp == 'c' || f->sp == 's' || f->sp == 'd' || f->sp == 'i')
 			c->mal += spec_count_one(c, f);
 		else
 			c->mal += spec_count_two(c, f);
 	}
 	else if (c->count_or_str == false && count_flags == 0)
 	{
-		if (c_in_str(f->sp, "csdi") == true)
+		if (f->sp == 'c' || f->sp == 's' || f->sp == 'd' || f->sp == 'i')
 			spec_str_one(c, f);
 		else
 			spec_str_two(c, f);

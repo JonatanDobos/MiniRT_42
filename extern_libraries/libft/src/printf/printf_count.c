@@ -6,16 +6,16 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/04 18:07:23 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/01/13 16:53:27 by rjw           ########   odam.nl         */
+/*   Updated: 2025/03/24 23:09:01 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
 #include <ft_printf.h>
 
 int32_t	spec_count_one(t_p *c, t_fl *f)
 {
 	char	*null_check;
+	char	*null_check_len;
 
 	if (f->sp == 'c')
 	{
@@ -31,7 +31,10 @@ int32_t	spec_count_one(t_p *c, t_fl *f)
 		}
 		else
 		{
-			return (ft_strlen(null_check));
+			null_check_len = null_check;
+			while (*null_check_len != '\0')
+				++null_check_len;
+			return (null_check_len - null_check);
 		}
 	}
 	return (signed_count(va_arg(c->va, int32_t)));

@@ -2,7 +2,6 @@ NAME			:=	miniRT
 
 # Get the number of logical processors (threads)
 N_JOBS			:=	$(shell nproc)
-# N_JOBS			:=	1
 
 # (-j) Specify the number of jobs (commands) to run simultaneously
 MULTI_THREADED	:=	-j $(N_JOBS)
@@ -43,24 +42,6 @@ OFLAGS			 =	-march=native
 
 OFLAGS += -Ofast
 OFLAGS += -O3
-# ifeq ($(shell uname -s),Linux)
-# 	ifeq ($(MAKECMDGOALS),malloc_wrap)
-# 		WRAP_MALLOC	:= -Wl,--wrap=malloc
-# 		OFLAGS := $(filter-out -Ofast, $(OFLAGS))
-# 		OFLAGS := $(filter-out -O3, $(OFLAGS))
-# 	endif
-# endif
-
-ifeq ($(MAKECMDGOALS),malloc_wrap)
-	CFLAGS	+=	-D MALLOC_WRAP=true
-	OFLAGS	:= 	$(filter-out -Ofast, $(OFLAGS))
-	OFLAGS	:= 	$(filter-out -O3, $(OFLAGS))
-	LIBWRAP :=	malloc_wrap
-	ifeq ($(shell uname -s),Linux)
-		WRAP_MALLOC	:= -Wl,--wrap=malloc
-	endif
-endif
-
 #	macOS = Darwin
 ifeq ($(shell uname -s), Darwin)
 # GLFW := $(shell brew --prefix glfw)/lib
@@ -74,14 +55,17 @@ else
 endif
 CFLAGS += $(OFLAGS)
 
-# Screen res data uitgecomment omdat het niet werkt op mijn mac...!
-
-# SCREEN_RES		:=	$(shell xrandr | grep '*' | uniq | awk '{print $$1}')
-# SCREEN_WIDTH	:=	$(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
-# SCREEN_HEIGHT	:=	$(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
-
-# Pass screen resolution as defines to the compiler
-# CFLAGS += -D SCREEN_WIDTH=$(SCREEN_WIDTH) -D SCREEN_HEIGHT=$(SCREEN_HEIGHT)
+OS := $(shell uname -s)
+ifeq ($(OS), Linux)
+    SCREEN_RES   := $(shell xrandr | grep '*' | uniq | awk '{print $$1}')
+    SCREEN_WIDTH := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
+    SCREEN_HEIGHT := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
+else ifeq ($(OS), Darwin)  # macOS
+    SCREEN_RES   := $(shell system_profiler SPDisplaysDataType | grep Resolution | awk '{print $$2"x"$$4}')
+    SCREEN_WIDTH := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
+    SCREEN_HEIGHT := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
+endif
+CFLAGS += -D SCREEN_WIDTH=$(SCREEN_WIDTH) -D SCREEN_HEIGHT=$(SCREEN_HEIGHT)
 
 #		Directories
 BUILD_DIR		:=	.build/
@@ -172,7 +156,7 @@ DELETE			 =	*.out										\
 all:	$(NAME)
 
 $(NAME): $(LIBS) $(OBJS)
-	$(BUILD) $(WRAP_MALLOC) $(OBJS) $(LIBS) $(LINKER_FLAGS) -o $(NAME)
+	$(BUILD) $(OBJS) $(LIBS) $(LINKER_FLAGS) -o $(NAME)
 	@printf "$(CREATED)" $@ $(CUR_DIR)
 
 $(BUILD_DIR)%.o: %.c $(HEADERS)
@@ -180,7 +164,7 @@ $(BUILD_DIR)%.o: %.c $(HEADERS)
 	$(BUILD) $(INCLUDE_RT) -c $< -o $@
 
 $(LIBFT_L):
-	@$(MAKE) $(MULTI_THREADED) $(PRINT_NO_DIR) -C $(LIBFT_D) $(LIBWRAP) OFLAGS="$(OFLAGS)"
+	@$(MAKE) $(MULTI_THREADED) $(PRINT_NO_DIR) -C $(LIBFT_D)
 
 $(MLX42_L):
 	@cmake $(MLX42_D) -B $(MLX42_D)/build && cmake --build $(MLX42_D)/build --parallel $(N_JOBS)
@@ -214,22 +198,23 @@ re:
 malloc_wrap: all
 
 test: all
-	./$(NAME) ./test1.rt
+	./$(NAME) ./scenes/test1.rt
 
 test2: all
-	./$(NAME) ./plane_sphere.rt
+	./$(NAME) ./scenes/plane_sphere.rt
 
 test3: all
-	./$(NAME) ./sphere_behind_sphere.rt
+	./$(NAME) ./scenes/sphere_behind_sphere.rt
 
 test4: all
-	./$(NAME) ./cylinder.rt
+	./$(NAME) ./scenes/cylinder.rt
 
 test5: all
-	./$(NAME) ./resizing.rt
+	./$(NAME) ./scenes/resizing.rt
 
-valgrind: all
-	valgrind --leak-check=full -s ./$(NAME)
+white: all
+	./$(NAME) ./scenes/white.rt
+
 
 print-%:
 	$(info $($*))

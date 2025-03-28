@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   put_chars_fd.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jdobos <jdobos@student.42.fr>                +#+                     */
+/*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/09/11 20:31:50 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/27 02:14:47 by rjw           ########   odam.nl         */
+/*   Created: 2025/01/09 20:31:53 by rde-brui      #+#    #+#                 */
+/*   Updated: 2025/03/21 18:52:47 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 /*
 	Used functions:
 	- write
+	- perror
 */
 void	ft_putchar_fd(char c, int fd)
 {
@@ -26,6 +27,7 @@ void	ft_putchar_fd(char c, int fd)
 /*
 	Used functions:
 	- write
+	- perror
 */
 void	ft_putendl_fd(t_cchr *s, int fd)
 {
@@ -57,19 +59,47 @@ void	ft_putendl_fd(t_cchr *s, int fd)
 /*
 	Used functions:
 	- write
+	- perror
 */
 void	ft_putnbr_fd(int n, int fd)
+{
+	char		store[11];
+	char		*number;
+	uint32_t	negative;
+
+	number = store + 10;
+	if (n == 0)
+	{
+		if (write(fd, "0\n", 2) == -1)
+			perror("ft_putnbr_nl_fd: write");
+		return ;
+	}
+	negative = n;
+	if (n < 0)
+		negative = -n;
+	while (negative != 0)
+	{
+		*(number--) = '0' + (negative % 10);
+		negative /= 10;
+	}
+	if (n < 0)
+		*(number--) = '-';
+	if (write(fd, number, (store + 10) - number + 1) == -1)
+		perror("ft_putnbr_nl_fd: write");
+}
+
+void	ft_putnbr_nl_fd(int n, int fd)
 {
 	char		store[12];
 	char		*number;
 	uint32_t	negative;
 
-	store[11] = '\0';
-	number = &store[11];
+	number = store + 11;
+	*(number) = '\n';
 	if (n == 0)
 	{
-		if (write(fd, "0", 1) == -1)
-			perror("ft_putnbr_fd: write");
+		if (write(fd, "0\n", 2) == -1)
+			perror("ft_putnbr_nl_fd: write");
 		return ;
 	}
 	negative = n;
@@ -82,14 +112,15 @@ void	ft_putnbr_fd(int n, int fd)
 	}
 	if (n < 0)
 		*(--number) = '-';
-	if (write(fd, number, &store[11] - number) == -1)
-		perror("ft_putnbr_fd: write");
+	if (write(fd, number, (store + 11) - number + 1) == -1)
+		perror("ft_putnbr_nl_fd: write");
 }
 
 /*
 	Used functions:
 	- write
 	- ft_strlen
+	- perror
 */
 void	ft_putstr_fd(t_cchr *s, int fd)
 {

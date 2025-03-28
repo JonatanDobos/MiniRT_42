@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/09 20:31:53 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/01/19 02:28:45 by rjw           ########   odam.nl         */
+/*   Updated: 2025/03/21 19:13:24 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	dynarr_create(t_dynarr *ptr, size_t init_size, const size_t data_size)
 	*(size_t *)&ptr->elem_size = data_size;
 	ptr->capacity = init_size;
 	ptr->length = 0;
-	ptr->arr = ft_calloc(init_size, data_size);
+	ptr->arr = da_calloc(init_size, data_size);
 	if (ptr->arr == NULL)
 		return (false);
 	return (true);
@@ -34,7 +34,8 @@ bool	dynarr_shrink_to_fit(t_dynarr *a)
 
 	if (a == NULL || a->arr == NULL)
 		return (false);
-	ar = ft_realloc(&a->arr, a->length * a->elem_size, a->capacity * a->elem_size);
+	ar = da_realloc(&a->arr,
+			(a->length * a->elem_size), (a->capacity * a->elem_size));
 	if (ar == NULL)
 		return (false);
 	a->arr = ar;
@@ -44,7 +45,7 @@ bool	dynarr_shrink_to_fit(t_dynarr *a)
 
 void	dynarr_free(t_dynarr *a)
 {
-	free_ptr(&a->arr);
+	da_free_ptr(&a->arr);
 	*(size_t *)&a->elem_size = 0;
 	a->capacity = 0;
 	a->length = 0;
@@ -62,6 +63,7 @@ void	*dynarr_take_arr(t_dynarr *a)
 	return (arr_copy);
 }
 
+// #include <stdio.h>
 // void	showcase(t_dynarr myArray)
 // {
 // 	for (size_t i = 0; i < myArray.length; i++)
@@ -78,18 +80,17 @@ void	*dynarr_take_arr(t_dynarr *a)
 
 // 	if (!dynarr_create(&myArray, initialSize, dataSize))
 // 	{
-// 		return 1;
+// 		return (1);
 // 	}
-// 	for (int i = 0; i < 15; i++)
+// 	for (int i = 1; i <= 15; i++)
 // 	{
 // 		dynarr_insert(&myArray, &i);
 // 	}
 // 	showcase(myArray);
-// 	printf("\t%zu\n", myArray.capacity);
+// 	printf("myArray.capacity %zu\n", myArray.capacity);
 // 	dynarr_shrink_to_fit(&myArray);
-// 	printf("\t%zu\n", myArray.capacity);
+// 	printf("myArray.capacity %zu\n", myArray.capacity);
 
-// 	size_t	arr_len = myArray.length;
 // 	int cpy_value = ((int *)myArray.arr)[5];
 // 	int	*arr = dynarr_take_arr(&myArray);
 // 	printf("copied value = %d\n", cpy_value);
@@ -98,5 +99,6 @@ void	*dynarr_take_arr(t_dynarr *a)
 // 	printf("set to 0 %ld\n", myArray.length);
 
 // 	printf("extracted array from dynarr %d\n", arr[0]);
+// 	free(arr);
 // 	return (0);
 // }

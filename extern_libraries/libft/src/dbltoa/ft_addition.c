@@ -1,32 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   linux_malloc_wrapper.c                             :+:    :+:            */
+/*   ft_addition.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rjw <rjw@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/25 22:04:13 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/27 14:16:34 by rde-brui      ########   odam.nl         */
+/*   Created: 2025/03/12 02:12:12 by rjw           #+#    #+#                 */
+/*   Updated: 2025/03/15 01:28:57 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <wrap_functions.h>
-#if defined(__linux__)
-# ifdef MALLOC_WRAP
-#  if MALLOC_WRAP == true
+#include <dbltoa.h>
 
-void	*__wrap_malloc(size_t size)
+void	ft_addition(char *s1, char *s2)
 {
-	if (malloc_toggle(RETRIEVE_MALLOC) == OG_MALLOC_ENABLED)
+	int32_t	len;
+	int32_t	carry;
+	int32_t	i;
+	int32_t	sum;
+
+	s1 += (*s1 == '+');
+	s2 += (*s2 == '+');
+	carry = 0;
+	len = ft_strlen(s1);
+	i = len - 1;
+	while (i >= 0)
 	{
-		return (__real_malloc(size));
+		sum = (s1[i] - '0') + (s2[i] - '0') + carry;
+		carry = sum / DECIMAL_NBR;
+		s1[i] = (sum % DECIMAL_NBR) + '0';
+		--i;
 	}
-	else if (malloc_handler(size, NULL, NULL) == false)
+	if (carry > 0)
 	{
-		return (NULL);
+		charmove(s1 + 1, s1, len);
+		s1[0] = carry + '0';
 	}
-	return (__real_malloc(size));
 }
-#  endif
-# endif
-#endif

@@ -12,7 +12,7 @@ int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line)
 	sc->ambient.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 	sc->ambient.color[A] = 1.0F;
 	++vc->amb_amount;
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
@@ -27,7 +27,7 @@ int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
 	sc->camera.c.zvp_dist = 1.0F / tanf((sc->camera.c.fov * M_PI / 180.0F) / 2.0F);
 	sc->camera.c.realtime_fov = sc->camera.c.fov;
 	++vc->cam_amount;
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
@@ -50,7 +50,7 @@ int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 		return (errset(perr("parse_light", errno)));
 	++sc->l_arr_size;
 	++vc->light_amount;
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 // int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
@@ -64,5 +64,5 @@ int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 // 	sc->light.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 // 	sc->light.color[A] = 1.0F;
 // 	++vc->light_amount;
-// 	return (SUCCESS);
+// 	return (EXIT_SUCCESS);
 // }

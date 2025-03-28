@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/13 18:13:07 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/01/13 19:09:26 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/03/25 13:51:40 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ void	markup(t_cchr *str, ...)
 
 void	print_full_width(t_csize_t c)
 {
-	struct winsize	w;
 	const size_t	markup = sizeof(MARKUP) - 1;
 	const size_t	markdown = sizeof(MARKDOWN) - 1;
 	char			*chr;
+	struct winsize	w;
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 	chr = (char *)malloc((w.ws_col + markup + markdown + 1));

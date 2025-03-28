@@ -6,17 +6,19 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/15 13:29:00 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/01/13 18:44:32 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/03/24 23:21:29 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>	// perror
+#include <stdlib.h>		//	malloc
+#include <unistd.h>		//	STDOUT_FILENO
+#include <stdio.h>		//	perror
 #include <ft_printf.h>
 
 //	Static Functions
-static int32_t	ft_printf_all(int fd, t_cchr *format, va_list args);
+static int32_t	ft_printf_all(int fd, const char *format, va_list args);
 
-int	ft_printf(t_cchr *format, ...)
+int	ft_printf(const char *format, ...)
 {
 	va_list	args;
 	int		result;
@@ -27,7 +29,7 @@ int	ft_printf(t_cchr *format, ...)
 	return (result);
 }
 
-int	ft_dprintf(int fd, t_cchr *format, ...)
+int	ft_dprintf(int fd, const char *format, ...)
 {
 	va_list	args;
 	int		result;
@@ -38,12 +40,12 @@ int	ft_dprintf(int fd, t_cchr *format, ...)
 	return (result);
 }
 
-int	ft_vprintf(t_cchr *format, va_list args)
+int	ft_vprintf(const char *format, va_list args)
 {
 	return (ft_printf_all(STDOUT_FILENO, format, args));
 }
 
-static int32_t	ft_printf_all(int fd, t_cchr *format, va_list args)
+static int32_t	ft_printf_all(int fd, const char *format, va_list args)
 {
 	t_p		print;
 	int32_t	total;
@@ -64,7 +66,7 @@ static int32_t	ft_printf_all(int fd, t_cchr *format, va_list args)
 	parse_format_string(&print);
 	va_end(print.va);
 	if (write(fd, print.str, total) == -1)
-		perror("ft_printf_all: write: ");
+		perror("ft_printf_all: write:");
 	free(print.str);
 	return (total);
 }

@@ -15,7 +15,7 @@ int16_t	init_read_scene(t_scene *src, t_scene *dest)
 		return (errset(errno));
 	ft_memcpy(dest->objs, src->objs, sizeof(t_objs) * src->o_arr_size);
 	ft_memcpy(dest->lights, src->lights, sizeof(t_objs) * src->l_arr_size);
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int16_t	cpy_scene(t_scene *src, t_scene *dest)
@@ -30,5 +30,5 @@ int16_t	cpy_scene(t_scene *src, t_scene *dest)
 	dest->lights = dest_lights;
 	ft_memcpy(dest->objs, src->objs, sizeof(t_objs) * src->o_arr_size);
 	ft_memcpy(dest->lights, src->lights, sizeof(t_objs) * src->l_arr_size);
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }

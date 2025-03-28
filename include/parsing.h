@@ -1,6 +1,7 @@
 #ifndef PARSING_H
 # define PARSING_H
 # include <common_defs.h>
+# include <libft.h>
 # include <scene.h>
 # include <miniRT.h>
 # include <fcntl.h>

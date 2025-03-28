@@ -6,7 +6,7 @@
 /*   By: rjw <rjw@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/11 02:58:41 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/11 17:38:33 by rjw           ########   odam.nl         */
+/*   Updated: 2025/03/09 02:19:04 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,21 @@
 
 static inline int	ft_isspace(int c)
 {
-	return (c == ' ' || c == '\t' || c == '\n' || \
-	c == '\v' || c == '\f' || c == '\r');
+	return ((c >= '\t' && c <= '\r') || c == ' ');
 }
 
 static inline int	ft_isupper(int c)
 {
-	return (c >= 65 && c <= 90);
+	return (c >= 'A' && c <= 'Z');
 }
 
 static inline int	ft_islower(int c)
 {
-	return (c >= 97 && c <= 122);
+	return (c >= 'a' && c <= 'z');
 }
 
 static inline int	ft_isprint(int c)
 {
-	return (c >= 32 && c <= 126);
+	return (c >= ' ' && c <= '~');
 }
 #endif

@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   sign.c                                             :+:    :+:            */
+/*   linux_malloc_wrapper.c                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rjw <rjw@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/09/11 20:33:02 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/08 17:44:16 by rde-brui      ########   odam.nl         */
+/*   Created: 2025/01/25 22:04:13 by rjw           #+#    #+#                 */
+/*   Updated: 2025/03/20 21:16:59 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+#include <wrapper.h>
 
-int8_t	sign(int n)
-{
-	if (n >= 0)
-		return (n > 0);
-	return (-1);
-}
+#if defined(__linux__)
+# ifdef MALLOC_WRAP
+#  if (MALLOC_WRAP == true) 
 
-/**
- * check on double.
-*/
-int8_t	sign_d(double n)
+void	*__wrap_malloc(size_t size)
 {
-	if (n >= 0)
-		return (n > 0);
-	return (-1);
+	if (malloc_toggle(RETRIEVE_MALLOC) == OG_MALLOC_ENABLED)
+	{
+		return (__real_malloc(size));
+	}
+	else if (malloc_handler(size, NULL, NULL) == false)
+	{
+		return (NULL);
+	}
+	return (__real_malloc(size));
 }
+#  endif
+# endif
+#endif

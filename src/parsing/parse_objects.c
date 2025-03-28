@@ -23,7 +23,7 @@ int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 		return (errset(perr("parse_pl", errno)));
 	++sc->o_arr_size;
 	++vc->obj_amount;
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
@@ -45,7 +45,7 @@ int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 		return (errset(perr("parse_sp", errno)));
 	++sc->o_arr_size;
 	++vc->obj_amount;
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
@@ -72,5 +72,5 @@ int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 		return (errset(perr("parse_cy", errno)));
 	++sc->o_arr_size;
 	++vc->obj_amount;
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/15 14:42:32 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/01/13 17:45:43 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/03/24 23:22:08 by rjw           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int32_t	signed_decimal_base(char *str, int32_t n)
 	return (move_str(str, number));
 }
 
-int32_t	move_str(char *dst, t_cchr *src)
+int32_t	move_str(char *dst, const char *src)
 {
 	int8_t	i;
 
@@ -52,7 +52,7 @@ int32_t	move_str(char *dst, t_cchr *src)
 	return (i);
 }
 
-int32_t	move_num_src(char *dst, t_cchr *src, int32_t num)
+int32_t	move_num_src(char *dst, const char *src, int32_t num)
 {
 	int8_t	i;
 
@@ -66,7 +66,7 @@ int32_t	move_num_src(char *dst, t_cchr *src, int32_t num)
 	return (i);
 }
 
-int32_t	move_num_chr(char *str, t_cchr c, int32_t n)
+int32_t	move_num_chr(char *str, const char c, int32_t n)
 {
 	int8_t	i;
 

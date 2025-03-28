@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   libft.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jdobos <jdobos@student.42.fr>                +#+                     */
+/*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/15 16:27:18 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/01/17 18:54:06 by jdobos        ########   odam.nl         */
+/*   Created: 2025/01/09 20:31:53 by rde-brui      #+#    #+#                 */
+/*   Updated: 2025/03/25 14:26:01 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,38 +24,24 @@
 #  define KILOBYTE 1024
 # endif
 
-# define MAX_FDS 1024
+# if defined(__APPLE__) || defined(__MACH__)
+#  include <limits.h>
+#  define MAX_FD OPEN_MAX
+# elif defined(__linux__) || defined(__FreeBSD__)
+#  define MAX_FD 1024
+# elif defined(_WIN32)
+#  define MAX_FD 512
+# else
+#  define MAX_FD 256
+# endif
 
-//	error handling
-# define CALLOC_ERR "ENOMEM, Cannot allocate memory ft_calloc()"
-# define GNL_ERR "ENOMEM, Cannot allocate memory get_next_line()"
-# define ITOA_ERR "ENOMEM, Cannot allocate memory ft_itoa()"
-# define LSTNEW_ERR "ENOMEM, Cannot allocate memory ft_lstnew()"
-# define SPLIT_ERR "ENOMEM, Cannot allocate memory split()"
-# define SPLIT_SET_ERR "ENOMEM, Cannot allocate memory split_set()"
-# define STRDUP_ERR "ENOMEM, Cannot allocate memory ft_strdup()"
-# define STRMAPI_ERR "ENOMEM, Cannot allocate memory ft_strmapi()"
-# define STRTRIM_ERR "ENOMEM, Cannot allocate memory ft_strtrim()"
-# define STRJOIN_ERR "ENOMEM, Cannot allocate memory strjoin()"
-# define JOIN_FREE_S1_ERR "ENOMEM, Cannot allocate memory strjoin_free_s1()"
-# define JOIN_FREE_S1_NERR "ENOMEM, Cannot allocate memory strjoin_free_s1_n()"
-# define JOIN_FREE_S2_ERR "ENOMEM, Cannot allocate memory strjoin_free_s2()"
-# define JOIN_FREE_S2_NERR "ENOMEM, Cannot allocate memory strjoin_free_s2_n()"
-# define JOIN_FREE_ALL_ERR "ENOMEM, Cannot allocate memory strjoin_free_all()"
-# define JOIN_FRE_ALL_NERR "ENOMEM, Cannot allocate memory strjoin_free_all_n()"
-# define SUBSTR_ERR "ENOMEM, Cannot allocate memory ft_substr()"
+//	'\0' AKA Terminator
+# define TERM 1
 
 # include <common_defs.h>
 # include <is_ctype1.h>
 # include <is_ctype2.h>
 # include <validate_ptr.h>
-
-enum	e_return
-{
-	ERROR = -1,
-	SUCCESS,
-	FAILURE
-};
 
 typedef struct s_list		t_lst;
 
@@ -88,13 +74,14 @@ char		**split_set(char const *s, char *set);
 //	Conversions Functions
 int32_t		atoi32(t_cchr *nptr);
 int64_t		atoi64(t_cchr *nptr);
-
+int64_t		atoi_base(const char *nbr_str, char *base, bool *is_neg);
 uint32_t	atui32(t_cchr *nptr);
 uint64_t	atui64(t_cchr *nptr);
 
 //	Get_Next_line
 char		*gnl(int fd);
 char		*gnl_fds(int fd);
+ssize_t		get_user_input(char *buff, ssize_t buff_size, char *prompt);
 
 //	Linked List Functions
 void		ft_lstadd_back(t_lst **lst, t_lst *new);
@@ -110,7 +97,9 @@ int			ft_lstsize(t_lst *lst);
 //	Math Functions
 int8_t		sign(int n);
 int8_t		sign_d(double n);
-uint8_t		digit_counter(int64_t n);
+uint64_t	abs_int64(int64_t n);
+uint8_t		digit_counter(int64_t n, uint8_t base_len);
+uint8_t		digit_ucounter(uint64_t n, uint8_t base_len);
 
 //	Memory Edits Functions
 void		ft_bzero(void *s, size_t n);
@@ -126,10 +115,15 @@ int			ft_memcmp(const void *s1, const void *s2, size_t n);
 void		ft_putchar_fd(char c, int fd);
 void		ft_putendl_fd(t_cchr *s, int fd);
 void		ft_putnbr_fd(int n, int fd);
+void		ft_putnbr_nl_fd(int n, int fd);
 void		ft_putstr_fd(t_cchr *s, int fd);
 
 //	String Create Functions
 char		*ft_itoa(int n);
+char		*nbr_to_str(int64_t n);
+char		*itoa_base(int64_t n, const char *base);
+char		*int_to_str(char *dst, uint8_t len, int64_t n, const char *base);
+
 char		*ft_strdup(t_cchr *s);
 char		*strdup_safe(t_cchr *s);
 char		*strdup_len(t_cchr *s, size_t size);
@@ -157,11 +151,14 @@ size_t		cpy_str_s(char *dst, t_cchr *src);
 size_t		cpy_till_char_s(char *dst, t_cchr *src, t_cchr chr);
 void		ft_striteri(char *s, void (*f)(uint32_t, char*));
 size_t		ft_strlcat(char *dst, t_cchr *src, size_t size);
+char		*ft_strncpy(char *dst, const char *src, size_t n);
 size_t		ft_strlcpy(char *dst, t_cchr *src, size_t size);
 char		*charmove(char *dest, const char *src, size_t n);
+void		extract_substr(const char *s, uint32_t start, size_t ln, char *buf);
 char		*ft_strmapi(char const *s, char (*f)(uint32_t, char));
 void		swap_ptr(void **s1, void **s2);
-void		itoa_buff(char *dst, int n);
+uint8_t		nbr_to_buff(char *dst, int64_t n);
+size_t		int64_base(int64_t n, const char *base, char *buff, size_t b_len);
 
 //	String Manipulation Functions
 char		*ft_strchr(t_cchr *s, int c);

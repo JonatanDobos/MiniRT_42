@@ -11,7 +11,7 @@ static int16_t	check_values(t_value_check *vc)
 	// 	return (errset(perr_msg("check_values", ERRFORM, EMSG_4L)));
 	// if (vc->obj_amount < 1)
 	// 	return (errset(perr_msg("check_values", ERRFORM, EMSG_4O)));
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 static int16_t	input_line_check(char *line)
@@ -34,7 +34,7 @@ static int16_t	input_line_check(char *line)
 		++i;
 	if (line[i] != '\0')
 		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_3)));
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 static int16_t	input_type_parse(t_scene *dest, t_value_check *vc, char *line)
@@ -51,7 +51,7 @@ static int16_t	input_type_parse(t_scene *dest, t_value_check *vc, char *line)
 		return (parse_sp(dest, vc, nxtv(line)));
 	if (!ft_strncmp(line, "cy", 2))
 		return (parse_cy(dest, vc, nxtv(line)));
-	return (SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int16_t	input_parse(t_rt *m, const char *file, t_scene *dest)
@@ -74,18 +74,18 @@ int16_t	input_parse(t_rt *m, const char *file, t_scene *dest)
 			return (puts("1"), close(fd), errset(perr("input_line_check", errno)));
 		if (line == NULL)
 			break ;
-		if (input_line_check(line) != SUCCESS)
+		if (input_line_check(line) != EXIT_SUCCESS)
 			return (puts("2"), close(fd), free_str(&line), cleanup(m), errset(ERTRN));
-		if (input_type_parse(dest, &vc, line) != SUCCESS)
+		if (input_type_parse(dest, &vc, line) != EXIT_SUCCESS)
 			return (puts("3"), close(fd), free_str(&line), cleanup(m), errset(ERTRN));
 		free_str(&line);
 	}
-	if (check_values(&vc) != SUCCESS)
+	if (check_values(&vc) != EXIT_SUCCESS)
 		return (close(fd), free_str(&line), cleanup(m), errset(ERTRN));
 	dynarr_shrink_to_fit(&dest->obj_dynarr);
 	dynarr_shrink_to_fit(&dest->light_dynarr);
 	dest->objs = (t_objs *)dynarr_take_arr(&dest->obj_dynarr);
 	dest->lights = (t_objs *)dynarr_take_arr(&dest->light_dynarr);
 	// _print_parsing(dest);//test
-	return (close(fd), free_str(&line), SUCCESS);
+	return (close(fd), free_str(&line), EXIT_SUCCESS);
 }

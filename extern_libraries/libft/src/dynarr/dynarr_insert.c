@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   dynarr_insert.c                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jdobos <jdobos@student.42.fr>                +#+                     */
+/*   By: rde-brui <rde-brui@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/09 20:19:40 by rde-brui      #+#    #+#                 */
-/*   Updated: 2025/01/19 04:05:04 by rjw           ########   odam.nl         */
+/*   Created: 2025/01/09 20:31:53 by rde-brui      #+#    #+#                 */
+/*   Updated: 2025/03/21 19:05:56 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 static size_t	get_growth_factor(size_t length, size_t capacity);
 static bool		dynarr_grow(t_dynarr *a);
 
-#include <stdio.h>
-bool	dynarr_insert(t_dynarr *a, t_cvoid *element)
+bool	dynarr_insert(t_dynarr *a, const void *element)
 {
 	if (a == NULL)
 	{
@@ -27,7 +26,7 @@ bool	dynarr_insert(t_dynarr *a, t_cvoid *element)
 	{
 		return (false);
 	}
-	ft_memcpy(a->arr + (a->length * a->elem_size), element, a->elem_size);
+	da_memcpy(a->arr + (a->length * a->elem_size), element, a->elem_size);
 	++a->length;
 	return (true);
 }
@@ -39,7 +38,7 @@ static bool	dynarr_grow(t_dynarr *a)
 	void			*new_arr;
 
 	new_capacity = get_growth_factor(a->length, a->capacity);
-	new_arr = ft_realloc(&a->arr, new_capacity * a->elem_size, old_size);
+	new_arr = da_realloc(&a->arr, new_capacity * a->elem_size, old_size);
 	if (new_arr == NULL && a->arr != NULL)
 	{
 		return (false);
