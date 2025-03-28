@@ -51,7 +51,7 @@ bool	destroy_conditions(t_rt *rt)
 	return (true);
 }
 
-void	destroy_threads(t_rt *rt, size_t thread_amount)
+void	destroy_threads(t_rt *rt)
 {
 	if (pthread_join(rt->thread.thread, NULL) != 0)
 	{

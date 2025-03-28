@@ -30,8 +30,6 @@ typedef struct	s_thread
 	uint8_t			*pixels;
 	uint8_t			*pixels_mlx;
 	uint8_t			*pixels_own;
-	uint16_t		img_width;
-	uint16_t		img_height;
 	t_mtx			mtx;
 	pthread_t		thread;
 }	t_thread;
@@ -40,13 +38,12 @@ typedef struct	s_thread
 bool	initialize_mutexes(t_rt *rt);
 bool	initialize_conditions(t_rt *rt);
 bool	launch_pthreads(t_rt *rt);
-void	destroy_threads(t_rt *rt, size_t thread_amount);
+void	destroy_threads(t_rt *rt);
 bool	destroy_conditions(t_rt *rt);
 void	destroy_mutexes(t_rt *rt, size_t amount);
 
 bool	img_multithreaded(t_rt *rt);
 void	thread_routine_init(t_thread *th);
-void	img_deletion(t_rt *rt, uint16_t img_amount);
 
 bool	check_bool(t_mtx *mutex, bool to_check);
 bool	toggle_bool(t_mtx *mutex, bool *to_toggle, bool new_value);

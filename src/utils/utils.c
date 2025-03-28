@@ -15,7 +15,7 @@ t_cint32	cleanup(t_rt *rt)
 			destroy_mutexes(rt, MTX_AMOUNT);
 		}
 		if (rt->creation_check == true)
-			destroy_threads(rt, THREADS - 1);
+			destroy_threads(rt);
 		if (rt->read_scene->objs)
 			free(rt->read_scene->objs);
 		if (rt->read_scene->lights)

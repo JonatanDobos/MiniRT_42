@@ -13,10 +13,6 @@ void	thread_routine_init(t_thread *th)
 {
 	pthread_mutex_lock(th->rt->mtx + MTX_SYNC);
 	pthread_mutex_unlock(th->rt->mtx + MTX_SYNC);
-	if (check_bool(th->rt->mtx + MTX_CREATION_CHECK, th->rt->creation_check) == false)
-	{
-		return ;
-	}
 	render_routine(th);
 }
 
