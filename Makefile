@@ -84,8 +84,12 @@ PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_
 
 THREADING		:=	thread_setup.c	thread_terminate.c	routine.c	init_mlx_images.c		utils_thread.c	read_scene.c
 
-MLX				:=	window_setup.c			hooks.c		camera_move.c	camera_rotate.c	\
-					object_modification.c	object_move.c	object_rotate.c		hooks_move.c
+MLX				:=	hooks/hooks.c				hooks/hooks_move.c												\
+					cam/camera_move.c			cam/camera_rotate.c											\
+					misc/set_filename.c			misc/window_setup.c											\
+					obj/object_move.c			obj/object_rotate.c				obj/object_modification.c
+
+SCENE			:=	create_rt_file.c	scene_elements.c	geometric_primitives.c
 
 UTILS			:=	utils.c		init.c
 
@@ -98,21 +102,16 @@ RENDER			:=	render.c		scaling.c	cylinder.c	lighting.c	set_pixel.c		obj_intersect
 
 MATH			:=	math.c		vec_arithmetic.c		vec_geometry.c		vec_transform.c
 
-PRINT_SCENE		:=	print_scene.c
-
-# plane.c										
-# sphere.c										
-
 #		Find all .c files in the specified directories
 SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))						\
 					$(addprefix $(SRC_DIR)parsing/, $(PARSE))				\
 					$(addprefix $(SRC_DIR)error/, $(ERROR))					\
 					$(addprefix $(SRC_DIR)mlx/, $(MLX))						\
+					$(addprefix $(SRC_DIR)scene/, $(SCENE))					\
 					$(addprefix $(SRC_DIR)utils/, $(UTILS))					\
 					$(addprefix $(SRC_DIR)render/, $(RENDER))				\
 					$(addprefix $(SRC_DIR)math/, $(MATH))					\
 					$(addprefix $(SRC_DIR)multi_threading/, $(THREADING))	\
-					$(addprefix $(SRC_DIR)print_scene/, $(PRINT_SCENE))		\
 					$(addprefix $(SRC_DIR)debug/, $(DEBUG))
 
 #		Generate object file names

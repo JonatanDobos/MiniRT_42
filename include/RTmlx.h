@@ -3,11 +3,11 @@
 # include <MLX42/MLX42.h>
 # include <common_defs.h>
 # include <miniRT.h>
+# include <libft.h> 
 
 # define LOGO_PATH "images/glasses.png"
-
 // Maybe scrool FOV hook speed??
-
+# define NAME_FILE "Name your .rt file:  "
 # define CAM_ROTATION_SPEED 2.6f
 # define CAM_MOVE_SPEED 18.0f
 # define FOV_SCROLL_SPEED 90.0f
@@ -34,6 +34,9 @@ typedef struct s_window
 	uint16_t		res_r_start;
 	float			delta_time;
 	bool			resize;
+	bool			file_creation;
+	char			filename[FILE_CREATION + (sizeof(NAME_FILE) - 1)];
+	uint16_t		filename_len;
 	mlx_texture_t	*logo;
 }	t_window;
 
@@ -50,7 +53,7 @@ void	loop_hook_threaded(t_rt *rt);
 void	my_keyhook(mlx_key_data_t keydata, t_rt *rt);
 void	fov_hook(double xdelta, double ydelta, t_scene *sc);
 
-bool	keybindings_used_in_loophook(const keys_t key);
+// bool	keybindings_used_in_loophook(const keys_t key);
 
 // hooks_move.c
 
@@ -97,5 +100,8 @@ void		obj_rotate_up(t_scene *sc);
 void		obj_rotate_down(t_scene *sc);
 void		obj_rotate_left(t_scene *sc);
 void		obj_rotate_right(t_scene *sc);
+
+void		reset_filename(t_window *win);
+void		set_filename(const keys_t key, t_window *win, t_scene *sc);
 
 #endif

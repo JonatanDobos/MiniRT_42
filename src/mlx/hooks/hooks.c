@@ -6,17 +6,17 @@
 #include <debug.h>
 #include <unistd.h>
 
-bool	keybindings_used_in_loophook(const keys_t key)
-{
-	if (key == MLX_KEY_W || key == MLX_KEY_A || key == MLX_KEY_S || 
-		key == MLX_KEY_D || key == MLX_KEY_UP || key == MLX_KEY_LEFT ||
-		key == MLX_KEY_DOWN || key == MLX_KEY_RIGHT ||
-		key == MLX_KEY_SPACE || key == MLX_KEY_LEFT_SHIFT)
-	{
-		return (true);
-	}
-	return (false);
-}
+// bool	keybindings_used_in_loophook(const keys_t key)
+// {
+// 	if (key == MLX_KEY_W || key == MLX_KEY_A || key == MLX_KEY_S || 
+// 		key == MLX_KEY_D || key == MLX_KEY_UP || key == MLX_KEY_LEFT ||
+// 		key == MLX_KEY_DOWN || key == MLX_KEY_RIGHT ||
+// 		key == MLX_KEY_SPACE || key == MLX_KEY_LEFT_SHIFT)
+// 	{
+// 		return (true);
+// 	}
+// 	return (false);
+// }
 
 void	mlx_closing_cleanup_threads(t_rt *rt)
 {
@@ -34,7 +34,18 @@ void	mlx_closing_cleanup_threads(t_rt *rt)
 
 bool	handle_custom_key(const keys_t key, t_rt *rt)
 {
-	if (handle_object_modification(key, rt->scene) == true)
+	if (key == MLX_KEY_P)
+		printf("\n>%ld<\n", sizeof(NAME_FILE) - 1);
+		// print_camera(rt->scene->camera);
+
+	if (key == MLX_KEY_ENTER || rt->win->file_creation == true)
+		set_filename(key, rt->win, rt->scene);
+	else if (key == MLX_KEY_ESCAPE)
+	{
+		mlx_closing_cleanup_threads(rt);
+		mlx_close_window(rt->win->mlx);
+	}
+	else if (handle_object_modification(key, rt->scene) == true)
 		rt->scene->render = true;
 	else if (key == MLX_KEY_1)
 		print_camera(rt->scene->camera);
@@ -42,17 +53,14 @@ bool	handle_custom_key(const keys_t key, t_rt *rt)
 		rt->scene->render = res_upscale(rt->win);
 	else if (key == MLX_KEY_MINUS)
 		rt->scene->render = res_downscale(rt->win);
-	else if (key == MLX_KEY_ESCAPE) {
-		mlx_closing_cleanup_threads(rt);
-		mlx_close_window(rt->win->mlx);
-	}
+
 	else if (key == MLX_KEY_L)
 	{
 		rt->scene->intersect_lights = !rt->scene->intersect_lights;
 		rt->scene->render = true;
 	}
-	else if (keybindings_used_in_loophook(key) == false)
-		return (false);
+	// else if (keybindings_used_in_loophook(key) == false)
+	// 	return (false);
 	return (true);
 }
 
@@ -79,6 +87,7 @@ void	init_hooks(t_rt *rt)
 	mlx_mouse_hook(rt->win->mlx, (mlx_mousefunc)mouse_hook, rt);
 	mlx_scroll_hook(rt->win->mlx, (mlx_cursorfunc)fov_hook, rt->scene);
 	mlx_close_hook(rt->win->mlx, (mlx_closefunc)mlx_closing_cleanup_threads, rt);
+	reset_filename(rt->win);
 }
 
 void	fov_hook(double xdelta, double ydelta, t_scene *sc)

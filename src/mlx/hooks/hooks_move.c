@@ -11,13 +11,16 @@ static void	mouse_clicks_on_obj(t_scene *scene, t_ray ray);
 
 void	movement(t_rt *rt)
 {
-	if (rt->scene->selected_obj == NULL)
+	if (rt->win->file_creation == false)
 	{
-		cam_hook(rt);
-	}
-	else
-	{
-		obj_hook(rt);
+		if (rt->scene->selected_obj == NULL)
+		{
+			cam_hook(rt);
+		}
+		else
+		{
+			obj_hook(rt);
+		}
 	}
 }
 

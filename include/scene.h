@@ -4,8 +4,9 @@
 # include <stdlib.h>
 # include <miniRT.h>
 # include <dynarr.h>
+# include <dbltoa.h>
 
-
+# define RT_MAX_LINE_LEN 150
 //	3 objects, Plane Sphere Cylinder
 # define NUM_OBJ_TYPES 3
 
@@ -118,5 +119,13 @@ typedef struct	s_scene
 
 void	render(t_rt *rt);
 
-void	create_scene_rt_file(t_scene *sc);
+void	create_scene_rt_file(t_scene *sc, const char *filename);
+size_t	color_line(t_dbltoa *dbl, char *rt_line, t_vec4 color);
+size_t	coords_line(t_dbltoa *dbl, char *rt_line, t_vec4 coords);
+
+void	ambient_line(t_objs *ambient, t_dbltoa *dbl, int fd);
+void	camera_line(t_objs *camera, t_dbltoa *dbl, int fd);
+void	lights_line(t_objs *lights, size_t amount, t_dbltoa *dbl, int fd);
+
+void	objs_line(t_objs *objs, size_t amount, t_dbltoa *dbl, int fd);
 #endif

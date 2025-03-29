@@ -56,7 +56,6 @@ int main(int argc, char **argv)
 	t_scene		read_sc;
 	t_window	win;
 
-
 	init_main(&rt, &sc, &win);
 	if (SCREEN_WIDTH < 5 || SCREEN_HEIGHT < 5)
 		return (write(1, "Screensizes are lower than allowed\n", 35), EXIT_SUCCESS);
@@ -66,7 +65,6 @@ int main(int argc, char **argv)
 	{
 		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
 	}
-	create_scene_rt_file(&sc);
 	init_hooks(&rt);
 	if (THREADS > 1)
 	{
