@@ -5,14 +5,6 @@
 #include <utils.h>
 #include <render.h>
 
-bool	check_input(t_rt *rt, int argc, char **argv)
-{
-	(void)rt;
-	(void)argc;
-	(void)argv;
-	return (EXIT_SUCCESS);
-}
-
 void	init_main(t_rt *rt, t_scene *scn, t_window *win)
 {
 	ft_bzero(rt, sizeof(t_rt));
@@ -59,8 +51,7 @@ int main(int argc, char **argv)
 	init_main(&rt, &sc, &win);
 	if (SCREEN_WIDTH < 5 || SCREEN_HEIGHT < 5)
 		return (write(1, "Screensizes are lower than allowed\n", 35), EXIT_SUCCESS);
-	if (check_input(&rt, argc, argv) != 0 || \
-		input_parse(&rt, argv[1], &sc) != 0 || \
+	if (input_parse(&rt, argv[1], &sc) != 0 || \
 		windows_setup_mlx(&rt) != 0)
 	{
 		return (perr("Parsing", errset(ERTRN)), cleanup(&rt));
