@@ -14,13 +14,24 @@ static int16_t	check_values(t_value_check *vc)
 	return (EXIT_SUCCESS);
 }
 
-static int16_t	input_line_check(char *line)
+static bool	only_space_line(char *line)
 {
-	size_t			i;
-	const size_t	len = ft_strlen(line);
+	size_t	i;
 
-	if (len < 4)
-		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_1)));
+	i = 0;
+	while (line[i])
+	{
+		if (!(ft_isspace(line[i]) || line[i] == '\n'))
+			return (false);
+		++i;
+	}
+	return (true);
+}
+
+static int16_t	check_characters(char *line)
+{
+	size_t	i;
+
 	if (!(!ft_strncmp(line, "A", 1) && ft_isspace(line[1]))
 		&& !(!ft_strncmp(line, "C ", 2) && ft_isspace(line[1]))
 		&& !(!ft_strncmp(line, "L ", 2) && ft_isspace(line[1]))
@@ -34,6 +45,19 @@ static int16_t	input_line_check(char *line)
 		++i;
 	if (line[i] != '\0')
 		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_3)));
+}
+
+static int16_t	input_line_check(char *line)
+{
+	size_t			i;
+	const size_t	len = ft_strlen(line);
+
+	if ((len == 1 && line[0] == '\n') || only_space_line(line) == true)
+		return (EXIT_SUCCESS);
+	if (len < 4)
+		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_1)));
+	if (check_characters != EXIT_SUCCESS)
+		return (errset(ERTRN));
 	return (EXIT_SUCCESS);
 }
 
@@ -75,13 +99,13 @@ int16_t	input_parse(t_rt *m, const char *file, t_scene *dest)
 		if (line == NULL)
 			break ;
 		if (input_line_check(line) != EXIT_SUCCESS)
-			return (puts("2"), close(fd), free_str(&line), cleanup(m), errset(ERTRN));
+			return (puts("2"), close(fd), free_str(&line), errset(ERTRN));
 		if (input_type_parse(dest, &vc, line) != EXIT_SUCCESS)
-			return (puts("3"), close(fd), free_str(&line), cleanup(m), errset(ERTRN));
+			return (puts("3"), close(fd), free_str(&line), errset(ERTRN));
 		free_str(&line);
 	}
 	if (check_values(&vc) != EXIT_SUCCESS)
-		return (close(fd), free_str(&line), cleanup(m), errset(ERTRN));
+		return (close(fd), free_str(&line), errset(ERTRN));
 	dynarr_shrink_to_fit(&dest->obj_dynarr);
 	dynarr_shrink_to_fit(&dest->light_dynarr);
 	dest->objs = (t_objs *)dynarr_take_arr(&dest->obj_dynarr);

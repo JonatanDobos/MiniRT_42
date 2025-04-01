@@ -6,6 +6,7 @@ int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	pl;
 
+	puts("P plane");//t
 	pl.type = PLANE;
 	pl.coords[X] = rt_atof(line);
 	pl.coords[Y] = rt_atof(nxtvp(&line));
@@ -30,6 +31,7 @@ int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	sp;
 
+	puts("P sphere");//t
 	sp.type = SPHERE;
 	sp.coords[X] = rt_atof(line);
 	sp.coords[Y] = rt_atof(nxtvp(&line));
@@ -52,6 +54,7 @@ int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	cy;
 
+	puts("P cylinder");//t
 	cy.type = CYLINDER;
 	cy.coords[X] = rt_atof(line);
 	cy.coords[Y] = rt_atof(nxtvp(&line));

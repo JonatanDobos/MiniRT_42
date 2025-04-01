@@ -5,6 +5,7 @@
 
 t_cint32	cleanup(t_rt *rt)
 {
+	puts("cleanup start");//t
 	if (THREADS > 1)
 	{
 		// Wat gebeurt er bij mutex SYNC?
@@ -20,9 +21,11 @@ t_cint32	cleanup(t_rt *rt)
 			free(rt->read_scene->objs);
 		if (rt->read_scene->lights)
 			free(rt->read_scene->lights);
+		if (rt->thread.img)
+			rt->thread.img->pixels = rt->thread.pixels_mlx;
+		puts("cleanup end");//t
 		if (rt->thread.pixels_own)
 			free(rt->thread.pixels_own);
-		rt->thread.img->pixels = rt->thread.pixels_mlx;
 	}
 	else if (rt->win->img != NULL)
 		mlx_delete_image(rt->win->mlx, rt->win->img);

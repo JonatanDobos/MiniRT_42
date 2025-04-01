@@ -6,6 +6,7 @@
 
 int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line)
 {
+	puts("P ambient");//t
 	sc->ambient.a.ratio = range(rt_atof(line), 0.0F, 1.0F);
 	sc->ambient.color[R] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 	sc->ambient.color[G] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
@@ -17,6 +18,7 @@ int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line)
 
 int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
 {
+	puts("P cam");//t
 	sc->camera.coords[X] = rt_atof(line);
 	sc->camera.coords[Y] = rt_atof(nxtvp(&line));
 	sc->camera.coords[Z] = rt_atof(nxtvp(&line));
@@ -34,6 +36,7 @@ int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	l;
 
+	puts("P light");//t
 	l.type = LIGHT;
 	l.coords[X] = rt_atof(line);
 	l.coords[Y] = rt_atof(nxtvp(&line));
@@ -44,7 +47,7 @@ int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 	l.color[G] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 	l.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 	l.color[A] = 1.0F;
-	// Hardcoded raduis, implement parsing later.
+	// Hardcoded raduis, implement parsing later for soft shadows.
 	l.l.radius = 1.0F;
 	if (dynarr_insert(&sc->light_dynarr, &l) == false)
 		return (errset(perr("parse_light", errno)));
@@ -53,16 +56,3 @@ int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 	return (EXIT_SUCCESS);
 }
 
-// int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
-// {
-// 	sc->light.coords[X] = rt_atof(line);
-// 	sc->light.coords[Y] = rt_atof(nxtvp(&line));
-// 	sc->light.coords[Z] = rt_atof(nxtvp(&line));
-// 	sc->light.l.brightness = range(rt_atof(nxtvp(&line)), 0.0F, 1.0F);
-// 	sc->light.color[R] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-// 	sc->light.color[G] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-// 	sc->light.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-// 	sc->light.color[A] = 1.0F;
-// 	++vc->light_amount;
-// 	return (EXIT_SUCCESS);
-// }
