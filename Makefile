@@ -17,7 +17,8 @@ COMPILER		:=	gcc
 CFLAGS			:=	-std=c99
 CFLAGS			+=	-Wall -Wextra
 CFLAGS			+=	-Werror
-# CFLAGS			+=	-Wunreachable-code -Wpedantic -Wshadow
+# CFLAGS			+=	-Wunreachable-code -Wpedantic -Wconversion -Wshadow
+CFLAGS			+=	-Wunreachable-code -Wshadow
 # CFLAGS			+=	-Wconversion
 CFLAGS			+=	-MMD -MP
 CFLAGS			+=	-g
@@ -80,16 +81,19 @@ SRC_DIR			:=	src/
 
 MAIN			:=	main.c
 
-PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c
+PARSE			:=	parse_objects.c				parse_peripherals.c				parsing_utils.c					\
+					parsing.c string_utils.c
 
-THREADING		:=	thread_setup.c	thread_terminate.c	routine.c	init_mlx_images.c		utils_thread.c	read_scene.c
+THREADING		:=	handling/thread_setup.c		handling/thread_terminate.c										\
+					routine/routine.c			routine/utils_thread.c			routine/read_scene.c
 
-MLX				:=	hooks/hooks.c				hooks/hooks_move.c												\
-					cam/camera_move.c			cam/camera_rotate.c											\
-					misc/set_filename.c			misc/window_setup.c											\
+MLX				:=	setup/window_setup.c		setup/init_mlx_images.c											\
+					hooks/hooks.c				hooks/hooks_move.c												\
+					cam/camera_move.c			cam/camera_rotate.c												\
 					obj/object_move.c			obj/object_rotate.c				obj/object_modification.c
 
-SCENE			:=	create_rt_file.c	scene_elements.c	geometric_primitives.c
+SCENE			:=	set_filename.c				create_rt_file.c				scene_elements.c				\
+					geometric_primitives.c
 
 UTILS			:=	utils.c		init.c
 
@@ -97,21 +101,23 @@ ERROR			:=	error.c			print.c
 
 DEBUG			:=	print_info.c
 
-RENDER			:=	render.c		scaling.c	cylinder.c	lighting.c	set_pixel.c		obj_intersect.c		trace_ray.c \
-					render_upscale.c
+RENDER			:=	rendering/render.c		rendering/trace_ray.c				rendering/scaling.c				\
+					rendering/set_pixel.c		rendering/upscale_manager.c 									\
+					intersect/obj_intersect.c	intersect/cylinder.c			intersect/lighting.c
 
-MATH			:=	math.c		vec_arithmetic.c		vec_geometry.c		vec_transform.c
+
+MATH			:=	vec_arithmetic.c			vec_geometry.c				vec_transform.c
 
 #		Find all .c files in the specified directories
 SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))						\
 					$(addprefix $(SRC_DIR)parsing/, $(PARSE))				\
 					$(addprefix $(SRC_DIR)error/, $(ERROR))					\
 					$(addprefix $(SRC_DIR)mlx/, $(MLX))						\
-					$(addprefix $(SRC_DIR)scene/, $(SCENE))					\
+					$(addprefix $(SRC_DIR)create_scene_file/, $(SCENE))		\
 					$(addprefix $(SRC_DIR)utils/, $(UTILS))					\
 					$(addprefix $(SRC_DIR)render/, $(RENDER))				\
 					$(addprefix $(SRC_DIR)math/, $(MATH))					\
-					$(addprefix $(SRC_DIR)multi_threading/, $(THREADING))	\
+					$(addprefix $(SRC_DIR)threads/, $(THREADING))			\
 					$(addprefix $(SRC_DIR)debug/, $(DEBUG))
 
 #		Generate object file names

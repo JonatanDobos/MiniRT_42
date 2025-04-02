@@ -4,7 +4,7 @@
 #include <render.h>
 #include <utils.h>
 
-void	render_manager(t_rt *rt)
+void	upscale_manager(t_rt *rt)
 {
 	if (rt->scene->render == true)
 	{
@@ -26,7 +26,7 @@ void	render_manager(t_rt *rt)
 	render(rt);
 }
 
-void	render_manager_thread(t_rt *rt)
+void	upscale_manager_thread(t_rt *rt)
 {
 	if (rt->scene->render == true)
 	{

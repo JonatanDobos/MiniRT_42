@@ -77,7 +77,7 @@ typedef struct	s_camera
 typedef struct	s_objs
 {
 	t_obj_type		type;
-	union 
+	union
 	{
 		t_camera	c;
 		t_amblight	a;

@@ -10,9 +10,6 @@
 # define M_PI 3.14159265358979323846
 #endif
 
-// math.c
-
-float		fast_sqrt(float number);
 
 // vec_arithmetic.c
 

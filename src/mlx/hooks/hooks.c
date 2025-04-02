@@ -48,7 +48,7 @@ bool	handle_custom_key(const keys_t key, t_rt *rt)
 	else if (handle_object_modification(key, rt->scene) == true)
 		rt->scene->render = true;
 	else if (key == MLX_KEY_1)
-		print_camera(rt->scene->camera);
+		print_camera(rt->scene->camera);		//	alleen debug maar kan andere doen
 	else if (key == MLX_KEY_L)
 	{
 		rt->scene->intersect_lights = !rt->scene->intersect_lights;
@@ -114,7 +114,7 @@ void	loop_hook(t_rt *rt)
 	movement(rt);
 	if (rt->scene->render == true || rt->scene->render_ongoing == true)
 	{
-		render_manager(rt);
+		upscale_manager(rt);
 		time = mlx_get_time() - time;
 		rt->win->delta_time = time;
 		time = 0.01F;// maybe change to delta time!
@@ -143,7 +143,7 @@ void	render_updates(t_rt *rt)
 {
 	if (rt->scene->render == true)
 		cpy_scene(rt->scene, rt->read_scene);
-	render_manager_thread(rt);
+	upscale_manager_thread(rt);
 	rt->win->delta_time = 0.01F;// temporary!
 	rt->scene->cam_fov_speed = FOV_SCROLL_SPEED * rt->win->delta_time;
 	rt->scene->cam_m_speed = CAM_MOVE_SPEED * rt->win->delta_time;
