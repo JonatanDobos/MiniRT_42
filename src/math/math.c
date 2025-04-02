@@ -20,13 +20,15 @@ float	fast_sqrt(float number)
 {
 	const float	threehalfs = 1.5F;
 	const float	x2 = number * 0.5F;
-	int32_t		i;
+	union {
+		float f;
+		int32_t i;
+	} conv;
 	float		y;
 
-	y = number;
-	i = *(int32_t *)&y; // evil floating point bit level hacking
-	i = 0x5f3759df - (i >> 1); // what the fuck?
-	y = *(float *)&i;
+	conv.f = number;
+	conv.i = 0x5f3759df - (conv.i >> 1); // magic number
+	y = conv.f;
 	y = y * (threehalfs - (x2 * y * y)); // 1st iteration
 	return (number * y);
 }

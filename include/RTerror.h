@@ -38,7 +38,7 @@ enum	custom_error
 
 // error.c
 
-int64_t		errset(const int64_t errnum);
+int32_t		errset(const int64_t errnum);
 int16_t		nsave(const int16_t num);
 
 // print.c

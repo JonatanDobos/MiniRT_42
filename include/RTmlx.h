@@ -67,10 +67,7 @@ bool	handle_object_modification(const keys_t key, t_scene *sc);
 // scaling.c
 
 void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
-bool	res_downscale(t_window *win);
-bool	res_upscale(t_window *win);
 bool	res_setscale(t_window *win, const float scale);
-
 
 // camera_move.c
 

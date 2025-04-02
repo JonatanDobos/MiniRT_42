@@ -55,14 +55,14 @@ static void	select_obj_right(t_scene *sc)
 	ssize_t index = sc->sel_obj_index;
 
 	index = sc->sel_obj_index + 1;
-	while (index < sc->o_arr_size && sc->objs[index].type == PLANE)
+	while (index < (ssize_t)sc->o_arr_size && sc->objs[index].type == PLANE)
 		++index;
-	if (index >= sc->o_arr_size)
+	if (index >= (ssize_t)sc->o_arr_size)
 	{
 		index = 0;
-		while (index < sc->o_arr_size && sc->objs[index].type == PLANE)
+		while (index < (ssize_t)sc->o_arr_size && sc->objs[index].type == PLANE)
 			++index;
-		if (index >= sc->o_arr_size)
+		if (index >= (ssize_t)sc->o_arr_size)
 			return;
 	}
 	sc->selected_obj = sc->objs + index;

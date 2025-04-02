@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 	t_window	win;
 
 	init_main(&rt, &sc, &read_sc, &win);
-	if (setup_init_parsing(&rt, argv[1]) != EXIT_SUCCESS)
+	if (setup_init_parsing(&rt, argc, argv[1]) != EXIT_SUCCESS)
 		return (errset(ERTRN));
 	init_hooks(&rt);
 	if (THREADS > 1)

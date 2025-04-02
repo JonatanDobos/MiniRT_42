@@ -1,4 +1,5 @@
 #include <MLX42/MLX42.h>
+#include <parsing.h>
 #include <scene.h>
 #include <utils.h>
 #include <RTmlx.h>
@@ -6,9 +7,9 @@
 #define NO_FILENAME "Give argument: ./miniRT <filename>\n"
 #define SCREEN_ERROR "Screensize is too small\n"
 
-int16_t setup_init_parsing(t_rt *rt, const char *argv)
+int16_t setup_init_parsing(t_rt *rt, const int argc, const char *argv)
 {
-	if (argv == NULL)
+	if (argc != 2)
 		return (write(1, NO_FILENAME, sizeof(NO_FILENAME) - 1), EXIT_FAILURE);
 	else if (SCREEN_WIDTH < 5 || SCREEN_HEIGHT < 5)
 		return (write(1, SCREEN_ERROR, sizeof(SCREEN_ERROR) - 1), EXIT_FAILURE);
@@ -19,7 +20,7 @@ int16_t setup_init_parsing(t_rt *rt, const char *argv)
 	return (EXIT_SUCCESS);
 }
 
-t_cint32	cleanup(t_rt *rt)
+int32_t	cleanup(t_rt *rt)
 {
 	puts("cleanup start");//t
 	if (THREADS > 1)
@@ -39,7 +40,6 @@ t_cint32	cleanup(t_rt *rt)
 			free(rt->read_scene->lights);
 		if (rt->thread.img)
 			rt->thread.img->pixels = rt->thread.pixels_mlx;
-		puts("cleanup end");//t
 		if (rt->thread.pixels_own)
 			free(rt->thread.pixels_own);
 	}

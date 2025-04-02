@@ -49,11 +49,6 @@ bool	handle_custom_key(const keys_t key, t_rt *rt)
 		rt->scene->render = true;
 	else if (key == MLX_KEY_1)
 		print_camera(rt->scene->camera);
-	else if (key == MLX_KEY_EQUAL)
-		rt->scene->render = res_upscale(rt->win);
-	else if (key == MLX_KEY_MINUS)
-		rt->scene->render = res_downscale(rt->win);
-
 	else if (key == MLX_KEY_L)
 	{
 		rt->scene->intersect_lights = !rt->scene->intersect_lights;

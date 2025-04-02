@@ -32,7 +32,7 @@ void	*memappend(void **ptr, void *append, size_t size, size_t len)
 	return (*ptr);
 }
 
-double	range(double value, double min, double max)
+float	range(float value, float min, float max)
 {
 	if (value > max)
 		return (max);

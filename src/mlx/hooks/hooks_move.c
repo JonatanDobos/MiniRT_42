@@ -83,7 +83,8 @@ void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *
 	float	ndc_x;
 	float	ndc_y;
 	t_ray	ray;
-
+	
+	(void)mods;
 	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS)
 	{
 		mlx_get_mouse_pos(rt->win->mlx, &x, &y);
@@ -101,13 +102,9 @@ static void	mouse_clicks_on_obj(t_scene *sc, t_ray ray)
 {
 	float		closest_t;
 	uint8_t		closest_intersect_type;
-	t_vec4		pixel_color;
-	t_vec4		normal;
 	t_objs		*closest_obj;
 	uint32_t	closest_obj_index;
-	t_vec4		hit_point;
 
-	pixel_color = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
 	closest_obj_index = find_closest_object(sc, ray, &closest_t, &closest_intersect_type);
 	closest_obj = sc->objs + closest_obj_index;
 	if (sc->intersect_lights == true)

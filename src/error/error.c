@@ -13,7 +13,7 @@
  * @note Use ERTRN (-1) to return last errnum without overwriting.
  * @note Use ESET (-2) to set the shared_errnum address in the next call.
  */
-int64_t	errset(const int64_t errnum)
+int32_t	errset(const int64_t errnum)
 {
 	static int64_t	*shared_errnum = NULL;
 	static bool		set_address = true;

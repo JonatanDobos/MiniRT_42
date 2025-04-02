@@ -38,7 +38,7 @@ t_vec4	calc_lighting(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
 bool	calc_shadow(t_scene *sc, t_ray ray, t_vec4 light_dir, uint32_t light)
 {
 	t_vec4		origin;
-	float		shadow;
+	// float		shadow;
 	uint32_t	i;
 	float		t;
 	float		distance;

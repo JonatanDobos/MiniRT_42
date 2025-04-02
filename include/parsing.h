@@ -34,7 +34,7 @@ int16_t		parse_cy(t_scene *sc, t_value_check *vc, char *line);
 // parsing_utils.c
 
 void		*memappend(void **ptr, void *append, size_t size, size_t len);
-double		range(double value, double min, double max);
+float		range(float value, float min, float max);
 
 // string_utils.c
 

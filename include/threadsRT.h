@@ -19,7 +19,6 @@ typedef struct s_rt			t_rt;
 typedef pthread_mutex_t		t_mtx;
 typedef void				*(*t_cast)(void *);
 
-
 typedef struct	s_thread
 {
 	uint16_t		id;
@@ -43,7 +42,7 @@ bool	destroy_conditions(t_rt *rt);
 void	destroy_mutexes(t_rt *rt, size_t amount);
 
 bool	img_multithreaded(t_rt *rt);
-void	thread_routine_init(t_thread *th);
+void	*thread_routine_init(t_thread *th);
 
 bool	check_bool(t_mtx *mutex, bool to_check);
 bool	toggle_bool(t_mtx *mutex, bool *to_toggle, bool new_value);

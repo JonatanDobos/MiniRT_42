@@ -9,20 +9,20 @@ MULTI_THREADED	:=	-j $(N_JOBS)
 # MAKEFLAGS will automatically apply the specified options (e.g., parallel execution) when 'make' is invoked
 MAKEFLAGS		+=	$(MULTI_THREADED)
 
-# COMPILER		:=	cc
-COMPILER		:=	gcc
 RM				:=	rm -rf
 PRINT_NO_DIR	:=	--no-print-directory
 
 #		CFLAGS for testing
-CFLAGS			 =	-MMD -MP -std=c99
-# CFLAGS			+=	-Wall -Wextra
-# # Werror cannot go together with fsanitize, because fsanitize won't work correctly.
-# CFLAGS			+=	-Werror
+COMPILER		:=	gcc
+CFLAGS			:=	-std=c99
+CFLAGS			+=	-Wall -Wextra
+CFLAGS			+=	-Werror
+# CFLAGS			+=	-Wunreachable-code -Wpedantic -Wshadow
+# CFLAGS			+=	-Wconversion
+CFLAGS			+=	-MMD -MP
 CFLAGS			+=	-g
-# CFLAGS			+=	-g -Og
+#	Werror cannot go together with fsanitize, because fsanitize won't work correctly.
 # CFLAGS			+=	-fsanitize=address
-# CFLAGS			+=	-Wunused -Wuninitialized -Wunreachable-code
 
 #		Temporary CFLAGS
 CFLAGS			+=	-pthread -D THREADS=2
@@ -80,7 +80,7 @@ SRC_DIR			:=	src/
 
 MAIN			:=	main.c
 
-PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c _debug.c
+PARSE			:=	parse_objects.c	parse_peripherals.c	parsing_utils.c	parsing.c string_utils.c
 
 THREADING		:=	thread_setup.c	thread_terminate.c	routine.c	init_mlx_images.c		utils_thread.c	read_scene.c
 
@@ -217,6 +217,8 @@ test5: all
 white: all
 	./$(NAME) ./scenes/white.rt
 
+valrind: all
+	./$(NAME) ./scenes/test1.rt
 
 print-%:
 	$(info $($*))

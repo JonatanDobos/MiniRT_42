@@ -9,11 +9,12 @@
 static void	render_routine(t_thread *th);
 static void	resynchronize_after_rendering(t_thread *th);
 
-void	thread_routine_init(t_thread *th)
+void	*thread_routine_init(t_thread *th)
 {
 	pthread_mutex_lock(th->rt->mtx + MTX_SYNC);
 	pthread_mutex_unlock(th->rt->mtx + MTX_SYNC);
 	render_routine(th);
+	return (NULL);
 }
 
 // Ook iets doen wanneer de render onderbroken wordt?

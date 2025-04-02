@@ -44,12 +44,12 @@ static int16_t	check_characters(char *line)
 		++i;
 	if (line[i] != '\0')
 		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_3)));
+	return (EXIT_SUCCESS);
 }
 
 static int16_t	input_line_check(char *line)
 {
 	const size_t	len = ft_strlen(line);
-	size_t			i;
 
 	if ((len == 1 && line[0] == '\n') || only_space_line(line) == true)
 		return (EXIT_SUCCESS);
