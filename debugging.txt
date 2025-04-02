@@ -1,1 +1,2 @@
 1.	./miniRT <randomfile> segmenetation
+

@@ -32,7 +32,7 @@ int16_t	perr(char *place, const int16_t errnum)
 		return (errnum);
 	ft_putstr_fd("Error\n", STDERR_FILENO);
 	ft_putstr_fd("miniRT: ", STDERR_FILENO);
-	if (place)
+	if (place != NULL)
 	{
 		ft_putstr_fd(place, STDERR_FILENO);
 		ft_putstr_fd("(): ", STDERR_FILENO);

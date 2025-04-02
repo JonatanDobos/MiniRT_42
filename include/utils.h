@@ -4,17 +4,21 @@
 # include <math.h>
 # include <miniRT.h>
 
+
+// static inline float	rt_minf(float a, float b)
+// {
+	// 	if (a > b)
+	// 		return (b);
+	// 	else
+	// 		return (a);
+	// }
+	
+	// utils.c
 t_cint32	cleanup(t_rt *rt);
 
-static inline float	rt_minf(float a, float b)
-{
-	if (a > b)
-		return (b);
-	else
-		return (a);
-}
-
-// utils.c
+void		init_main(t_rt *rt, t_scene *scn, t_scene *read_scn, t_window *win);
+int32_t		multithreaded(t_rt *rt);
+int16_t 	setup_init_parsing(t_rt *rt, const char *argv);
 
 t_vec4		bcast4(float scalar);
 t_vec4		bcast3(float scalar);

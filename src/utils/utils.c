@@ -2,6 +2,22 @@
 #include <scene.h>
 #include <utils.h>
 #include <RTmlx.h>
+#include <RTerror.h>
+#define NO_FILENAME "Give argument: ./miniRT <filename>\n"
+#define SCREEN_ERROR "Screensize is too small\n"
+
+int16_t setup_init_parsing(t_rt *rt, const char *argv)
+{
+	if (argv == NULL)
+		return (write(1, NO_FILENAME, sizeof(NO_FILENAME) - 1), EXIT_FAILURE);
+	else if (SCREEN_WIDTH < 5 || SCREEN_HEIGHT < 5)
+		return (write(1, SCREEN_ERROR, sizeof(SCREEN_ERROR) - 1), EXIT_FAILURE);
+	else if (read_inp_file(argv, rt->scene) != 0)
+		return (cleanup(rt), errset(ERTRN));
+	else if (windows_setup_mlx(rt) != 0)
+		return (cleanup(rt), perr("MLX", errset(ERTRN)));
+	return (EXIT_SUCCESS);
+}
 
 t_cint32	cleanup(t_rt *rt)
 {

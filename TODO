@@ -14,3 +14,15 @@ Options:
 
 
 - Implementeren van variabele resolutie-scaling om wat smoothere bewegingen te krijgen ook bij veel objs
+
+
+
+
+Remy opmerking:
+1.	./miniRT <randomfile> segmenetation		opgelost?
+argv check
+
+PARSING
+. and , kunnen overal geplaatst worden.
+
+na laatste value check

@@ -6,7 +6,6 @@ int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	pl;
 
-	puts("P plane");//t
 	pl.type = PLANE;
 	pl.coords[X] = rt_atof(line);
 	pl.coords[Y] = rt_atof(nxtvp(&line));
@@ -21,7 +20,7 @@ int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 	pl.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 	pl.color[A] = 1.0F;
 	if (dynarr_insert(&sc->obj_dynarr, &pl) == false)
-		return (errset(perr("parse_pl", errno)));
+		return (errset(perr("parse_pl", ENOMEM)));
 	++sc->o_arr_size;
 	++vc->obj_amount;
 	return (EXIT_SUCCESS);
@@ -31,7 +30,6 @@ int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	sp;
 
-	puts("P sphere");//t
 	sp.type = SPHERE;
 	sp.coords[X] = rt_atof(line);
 	sp.coords[Y] = rt_atof(nxtvp(&line));
@@ -44,7 +42,7 @@ int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 	sp.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 	sp.color[A] = 1.0F;
 	if (dynarr_insert(&sc->obj_dynarr, &sp) == false)
-		return (errset(perr("parse_sp", errno)));
+		return (errset(perr("parse_sp", ENOMEM)));
 	++sc->o_arr_size;
 	++vc->obj_amount;
 	return (EXIT_SUCCESS);
@@ -54,7 +52,6 @@ int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	cy;
 
-	puts("P cylinder");//t
 	cy.type = CYLINDER;
 	cy.coords[X] = rt_atof(line);
 	cy.coords[Y] = rt_atof(nxtvp(&line));
@@ -72,7 +69,7 @@ int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 	cy.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 	cy.color[A] = 1.0F;
 	if (dynarr_insert(&sc->obj_dynarr, &cy) == false)
-		return (errset(perr("parse_cy", errno)));
+		return (errset(perr("parse_cy", ENOMEM)));
 	++sc->o_arr_size;
 	++vc->obj_amount;
 	return (EXIT_SUCCESS);

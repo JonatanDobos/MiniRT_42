@@ -10,7 +10,7 @@
 # define EMSG_3 "Unknown symbol in .rt file."
 # define EMSG_4C "Unsupported amount of cameras (C)."
 # define EMSG_4A "Unsupported amount of ambient light (A)."
-# define EMSG_4L "Unsupported amount of Lights (L)."
+// # define EMSG_4L "Unsupported amount of Lights (L)."
 # define EMSG_4O "Unsupported amount of objects (sp, cy, pl)."
 
 // Custom error code macro's
