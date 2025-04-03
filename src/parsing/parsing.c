@@ -15,25 +15,15 @@ static void	check_values(t_value_check *vc)
 
 int	*group_numbers(const char prefix)
 {
-	static const char	prefixes[] = "ACLspcy";
-	static int			groups[6][5] = {
-		{1, 3, 0, 0, 0},       // 'A'
-		{3, 3, 1, 0, 0},       // 'C'
-		{3, 1, 3, 0, 0},       // 'L'
-		{3, 1, 3, 0, 0},       // 'sp'
-		{3, 3, 3, 0, 0},       // 'pl'
-		{3, 3, 1, 1, 3}        // 'cy'
+	static int	groups[6][5] = {
+		{1, 3, 0, 0, 0},	// 'A'
+		{3, 3, 1, 0, 0},	// 'C'
+		{3, 1, 3, 0, 0},	// 'L'
+		{3, 1, 3, 0, 0},	// 'sp'
+		{3, 3, 3, 0, 0},	// 'pl'
+		{3, 3, 1, 1, 3}		// 'cy'
 	};
-	uint8_t				i;
-
-	i = 0;
-	while (i < sizeof(prefixes) - 1)
-	{
-		if (prefix == prefixes[i])
-			return (groups[i]);
-		++i;
-	}
-	return (NULL);
+	return (groups[find_char("ACLspcy", prefix)]);
 }
 
 bool	one_member_group(const char *line, size_t *prev_i)
@@ -81,9 +71,9 @@ bool	three_member_group(const char *line, size_t *prev_i)
 
 bool	check_line(const char *line, const char prefix, uint8_t nbr_of_groups)
 {
-	static bool (*group_ptr[2])(const char *, size_t *) = {
-		one_member_group,   // Index 0: for *prefix_nbr != 3
-		three_member_group  // Index 1: for *prefix_nbr == 3
+	static bool	(*group_ptr[2])(const char *, size_t *) = {
+		one_member_group,
+		three_member_group
 	};
 	const int	*prefix_nbr = group_numbers(prefix);
 	uint8_t		group_index;
@@ -94,7 +84,7 @@ bool	check_line(const char *line, const char prefix, uint8_t nbr_of_groups)
 	while (line[i] != '\0' && line[i] != '#')
 	{
 		if (ft_isnum(line + i) == false)
-			return (puts("niet?"),false);
+			return (false);
 		if (group_ptr[((*prefix_nbr) == 3)](line, &i) == false)
 			return (false);
 		++group_index;
