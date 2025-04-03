@@ -6,7 +6,7 @@
 /*   By: rjw <rjw@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/11 02:58:41 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/11 03:10:24 by rjw           ########   odam.nl         */
+/*   Updated: 2025/04/03 15:33:30 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ static inline int	ft_isalpha(int c)
 static inline int	ft_isdigit(int c)
 {
 	return (c >= 48 && c <= 57);
+}
+
+static inline int	ft_isnum(const char *s)
+{
+	return (ft_isdigit(*s) || (*s == '-' && ft_isdigit(s[1])));
 }
 
 static inline int	ft_isascii(int c)

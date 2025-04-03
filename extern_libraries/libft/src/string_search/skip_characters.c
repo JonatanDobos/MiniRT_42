@@ -6,52 +6,42 @@
 /*   By: rjw <rjw@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/11 20:30:24 by rjw           #+#    #+#                 */
-/*   Updated: 2025/01/08 17:44:16 by rde-brui      ########   odam.nl         */
+/*   Updated: 2025/04/03 15:58:34 by rde-brui      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-size_t	skip_alpha(t_cchr *str)
+size_t	skip_alpha(const char *str)
 {
-	size_t	i;
+	const char	*tmp_str = str;
 
-	i = 0;
-	while (ft_isalpha(str[i]) == 1024)
-		++i;
-	return (i);
+	while (*tmp_str != '\0' && ft_isalpha(*tmp_str) == 1024)
+		++tmp_str;
+	return (tmp_str - str);
 }
 
 size_t	skip_digits(t_cchr *str)
 {
-	size_t	i;
+	const char	*tmp_str = str;
 
-	i = 0;
-	while (str[i] != '\0' && ft_isdigit(str[i]))
-		++i;
-	return (i);
+	while (*tmp_str != '\0' && ft_isdigit(*tmp_str) == true)
+		++tmp_str;
+	return (tmp_str - str);
 }
 
-size_t	skip_signed_digits(t_cchr *str)
+size_t	skip_signed_digits(const char *str)
 {
-	size_t	i;
+	bool	is_signed = (*str == '-' || *str == '+');
 
-	i = 0;
-	if (str[i] != '\0' && (str[i] == '-' || str[i] == '+'))
-		++i;
-	if (str[i] == '\0' || ft_isdigit(str[i]) == 0)
-		return (0);
-	while (str[i] != '\0' && ft_isdigit(str[i]))
-		++i;
-	return (i);
+	return (skip_digits(str + is_signed) + is_signed);
 }
 
 size_t	skip_spaces(t_cchr *str)
 {
-	size_t	i;
+	const char	*tmp_str = str;
 
-	i = 0;
-	while (ft_isspace(str[i]) == 1)
-		++i;
-	return (i);
+	while (ft_isspace(*tmp_str) == true)
+		++tmp_str;
+	return (tmp_str - str);
 }

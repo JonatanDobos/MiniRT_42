@@ -11,17 +11,17 @@ float	rt_atof(const char *str)
 	num = 0.0F;
 	i = 0;
 	sign = 1;
-	while (!ft_isdigit(str[i]) || str[i] == '.')
+	while (ft_isdigit(str[i]) == false || str[i] == '.')
 		++i;
 	if (i > 0 && str[i - 1] == '-')
 		sign = -1;
-	while (str[i] && ft_isdigit(str[i]))
+	while (str[i] != '\0' && ft_isdigit(str[i]))
 		num = (num * 10.0F) + (str[i++] - '0');
 	if (str[i] != '.')
 		return (num * sign);
 	++i;
 	place = 1;
-	while (str[i] && ft_isdigit(str[i]))
+	while (str[i] != '\0' && ft_isdigit(str[i]))
 		num += (float)(str[i++] - '0') / pow(10, (float)(place++));
 	return (num * sign);
 }
@@ -35,11 +35,11 @@ int32_t	rt_atoi(const char *str)
 	sign = 1;
 	num = 0;
 	i = 0;
-	while (!ft_isdigit(str[i]))
+	while (ft_isdigit(str[i]) == false)
 		++i;
 	if (i > 0 && str[i - 1] == '-')
 		sign = -1;
-	while (ft_isdigit(str[i]))
+	while (ft_isdigit(str[i]) == true)
 		num = (num * 10) + (str[i++] - '0');
 	return (sign * num);
 }
@@ -54,9 +54,9 @@ int32_t	rt_atoi(const char *str)
  */
 char	*nxtv(char *str)
 {
-	while (*str && !ft_isspace(*str) && *str != ',')
+	while (*str && ft_isspace(*str) == false && *str != ',')
 		++str;
-	while (*str && *str != '.' && *str != '-' && !ft_isdigit(*str))
+	while (*str != '\0' && *str != '.' && *str != '-' && ft_isdigit(*str) == false)
 		++str;
 	return (str);
 }
@@ -77,7 +77,8 @@ char	*nxtvp(char **str)
 	c = *str;
 	while (*c && !ft_isspace(*c) && *c != ',')
 		++c;
-	while (*c && *c != '.' && *c != '-' && !ft_isdigit(*c))
+	while (*c && *c != '.' && *c != '-' && ft_isdigit(*c) == false)
 		++c;
-	return (*str = c, c);
+	*str = c;
+	return (c);
 }

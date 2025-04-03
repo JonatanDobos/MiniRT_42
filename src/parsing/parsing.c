@@ -18,12 +18,142 @@ static bool	only_space_line(char *line)
 	size_t	i;
 
 	i = 0;
-	while (line[i])
+	while (line[i] != '\0')
 	{
-		if (!(ft_isspace(line[i]) || line[i] == '\n'))
+		if (ft_isspace(line[i]) == false && line[i] != '\n')
 			return (false);
 		++i;
 	}
+	return (true);
+}
+
+// static bool	is_valid_number_format(const char *line)
+// {
+// 	size_t	i;
+// 	bool	has_digit;
+
+// 	i = 0;
+// 	has_digit = false;
+// 	while (line[i] != '\0')
+// 	{
+// 		if (ft_isdigit(line[i]) == true)
+// 		{
+// 			has_digit = true;
+// 		}
+// 		else if (line[i] == '.' || line[i] == ',')
+// 		{
+// 			// Ensure the character is between digits
+// 			if (i == 0 || !ft_isdigit(line[i - 1]) || !ft_isdigit(line[i + 1]))
+// 				return (false);
+// 		}
+// 		else if (line[i] != '-' && ft_isspace(line[i]) == false)
+// 		{
+// 			// Invalid character
+// 			return (false);
+// 		}
+// 		++i;
+// 	}
+// 	return (has_digit);
+// }
+
+// static bool	is_valid_number_format(const char *line)
+// {
+// 	size_t	i;
+// 	// bool	has_digit;
+	
+// 	// static int counter = 0;
+// 	// if (counter < 15)
+// 	// 	puts(line);
+// 	// else
+// 	// 	exit(0);
+// 	// counter++;
+// 	i = 0;
+// 	// has_digit = false;
+// 	while (line[i] != '\0')
+// 	{
+// 		puts(line+i);
+// 		if (ft_isnum(line + i) == true)
+// 		{
+// 			i += 1 + (line[i] == '-');
+// 			if (ft_isspace(line[i]) == false)
+// 			{
+// 				if ((line[i] == ',' || line[i] == '.') && line[i + 1] != ft_isnum(line + i + 1) == false)
+// 					return (false);
+// 				i += (line[i] == ',' || line[i] == '.');
+// 			}
+// 		}
+// 		// else if (line[i] == ',' || line[i] == '.')
+// 		sleep(1);
+// 		i += skip_spaces(line + i);
+// 		// ++i;
+// 	}
+// 	return (true);
+// }
+
+bool	grouped_numbers(const char *line, size_t *prev_i)
+{
+	size_t	i;
+
+	i = *prev_i;
+	if (line[i] == '.')
+	{
+		++i;
+		if (ft_isnum(line + i) == true)
+			i += skip_signed_digits(line + i);
+		else
+			return (false);
+	}
+	
+	if (ft_isspace(line[i]) == false)
+	{
+		if (line[i] == ',')
+		{
+			++i;
+			// printf(">%s<\n", line+i);
+			if (ft_isnum(line + i) == true)
+				i += skip_signed_digits(line + i);
+			else
+				return (false);
+		}
+	}
+	*prev_i = i;
+	return (true);
+}
+
+static bool	is_valid_number_format(const char *line)
+{
+	size_t	i;
+	// bool	has_digit;
+	static int counter = 0;
+	// static int counter = 0;
+	// if (counter < 15)
+	// 	puts(line);
+	// else
+	// 	exit(0);
+	counter++;
+	i = 0;
+	// has_digit = false;
+	while (line[i] != '\0')
+	{
+		// puts(line+i);
+		if (ft_isnum(line + i) == true)
+		{
+			//	group 1, 2, 3
+			i += skip_signed_digits(line + i);
+			if (ft_isspace(line[i]) == false)
+			{
+				// printf(">%s<\n", line+i);
+				if (grouped_numbers(line, &i) == false)
+					return (false);
+				if (grouped_numbers(line, &i) == false)
+					return (false);
+			}
+		}
+		else if (line[i] != '#')
+			return (true);
+		i += skip_spaces(line + i);
+	}
+	printf("counter %d\n", counter);
 	return (true);
 }
 
@@ -31,18 +161,18 @@ static int16_t	check_characters(char *line)
 {
 	size_t	i;
 
-	if (!(!ft_strncmp(line, "A", 1) && ft_isspace(line[1]))
-		&& !(!ft_strncmp(line, "C ", 1) && ft_isspace(line[1]))
-		&& !(!ft_strncmp(line, "L ", 1) && ft_isspace(line[1]))
-		&& !(!ft_strncmp(line, "sp ", 2) && ft_isspace(line[2]))
-		&& !(!ft_strncmp(line, "pl ", 2) && ft_isspace(line[2]))
-		&& !(!ft_strncmp(line, "cy ", 2) && ft_isspace(line[2])))
+	if ((ft_strncmp(line, "A ", 2) == 0 && ft_isspace(line[1]) == false) ||
+		(ft_strncmp(line, "C ", 2) == 0 && ft_isspace(line[1]) == false) ||
+		(ft_strncmp(line, "L ", 2) == 0 && ft_isspace(line[1]) == false) ||
+		(ft_strncmp(line, "sp ", 2) == 0 && ft_isspace(line[2]) == false) ||
+		(ft_strncmp(line, "pl ", 2) == 0 && ft_isspace(line[2]) == false) ||
+		(ft_strncmp(line, "cy ", 2) == 0 && ft_isspace(line[2]) == false))
+	{
 		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_2)));
-	i = 2;
-	while (ft_isspace(line[i]) == true || ft_isdigit(line[i]) == true
-		|| line[i] == '.' || line[i] == ',' || line[i] == '-')
-		++i;
-	if (line[i] != '\0')
+	}
+	i = 2 + ft_isspace(line[2]);
+	i += skip_spaces(line + i);
+	if (is_valid_number_format(line + i) == false)
 		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_3)));
 	return (EXIT_SUCCESS);
 }
@@ -62,17 +192,17 @@ static int16_t	input_line_check(char *line)
 
 static int16_t	input_type_parse(t_scene *sc, t_value_check *vc, char *line)
 {
-	if (!ft_strncmp(line, "A", 1))
+	if (ft_strncmp(line, "A", 1) == 0)
 		return (parse_amb(sc, vc, nxtv(line)));
-	if (!ft_strncmp(line, "C", 1))
+	if (ft_strncmp(line, "C", 1) == 0)
 		return (parse_cam(sc, vc, nxtv(line)));
-	if (!ft_strncmp(line, "L", 1))
+	if (ft_strncmp(line, "L", 1) == 0)
 		return (parse_light(sc, vc, nxtv(line)));
-	if (!ft_strncmp(line, "pl", 2))
+	if (ft_strncmp(line, "pl", 2) == 0)
 		return (parse_pl(sc, vc, nxtv(line)));
-	if (!ft_strncmp(line, "sp", 2))
+	if (ft_strncmp(line, "sp", 2) == 0)
 		return (parse_sp(sc, vc, nxtv(line)));
-	if (!ft_strncmp(line, "cy", 2))
+	if (ft_strncmp(line, "cy", 2) == 0)
 		return (parse_cy(sc, vc, nxtv(line)));
 	return (EXIT_SUCCESS);
 }
@@ -95,8 +225,11 @@ bool	shrink_dynarr(t_scene *sc)
 	return (true);
 }
 
+
+
 static int16_t	input_parse(const int fd, t_scene *sc)
 {
+	char			*skip_sp;
 	char			*line;
 	t_value_check	vc;
 
@@ -109,7 +242,9 @@ static int16_t	input_parse(const int fd, t_scene *sc)
 			errset(perr("input_line_check", ENOMEM));
 			break ;
 		}
-		if (line == NULL || input_line_check(line) != EXIT_SUCCESS
+		if (line != NULL)
+			skip_sp = line + skip_spaces(line);
+		if (line == NULL || input_line_check(skip_sp) != EXIT_SUCCESS
 			|| input_type_parse(sc, &vc, line) != EXIT_SUCCESS)
 			break ;
 		free_str(&line);

@@ -18,7 +18,7 @@ void	*memappend(void **ptr, void *append, size_t size, size_t len)
 	void			*new;
 	const size_t	old_size = size * len;
 
-	if (!ptr || !append || !size)
+	if (ptr != NULL || append != NULL || size != 0)
 		return (NULL);
 	new = (void *)malloc(old_size + size);
 	if (new == NULL)
@@ -26,7 +26,7 @@ void	*memappend(void **ptr, void *append, size_t size, size_t len)
 	if (old_size && *ptr)
 		ft_memcpy(new, *ptr, old_size);
 	free_ptr(ptr);
-	if (append)
+	if (append != NULL)
 		ft_memcpy(new + old_size, append, size);
 	*ptr = new;
 	return (*ptr);
