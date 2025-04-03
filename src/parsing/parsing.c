@@ -90,89 +90,168 @@ static bool	only_space_line(char *line)
 // 	return (true);
 // }
 
+
+int	**group_numbers(const char prefix)
+{
+	static int A[] = {1, 3};
+	static int C[] = {3, 3, 1};
+	static int L[] = {3, 1, 3};
+	static int sp[] = {3, 1, 3};
+	static int pl[] = {3, 3, 3};
+	static int cy[] = {3, 3, 1, 1, 3};
+
+	static int *groups[] = {
+		['A'] = A,
+		['C'] = C,
+		['L'] = L,
+		['s'] = sp, // 'sp' prefix starts with 's'
+		['p'] = pl, // 'pl' prefix starts with 'p'
+		['c'] = cy  // 'cy' prefix starts with 'c'
+	};
+
+	return (groups[(unsigned char)prefix]);
+}
+
 bool	grouped_numbers(const char *line, size_t *prev_i)
 {
 	size_t	i;
+	uint8_t	iterate_twice;
+static int counter = 0;
 
+counter++;
 	i = *prev_i;
-	if (line[i] == '.')
-	{
-		++i;
-		if (ft_isnum(line + i) == true)
-			i += skip_signed_digits(line + i);
-		else
-			return (false);
-	}
-	
-	if (ft_isspace(line[i]) == false)
+
+	// printf("%d\n", counter);
+
+	// if (counter == 5) {
+	// 	printf(">%s<\n", line+i);
+	// 	exit(0);
+	// }
+	iterate_twice = 0;
+	while (iterate_twice != 2)
 	{
 		if (line[i] == ',')
 		{
 			++i;
-			// printf(">%s<\n", line+i);
 			if (ft_isnum(line + i) == true)
 				i += skip_signed_digits(line + i);
 			else
 				return (false);
 		}
+		else if (iterate_twice == 1)
+			return (false);
+		if (ft_isspace(line[i]) == false)
+		{
+			if (line[i] == '.')
+			{
+				++i;
+				if (ft_isnum(line + i) == true)
+					i += skip_signed_digits(line + i);
+				else
+					return (false);
+			}
+		}
+		++iterate_twice;
 	}
 	*prev_i = i;
 	return (true);
 }
 
-static bool	is_valid_number_format(const char *line)
+static bool	is_valid_number_format(const char *line, const char prefix, uint8_t nbr_of_groups)
 {
+	// int **prefix_nbr = group_numbers(prefix);
+(void)prefix;
+	
 	size_t	i;
-	// bool	has_digit;
-	static int counter = 0;
-	// static int counter = 0;
-	// if (counter < 15)
-	// 	puts(line);
-	// else
-	// 	exit(0);
-	counter++;
+	uint8_t group_index;
+// static int count = 0;
+// ++count;
+	group_index = 0;
 	i = 0;
-	// has_digit = false;
 	while (line[i] != '\0')
 	{
-		// puts(line+i);
 		if (ft_isnum(line + i) == true)
 		{
-			//	group 1, 2, 3
 			i += skip_signed_digits(line + i);
+			if (line[i] == '.')
+			{
+				++i;
+				if (ft_isnum(line + i) == true)
+					i += skip_signed_digits(line + i);
+				else
+					return (false);
+			}
 			if (ft_isspace(line[i]) == false)
 			{
-				// printf(">%s<\n", line+i);
-				if (grouped_numbers(line, &i) == false)
-					return (false);
 				if (grouped_numbers(line, &i) == false)
 					return (false);
 			}
 		}
-		else if (line[i] != '#')
+		else if (line[i] == '#')
 			return (true);
+		else
+			return (false);
 		i += skip_spaces(line + i);
+		++group_index;
+		if (group_index > nbr_of_groups)
+			return (false);
 	}
-	printf("counter %d\n", counter);
+	if (group_index != nbr_of_groups)
+		return (false);
 	return (true);
+}
+/**
+ * Each prefix corresponds to a specific number of groups of numbers:
+ * "A "  -> 2 groups: ambient light ratio and RGB color
+ * "C "  -> 3 groups: position, orientation, and field of view
+ * "L "  -> 3 groups: position, brightness, and RGB color
+ * "sp " -> 3 groups: position, diameter, and RGB color
+ * "pl " -> 3 groups: position, normal vector, and RGB color
+ * "cy " -> 5 groups: position, orientation, diameter, height, and RGB color
+ * The function returns:
+ * - 2 for "A "
+ * - 3 for "C ", "L ", "sp ", and "pl "
+ * - 5 for "cy "
+ * - 0 if no valid prefix is found
+ */
+static uint8_t	is_valid_prefix(const char *line, char *prefix)
+{
+	const char		*prefixes[6] = {"A", "C", "L", "sp", "pl", "cy"};
+	const uint8_t	nbr_of_groups[6] = {2, 3, 3, 3, 3, 5};
+	const size_t	num_prefixes = sizeof(prefixes) / sizeof(prefixes[0]);
+	size_t			prefix_len;
+	size_t			i;
+
+	i = 0;
+	while (i < num_prefixes)
+	{
+		prefix_len = ft_strlen(prefixes[i]);
+		if (ft_strncmp(line, prefixes[i], prefix_len) == 0 &&
+			ft_isspace(line[prefix_len]) == true)
+		{
+			if (ft_isspace(line[prefix_len - 1]) == false)
+			{
+				*prefix = *line;
+				return (nbr_of_groups[i]);
+			}
+		}
+		++i;
+	}
+	return (false);
 }
 
 static int16_t	check_characters(char *line)
 {
+	uint8_t	nbr_of_groups;
 	size_t	i;
+	char	prefix;
 
-	if ((ft_strncmp(line, "A ", 2) == 0 && ft_isspace(line[1]) == false) ||
-		(ft_strncmp(line, "C ", 2) == 0 && ft_isspace(line[1]) == false) ||
-		(ft_strncmp(line, "L ", 2) == 0 && ft_isspace(line[1]) == false) ||
-		(ft_strncmp(line, "sp ", 2) == 0 && ft_isspace(line[2]) == false) ||
-		(ft_strncmp(line, "pl ", 2) == 0 && ft_isspace(line[2]) == false) ||
-		(ft_strncmp(line, "cy ", 2) == 0 && ft_isspace(line[2]) == false))
-	{
+	nbr_of_groups = is_valid_prefix(line, &prefix);
+	if (nbr_of_groups == false)
 		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_2)));
-	}
 	i = 2 + ft_isspace(line[2]);
 	i += skip_spaces(line + i);
-	if (is_valid_number_format(line + i) == false)
+	if (is_valid_number_format(line + i, prefix, nbr_of_groups) == false)
 		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_3)));
 	return (EXIT_SUCCESS);
 }
@@ -181,7 +260,7 @@ static int16_t	input_line_check(char *line)
 {
 	const size_t	len = ft_strlen(line);
 
-	if ((len == 1 && line[0] == '\n') || only_space_line(line) == true)
+	if (*line == '\n' || *line == '#')
 		return (EXIT_SUCCESS);
 	if (len < 4)
 		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_1)));
@@ -245,7 +324,7 @@ static int16_t	input_parse(const int fd, t_scene *sc)
 		if (line != NULL)
 			skip_sp = line + skip_spaces(line);
 		if (line == NULL || input_line_check(skip_sp) != EXIT_SUCCESS
-			|| input_type_parse(sc, &vc, line) != EXIT_SUCCESS)
+			|| input_type_parse(sc, &vc, skip_sp) != EXIT_SUCCESS)
 			break ;
 		free_str(&line);
 	}
