@@ -13,193 +13,101 @@ static void	check_values(t_value_check *vc)
 		errset(perr_msg("check_values", ERRFORM, EMSG_4O));
 }
 
-static bool	only_space_line(char *line)
+int	*group_numbers(const char prefix)
 {
-	size_t	i;
+	static const char	prefixes[] = "ACLspcy";
+	static int			groups[6][5] = {
+		{1, 3, 0, 0, 0},       // 'A'
+		{3, 3, 1, 0, 0},       // 'C'
+		{3, 1, 3, 0, 0},       // 'L'
+		{3, 1, 3, 0, 0},       // 'sp'
+		{3, 3, 3, 0, 0},       // 'pl'
+		{3, 3, 1, 1, 3}        // 'cy'
+	};
+	uint8_t				i;
 
 	i = 0;
-	while (line[i] != '\0')
+	while (i < sizeof(prefixes) - 1)
 	{
-		if (ft_isspace(line[i]) == false && line[i] != '\n')
-			return (false);
+		if (prefix == prefixes[i])
+			return (groups[i]);
 		++i;
 	}
-	return (true);
+	return (NULL);
 }
 
-// static bool	is_valid_number_format(const char *line)
-// {
-// 	size_t	i;
-// 	bool	has_digit;
-
-// 	i = 0;
-// 	has_digit = false;
-// 	while (line[i] != '\0')
-// 	{
-// 		if (ft_isdigit(line[i]) == true)
-// 		{
-// 			has_digit = true;
-// 		}
-// 		else if (line[i] == '.' || line[i] == ',')
-// 		{
-// 			// Ensure the character is between digits
-// 			if (i == 0 || !ft_isdigit(line[i - 1]) || !ft_isdigit(line[i + 1]))
-// 				return (false);
-// 		}
-// 		else if (line[i] != '-' && ft_isspace(line[i]) == false)
-// 		{
-// 			// Invalid character
-// 			return (false);
-// 		}
-// 		++i;
-// 	}
-// 	return (has_digit);
-// }
-
-// static bool	is_valid_number_format(const char *line)
-// {
-// 	size_t	i;
-// 	// bool	has_digit;
-	
-// 	// static int counter = 0;
-// 	// if (counter < 15)
-// 	// 	puts(line);
-// 	// else
-// 	// 	exit(0);
-// 	// counter++;
-// 	i = 0;
-// 	// has_digit = false;
-// 	while (line[i] != '\0')
-// 	{
-// 		puts(line+i);
-// 		if (ft_isnum(line + i) == true)
-// 		{
-// 			i += 1 + (line[i] == '-');
-// 			if (ft_isspace(line[i]) == false)
-// 			{
-// 				if ((line[i] == ',' || line[i] == '.') && line[i + 1] != ft_isnum(line + i + 1) == false)
-// 					return (false);
-// 				i += (line[i] == ',' || line[i] == '.');
-// 			}
-// 		}
-// 		// else if (line[i] == ',' || line[i] == '.')
-// 		sleep(1);
-// 		i += skip_spaces(line + i);
-// 		// ++i;
-// 	}
-// 	return (true);
-// }
-
-
-int	**group_numbers(const char prefix)
-{
-	static int A[] = {1, 3};
-	static int C[] = {3, 3, 1};
-	static int L[] = {3, 1, 3};
-	static int sp[] = {3, 1, 3};
-	static int pl[] = {3, 3, 3};
-	static int cy[] = {3, 3, 1, 1, 3};
-
-	static int *groups[] = {
-		['A'] = A,
-		['C'] = C,
-		['L'] = L,
-		['s'] = sp, // 'sp' prefix starts with 's'
-		['p'] = pl, // 'pl' prefix starts with 'p'
-		['c'] = cy  // 'cy' prefix starts with 'c'
-	};
-
-	return (groups[(unsigned char)prefix]);
-}
-
-bool	grouped_numbers(const char *line, size_t *prev_i)
+bool	one_member_group(const char *line, size_t *prev_i)
 {
 	size_t	i;
-	uint8_t	iterate_twice;
-static int counter = 0;
-
-counter++;
+	
 	i = *prev_i;
-
-	// printf("%d\n", counter);
-
-	// if (counter == 5) {
-	// 	printf(">%s<\n", line+i);
-	// 	exit(0);
-	// }
-	iterate_twice = 0;
-	while (iterate_twice != 2)
+	i += skip_signed_digits(line + i);
+	if (line[i] == '.')
 	{
-		if (line[i] == ',')
-		{
-			++i;
-			if (ft_isnum(line + i) == true)
-				i += skip_signed_digits(line + i);
-			else
-				return (false);
-		}
-		else if (iterate_twice == 1)
+		++i;
+		if (ft_isnum(line + i) == true)
+			i += skip_signed_digits(line + i);
+		else
 			return (false);
-		if (ft_isspace(line[i]) == false)
-		{
-			if (line[i] == '.')
-			{
-				++i;
-				if (ft_isnum(line + i) == true)
-					i += skip_signed_digits(line + i);
-				else
-					return (false);
-			}
-		}
-		++iterate_twice;
 	}
 	*prev_i = i;
 	return (true);
 }
 
-static bool	is_valid_number_format(const char *line, const char prefix, uint8_t nbr_of_groups)
+bool	three_member_group(const char *line, size_t *prev_i)
 {
-	// int **prefix_nbr = group_numbers(prefix);
-(void)prefix;
-	
+	uint8_t iterate_twice;
 	size_t	i;
-	uint8_t group_index;
-// static int count = 0;
-// ++count;
-	group_index = 0;
-	i = 0;
-	while (line[i] != '\0')
+
+	i = *prev_i;
+	iterate_twice = 0;
+	while (iterate_twice < 2)
 	{
-		if (ft_isnum(line + i) == true)
-		{
-			i += skip_signed_digits(line + i);
-			if (line[i] == '.')
-			{
-				++i;
-				if (ft_isnum(line + i) == true)
-					i += skip_signed_digits(line + i);
-				else
-					return (false);
-			}
-			if (ft_isspace(line[i]) == false)
-			{
-				if (grouped_numbers(line, &i) == false)
-					return (false);
-			}
-		}
-		else if (line[i] == '#')
-			return (true);
+		if (one_member_group(line, &i) == false)
+			return (false);
+		if (line[i] == ',' && line[i + 1] != '.')
+			++i;
 		else
 			return (false);
-		i += skip_spaces(line + i);
+		if (line[i] == '\0' || line[i] == '\n')
+			return (printf(">%s<\n",line + i),false);
+		++iterate_twice;
+	}
+	if (one_member_group(line, &i) == false)
+		return (false);
+	*prev_i = i;
+	return (true);
+}
+
+bool	check_line(const char *line, const char prefix, uint8_t nbr_of_groups)
+{
+	static bool (*group_ptr[2])(const char *, size_t *) = {
+		one_member_group,   // Index 0: for *prefix_nbr != 3
+		three_member_group  // Index 1: for *prefix_nbr == 3
+	};
+	const int	*prefix_nbr = group_numbers(prefix);
+	uint8_t		group_index;
+	size_t		i;
+
+	group_index = 0;
+	i = 0;
+	while (line[i] != '\0' && line[i] != '#')
+	{
+		if (ft_isnum(line + i) == false)
+			return (puts("niet?"),false);
+		if (group_ptr[((*prefix_nbr) == 3)](line, &i) == false)
+			return (false);
 		++group_index;
 		if (group_index > nbr_of_groups)
 			return (false);
+		++prefix_nbr;
+		i += skip_spaces(line + i);
 	}
 	if (group_index != nbr_of_groups)
 		return (false);
 	return (true);
 }
+
 /**
  * Each prefix corresponds to a specific number of groups of numbers:
  * "A "  -> 2 groups: ambient light ratio and RGB color
@@ -251,7 +159,7 @@ static int16_t	check_characters(char *line)
 		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_2)));
 	i = 2 + ft_isspace(line[2]);
 	i += skip_spaces(line + i);
-	if (is_valid_number_format(line + i, prefix, nbr_of_groups) == false)
+	if (check_line(line + i, prefix, nbr_of_groups) == false)
 		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_3)));
 	return (EXIT_SUCCESS);
 }
