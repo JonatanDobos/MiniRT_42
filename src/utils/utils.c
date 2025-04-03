@@ -17,6 +17,9 @@ int16_t setup_init_parsing(t_rt *rt, const int argc, const char *argv)
 		return (cleanup(rt), errset(ERTRN));
 	else if (windows_setup_mlx(rt) != 0)
 		return (cleanup(rt), perr("MLX", errset(ERTRN)));
+	rt->win->target_time += (float)(rt->scene->l_arr_size + rt->scene->o_arr_size) * 0.0005F;
+	rt->win->target_time = clamp(rt->win->target_time, 0.01F, 0.025F);
+	printf("TargetDTime: %f sec. | (%hu) fps\n", rt->win->target_time, (uint16_t)(1.0F / rt->win->target_time));//t
 	return (EXIT_SUCCESS);
 }
 

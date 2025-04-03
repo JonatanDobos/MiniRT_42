@@ -3,7 +3,7 @@
 
 static void	check_values(t_value_check *vc)
 {
-	if (vc->amb_amount != 1)
+	if (vc->amb_amount > 1)
 		errset(perr_msg("check_values", ERRFORM, EMSG_4A));
 	else if (vc->cam_amount != 1)
 		errset(perr_msg("check_values", ERRFORM, EMSG_4C));

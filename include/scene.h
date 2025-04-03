@@ -64,7 +64,6 @@ typedef struct	s_camera
 {
 	t_vec4	orientation;
 	float	fov;
-	float	realtime_fov;
 	float	zvp_dist;
 	// t_fvec	rotated;
 	// float	rotation[2];

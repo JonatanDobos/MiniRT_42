@@ -15,10 +15,10 @@ PRINT_NO_DIR	:=	--no-print-directory
 #		CFLAGS for testing
 COMPILER		:=	gcc
 CFLAGS			:=	-std=c99
-CFLAGS			+=	-Wall -Wextra
-CFLAGS			+=	-Werror
+# CFLAGS			+=	-Wall -Wextra
+# CFLAGS			+=	-Werror
 # CFLAGS			+=	-Wunreachable-code -Wpedantic -Wconversion -Wshadow
-CFLAGS			+=	-Wunreachable-code -Wshadow
+# CFLAGS			+=	-Wunreachable-code -Wshadow
 # CFLAGS			+=	-Wconversion
 CFLAGS			+=	-MMD -MP
 CFLAGS			+=	-g

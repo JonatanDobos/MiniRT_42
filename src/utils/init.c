@@ -7,6 +7,8 @@
 
 void	init_main(t_rt *rt, t_scene *scn, t_scene *read_scn, t_window *win)
 {
+	const float	scrsize_multiplier = ((float)(SCREEN_HEIGHT + SCREEN_WIDTH) * 0.000001F);
+
 	ft_bzero(rt, sizeof(t_rt));
 	ft_bzero(scn, sizeof(t_scene));
 	ft_bzero(read_scn, sizeof(t_scene));
@@ -18,6 +20,8 @@ void	init_main(t_rt *rt, t_scene *scn, t_scene *read_scn, t_window *win)
 	rt->win->res_ratio = 1;
 	scn->render = true;
 	rt->win->res_r_start = RES_RATIO_MAX;
+	win->delta_time = 0.1F;
+	win->target_time = 0.002F + scrsize_multiplier;
 }
 
 int32_t	multithreaded(t_rt *rt)
@@ -44,9 +48,8 @@ int32_t	multithreaded(t_rt *rt)
 
 void	set_starting_res_ratio(t_rt *rt, double delta_time)
 {
-	const double	target_time = 0.014F + ((float)(SCREEN_HEIGHT + SCREEN_WIDTH) * 0.000001F);
-	const double	error = delta_time - target_time;
-	const double	adjustment_factor = 8.0F;
+	const double	error = delta_time - rt->win->target_time;
+	const double	adjustment_factor = 10.0F;
 	const double	new_ratio = rt->win->res_r_start * (1.0F + (error * adjustment_factor));
 
 	rt->win->res_r_start = intclamp((int)new_ratio, 2, 30);

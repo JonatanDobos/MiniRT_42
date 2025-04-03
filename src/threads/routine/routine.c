@@ -29,6 +29,7 @@ static void	render_routine(t_thread *th)
 		{
 			thread_fast_render(th, 0);
 			time = mlx_get_time() - time;
+			th->win->delta_time = time + 1.0F;
 		}
 		else if (thread_render(th, 0) == false)
 		{
@@ -37,7 +38,7 @@ static void	render_routine(t_thread *th)
 				set_starting_res_ratio(th->rt, time);
 		}
 		pthread_mutex_lock(th->rt->mtx + MTX_PRINT);
-		printf("\r  resratio: %2hu -> (%2hu) fps", th->win->res_ratio, (uint16_t)(1.0 / time));
+		printf("\r  resratio: %2hu -> %3hu fps", th->win->res_ratio, (uint16_t)(1.0 / time));
 		fflush(stdout);
 		pthread_mutex_unlock(th->rt->mtx + MTX_PRINT);
 		resynchronize_after_rendering(th);

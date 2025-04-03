@@ -9,7 +9,7 @@ void	print_camera(t_objs cam)
 		"zvp_dist: %f\n",
 		cam.coords[0], cam.coords[1], cam.coords[2],
 		cam.c.orientation[0], cam.c.orientation[1], cam.c.orientation[2],
-		cam.c.fov, cam.c.realtime_fov, cam.c.zvp_dist);
+		cam.c.fov, cam.c.fov, cam.c.zvp_dist);
 }
 
 void	print_ambient(t_objs amb)
