@@ -23,11 +23,10 @@ int	intclamp(int value, int min, int max)
 // Clamp a vector between min and max
 t_vec4	vec_clamp(t_vec4 value, float min, float max)
 {
-	return (t_vec4)
-	{
+	return ((t_vec4){
 		clamp(value[0], min, max),
 		clamp(value[1], min, max),
 		clamp(value[2], min, max),
 		clamp(value[3], min, max)
-	};
+	});
 }

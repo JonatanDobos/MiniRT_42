@@ -42,7 +42,6 @@ static void	sphere_line(t_objs *sp, t_dbltoa *dbl, int fd)
 
 	line_index = cpy_str(rt_line, "sp\t");
 	line_index += coords_line(dbl, rt_line + line_index, sp->coords);
-
 	dbl->value = sp->sphere.diameter;
 	dbltoa_buff_prec(*dbl);
 	line_index += cpy_str(rt_line + line_index, dbl->buff);
@@ -63,13 +62,10 @@ static void	cylinder_line(t_objs *cy, t_dbltoa *dbl, int fd)
 	dbltoa_buff_prec(*dbl);
 	line_index += cpy_str(rt_line + line_index, dbl->buff);
 	line_index += cpy_str(rt_line + line_index, "\t\t");
-
 	dbl->value = cy->cylinder.height;
 	dbltoa_buff_prec(*dbl);
 	line_index += cpy_str(rt_line + line_index, dbl->buff);
 	line_index += cpy_str(rt_line + line_index, "\t\t");
-
 	line_index += color_line(dbl, rt_line + line_index, cy->color);
 	ft_putendl_fd(rt_line, fd);
 }
-

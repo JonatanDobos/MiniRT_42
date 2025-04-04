@@ -7,14 +7,13 @@ static void	print_cylinder(t_objs cy);
 
 void	geometric_primitives(t_objs *obj)
 {
-    static void (*print_primitives[])(t_objs) = {
-        print_plane,
-        print_sphere,
-        print_cylinder
-    };
+	static void	(*print_primitives[])(t_objs) = {
+		print_plane,
+		print_sphere,
+		print_cylinder
+	};
 
-    // Call the appropriate static function based on the object's type
-    print_primitives[obj->type](*obj);
+	print_primitives[obj->type](*obj);
 }
 
 static void	print_plane(t_objs pl)

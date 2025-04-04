@@ -3,7 +3,7 @@
 #include <render.h>
 
 //	Static Functions
-static void	mlx_closing_cleanup_threads(t_rt *rt);
+static void	closing_cleanup_threads(t_rt *rt);
 
 void	init_hooks(t_rt *rt)
 {
@@ -14,7 +14,7 @@ void	init_hooks(t_rt *rt)
 	mlx_key_hook(rt->win->mlx, (mlx_keyfunc)my_keyhook, rt);
 	mlx_scroll_hook(rt->win->mlx, (mlx_cursorfunc)scroll_fov_hook, rt->scene);
 	mlx_mouse_hook(rt->win->mlx, (mlx_mousefunc)mouse_hook, rt);
-	mlx_close_hook(rt->win->mlx, (mlx_closefunc)mlx_closing_cleanup_threads, rt);
+	mlx_close_hook(rt->win->mlx, (mlx_closefunc)closing_cleanup_threads, rt);
 	reset_filename(rt->win);
 }
 
@@ -28,7 +28,7 @@ void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 			set_filename(keydata.key, rt->win, rt->scene);
 		else if (keydata.key == MLX_KEY_ESCAPE)
 		{
-			mlx_closing_cleanup_threads(rt);
+			closing_cleanup_threads(rt);
 			mlx_close_window(rt->win->mlx);
 		}
 		else if (keydata.key == MLX_KEY_K)
@@ -43,7 +43,7 @@ void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 	}
 }
 
-static void	mlx_closing_cleanup_threads(t_rt *rt)
+static void	closing_cleanup_threads(t_rt *rt)
 {
 	pthread_mutex_lock(rt->mtx + MTX_QUIT_ROUTINE);
 	pthread_mutex_unlock(rt->mtx + MTX_RESYNC);

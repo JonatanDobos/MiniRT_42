@@ -5,8 +5,7 @@
 // Vector cross-product.
 t_vec4	vcross(t_vec4 a, t_vec4 b)
 {
-	return ((t_vec4)
-	{
+	return ((t_vec4){
 		a[Y] * b[Z] - a[Z] * b[Y],
 		a[Z] * b[X] - a[X] * b[Z],
 		a[X] * b[Y] - a[Y] * b[X]

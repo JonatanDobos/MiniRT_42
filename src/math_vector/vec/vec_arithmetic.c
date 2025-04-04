@@ -18,10 +18,3 @@ t_vec4	vscale(t_vec4 v, float scalar)
 {
 	return (v * bcast4(scalar));
 }
-
-// Vector negate.
-t_vec4 vneg(t_vec4 v)
-{
-	return (-v);
-}
-

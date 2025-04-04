@@ -48,7 +48,7 @@ static bool	init_mlx(t_window *win)
 
 static bool	img_to_window(t_window *win)
 {
-	win->img = mlx_new_image(win->mlx, (int32_t)win->window_wdth, (int32_t)win->window_hght);
+	win->img = mlx_new_image(win->mlx, (uint32_t)win->window_wdth, (uint32_t)win->window_hght);
 	if (win->img == NULL)
 		return (false);
 	win->id = mlx_image_to_window(win->mlx, win->img, 0, 0);

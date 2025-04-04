@@ -6,13 +6,12 @@
 static void	perr_custom(const int16_t errnum)
 {
 	const int16_t	index = (errnum * -1) - 2;
-	const char		msg[CUST_ERR_AMOUNT][30] = \
-		{
-			"Waiting for errnum address",
-			"Errnum address not set",
-			"Wrong format",
-			"Wrong file extension"
-		};
+	const char		msg[CUST_ERR_AMOUNT][30] = { \
+		"Waiting for errnum address", \
+		"Errnum address not set", \
+		"Wrong format", \
+		"Wrong file extension" \
+	};
 
 	if (index >= 0 && index < CUST_ERR_AMOUNT)
 		ft_putstr_fd(msg[index], STDERR_FILENO);

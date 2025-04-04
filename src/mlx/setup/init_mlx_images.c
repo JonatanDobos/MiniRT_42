@@ -7,7 +7,10 @@
 
 bool	img_multithreaded(t_rt *rt)
 {
-	rt->thread.img = mlx_new_image(rt->win->mlx, (int32_t)rt->win->window_wdth, (int32_t)rt->win->window_hght);
+	const uint16_t	width = (uint32_t)rt->win->window_wdth;
+	const uint16_t	height = (uint32_t)rt->win->window_hght;
+
+	rt->thread.img = mlx_new_image(rt->win->mlx, width, height);
 	if (rt->thread.img == NULL)
 	{
 		return (false);
@@ -18,7 +21,7 @@ bool	img_multithreaded(t_rt *rt)
 		return (mlx_delete_image(rt->win->mlx, rt->thread.img), false);
 	}
 	rt->thread.pixels_mlx = (uint8_t *)rt->thread.img->pixels;
-	rt->thread.pixels_own = (uint8_t *)malloc(sizeof(uint8_t) * (rt->win->window_wdth * rt->win->window_hght * 4));
+	rt->thread.pixels_own = (uint8_t *)malloc(sizeof(uint8_t) * (width * height * 4));
 	if (rt->thread.pixels_own == NULL)
 		return (mlx_delete_image(rt->win->mlx, rt->thread.img), false);
 	rt->thread.pixels = rt->thread.pixels_own;

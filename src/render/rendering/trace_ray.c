@@ -38,7 +38,7 @@ t_vec4 calculate_normal_cylinder(t_objs *obj, t_ray ray, float t, uint8_t inters
 	}
 	else
 	{
-		return (vneg(vnorm(obj->cylinder.orientation)));
+		return (vnorm(obj->cylinder.orientation) * -1);
 	}
 }
 

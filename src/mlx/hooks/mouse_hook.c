@@ -8,38 +8,38 @@ static void	mouse_clicks_on_obj(t_scene *sc, t_ray ray);
 void	scroll_fov_hook(double xdelta, double ydelta, t_scene *sc)
 {
 	(void)(xdelta);
-	if (ydelta > 0 && sc->camera.c.fov > 0.1f)
+	if (ydelta > 0.0F && sc->camera.c.fov > 0.1F)
 	{
-		sc->camera.c.fov = clamp(sc->camera.c.fov - sc->cam_fov_speed, 0.0f, 180.0f);
-		sc->camera.c.zvp_dist = 1.0f / tanf((sc->camera.c.fov * M_PI / 180.0f) / 2.0f);
+		sc->camera.c.fov = clamp(sc->camera.c.fov - sc->cam_fov_speed, 0.0F, 180.0F);
+		sc->camera.c.zvp_dist = 1.0F / tanf((sc->camera.c.fov * M_PI / 180.0F) / 2.0F);
 		sc->render = true;
 	}
 	else if (ydelta < 0 && sc->camera.c.fov < FOV_MAX)
 	{
-		sc->camera.c.fov = clamp(sc->camera.c.fov + sc->cam_fov_speed, 0.0f, 180.0f);
-		sc->camera.c.zvp_dist = 1.0f / tanf((sc->camera.c.fov * M_PI / 180.0f) / 2.0f);
+		sc->camera.c.fov = clamp(sc->camera.c.fov + sc->cam_fov_speed, 0.0F, 180.0F);
+		sc->camera.c.zvp_dist = 1.0F / tanf((sc->camera.c.fov * M_PI / 180.0F) / 2.0F);
 		sc->render = true;
 	}
 }
 
 void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *rt)
 {
+	t_vec4	ndc;
+	t_ray	ray;
 	int32_t	x;
 	int32_t	y;
-	float	ndc_x;
-	float	ndc_y;
-	t_ray	ray;
-	
+
 	(void)mods;
 	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS)
 	{
 		mlx_get_mouse_pos(rt->win->mlx, &x, &y);
-		y = (float)y / rt->win->res_ratio;
-		x = (float)x / rt->win->res_ratio;
-		ndc_x = (2.0F * ((x + 0.5F) / (float)rt->win->rndr_wdth) - 1.0F) * rt->win->aspectrat;
-		ndc_y = 1.0F - 2.0F * ((y + 0.5F) / (float)rt->win->rndr_hght);
+		y = y / rt->win->res_ratio;
+		x = x / rt->win->res_ratio;
+		ndc[X] = (2.0F * ((x + 0.5F) / (float)rt->win->rndr_wdth) - 1.0F) * rt->win->aspectrat;
+		ndc[Y] = 1.0F - 2.0F * ((y + 0.5F) / (float)rt->win->rndr_hght);
+		ndc[Y] = rt->scene->camera.c.zvp_dist;
 		ray.origin = rt->scene->camera.coords;
-		ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, rt->scene->camera.c.zvp_dist, 0.0F}, rt->scene->camera.c.orientation);
+		ray.vec = transform_ray_dir(ndc, rt->scene->camera.c.orientation);
 		mouse_clicks_on_obj(rt->scene, ray);
 	}
 }

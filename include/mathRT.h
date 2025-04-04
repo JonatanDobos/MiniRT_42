@@ -39,7 +39,6 @@ t_vec4		vec_clamp(t_vec4 value, float min, float max);
 t_vec4		vadd(t_vec4 a, t_vec4 b)__attribute__((const, hot));
 t_vec4		vsub(t_vec4 a, t_vec4 b)__attribute__((const, hot));
 t_vec4		vscale(t_vec4 v, float scalar)__attribute__((const, hot));
-t_vec4		vneg(t_vec4 v)__attribute__((const, hot));
 
 //	vec_geometry.c
 t_vec4		vcross(t_vec4 a, t_vec4 b)__attribute__((const, hot));

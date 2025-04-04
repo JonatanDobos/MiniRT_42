@@ -11,6 +11,7 @@ void	print_obj_info(t_scene *sc)
 		print_light,
 		print_ambient
 	};
+
 	if (sc->selected_obj == NULL)
 	{
 		print_camera(sc->camera);

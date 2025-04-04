@@ -12,7 +12,7 @@ void	create_scene_rt_file(t_scene *sc, const char *filename)
 	t_dbltoa	dbl;
 	int			fd;
 
-	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644); 
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		perror("create_scene_rt_file: Error opening fileeee");
@@ -25,7 +25,6 @@ void	create_scene_rt_file(t_scene *sc, const char *filename)
 	objs_line(sc->objs, sc->o_arr_size, &dbl, fd);
 	close(fd);
 }
-
 
 size_t	color_line(t_dbltoa *dbl, char *rt_line, t_vec4 color)
 {
