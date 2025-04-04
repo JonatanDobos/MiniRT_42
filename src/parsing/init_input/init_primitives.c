@@ -1,6 +1,21 @@
 #include <parsing.h>
+// #include <utils.h>
 
-int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
+//	Static Functions
+static int16_t		parse_pl(t_scene *sc, t_value_check *vc, char *line);
+static int16_t		parse_sp(t_scene *sc, t_value_check *vc, char *line);
+static int16_t		parse_cy(t_scene *sc, t_value_check *vc, char *line);
+
+int16_t	init_primitives(t_scene *sc, t_value_check *vc, char *line)
+{
+	if (ft_strncmp(line, "pl", 2) == 0)
+		return (parse_pl(sc, vc, nxtv(line)));
+	else if (ft_strncmp(line, "sp", 2) == 0)
+		return (parse_sp(sc, vc, nxtv(line)));
+	return (parse_cy(sc, vc, nxtv(line)));
+}
+
+static int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	pl;
 
@@ -24,7 +39,7 @@ int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 	return (EXIT_SUCCESS);
 }
 
-int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
+static int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	sp;
 
@@ -46,7 +61,7 @@ int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 	return (EXIT_SUCCESS);
 }
 
-int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
+static int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	cy;
 

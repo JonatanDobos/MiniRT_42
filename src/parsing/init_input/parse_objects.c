@@ -1,9 +1,24 @@
 #include <parsing.h>
-#include <math.h>
-#include <utils.h>
+// #include <utils.h>
 #include <mathRT.h>
 
-int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line)
+//	Static Functions
+static int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line);
+static int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line);
+static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line);
+
+int16_t	input_type_parse(t_scene *sc, t_value_check *vc, char *line)
+{
+	if (ft_strncmp(line, "A", 1) == 0)
+		return (parse_amb(sc, vc, nxtv(line)));
+	else if (ft_strncmp(line, "C", 1) == 0)
+		return (parse_cam(sc, vc, nxtv(line)));
+	else if (ft_strncmp(line, "L", 1) == 0)
+		return (parse_light(sc, vc, nxtv(line)));
+	return (init_primitives(sc, vc, line));
+}
+
+static int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line)
 {
 	sc->ambient.type = AMBIENT;
 	sc->ambient.a.ratio = range(rt_atof(line), 0.0F, 1.0F);
@@ -15,7 +30,7 @@ int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line)
 	return (EXIT_SUCCESS);
 }
 
-int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
+static int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
 {
 	sc->camera.coords[X] = rt_atof(line);
 	sc->camera.coords[Y] = rt_atof(nxtvp(&line));
@@ -30,7 +45,7 @@ int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
 	return (EXIT_SUCCESS);
 }
 
-int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
+static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	l;
 
@@ -44,7 +59,6 @@ int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 	l.color[G] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 	l.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 	l.color[A] = 1.0F;
-	// Hardcoded raduis, implement parsing later for soft shadows.
 	l.l.radius = 1.0F;
 	if (dynarr_insert(&sc->light_dynarr, &l) == false)
 		return (errset(perr("parse_light", ENOMEM)));
@@ -52,4 +66,3 @@ int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 	++vc->light_amount;
 	return (EXIT_SUCCESS);
 }
-

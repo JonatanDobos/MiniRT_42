@@ -2,9 +2,53 @@
 // #include <utils.h>
 
 //	Static Functions
+static int16_t	check_line_format(char *line);
+static int16_t	process_format(char *line);
 static uint8_t	is_valid_prefix(char *line, char *prefix);
+static void		check_values(t_value_check *vc);
 
-int16_t	line_validation(char *line)
+ int16_t	line_validation(const int fd, t_scene *sc)
+{
+	char			*skip_sp;
+	char			*line;
+	t_value_check	vc;
+
+	ft_bzero(&vc, sizeof(t_value_check));
+	while (true)
+	{
+		line = gnl(fd);
+		if (line == NULL && errno == ENOMEM)
+		{
+			errset(perr("input_line_check", ENOMEM));
+			break ;
+		}
+		if (line != NULL)
+			skip_sp = line + skip_spaces(line);
+		if (line == NULL || check_line_format(skip_sp) != EXIT_SUCCESS
+			|| input_type_parse(sc, &vc, skip_sp) != EXIT_SUCCESS)
+			break ;
+		free_str(&line);
+	}
+	free_str(&line);
+	if (errset(ERTRN) == 0)
+		check_values(&vc);
+	return (errset(ERTRN));
+}
+
+static int16_t	check_line_format(char *line)
+{
+	const size_t	len = ft_strlen(line);
+
+	if (*line == '\n' || *line == '#')
+		return (EXIT_SUCCESS);
+	if (len < 4)
+		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_1)));
+	if (process_format(line) != EXIT_SUCCESS)
+		return (errset(ERTRN));
+	return (EXIT_SUCCESS);
+}
+
+static int16_t	process_format(char *line)
 {
 	uint8_t	nbr_of_groups;
 	size_t	i;
@@ -58,4 +102,16 @@ static uint8_t	is_valid_prefix(char *line, char *prefix)
 		++i;
 	}
 	return (false);
+}
+
+static void	check_values(t_value_check *vc)
+{
+	if (vc->amb_amount > 1)
+		errset(perr_msg("check_values", ERRFORM, EMSG_4A));
+	else if (vc->cam_amount != 1)
+		errset(perr_msg("check_values", ERRFORM, EMSG_4C));
+	// else if (vc->light_amount < 1)
+	// 	errset(perr_msg("check_values", ERRFORM, EMSG_4L));
+	else if (vc->obj_amount < 1)
+		errset(perr_msg("check_values", ERRFORM, EMSG_4O));
 }

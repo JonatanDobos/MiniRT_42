@@ -16,6 +16,23 @@ Options:
 - Implementeren van variabele resolutie-scaling om wat smoothere bewegingen te krijgen ook bij veel objs
 
 
+range verwijderd.
+float	range(float value, float min, float max)
+{
+	if (value > max)
+		return (max);
+	if (value < min)
+		return (min);
+	return (value);
+}
+float	clamp(float value, float min, float max)
+{
+	if (value < min)
+		return (min);
+	if (value > max)
+		return (max);
+	return (value);
+}
 Remy opmerking:
 1.	./miniRT <randomfile> segmenetation		opgelost?
 

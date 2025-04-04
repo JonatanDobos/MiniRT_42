@@ -82,9 +82,10 @@ SRC_DIR			:=	src/
 
 MAIN			:=	main.c
 
-PARSE			:=	parse_objects.c				parse_peripherals.c				parsing_utils.c					\
+PARSE			:=	parsing_utils.c					\
 					parsing.c string_utils.c		\
-					line_validate/line_val.c	line_validate/number_check.c
+					line_validate/line_val.c	line_validate/number_check.c			\
+					init_input/parse_objects.c	init_input/init_primitives.c
 
 THREADING		:=	handling/thread_setup.c		handling/thread_terminate.c										\
 					routine/routine.c			routine/utils_thread.c			routine/read_scene.c

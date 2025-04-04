@@ -13,7 +13,7 @@ int16_t setup_init_parsing(t_rt *rt, const int argc, const char *argv)
 		return (write(1, NO_FILENAME, sizeof(NO_FILENAME) - 1), EXIT_FAILURE);
 	else if (SCREEN_WIDTH < 5 || SCREEN_HEIGHT < 5)
 		return (write(1, SCREEN_ERROR, sizeof(SCREEN_ERROR) - 1), EXIT_FAILURE);
-	else if (read_inp_file(argv, rt->scene) != 0)
+	else if (parse_scene_file(argv, rt->scene) != 0)
 		return (cleanup(rt), errset(ERTRN));
 	else if (windows_setup_mlx(rt) != 0)
 		return (cleanup(rt), perr("MLX", errset(ERTRN)));
