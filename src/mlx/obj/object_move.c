@@ -1,5 +1,4 @@
 #include <scene.h>
-#include <utils.h>
 #include <mathRT.h>
 #include <RTmlx.h>
 

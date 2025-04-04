@@ -1,4 +1,3 @@
-#include <utils.h>
 #include <scene.h>
 #include <mathRT.h>
 #include <render.h>

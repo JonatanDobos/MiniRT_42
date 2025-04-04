@@ -1,10 +1,10 @@
 #include <MLX42/MLX42.h>
 #include <parsing.h>
 #include <scene.h>
-#include <utils.h>
 #include <RTmlx.h>
 #include <RTerror.h>
 #include <mathRT.h>
+#include <utils.h>
 
 #define NO_FILENAME "Give argument: ./miniRT <filename>\n"
 #define SCREEN_ERROR "Screensize is too small\n"

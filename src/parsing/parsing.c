@@ -1,5 +1,4 @@
 #include <parsing.h>
-#include <utils.h>
 
 //	Static Functions
 static bool	init_dynarr(t_scene *sc);

@@ -1,5 +1,4 @@
 #include <parsing.h>
-// #include <utils.h>
 
 //	Static Functions
 static int16_t	check_line_format(char *line);

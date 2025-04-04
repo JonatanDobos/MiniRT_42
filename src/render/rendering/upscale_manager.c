@@ -2,7 +2,6 @@
 #include <RTmlx.h>
 #include <mathRT.h>
 #include <render.h>
-#include <utils.h>
 
 void	upscale_manager(t_rt *rt)
 {
