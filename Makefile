@@ -25,7 +25,7 @@ CFLAGS			+=	-g
 # CFLAGS			+=	-fsanitize=address
 
 #	Sets MINIRT_THREADS to 2 if N_JOBS (logical processors) is greater than 1, otherwise sets it to 1.
-MINIRT_THREADS := $(if $(filter-out 1,$(N_JOBS)),2,1)
+MINIRT_THREADS	:=	$(if $(filter-out 1,$(N_JOBS)),2,1)
 
 #		Temporary CFLAGS
 CFLAGS			+=	-pthread -D THREADS=$(MINIRT_THREADS)
@@ -83,7 +83,8 @@ SRC_DIR			:=	src/
 MAIN			:=	main.c
 
 PARSE			:=	parse_objects.c				parse_peripherals.c				parsing_utils.c					\
-					parsing.c string_utils.c
+					parsing.c string_utils.c		\
+					line_validate/line_val.c	line_validate/number_check.c
 
 THREADING		:=	handling/thread_setup.c		handling/thread_terminate.c										\
 					routine/routine.c			routine/utils_thread.c			routine/read_scene.c

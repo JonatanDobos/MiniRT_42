@@ -19,6 +19,10 @@ typedef struct s_parsing_value_check
 
 int16_t		read_inp_file(const char *file, t_scene *sc);
 
+// line_validation
+int16_t		line_validation(char *line);
+bool		check_line(char *line, const char prefix, uint8_t nbr_of_groups);
+
 // parse_peripherals.c
 
 int16_t		parse_amb(t_scene *sc, t_value_check *vc, char *line);
