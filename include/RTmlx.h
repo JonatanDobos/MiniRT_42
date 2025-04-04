@@ -99,7 +99,7 @@ void		obj_rotate_down(t_scene *sc);
 void		obj_rotate_left(t_scene *sc);
 void		obj_rotate_right(t_scene *sc);
 
-void		reset_filename(t_window *win);
 void		set_filename(const keys_t key, t_window *win, t_scene *sc);
+void		reset_filename(t_window *win);
 
 #endif

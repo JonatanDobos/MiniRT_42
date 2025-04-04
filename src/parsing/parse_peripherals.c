@@ -1,11 +1,11 @@
 #include <parsing.h>
 #include <math.h>
 #include <utils.h>
-#include <debug.h>
 #include <mathRT.h>
 
 int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line)
 {
+	sc->ambient.type = AMBIENT;
 	sc->ambient.a.ratio = range(rt_atof(line), 0.0F, 1.0F);
 	sc->ambient.color[R] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
 	sc->ambient.color[G] = (float)rt_atoi(nxtvp(&line)) / 255.0F;

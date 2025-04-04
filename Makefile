@@ -90,16 +90,14 @@ THREADING		:=	handling/thread_setup.c		handling/thread_terminate.c										\
 MLX				:=	setup/window_setup.c		setup/init_mlx_images.c											\
 					hooks/hooks.c				hooks/hooks_move.c												\
 					cam/camera_move.c			cam/camera_rotate.c												\
-					obj/object_move.c			obj/object_rotate.c				obj/object_modification.c
-
+					obj/object_move.c			obj/object_rotate.c				obj/object_modification.c		\
+					print/print_objs.c			print/print_primitives.c
 SCENE			:=	set_filename.c				create_rt_file.c				scene_elements.c				\
 					geometric_primitives.c
 
 UTILS			:=	utils.c		init.c
 
 ERROR			:=	error.c			print.c
-
-DEBUG			:=	print_info.c
 
 RENDER			:=	rendering/render.c		rendering/trace_ray.c				rendering/scaling.c				\
 					rendering/set_pixel.c		rendering/upscale_manager.c 									\
@@ -117,8 +115,7 @@ SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))						\
 					$(addprefix $(SRC_DIR)utils/, $(UTILS))					\
 					$(addprefix $(SRC_DIR)render/, $(RENDER))				\
 					$(addprefix $(SRC_DIR)math/, $(MATH))					\
-					$(addprefix $(SRC_DIR)threads/, $(THREADING))			\
-					$(addprefix $(SRC_DIR)debug/, $(DEBUG))
+					$(addprefix $(SRC_DIR)threads/, $(THREADING))
 
 #		Generate object file names
 OBJS 			:=	$(SRCP:%.c=$(BUILD_DIR)%.o)
@@ -127,7 +124,7 @@ DEPS			:=	$(OBJS:.o=.d)
 
 #		HEADERS
 INCS			:=	miniRT.h		parsing.h		RTerror.h			scene.h				RTmlx.h \
-					utils.h		debug.h		render.h		mathRT.h
+					utils.h		render.h		mathRT.h
 INCP			:=	$(addprefix $(INCD), $(INCS))
 HEADERS			:=	$(INCP)
 INCLUDE_RT		:=	-I $(INCD)

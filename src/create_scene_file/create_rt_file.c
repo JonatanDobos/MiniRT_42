@@ -15,7 +15,7 @@ void	create_scene_rt_file(t_scene *sc, const char *filename)
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644); 
 	if (fd == -1)
 	{
-		perror("create_scene_rt_file: Error opening file");
+		perror("create_scene_rt_file: Error opening fileeee");
 		return ;
 	}
 	dbl = setup_dbltoa_params(dbltoa_buff);

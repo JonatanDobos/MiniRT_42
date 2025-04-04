@@ -4,12 +4,6 @@
 //	Static Function
 static void	update_filename_input(const keys_t key, t_window *win);
 
-void	reset_filename(t_window *win)
-{
-	win->filename_len = cpy_str(win->filename, NAME_FILE);
-	win->file_creation = false;
-}
-
 void	set_filename(const keys_t key, t_window *win, t_scene *sc)
 {
 	if (key == MLX_KEY_ENTER && win->file_creation == false)
@@ -24,14 +18,24 @@ void	set_filename(const keys_t key, t_window *win, t_scene *sc)
 	}
 	else if (key == MLX_KEY_ENTER && win->file_creation == true)
 	{
-		create_scene_rt_file(sc, win->filename + (sizeof(NAME_FILE) - 1));
-		cpy_str(win->filename + 6, "Created file: ");
-		win->filename[sizeof(NAME_FILE) - 2] = ' ';
-		mlx_set_window_title(win->mlx, win->filename + 6);
+		if (ft_strncmp(win->filename, NAME_FILE, sizeof(NAME_FILE)) != 0)
+		{
+			create_scene_rt_file(sc, win->filename + (sizeof(NAME_FILE) - 1));
+			cpy_str(win->filename + 6, "Created file: ");
+			win->filename[sizeof(NAME_FILE) - 2] = ' ';
+			// mlx_set_window_title(win->mlx, win->filename + 6);
+		}
+		mlx_set_window_title(win->mlx, "miniRT");
 		reset_filename(win);
 	}
 	else
 		update_filename_input(key, win);
+}
+
+void	reset_filename(t_window *win)
+{
+	win->filename_len = cpy_str(win->filename, NAME_FILE);
+	win->file_creation = false;
 }
 
 static void	update_filename_input(const keys_t key, t_window *win)

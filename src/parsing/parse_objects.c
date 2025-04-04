@@ -1,6 +1,4 @@
 #include <parsing.h>
-#include <debug.h>
-
 
 int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 {

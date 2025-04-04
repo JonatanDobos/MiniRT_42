@@ -3,7 +3,6 @@
 #include <utils.h>
 #include <mathRT.h>
 #include <render.h>
-#include <debug.h>
 #include <unistd.h>
 
 // bool	keybindings_used_in_loophook(const keys_t key)
@@ -35,9 +34,7 @@ void	mlx_closing_cleanup_threads(t_rt *rt)
 bool	handle_custom_key(const keys_t key, t_rt *rt)
 {
 	if (key == MLX_KEY_P)
-		printf("\n>%ld<\n", sizeof(NAME_FILE) - 1);
-		// print_camera(rt->scene->camera);
-
+		print_obj_info(rt->scene);
 	if (key == MLX_KEY_ENTER || rt->win->file_creation == true)
 		set_filename(key, rt->win, rt->scene);
 	else if (key == MLX_KEY_ESCAPE)
@@ -45,10 +42,10 @@ bool	handle_custom_key(const keys_t key, t_rt *rt)
 		mlx_closing_cleanup_threads(rt);
 		mlx_close_window(rt->win->mlx);
 	}
+	else if (key == MLX_KEY_K)
+		rt->scene->selected_obj = &rt->scene->ambient;
 	else if (handle_object_modification(key, rt->scene) == true)
 		rt->scene->render = true;
-	else if (key == MLX_KEY_1)
-		print_camera(rt->scene->camera);		//	alleen debug maar kan andere doen
 	else if (key == MLX_KEY_L)
 	{
 		rt->scene->intersect_lights = !rt->scene->intersect_lights;
@@ -93,14 +90,12 @@ void	fov_hook(double xdelta, double ydelta, t_scene *sc)
 		sc->camera.c.fov = clamp(sc->camera.c.fov - sc->cam_fov_speed, 0.0f, 180.0f);
 		sc->camera.c.zvp_dist = 1.0f / tanf((sc->camera.c.fov * M_PI / 180.0f) / 2.0f);
 		sc->render = true;
-		return ;
 	}
-	if (ydelta < 0 && sc->camera.c.fov < FOV_MAX)
+	else if (ydelta < 0 && sc->camera.c.fov < FOV_MAX)
 	{
 		sc->camera.c.fov = clamp(sc->camera.c.fov + sc->cam_fov_speed, 0.0f, 180.0f);
 		sc->camera.c.zvp_dist = 1.0f / tanf((sc->camera.c.fov * M_PI / 180.0f) / 2.0f);
 		sc->render = true;
-		return ;
 	}
 }
 
@@ -146,8 +141,6 @@ void	render_updates(t_rt *rt)
 	rt->scene->cam_m_speed = CAM_MOVE_SPEED * rt->win->delta_time;
 	rt->scene->cam_r_speed = CAM_ROTATION_SPEED * rt->win->delta_time;
 	rt->scene->render = false;
-	// conditional lock?
-	// pthread_cond_broadcast
 }
 
 void	loop_hook_threaded(t_rt *rt)

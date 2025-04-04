@@ -38,7 +38,8 @@ typedef enum e_obj_types
 	PLANE,
 	SPHERE,
 	CYLINDER,
-	LIGHT
+	LIGHT,
+	AMBIENT
 }	t_obj_type;
 
 typedef struct	s_plane
@@ -127,4 +128,7 @@ void	camera_line(t_objs *camera, t_dbltoa *dbl, int fd);
 void	lights_line(t_objs *lights, size_t amount, t_dbltoa *dbl, int fd);
 
 void	objs_line(t_objs *objs, size_t amount, t_dbltoa *dbl, int fd);
+
+void	print_obj_info(t_scene *sc);
+void	geometric_primitives(t_objs *obj);
 #endif

@@ -24,13 +24,6 @@ Remy opmerking:
 1.	./miniRT <randomfile> segmenetation		opgelost?
 
 PARSING
-. and , kunnen overal geplaatst worden.
-
-na laatste value check
-
-
-create file alleen enter geeft dit aan:
-create_scene_rt_file: Error opening file: No such file or directory
 
 
 MAKEFILE

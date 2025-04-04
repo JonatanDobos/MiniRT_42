@@ -15,82 +15,93 @@ static void	check_values(t_value_check *vc)
 
 int	*group_numbers(const char prefix)
 {
-	static int	groups[6][5] = {
-		{1, 3, 0, 0, 0},	// 'A'
-		{3, 3, 1, 0, 0},	// 'C'
-		{3, 1, 3, 0, 0},	// 'L'
-		{3, 1, 3, 0, 0},	// 'sp'
-		{3, 3, 3, 0, 0},	// 'pl'
-		{3, 3, 1, 1, 3}		// 'cy'
+	static const char	prefixes[] = "ACLspcy";
+	static int			groups[6][5] = {
+		{1, 3, 0, 0, 0},       // 'A'
+		{3, 3, 1, 0, 0},       // 'C'
+		{3, 1, 3, 0, 0},       // 'L'
+		{3, 1, 3, 0, 0},       // 'sp'
+		{3, 3, 3, 0, 0},       // 'pl'
+		{3, 3, 1, 1, 3}        // 'cy'
 	};
-	return (groups[find_char("ACLspcy", prefix)]);
+	uint8_t				i;
+
+	i = 0;
+	while (i < sizeof(prefixes) - 1)
+	{
+		if (prefix == prefixes[i])
+			return (groups[i]);
+		++i;
+	}
+	return (NULL);
 }
 
-bool	one_member_group(char **line)
+bool	one_member_group(const char *line, size_t *prev_i)
 {
-	char	*tmp;
+	size_t	i;
 	
-	tmp = *line;
-	tmp += skip_signed_digits(tmp);
-	if (*tmp == '.')
+	i = *prev_i;
+	i += skip_signed_digits(line + i);
+	if (line[i] == '.')
 	{
-		++tmp;
-		if (ft_isnum(tmp) == true)
-			tmp += skip_signed_digits(tmp);
+		++i;
+		if (ft_isnum(line + i) == true)
+			i += skip_signed_digits(line + i);
 		else
 			return (false);
 	}
-	*line = tmp;
+	*prev_i = i;
 	return (true);
 }
 
-bool	three_member_group(char **line)
+bool	three_member_group(const char *line, size_t *prev_i)
 {
 	uint8_t iterate_twice;
-	char	*tmp;
-	
-	tmp = *line;
-	tmp += skip_signed_digits(tmp);
+	size_t	i;
+
+	i = *prev_i;
 	iterate_twice = 0;
 	while (iterate_twice < 2)
 	{
-		if (one_member_group(&tmp) == false)
+		if (one_member_group(line, &i) == false)
 			return (false);
-		if (tmp[0] == ',' && tmp[1] != '.')
-			++tmp;
+		if (line[i] == ',' && line[i + 1] != '.')
+			++i;
 		else
 			return (false);
-		if (tmp[0] == '\0' || tmp[0] == '\n')
-			return (false);
+		if (line[i] == '\0' || line[i] == '\n')
+			return (printf(">%s<\n",line + i),false);
 		++iterate_twice;
 	}
-	if (one_member_group(&tmp) == false)
+	if (one_member_group(line, &i) == false)
 		return (false);
-	*line = tmp;
+	*prev_i = i;
 	return (true);
 }
 
-bool	check_line(char *line, const char prefix, uint8_t nbr_of_groups)
+bool	check_line(const char *line, const char prefix, uint8_t nbr_of_groups)
 {
-	uint8_t		group_index;
-	const int	*prefix_nbr = group_numbers(prefix);
-	static bool	(*group_ptr[2])(char **) = {
-		one_member_group,
-		three_member_group
+	static bool (*group_ptr[2])(const char *, size_t *) = {
+		one_member_group,   // Index 0: for *prefix_nbr != 3
+		three_member_group  // Index 1: for *prefix_nbr == 3
 	};
+	const int	*prefix_nbr = group_numbers(prefix);
+	uint8_t		group_index;
+	size_t		i;
 
 	group_index = 0;
-	while (*line != '\0' && *line != '#')
+	i = 0;
+	while (line[i] != '\0' && line[i] != '#')
 	{
-		if (ft_isnum(line) == false)
-			return (false);
-		if (group_ptr[((*prefix_nbr) == 3)](&line) == false)
+		if (ft_isnum(line + i) == false)
+			return (puts("niet?"),false);
+		if (group_ptr[((*prefix_nbr) == 3)](line, &i) == false)
 			return (false);
 		++group_index;
 		if (group_index > nbr_of_groups)
 			return (false);
 		++prefix_nbr;
-		line += skip_spaces(line);
+		i += skip_spaces(line + i);
 	}
 	if (group_index != nbr_of_groups)
 		return (false);
@@ -114,8 +125,8 @@ bool	check_line(char *line, const char prefix, uint8_t nbr_of_groups)
 static uint8_t	is_valid_prefix(const char *line, char *prefix)
 {
 	const char		*prefixes[6] = {"A", "C", "L", "sp", "pl", "cy"};
-	const size_t	num_prefixes = sizeof(prefixes) / sizeof(*prefixes);
 	const uint8_t	nbr_of_groups[6] = {2, 3, 3, 3, 3, 5};
+	const size_t	num_prefixes = sizeof(prefixes) / sizeof(prefixes[0]);
 	size_t			prefix_len;
 	size_t			i;
 
