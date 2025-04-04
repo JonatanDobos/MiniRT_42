@@ -22,7 +22,7 @@ void	upscale_manager(t_rt *rt)
 	}
 	rt->win->rndr_hght = (float)rt->win->mlx->height / rt->win->res_ratio;
 	rt->win->rndr_wdth = (float)rt->win->mlx->width / rt->win->res_ratio;
-	render(rt);
+	render(rt, rt->win);
 }
 
 void	upscale_manager_thread(t_rt *rt)

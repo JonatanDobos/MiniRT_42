@@ -30,82 +30,79 @@ t_vec4	transform_ray_dir(t_vec4 ndc, t_vec4 cam_orient)
 }
 
 // Render the scene
-void	render(t_rt *rt)
+void	render(t_rt *rt, t_window *w)
 {
 	float		ndc_x;
 	float		ndc_y;
 	t_ray		ray;
-	uint16_t	y;
-	uint16_t	x;
+	t_axis2		axis;
 
 	ray.origin = rt->scene->camera.coords;
-	y = 0;
-	while (y < rt->win->rndr_hght)
+	axis.y = 0;
+	while (axis.y < w->rndr_hght)
 	{
-		x = 0;
-		while (x < rt->win->rndr_wdth)
+		axis.x = 0;
+		while (axis.x < w->rndr_wdth)
 		{
-			ndc_x = (2.0F * ((x + 0.5F) / (float)rt->win->rndr_wdth) - 1.0F) * rt->win->aspectrat;
-			ndc_y = 1.0F - 2.0F * ((y + 0.5F) / (float)rt->win->rndr_hght);
+			ndc_x = (2.0F * ((axis.x + 0.5F) / (float)w->rndr_wdth) - 1.0F) * w->aspectrat;
+			ndc_y = 1.0F - 2.0F * ((axis.y + 0.5F) / (float)w->rndr_hght);
 			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, rt->scene->camera.c.zvp_dist, 0.0F}, rt->scene->camera.c.orientation);
-			scaled_res_set_pixel(rt->win, x, y, trace_ray(rt->scene, ray));
-			++x;
+			scaled_res_set_pixel(w, axis.x, axis.y, trace_ray(rt->scene, ray));
+			++axis.x;
 		}
-		++y;
+		++axis.y;
 	}
 }
 
 // Render the scene (threaded)
-bool	thread_render(t_thread *th)
+bool	thread_render(t_thread *th, t_window *w)
 {
-	float			ndc_x;
-	float			ndc_y;
-	t_ray			ray;
-	uint16_t		y;
-	uint16_t		x;
+	float	ndc_x;
+	float	ndc_y;
+	t_ray	ray;
+	t_axis2	axis;
 
-	y = 0;
+	axis.y = 0;
 	ray.origin = th->scene->camera.coords;
-	while (y < th->win->rndr_hght)
+	while (axis.y < w->rndr_hght)
 	{
 		if (check_bool(th->rt->mtx + MTX_RENDER, th->scene->render) == true
 			|| check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, th->rt->quit_routine) == true)
 			return (true);
-		x = 0;
-		while (x < th->win->rndr_wdth)
+		axis.x = 0;
+		while (axis.x < w->rndr_wdth)
 		{
-			ndc_x = (2.0F * ((x + 0.5F) / (float)th->win->rndr_wdth) - 1.0F) * th->rt->win->aspectrat;
-			ndc_y = 1.0F - 2.0F * ((y + 0.5F) / (float)th->win->rndr_hght);
+			ndc_x = (2.0F * ((axis.x + 0.5F) / (float)w->rndr_wdth) - 1.0F) * w->aspectrat;
+			ndc_y = 1.0F - 2.0F * ((axis.y + 0.5F) / (float)w->rndr_hght);
 			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, th->scene->camera.c.zvp_dist, 0.0F}, th->scene->camera.c.orientation);
-			set_pixel_multi(th, (uint16_t)th->win->res_ratio, (t_axis2){x, y}, trace_ray(th->scene, ray));
-			++x;
+			set_pixel_multi(th, (uint16_t)w->res_ratio, axis, trace_ray(th->scene, ray));
+			++axis.x;
 		}
-		++y;
+		++axis.y;
 	}
 	return (false);
 }
 
-void	thread_fast_render(t_thread *th)
+void	thread_fast_render(t_thread *th, t_window *w)
 {
-	uint16_t		x;
-	t_ray			ray;
-	float			ndc_x;
-	float			ndc_y;
-	uint16_t		y;
+	float	ndc_x;
+	float	ndc_y;
+	t_ray	ray;
+	t_axis2	axis;
 
-	y = 0;
+	axis.y = 0;
 	ray.origin = th->scene->camera.coords;
-	while (y < th->win->rndr_hght)
+	while (axis.y < w->rndr_hght)
 	{
-		x = 0;
-		while (x < th->win->rndr_wdth)
+		axis.x = 0;
+		while (axis.x < w->rndr_wdth)
 		{
-			ndc_x = (2.0F * ((x + 0.5F) / (float)th->win->rndr_wdth) - 1.0F) * th->rt->win->aspectrat;
-			ndc_y = 1.0F - 2.0F * ((y + 0.5F) / (float)th->win->rndr_hght);
+			ndc_x = (2.0F * ((axis.x + 0.5F) / (float)w->rndr_wdth) - 1.0F) * w->aspectrat;
+			ndc_y = 1.0F - 2.0F * ((axis.y + 0.5F) / (float)w->rndr_hght);
 			ray.vec = transform_ray_dir((t_vec4){ndc_x, ndc_y, th->scene->camera.c.zvp_dist, 0.0F}, th->scene->camera.c.orientation);
-			set_pixel_multi(th, (uint16_t)th->win->res_ratio, (t_axis2){x, y}, trace_ray(th->scene, ray));
-			++x;
+			set_pixel_multi(th, (uint16_t)w->res_ratio, axis, trace_ray(th->scene, ray));
+			++axis.x;
 		}
-		++y;
+		++axis.y;
 	}
 }

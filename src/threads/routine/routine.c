@@ -28,11 +28,11 @@ static void	render_routine(t_thread *th)
 		time = mlx_get_time();
 		if (th->rt->win->res_ratio == th->win->res_r_start)
 		{
-			thread_fast_render(th);
+			thread_fast_render(th, th->rt->win);
 			time = mlx_get_time() - time;
 			th->win->delta_time = time + 1.0F;
 		}
-		else if (thread_render(th) == false)
+		else if (thread_render(th, th->rt->win) == false)
 		{
 			time = mlx_get_time() - time;
 			if (th->win->res_ratio == th->win->res_r_start - 1)

@@ -56,7 +56,9 @@ uint32_t	find_closest_object(t_scene *scene, t_ray ray, float *closest_t, uint8_
 void		upscale_manager(t_rt *rt);
 
 void		upscale_manager_thread(t_rt *rt);
-bool		thread_render(t_thread *th);
-void		thread_fast_render(t_thread *th);
+
+void		render(t_rt *rt, t_window *w);
+bool		thread_render(t_thread *th, t_window *w);
+void		thread_fast_render(t_thread *th, t_window *w);
 
 #endif

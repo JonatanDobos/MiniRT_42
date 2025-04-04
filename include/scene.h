@@ -133,8 +133,6 @@ typedef struct	s_scene
 	float	cam_fov_speed;
 }	t_scene;
 
-void	render(t_rt *rt);
-
 void	create_scene_rt_file(t_scene *sc, const char *filename);
 size_t	color_line(t_dbltoa *dbl, char *rt_line, t_vec4 color);
 size_t	coords_line(t_dbltoa *dbl, char *rt_line, t_vec4 coords);
