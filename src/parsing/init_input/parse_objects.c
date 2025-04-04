@@ -21,9 +21,9 @@ static int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line)
 {
 	sc->ambient.type = AMBIENT;
 	sc->ambient.a.ratio = clamp(rt_atof(line), 0.0F, 1.0F);
-	sc->ambient.color[R] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-	sc->ambient.color[G] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-	sc->ambient.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
+	sc->ambient.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
+	sc->ambient.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
+	sc->ambient.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	sc->ambient.color[A] = 1.0F;
 	++vc->amb_amount;
 	return (EXIT_SUCCESS);
@@ -37,7 +37,7 @@ static int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
 	sc->camera.c.orientation[X] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	sc->camera.c.orientation[Y] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	sc->camera.c.orientation[Z] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
-	sc->camera.c.fov = clamp(rt_atoi(nxtvp(&line)), 0.0F, 180.0F);
+	sc->camera.c.fov = clamp(atoi32(nxtvp(&line)), 0.0F, 180.0F);
 	sc->camera.c.zvp_dist = 1.0F / tanf((sc->camera.c.fov * M_PI / 180.0F) / 2.0F);
 	sc->camera.c.fov = sc->camera.c.fov;
 	++vc->cam_amount;
@@ -54,9 +54,9 @@ static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 	l.coords[Z] = rt_atof(nxtvp(&line));
 	l.coords[3] = 1.0F;
 	l.l.brightness = clamp(rt_atof(nxtvp(&line)), 0.0F, 1.0F);
-	l.color[R] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-	l.color[G] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-	l.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
+	l.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
+	l.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
+	l.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	l.color[A] = 1.0F;
 	l.l.radius = 1.0F;
 	if (dynarr_insert(&sc->light_dynarr, &l) == false)

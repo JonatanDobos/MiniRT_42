@@ -1,49 +1,6 @@
 #include <parsing.h>
 #include <math.h>
 
-float	rt_atof(const char *str)
-{
-	float	num;
-	int		i;
-	int		sign;
-	int		place;
-
-	num = 0.0F;
-	i = 0;
-	sign = 1;
-	while (ft_isdigit(str[i]) == false || str[i] == '.')
-		++i;
-	if (i > 0 && str[i - 1] == '-')
-		sign = -1;
-	while (str[i] != '\0' && ft_isdigit(str[i]))
-		num = (num * 10.0F) + (str[i++] - '0');
-	if (str[i] != '.')
-		return (num * sign);
-	++i;
-	place = 1;
-	while (str[i] != '\0' && ft_isdigit(str[i]))
-		num += (float)(str[i++] - '0') / pow(10, (float)(place++));
-	return (num * sign);
-}
-
-int32_t	rt_atoi(const char *str)
-{
-	int		sign;
-	int32_t	num;
-	size_t	i;
-
-	sign = 1;
-	num = 0;
-	i = 0;
-	while (ft_isdigit(str[i]) == false)
-		++i;
-	if (i > 0 && str[i - 1] == '-')
-		sign = -1;
-	while (ft_isdigit(str[i]) == true)
-		num = (num * 10) + (str[i++] - '0');
-	return (sign * num);
-}
-
 /**
  * @brief Skips till it encounters a new numerical value.
  * @param str Ptr in string to skip from.
@@ -81,6 +38,31 @@ char	*nxtvp(char **str)
 		++c;
 	*str = c;
 	return (c);
+}
+
+float	rt_atof(const char *str)
+{
+	float	num;
+	int		i;
+	int		sign;
+	int		place;
+
+	num = 0.0F;
+	i = 0;
+	sign = 1;
+	while (ft_isdigit(str[i]) == false || str[i] == '.')
+		++i;
+	if (i > 0 && str[i - 1] == '-')
+		sign = -1;
+	while (str[i] != '\0' && ft_isdigit(str[i]) == true)
+		num = (num * 10.0F) + (str[i++] - '0');
+	if (str[i] != '.')
+		return (num * sign);
+	++i;
+	place = 1;
+	while (str[i] != '\0' && ft_isdigit(str[i]) ==  true)
+		num += (float)(str[i++] - '0') / pow(10, (float)(place++));
+	return (num * sign);
 }
 
 /**

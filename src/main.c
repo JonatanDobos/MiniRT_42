@@ -2,7 +2,7 @@
 #include <RTerror.h>
 #include <scene.h>
 #include <RTmlx.h>
-#include <utils.h>
+#include <setup_clean.h>
 #include <render.h>
 
 int main(int argc, char **argv)

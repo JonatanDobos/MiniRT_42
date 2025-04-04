@@ -28,9 +28,9 @@ static int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 	pl.plane.orientation[Y] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	pl.plane.orientation[Z] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	pl.plane.orientation[3] = 0.0F;
-	pl.color[R] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-	pl.color[G] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-	pl.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
+	pl.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
+	pl.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
+	pl.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	pl.color[A] = 1.0F;
 	if (dynarr_insert(&sc->obj_dynarr, &pl) == false)
 		return (errset(perr("parse_pl", ENOMEM)));
@@ -50,9 +50,9 @@ static int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 	sp.coords[3] = 1.0F;
 	sp.sphere.diameter = rt_atof(nxtvp(&line));
 	sp.sphere.radius = sp.sphere.diameter / 2.0F;
-	sp.color[R] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-	sp.color[G] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-	sp.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
+	sp.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
+	sp.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
+	sp.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	sp.color[A] = 1.0F;
 	if (dynarr_insert(&sc->obj_dynarr, &sp) == false)
 		return (errset(perr("parse_sp", ENOMEM)));
@@ -77,9 +77,9 @@ static int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 	cy.cylinder.diameter = rt_atof(nxtvp(&line));
 	cy.cylinder.radius = cy.cylinder.diameter / 2.0F;
 	cy.cylinder.height = rt_atof(nxtvp(&line));
-	cy.color[R] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-	cy.color[G] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
-	cy.color[B] = (float)rt_atoi(nxtvp(&line)) / 255.0F;
+	cy.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
+	cy.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
+	cy.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	cy.color[A] = 1.0F;
 	if (dynarr_insert(&sc->obj_dynarr, &cy) == false)
 		return (errset(perr("parse_cy", ENOMEM)));

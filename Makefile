@@ -18,7 +18,6 @@ CFLAGS			+=	-Wall -Wextra
 CFLAGS			+=	-Werror
 # CFLAGS			+=	-Wunreachable-code -Wpedantic -Wconversion -Wshadow
 CFLAGS			+=	-Wunreachable-code -Wshadow
-# CFLAGS			+=	-Wconversion
 CFLAGS			+=	-MMD -MP
 CFLAGS			+=	-g
 #	Werror cannot go together with fsanitize, because fsanitize won't work correctly.
@@ -81,14 +80,11 @@ MLX42_PATH		:=	$(EXTERN_LIBS)MLX42/
 SRC_DIR			:=	src/
 
 MAIN			:=	main.c
-
-PARSE			:=	parsing.c		string_utils.c		\
-					line_validate/line_val.c	line_validate/number_check.c			\
+PARSE			:=	parse/parsing.c				parse/parse_utils.c												\
+					line_validate/line_val.c	line_validate/number_check.c									\
 					init_input/parse_objects.c	init_input/init_primitives.c
-
 THREADING		:=	handling/thread_setup.c		handling/thread_terminate.c										\
 					routine/routine.c			routine/utils_thread.c			routine/read_scene.c
-
 MLX				:=	setup/window_setup.c		setup/init_mlx_images.c											\
 					hooks/hooks.c				hooks/hooks_move.c												\
 					cam/camera_move.c			cam/camera_rotate.c												\
@@ -96,29 +92,25 @@ MLX				:=	setup/window_setup.c		setup/init_mlx_images.c											\
 					print/print_objs.c			print/print_primitives.c
 SCENE			:=	set_filename.c				create_rt_file.c				scene_elements.c				\
 					geometric_primitives.c
-
-UTILS			:=	utils.c		init.c
-
-ERROR			:=	error.c			print.c
-
 RENDER			:=	rendering/render.c			rendering/trace_ray.c			rendering/scaling.c				\
 					rendering/set_pixel.c		rendering/upscale_manager.c 									\
 					intersect/obj_intersect.c	intersect/cylinder.c			intersect/lighting.c
-
-
 MATH_VEC		:=	vec/vec_arithmetic.c		vec/vec_geometry.c				vec/vec_transform.c				\
 					math/clamp.c
+SETUP_CLEAN		:=	init.c						cleanup.c
+ERROR			:=	error.c						print.c
+
 
 #		Find all .c files in the specified directories
-SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))						\
-					$(addprefix $(SRC_DIR)parsing/, $(PARSE))				\
-					$(addprefix $(SRC_DIR)error/, $(ERROR))					\
-					$(addprefix $(SRC_DIR)mlx/, $(MLX))						\
-					$(addprefix $(SRC_DIR)create_scene_file/, $(SCENE))		\
-					$(addprefix $(SRC_DIR)utils/, $(UTILS))					\
-					$(addprefix $(SRC_DIR)render/, $(RENDER))				\
-					$(addprefix $(SRC_DIR)math_vector/, $(MATH_VEC))		\
-					$(addprefix $(SRC_DIR)threads/, $(THREADING))
+SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))															\
+					$(addprefix $(SRC_DIR)parsing/, $(PARSE))													\
+					$(addprefix $(SRC_DIR)threads/, $(THREADING))												\
+					$(addprefix $(SRC_DIR)mlx/, $(MLX))															\
+					$(addprefix $(SRC_DIR)create_scene_file/, $(SCENE))											\
+					$(addprefix $(SRC_DIR)render/, $(RENDER))													\
+					$(addprefix $(SRC_DIR)math_vector/, $(MATH_VEC))											\
+					$(addprefix $(SRC_DIR)setup_cleanup/, $(SETUP_CLEAN))										\
+					$(addprefix $(SRC_DIR)error/, $(ERROR))
 
 #		Generate object file names
 OBJS 			:=	$(SRCP:%.c=$(BUILD_DIR)%.o)
@@ -126,8 +118,8 @@ OBJS 			:=	$(SRCP:%.c=$(BUILD_DIR)%.o)
 DEPS			:=	$(OBJS:.o=.d)
 
 #		HEADERS
-INCS			:=	miniRT.h		parsing.h		RTerror.h			scene.h				RTmlx.h \
-					utils.h		render.h		mathRT.h
+INCS			:=	miniRT.h			parsing.h			threadsRT.h			scene.h				RTmlx.h		\
+					render.h			setup_clean.h		mathRT.h			RTerror.h
 INCP			:=	$(addprefix $(INCD), $(INCS))
 HEADERS			:=	$(INCP)
 INCLUDE_RT		:=	-I $(INCD)
@@ -156,9 +148,8 @@ LINKER_FLAGS	 =	-lglfw -lm
 BUILD			:=	$(COMPILER) $(INCLUDE) $(CFLAGS)
 
 #		Remove these created files
-DELETE			 =	*.out										\
-					.DS_Store									\
-					*.dSYM/
+DELETE			:=	*.out			**/*.out			.DS_Store												\
+					**/.DS_Store	.dSYM/				**/.dSYM/
 
 #		RECIPES
 all:	$(NAME)

@@ -16,6 +16,13 @@ Options:
 - Implementeren van variabele resolutie-scaling om wat smoothere bewegingen te krijgen ook bij veel objs
 
 
+
+
+
+remy to JONI
+memappend	wordt nergens gebruikt?
+
+
 range verwijderd.
 float	range(float value, float min, float max)
 {
@@ -38,14 +45,17 @@ deze line ook aangepast, maar niet zeker?
 
 
 
+
+
+
+
 Remy opmerking:
 1.	./miniRT <randomfile> segmenetation		opgelost?
 
 PARSING
 
 
-MAKEFILE
-voor github altijd met 2 threads, tenzij specifiek  aangegeven met foei
-voor vogsphere(codam) andersom
-
 flags -Wpedantic -Wconversion nog verwerken in de code
+
+
+probeerde -Wpedantic maar wordt wel heel erg veel extra werk
