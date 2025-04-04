@@ -27,10 +27,7 @@
 
 // # define THREADS 2
 
-typedef const t_vec4		t_cvec4;
 //	Forward declaration of structs;
-typedef struct s_scene		t_scene;
-typedef struct s_window		t_window;
 typedef struct mlx			mlx_t;
 typedef struct mlx_texture	mlx_texture_t;
 typedef struct mlx_image	mlx_image_t;
@@ -39,9 +36,9 @@ typedef void				*(*t_cast)(void *);
 
 typedef struct	s_rt
 {
-	t_scene			*scene;
-	t_scene			*read_scene;
-	t_window		*win;
+	struct s_scene	*scene;
+	struct s_scene	*read_scene;
+	struct s_window	*win;
 	pthread_cond_t	cond;
 	uint16_t		finished_rendering;
 	uint16_t		stopped_threads;

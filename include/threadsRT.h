@@ -7,7 +7,6 @@
 
 typedef float				t_vec4 __attribute__ ((vector_size(16)));
 
-typedef const t_vec4		t_cvec4;
 //	Forward declaration of structs;
 typedef struct s_scene		t_scene;
 typedef struct s_window		t_window;
