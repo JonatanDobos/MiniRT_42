@@ -43,7 +43,6 @@ typedef struct	s_rt
 	uint16_t		finished_rendering;
 	uint16_t		stopped_threads;
 	uint16_t		thread_rend_step;
-	bool			pressed_key;
 	bool			creation_check;
 	bool			mtx_init_check;
 	bool			quit_routine;

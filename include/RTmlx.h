@@ -52,9 +52,7 @@ void	init_hooks(t_rt *rt);
 void	loop_hook(t_rt *rt);
 void	loop_hook_threaded(t_rt *rt);
 void	my_keyhook(mlx_key_data_t keydata, t_rt *rt);
-void	fov_hook(double xdelta, double ydelta, t_scene *sc);
-
-// bool	keybindings_used_in_loophook(const keys_t key);
+void	scroll_fov_hook(double xdelta, double ydelta, t_scene *sc);
 
 // hooks_move.c
 
@@ -101,5 +99,7 @@ void		obj_rotate_right(t_scene *sc);
 
 void		set_filename(const keys_t key, t_window *win, t_scene *sc);
 void		reset_filename(t_window *win);
+
+void	create_bmp(t_rt *rt/* , const char *filename */);
 
 #endif

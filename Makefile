@@ -86,9 +86,10 @@ PARSE			:=	parse/parsing.c				parse/parse_utils.c												\
 THREADING		:=	handling/thread_setup.c		handling/thread_terminate.c										\
 					routine/routine.c			routine/utils_thread.c			routine/read_scene.c
 MLX				:=	setup/window_setup.c		setup/init_mlx_images.c											\
-					hooks/hooks.c				hooks/hooks_move.c												\
-					cam/camera_move.c			cam/camera_rotate.c												\
-					obj/object_move.c			obj/object_rotate.c				obj/object_modification.c		\
+					hooks/hooks.c				hooks/loop_hooks.c				hooks/mouse_hook.c				\
+					hooks/loop_move_hooks.c																		\
+					transform/cam/camera_move.c	transform/cam/camera_rotate.c									\
+					transform/obj/obj_move.c	transform/obj/obj_rotate.c		transform/obj/obj_modification.c\
 					print/print_objs.c			print/print_primitives.c
 SCENE			:=	set_filename.c				create_rt_file.c				scene_elements.c				\
 					geometric_primitives.c
