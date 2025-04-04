@@ -33,6 +33,11 @@ float	clamp(float value, float min, float max)
 		return (max);
 	return (value);
 }
+ * @brief Custom error code macros (range <= -2).
+deze line ook aangepast, maar niet zeker?
+
+
+
 Remy opmerking:
 1.	./miniRT <randomfile> segmenetation		opgelost?
 

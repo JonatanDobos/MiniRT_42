@@ -4,6 +4,7 @@
 #include <RTmlx.h>
 #include <render.h>
 #include <RTerror.h>
+#include <mathRT.h>
 
 void	init_main(t_rt *rt, t_scene *scn, t_scene *read_scn, t_window *win)
 {

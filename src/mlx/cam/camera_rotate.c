@@ -1,5 +1,4 @@
 #include <scene.h>
-#include <utils.h>
 #include <mathRT.h>
 
 void	cam_rotate_up(t_scene *sc)

@@ -82,8 +82,7 @@ SRC_DIR			:=	src/
 
 MAIN			:=	main.c
 
-PARSE			:=	parsing_utils.c					\
-					parsing.c string_utils.c		\
+PARSE			:=	parsing.c		string_utils.c		\
 					line_validate/line_val.c	line_validate/number_check.c			\
 					init_input/parse_objects.c	init_input/init_primitives.c
 
@@ -102,12 +101,13 @@ UTILS			:=	utils.c		init.c
 
 ERROR			:=	error.c			print.c
 
-RENDER			:=	rendering/render.c		rendering/trace_ray.c				rendering/scaling.c				\
+RENDER			:=	rendering/render.c			rendering/trace_ray.c			rendering/scaling.c				\
 					rendering/set_pixel.c		rendering/upscale_manager.c 									\
 					intersect/obj_intersect.c	intersect/cylinder.c			intersect/lighting.c
 
 
-MATH			:=	vec_arithmetic.c			vec_geometry.c				vec_transform.c
+MATH_VEC		:=	vec/vec_arithmetic.c		vec/vec_geometry.c				vec/vec_transform.c				\
+					math/clamp.c
 
 #		Find all .c files in the specified directories
 SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))						\
@@ -117,7 +117,7 @@ SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))						\
 					$(addprefix $(SRC_DIR)create_scene_file/, $(SCENE))		\
 					$(addprefix $(SRC_DIR)utils/, $(UTILS))					\
 					$(addprefix $(SRC_DIR)render/, $(RENDER))				\
-					$(addprefix $(SRC_DIR)math/, $(MATH))					\
+					$(addprefix $(SRC_DIR)math_vector/, $(MATH_VEC))		\
 					$(addprefix $(SRC_DIR)threads/, $(THREADING))
 
 #		Generate object file names

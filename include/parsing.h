@@ -30,7 +30,6 @@ int16_t		init_primitives(t_scene *sc, t_value_check *vc, char *line);
 // parsing_utils.c
 
 void		*memappend(void **ptr, void *append, size_t size, size_t len);
-float		range(float value, float min, float max);
 
 // string_utils.c
 

@@ -1,5 +1,4 @@
 #include <scene.h>
-#include <utils.h>
 #include <mathRT.h>
 
 void	cam_move_forw(t_scene *sc)

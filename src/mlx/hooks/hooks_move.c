@@ -1,6 +1,5 @@
 #include <RTmlx.h>
 #include <scene.h>
-#include <utils.h>
 #include <mathRT.h>
 #include <render.h>
 

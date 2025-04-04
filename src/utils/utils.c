@@ -4,6 +4,8 @@
 #include <utils.h>
 #include <RTmlx.h>
 #include <RTerror.h>
+#include <mathRT.h>
+
 #define NO_FILENAME "Give argument: ./miniRT <filename>\n"
 #define SCREEN_ERROR "Screensize is too small\n"
 
@@ -57,59 +59,4 @@ int32_t	cleanup(t_rt *rt)
 	return (rt->errnum);
 }
 
-/**
- * @brief Broadcasts scalar value to all four indexes of the t_vec4.
- * @param scalar Value to broadcast to vector[X, Y, Z, W].
- * @return (t_vec4){scalar, scalar, scalar, scalar}
- */
-t_vec4	bcast4(float scalar)
-{
-	return ((t_vec4){scalar, scalar, scalar, scalar});
-}
 
-/**
- * @brief Broadcasts scalar value to first three indexes of the t_vec4.
- * @param scalar Value to broadcast to vector[X, Y, Z].
- * @return (t_vec4){scalar, scalar, scalar, 1.0f}
- */
-t_vec4	bcast3(float scalar)
-{
-	return ((t_vec4){scalar, scalar, scalar, 1.0F});
-}
-
-// Clamp a value between min and max
-float	clamp(float value, float min, float max)
-{
-	if (value < min)
-		return (min);
-	if (value > max)
-		return (max);
-	return (value);
-}
-
-// Clamp a value between min and max
-int	intclamp(int value, int min, int max)
-{
-	if (value < min)
-		return (min);
-	if (value > max)
-		return (max);
-	return (value);
-}
-
-// Clamp a vector between min and max
-t_vec4	vec_clamp(t_vec4 value, float min, float max)
-{
-	return (t_vec4)
-	{
-		clamp(value[0], min, max),
-		clamp(value[1], min, max),
-		clamp(value[2], min, max),
-		clamp(value[3], min, max)
-	};
-}
-
-int32_t	r_down(float value)
-{
-	return ((int32_t)(value - 0.5));
-}

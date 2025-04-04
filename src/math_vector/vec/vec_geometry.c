@@ -1,5 +1,4 @@
 #include <miniRT.h>
-#include <utils.h>
 #include <mathRT.h>
 #include <scene.h>
 

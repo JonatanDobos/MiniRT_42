@@ -1,5 +1,5 @@
 #include <miniRT.h>
-#include <utils.h>
+#include <mathRT.h>
 
 // Vector addition.
 t_vec4	vadd(t_vec4 a, t_vec4 b)
