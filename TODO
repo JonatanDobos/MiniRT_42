@@ -15,10 +15,6 @@ Options:
 
 - Implementeren van variabele resolutie-scaling om wat smoothere bewegingen te krijgen ook bij veel objs
 
-Jonathan deze functions moeten eruit
-tanf
-pow
-
 
 Remy opmerking:
 1.	./miniRT <randomfile> segmenetation		opgelost?
@@ -31,6 +27,3 @@ voor github altijd met 2 threads, tenzij specifiek  aangegeven met foei
 voor vogsphere(codam) andersom
 
 flags -Wpedantic -Wconversion nog verwerken in de code
-
-
-geselecteerd objecten kunnem met 'P' print_camera gebruiken voor debuggen

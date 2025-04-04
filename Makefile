@@ -1,12 +1,11 @@
 NAME			:=	miniRT
 
-# Get the number of logical processors (threads)
+#	Get the number of logical processors (threads)
 N_JOBS			:=	$(shell nproc)
-
-# (-j) Specify the number of jobs (commands) to run simultaneously
+#	(-j) Specify the number of jobs (commands) to run simultaneously
 MULTI_THREADED	:=	-j $(N_JOBS)
 
-# MAKEFLAGS will automatically apply the specified options (e.g., parallel execution) when 'make' is invoked
+#	MAKEFLAGS will automatically apply the specified options (e.g., parallel execution) when 'make' is invoked
 MAKEFLAGS		+=	$(MULTI_THREADED)
 
 RM				:=	rm -rf
@@ -25,21 +24,23 @@ CFLAGS			+=	-g
 #	Werror cannot go together with fsanitize, because fsanitize won't work correctly.
 # CFLAGS			+=	-fsanitize=address
 
+#	Sets MINIRT_THREADS to 2 if N_JOBS (logical processors) is greater than 1, otherwise sets it to 1.
+MINIRT_THREADS := $(if $(filter-out 1,$(N_JOBS)),2,1)
+
 #		Temporary CFLAGS
-CFLAGS			+=	-pthread -D THREADS=2
-# CFLAGS			+=	-pthread -D THREADS=$(N_JOBS)
+CFLAGS			+=	-pthread -D THREADS=$(MINIRT_THREADS)
 CFLAGS			+=	-Wno-unused-result
 #		Optimization flags
 # Generate code optimized for the host machine's CPU
 OFLAGS			 =	-march=native
 # # Disable setting errno after math functions for better performance
-# OFLAGS			+=	-fno-math-errno
+OFLAGS			+=	-fno-math-errno
 # # This flag allows the compiler to use reciprocal approximations for division operations, which can improve performance but may reduce precision.
-# OFLAGS			+=	-freciprocal-math
+OFLAGS			+=	-freciprocal-math
 # # This flag allows the compiler to ignore the distinction between positive and negative zero, which can enable more aggressive optimizations.
-# OFLAGS			+=	-fno-signed-zeros
+OFLAGS			+=	-fno-signed-zeros
 # # This flag tells the compiler that floating-point operations cannot generate traps (such as overflow or division by zero), allowing for more aggressive optimizations.
-# OFLAGS			+=	-fno-trapping-math
+OFLAGS			+=	-fno-trapping-math
 
 OFLAGS += -Ofast
 OFLAGS += -O3
@@ -199,6 +200,9 @@ fcln:	cln
 re:
 	$(MAKE) $(PRINT_NO_DIR) fclean
 	$(MAKE) $(PRINT_NO_DIR) all
+
+single_thread:
+	@$(MAKE) $(PRINT_NO_DIR) MINIRT_THREADS=1	
 
 malloc_wrap: all
 
