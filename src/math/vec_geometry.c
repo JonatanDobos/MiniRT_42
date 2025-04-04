@@ -1,6 +1,7 @@
 #include <miniRT.h>
 #include <utils.h>
 #include <mathRT.h>
+#include <scene.h>
 
 // Vector cross-product.
 t_vec4	vcross(t_vec4 a, t_vec4 b)

@@ -21,19 +21,21 @@ static void	print_plane(t_objs pl)
 {
 	printf("\nPlane\nCoordinates: (x=%f, y=%f, z=%f)\n  "
 		"Direction: (%f, %f, %f)\n     "
-		"Colour: (%f, %f, %f, %f)\n",
+		"Colour: (%d, %d, %d)\n",
 		pl.coords[0], pl.coords[1], pl.coords[2],
 		pl.plane.orientation[0], pl.plane.orientation[1], pl.plane.orientation[2],
-		pl.color[0], pl.color[1], pl.color[2], pl.color[3]);
+		(int)(pl.color[0] * 255), (int)(pl.color[1] * 255),
+		(int)(pl.color[2] * 255));
 }
 
 static void	print_sphere(t_objs sp)
 {
 	printf("\nSphere\nCoordinates: (x=%f, y=%f, z=%f)\n   "
-		"Diameter: %f\n     Radius: %f\n     Colour: (%f, %f, %f, %f)\n",
+		"Diameter: %f\n     Radius: %f\n     Colour: (%d, %d, %d)\n",
 		sp.coords[0], sp.coords[1], sp.coords[2],
 		sp.sphere.diameter, sp.sphere.radius,
-		sp.color[0], sp.color[1], sp.color[2], sp.color[3]);
+		(int)(sp.color[0] * 255), (int)(sp.color[1] * 255),
+		(int)(sp.color[2] * 255));
 }
 
 static void	print_cylinder(t_objs cy)
@@ -42,9 +44,10 @@ static void	print_cylinder(t_objs cy)
 
 	printf("\nCylinder\nCoordinates: (x=%f, y=%f, z=%f)\n  Direction: (%f, %f, %f)\n"
 		"Diameter: %f\n     Radius: %f\n     "
-		"Height: %f\n     Colour: (%f, %f, %f, %f)\n",
+		"Height: %f\n     Colour: (%d, %d, %d)\n",
 		cy.coords[0], cy.coords[1], cy.coords[2],
 		c.orientation[0], c.orientation[1], c.orientation[2],
 		c.diameter, c.radius, c.height,
-		cy.color[0], cy.color[1], cy.color[2], cy.color[3]);
+		(int)(cy.color[0] * 255), (int)(cy.color[1] * 255),
+		(int)(cy.color[2] * 255));
 }

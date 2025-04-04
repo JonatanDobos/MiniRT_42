@@ -3,7 +3,7 @@
 //	Static Functions
 static void	print_camera(t_objs cam);
 static void	print_ambient(t_objs amb);
-static void	print_light(t_objs amb);
+static void	print_light(t_objs l);
 
 void	print_obj_info(t_scene *sc)
 {
@@ -40,17 +40,19 @@ static void	print_ambient(t_objs amb)
 {
 	printf("\nAmbient\n     "
 		"Ratio: %f\n    "
-		"Colour: (%f, %f, %f, %f)\n",
+		"Colour: (%d, %d, %d)\n",
 		amb.a.ratio,
-		amb.color[0], amb.color[1], amb.color[2], amb.color[3]);
+		(int)(amb.color[0] * 255), (int)(amb.color[1] * 255),
+		(int)(amb.color[2] * 255));
 }
 
-static void	print_light(t_objs amb)
+static void	print_light(t_objs l)
 {
 	printf("\nLight\nCoordinates: (x=%f, y=%f, z=%f)\n     "
 		"Ratio:	%f)\n    "
-		"Colour: (%f, %f, %f, %f)\n",
-		amb.coords[0], amb.coords[1], amb.coords[2],
-		amb.a.ratio,
-		amb.color[0], amb.color[1], amb.color[2], amb.color[3]);
+		"Colour: (%d, %d, %d)\n",
+		l.coords[0], l.coords[1], l.coords[2],
+		l.a.ratio,
+		(int)(l.color[0] * 255), (int)(l.color[1] * 255),
+		(int)(l.color[2] * 255));
 }

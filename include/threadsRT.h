@@ -33,6 +33,19 @@ typedef struct	s_thread
 	pthread_t		thread;
 }	t_thread;
 
+
+enum e_mtx
+{
+	MTX_PRINT,
+	MTX_SYNC,
+	MTX_RESYNC,
+	MTX_DONE_RENDERING,
+	MTX_QUIT_ROUTINE,
+	MTX_STOPPED_THREADS,
+	MTX_RENDER,
+	MTX_AMOUNT
+};
+
 // bool	init_pthread_mutex(t_rt *rt);
 bool	initialize_mutexes(t_rt *rt);
 bool	initialize_conditions(t_rt *rt);

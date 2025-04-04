@@ -1,5 +1,6 @@
 #include <miniRT.h>
 #include <mathRT.h>
+#include <scene.h>
 
 // Vector reflection.
 t_vec4	vrefl(t_vec4 v, t_vec4 n)

@@ -10,6 +10,22 @@
 //	3 objects, Plane Sphere Cylinder
 # define NUM_OBJ_TYPES 3
 
+enum e_axis
+{
+	X,
+	Y,
+	Z,
+	W
+};
+
+enum e_rgba
+{
+	R,
+	G,
+	B,
+	A
+};
+
 typedef struct s_axis2_16
 {
 	uint16_t		x;

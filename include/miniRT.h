@@ -27,8 +27,6 @@
 
 // # define THREADS 2
 
-typedef float				t_vec4 __attribute__ ((vector_size(16)));
-
 typedef const t_vec4		t_cvec4;
 //	Forward declaration of structs;
 typedef struct s_scene		t_scene;
@@ -38,34 +36,6 @@ typedef struct mlx_texture	mlx_texture_t;
 typedef struct mlx_image	mlx_image_t;
 typedef pthread_mutex_t		t_mtx;
 typedef void				*(*t_cast)(void *);
-
-enum e_axis
-{
-	X,
-	Y,
-	Z,
-	W
-};
-
-enum e_rgba
-{
-	R,
-	G,
-	B,
-	A
-};
-
-enum e_mtx
-{
-	MTX_PRINT,
-	MTX_SYNC,
-	MTX_RESYNC,
-	MTX_DONE_RENDERING,
-	MTX_QUIT_ROUTINE,
-	MTX_STOPPED_THREADS,
-	MTX_RENDER,
-	MTX_AMOUNT
-};
 
 typedef struct	s_rt
 {
