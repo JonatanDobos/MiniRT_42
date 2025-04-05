@@ -109,10 +109,10 @@ typedef struct	s_objs
 
 typedef struct	s_scene
 {
-	t_objs	camera;
-	t_objs	ambient;
-	bool	render;
-	bool	render_ongoing;
+	t_objs		camera;
+	t_objs		ambient;
+	bool		render;
+	bool		render_ongoing;
 	struct
 	{
 		t_dynarr	obj_dynarr;
@@ -126,11 +126,13 @@ typedef struct	s_scene
 		size_t		l_arr_size;
 		bool		intersect_lights;
 	};
-	t_objs	*selected_obj;
-	ssize_t	sel_obj_index;
-	float	cam_m_speed;
-	float	cam_r_speed;
-	float	cam_fov_speed;
+	t_objs		*selected_obj;
+	ssize_t		sel_obj_index;
+	float		cam_m_speed;
+	float		cam_r_speed;
+	float		cam_fov_speed;
+	bool		soft_shadows;
+	uint16_t	shadow_sample_gridsize;
 }	t_scene;
 
 void	create_scene_rt_file(t_scene *sc, const char *filename);

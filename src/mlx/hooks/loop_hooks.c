@@ -5,6 +5,7 @@
 //	Static Functions
 static void	render_updates(t_rt *rt);
 static void	switch_pixelarray(t_rt *rt);
+static void	last_pix_arr_switch(t_rt *rt);
 
 void	loop_hook(t_rt *rt)
 {
@@ -29,6 +30,7 @@ void	loop_hook(t_rt *rt)
 
 void	loop_hook_threaded(t_rt *rt)
 {
+	last_pix_arr_switch(rt);
 	movement(rt);
 	if (rt->scene->render == true)
 		toggle_bool(rt->mtx + MTX_RENDER, &rt->read_scene->render, true);
@@ -74,4 +76,30 @@ static void	switch_pixelarray(t_rt *rt)
 		rt->thread.img->pixels = rt->thread.pixels_own;
 		rt->thread.pixels = rt->thread.pixels_mlx;
 	}
+}
+
+static void	last_pix_arr_switch(t_rt *rt)
+{
+	static bool	switch_it = false;
+
+	pthread_mutex_lock(rt->mtx + MTX_DONE_RENDERING);
+	if (rt->scene->render == true)
+	{
+		switch_it = false;
+	}
+	else if (rt->scene->render == false && rt->scene->render_ongoing == true \
+			&& rt->win->res_ratio == RES_R_FULL)
+	{
+		if (rt->scene->soft_shadows == true)
+			mlx_set_window_title(rt->win->mlx, "miniRT is upsampling shadows (can take minutes)");
+		switch_it = true;
+	}
+	else if (switch_it == true && rt->scene->render_ongoing == false \
+			&& rt->finished_rendering == THREADS - 1)
+	{
+		mlx_set_window_title(rt->win->mlx, "miniRT");
+		switch_pixelarray(rt);
+		switch_it = false;
+	}
+	pthread_mutex_unlock(rt->mtx + MTX_DONE_RENDERING);
 }

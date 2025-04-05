@@ -58,7 +58,7 @@ static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 	l.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	l.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	l.color[A] = 1.0F;
-	l.l.radius = 1.0F;
+	l.l.radius = 1.5F;
 	if (dynarr_insert(&sc->light_dynarr, &l) == false)
 		return (errset(perr("parse_light", ENOMEM)));
 	++sc->l_arr_size;

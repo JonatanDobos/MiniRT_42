@@ -28,6 +28,7 @@ void	init_main(t_rt *rt, t_scene *scn, t_scene *read_scn, t_window *win)
 	rt->win->res_r_start = RES_RATIO_MAX;
 	win->delta_time = 0.1F;
 	win->target_time = 0.002F + screen_size_multiplier;
+	rt->scene->shadow_sample_gridsize = 1;
 }
 
 int16_t	setup_init_parsing(t_rt *rt, const int argc, const char *argv)

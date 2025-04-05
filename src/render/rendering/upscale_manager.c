@@ -34,17 +34,21 @@ void	upscale_manager_thread(t_rt *rt)
 			return ;
 		rt->win->res_ratio = rt->win->res_r_start;
 		rt->scene->render_ongoing = true;
+		rt->read_scene->shadow_sample_gridsize = 1;
 		mlx_set_window_title(rt->win->mlx, "Rendering miniRT");
 	}
 	else if (rt->win->res_ratio > RES_R_FULL)
 	{
 		rt->win->res_ratio = intclamp( \
 		rt->win->res_ratio - RES_STEP_SIZE, RES_R_FULL, rt->win->res_r_start);
+		if (rt->win->res_ratio < rt->win->res_r_start - 2 \
+			&& rt->read_scene->shadow_sample_gridsize < 4)
+			rt->read_scene->shadow_sample_gridsize += rt->win->res_ratio % 2;
 	}
 	else
 	{
 		rt->scene->render_ongoing = false;
-		mlx_set_window_title(rt->win->mlx, "miniRT");
+		rt->read_scene->shadow_sample_gridsize = 6;
 	}
 	rt->win->rndr_hght = (float)rt->win->mlx->height / rt->win->res_ratio;
 	rt->win->rndr_wdth = (float)rt->win->mlx->width / rt->win->res_ratio;

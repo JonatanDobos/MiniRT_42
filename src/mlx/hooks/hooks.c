@@ -40,6 +40,11 @@ void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 			rt->scene->intersect_lights = !rt->scene->intersect_lights;
 			rt->scene->render = true;
 		}
+		else if (keydata.key == MLX_KEY_RIGHT_SHIFT)
+		{
+			rt->scene->soft_shadows = !rt->scene->soft_shadows;
+			rt->scene->render = true;
+		}
 	}
 }
 
