@@ -8,7 +8,7 @@ static void	switch_pixelarray(t_rt *rt);
 
 void	loop_hook(t_rt *rt)
 {
-	double	time;
+	static double	time;
 
 	time = mlx_get_time();
 	movement(rt);
@@ -18,6 +18,8 @@ void	loop_hook(t_rt *rt)
 		time = mlx_get_time() - time;
 		if (rt->win->res_ratio == rt->win->res_r_start)
 			rt->win->delta_time = time;
+		else if (rt->win->res_ratio == rt->win->res_r_start - 1)
+			set_starting_res_ratio(rt, time);
 		rt->scene->cam_fov_speed = FOV_SCROLL_SPEED * rt->win->delta_time;
 		rt->scene->cam_m_speed = CAM_MOVE_SPEED * rt->win->delta_time;
 		rt->scene->cam_r_speed = CAM_ROTATION_SPEED * rt->win->delta_time;

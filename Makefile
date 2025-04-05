@@ -15,15 +15,16 @@ PRINT_NO_DIR	:=	--no-print-directory
 COMPILER		:=	gcc
 # CFLAGS			:=	-std=c99
 CFLAGS			+=	-Wall -Wextra
-CFLAGS			+=	-Werror
+# CFLAGS			+=	-Werror
 # CFLAGS			+=	-Wunreachable-code -Wpedantic -Wconversion -Wshadow
-CFLAGS			+=	-Wunreachable-code -Wshadow
+# CFLAGS			+=	-Wunreachable-code -Wshadow
 CFLAGS			+=	-MMD -MP
 CFLAGS			+=	-g
 #	Werror cannot go together with fsanitize, because fsanitize won't work correctly.
 # CFLAGS			+=	-fsanitize=address
 
 #	Sets MINIRT_THREADS to 2 if N_JOBS (logical processors) is greater than 1, otherwise sets it to 1.
+# MINIRT_THREADS	:=	1
 MINIRT_THREADS	:=	$(if $(filter-out 1,$(N_JOBS)),2,1)
 
 #		Temporary CFLAGS

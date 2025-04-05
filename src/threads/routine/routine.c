@@ -7,7 +7,6 @@
 
 //	Static functions
 static void	render_routine(t_thread *th);
-static void	set_starting_res_ratio(t_rt *rt, double delta_time);
 static void	resynchronize_after_rendering(t_thread *th);
 
 void	*thread_routine_init(t_thread *th)
@@ -29,7 +28,7 @@ static void	render_routine(t_thread *th)
 		{
 			thread_fast_render(th, th->rt->win);
 			time = mlx_get_time() - time;
-			th->win->delta_time = time + 1.0F;
+			th->win->delta_time = time;
 		}
 		else if (thread_render(th, th->rt->win) == false)
 		{
@@ -47,16 +46,6 @@ static void	render_routine(t_thread *th)
 	++th->rt->stopped_threads;
 	pthread_cond_signal(&th->rt->cond);
 	pthread_mutex_unlock(th->rt->mtx + MTX_STOPPED_THREADS);
-}
-
-static void	set_starting_res_ratio(t_rt *rt, double delta_time)
-{
-	const double	error = delta_time - rt->win->target_time;
-	const double	adjustment_factor = 10.0F;
-	int				new_ratio;	
-
-	new_ratio = rt->win->res_r_start * (1.0F + (error * adjustment_factor));
-	rt->win->res_r_start = intclamp((int)new_ratio, 2, 30);
 }
 
 static void	resynchronize_after_rendering(t_thread *th)

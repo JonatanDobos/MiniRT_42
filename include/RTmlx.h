@@ -6,11 +6,10 @@
 # include <libft.h> 
 
 # define LOGO_PATH "images/glasses.png"
-// Maybe scrool FOV hook speed??
 # define NAME_FILE "Name your .rt file:  "
-# define CAM_ROTATION_SPEED 0.012f
-# define CAM_MOVE_SPEED 0.12f
-# define FOV_SCROLL_SPEED 1.0f
+# define CAM_ROTATION_SPEED 1.0F
+# define CAM_MOVE_SPEED 12.0F
+# define FOV_SCROLL_SPEED 160.0F
 
 # define FOV_MAX 180.0f
 
