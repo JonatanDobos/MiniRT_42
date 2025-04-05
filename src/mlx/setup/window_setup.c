@@ -32,8 +32,8 @@ bool	windows_setup_mlx(t_rt *rt)
 
 static bool	init_mlx(t_window *win)
 {
-	int32_t	win_width;
-	int32_t	win_height;
+	uint32_t	win_width;
+	uint32_t	win_height;
 
 	win_width = SCREEN_WIDTH / 2;
 	win_height = SCREEN_HEIGHT / 2;
@@ -41,20 +41,20 @@ static bool	init_mlx(t_window *win)
 	win->mlx = mlx_init(win_width, win_height, "miniRT is setting up MLX", false);
 	if (win->mlx == NULL)
 		return (false);
-	win->window_hght = (uint16_t)win_height;
-	win->window_wdth = (uint16_t)win_width;
+	win->window_hght = win_height;
+	win->window_wdth = win_width;
 	return (true);
 }
 
 static bool	img_to_window(t_window *win)
 {
-	win->img = mlx_new_image(win->mlx, (uint32_t)win->window_wdth, (uint32_t)win->window_hght);
+	win->img = mlx_new_image(win->mlx, win->window_wdth, win->window_hght);
 	if (win->img == NULL)
 		return (false);
 	win->id = mlx_image_to_window(win->mlx, win->img, 0, 0);
 	if (win->id == -1)
-		return (false);
-	win->pixels = (uint8_t *)win->img->pixels;
+		return (mlx_delete_image(win->mlx, win->img), false);
+	win->pixels = win->img->pixels;
 	return (true);
 }
 

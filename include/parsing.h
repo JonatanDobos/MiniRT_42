@@ -28,7 +28,6 @@ int16_t		input_type_parse(t_scene *sc, t_value_check *vc, char *line);
 int16_t		init_primitives(t_scene *sc, t_value_check *vc, char *line);
 
 // parse_utils.c
-void		*memappend(void **ptr, void *append, size_t size, size_t len);
 float		rt_atof(const char *str);
 char		*nxtv(char *str);
 char		*nxtvp(char **str);

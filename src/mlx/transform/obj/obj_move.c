@@ -4,17 +4,13 @@
 
 bool	obj_move_forw(t_scene *sc)
 {
-	const t_vec4	speed = bcast3(sc->cam_m_speed);
-
-	sc->selected_obj->coords += sc->camera.c.orientation * speed;
+	sc->selected_obj->coords += sc->camera.c.orientation * bcast3(sc->cam_m_speed);
 	return (true);
 }
 
 bool	obj_move_backw(t_scene *sc)
 {
-	const t_vec4	speed = bcast3(sc->cam_m_speed);
-
-	sc->selected_obj->coords -= sc->camera.c.orientation * speed;
+	sc->selected_obj->coords -= sc->camera.c.orientation * bcast3(sc->cam_m_speed);
 	return (true);
 }
 

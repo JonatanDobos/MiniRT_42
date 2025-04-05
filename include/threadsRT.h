@@ -45,6 +45,8 @@ enum e_mtx
 	MTX_AMOUNT
 };
 
+bool	res_setscale(t_window *win, const float scale);
+
 // bool	init_pthread_mutex(t_rt *rt);
 bool	initialize_mutexes(t_rt *rt);
 bool	initialize_conditions(t_rt *rt);

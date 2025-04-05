@@ -6,14 +6,10 @@
 #include <mathRT.h>
 #include <setup_clean.h>
 
-
-
 int32_t	cleanup(t_rt *rt)
 {
 	if (THREADS > 1)
 	{
-		// Wat gebeurt er bij mutex SYNC?
-		// toggle_bool(rt->mtx + MTX_QUIT_ROUTINE, &rt->quit_routine, true);
 		if (rt->mtx_init_check == true)
 		{
 			pthread_mutex_unlock(rt->mtx + MTX_SYNC);
@@ -40,5 +36,3 @@ int32_t	cleanup(t_rt *rt)
 		free(rt->scene->lights);
 	return (rt->errnum);
 }
-
-

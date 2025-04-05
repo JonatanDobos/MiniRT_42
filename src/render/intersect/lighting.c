@@ -2,45 +2,58 @@
 #include <mathRT.h>
 #include <render.h>
 
-t_vec4	calc_lighting(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
-{
-	t_vec4			result;
-	t_vec4			light_dir;
-	float			diff;
-	uint32_t		i;
-	float			shadow;
+//	Static Functions
+static bool	calc_shadow(t_scene *sc, t_ray ray, t_vec4 light_dir, uint32_t light);
 
-	// Ambient lighting
-	result = obj_color * sc->ambient.color * bcast3(sc->ambient.a.ratio);
-	
+t_objs	*render_light(t_scene *sc, t_ray ray, float *closest_t, t_objs *closest_obj)
+{
+	uint32_t	i;
+	float		t;
+
 	i = 0;
 	while (i < sc->l_arr_size)
 	{
-		// Diffuse lighting
+		if (ray_intersect_sphere(ray, &sc->lights[i], &t) && t < *closest_t)
+		{
+			closest_obj = sc->lights + i;
+			*closest_t = t;
+		}
+		++i;
+	}
+	return (closest_obj);
+}
+
+t_vec4	calc_lighting(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
+{
+	t_vec4			light_dir;
+	t_vec4			result;
+	float			shadow;
+	float			diff;
+	uint32_t		i;
+
+	result = obj_color * sc->ambient.color * bcast3(sc->ambient.a.ratio);
+	i = 0;
+	while (i < sc->l_arr_size)
+	{
 		light_dir = vnorm(vsub(sc->lights[i].coords, point));
-
-		// Get shadow factor (0.1 for shadowed, 1.0 for fully lit)
-		shadow = calc_shadow(sc, (t_ray){point, normal}, light_dir, i) ? 0.1F : 1.0F;
-
+		if (calc_shadow(sc, (t_ray){point, normal}, light_dir, i))
+			shadow = 0.1F;
+		else
+			shadow = 1.0F;
 		diff = clamp(vdot(normal, light_dir), 0.0F, 1.0F) * sc->lights[i].l.brightness;
-
-		// **Apply per-light shadowing instead of returning early**
 		result += (obj_color * sc->lights[i].color * bcast3(diff * shadow));
-
 		++i;
 	}
 	return (vec_clamp(result, 0.0F, 1.0F));
 }
 
-
-// Hard shadow calculation.
-bool	calc_shadow(t_scene *sc, t_ray ray, t_vec4 light_dir, uint32_t light)
+static bool	calc_shadow(t_scene *sc, t_ray ray, t_vec4 light_dir, uint32_t light)
 {
+	float		distance;
 	t_vec4		origin;
-	// float		shadow;
 	uint32_t	i;
 	float		t;
-	float		distance;
+	// float		shadow;
 
 	i = 0;
 	t = 0.0F;
@@ -56,41 +69,4 @@ bool	calc_shadow(t_scene *sc, t_ray ray, t_vec4 light_dir, uint32_t light)
 		++i;
 	}
 	return (false);
-}
-
-// Ray-sphere intersection
-uint8_t	ray_intersect_light(t_ray ray, t_objs *obj, float *t)
-{
-	t_vec4	oc = vsub(ray.origin, obj->coords);
-	float	a = vdot(ray.vec, ray.vec);
-	float	b = 2.0F * vdot(oc, ray.vec);
-	float	c = vdot(oc, oc) - obj->l.radius * obj->l.radius;
-	float	discriminant = b * b - 4.0F * a * c;
-	float	sqrt_d;
-
-	if (discriminant < 0.0F)
-		return (false);
-	sqrt_d = sqrtf(discriminant);
-	*t = (-b - sqrt_d) / (2.0F * a);
-	if (*t < 0.0F)
-		*t = (-b + sqrt_d) / (2.0F * a);
-	return (*t >= 0.0F);
-}
-
-t_objs	*render_light(t_scene *sc, t_ray ray, float *closest_t, t_objs *closest_obj)
-{
-	uint32_t	i;
-	float		t;
-
-	i = 0;
-	while (i < sc->l_arr_size)
-	{
-		if (ray_intersect_light(ray, &sc->lights[i], &t) && t < *closest_t)
-		{
-			closest_obj = sc->lights + i;
-			*closest_t = t;
-		}
-		++i;
-	}
-	return (closest_obj);
 }

@@ -4,54 +4,76 @@
 
 void	obj_rotate_up(t_scene *sc)
 {
-	t_vec4 right = vcross(sc->camera.c.orientation, (t_vec4){0.0F, 1.0F, 0.0F});
-	if (sc->selected_obj->type == PLANE)
+	const t_vec4	right = vcross(sc->camera.c.orientation, (t_vec4){0.0F, 1.0F, 0.0F});
+	t_objs			*picked;
+
+	picked = sc->selected_obj;
+	if (picked->type == PLANE)
 	{
-		sc->selected_obj->plane.orientation = vnorm(vrotate(sc->selected_obj->plane.orientation, right, sc->cam_r_speed));
+		picked->plane.orientation = vnorm( \
+		vrotate(picked->plane.orientation, right, sc->cam_r_speed));
 	}
-	else if (sc->selected_obj->type == CYLINDER)
+	else if (picked->type == CYLINDER)
 	{
-		sc->selected_obj->cylinder.orientation = vnorm(vrotate(sc->selected_obj->cylinder.orientation, right, sc->cam_r_speed));
+		picked->cylinder.orientation = vnorm( \
+		vrotate(picked->cylinder.orientation, right, sc->cam_r_speed));
 	}
 	sc->render = true;
 }
 
 void	obj_rotate_down(t_scene *sc)
 {
-	t_vec4 right = vcross(sc->camera.c.orientation, (t_vec4){0.0F, 1.0F, 0.0F});
-	if (sc->selected_obj->type == PLANE)
+	const t_vec4	right = vcross(sc->camera.c.orientation, (t_vec4){0.0F, 1.0F, 0.0F});
+	t_objs			*picked;
+
+	picked = sc->selected_obj;
+	if (picked->type == PLANE)
 	{
-		sc->selected_obj->plane.orientation = vnorm(vrotate(sc->selected_obj->plane.orientation, right, -sc->cam_r_speed));
+		picked->plane.orientation = vnorm( \
+		vrotate(picked->plane.orientation, right, -sc->cam_r_speed));
 	}
-	else if (sc->selected_obj->type == CYLINDER)
+	else if (picked->type == CYLINDER)
 	{
-		sc->selected_obj->cylinder.orientation = vnorm(vrotate(sc->selected_obj->cylinder.orientation, right, -sc->cam_r_speed));
+		picked->cylinder.orientation = vnorm( \
+		vrotate(picked->cylinder.orientation, right, -sc->cam_r_speed));
 	}
 	sc->render = true;
 }
 
 void	obj_rotate_left(t_scene *sc)
 {
-	if (sc->selected_obj->type == PLANE)
+	const t_vec4	rotation_axis = {0.0F, 1.0F, 0.0F};
+	t_objs			*picked;
+
+	picked = sc->selected_obj;
+	if (picked->type == PLANE)
 	{
-		sc->selected_obj->plane.orientation = vnorm(vrotate(sc->selected_obj->plane.orientation, (t_vec4){0.0F, 1.0F, 0.0F}, -sc->cam_r_speed));
+		picked->plane.orientation = vnorm( \
+		vrotate(picked->plane.orientation, rotation_axis, -sc->cam_r_speed));
 	}
-	else if (sc->selected_obj->type == CYLINDER)
+	else if (picked->type == CYLINDER)
 	{
-		sc->selected_obj->cylinder.orientation = vnorm(vrotate(sc->selected_obj->cylinder.orientation, (t_vec4){0.0F, 1.0F, 0.0F}, -sc->cam_r_speed));
+		picked->cylinder.orientation = vnorm( \
+		vrotate(picked->cylinder.orientation, rotation_axis, -sc->cam_r_speed));
 	}
 	sc->render = true;
 }
 
 void	obj_rotate_right(t_scene *sc)
 {
-	if (sc->selected_obj->type == PLANE)
+	const t_vec4	rotation_axis = {0.0F, 1.0F, 0.0F};
+	t_objs			*picked;
+
+	picked = sc->selected_obj;
+	if (picked->type == PLANE)
 	{
-		sc->selected_obj->plane.orientation = vnorm(vrotate(sc->selected_obj->plane.orientation, (t_vec4){0.0F, 1.0F, 0.0F}, sc->cam_r_speed));
+		picked->plane.orientation = vnorm( \
+		vrotate(picked->plane.orientation, rotation_axis, sc->cam_r_speed));
 	}
-	else if (sc->selected_obj->type == CYLINDER)
+	else if (picked->type == CYLINDER)
 	{
-		sc->selected_obj->cylinder.orientation = vnorm(vrotate(sc->selected_obj->cylinder.orientation, (t_vec4){0.0F, 1.0F, 0.0F}, sc->cam_r_speed));
+		picked->cylinder.orientation = vnorm( \
+		vrotate(picked->cylinder.orientation, rotation_axis, sc->cam_r_speed));
 	}
 	sc->render = true;
 }

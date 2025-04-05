@@ -32,9 +32,9 @@ uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 		return false; // No intersection
 
 	// Compute the roots of the quadratic
-	float sqrt_d = sqrtf(discriminant);
-	float t0 = (-b - sqrt_d) / (2.0F * a);
-	float t1 = (-b + sqrt_d) / (2.0F * a);
+	float sqrt_discriminant = sqrtf(discriminant);
+	float t0 = (-b - sqrt_discriminant) / (2.0F * a);
+	float t1 = (-b + sqrt_discriminant) / (2.0F * a);
 
 	// Step 4: Determine the valid intersection point
 	if (t0 > t1) // Ensure t0 is the smaller value

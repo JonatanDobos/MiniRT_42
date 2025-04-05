@@ -1,36 +1,36 @@
 #include <scene.h>
 #include <mathRT.h>
 
-// Ray-plane intersection
 uint8_t	ray_intersect_plane(t_ray ray, t_objs *obj, float *t)
 {
-	const float	denom = vdot(ray.vec, obj->plane.orientation);
-	t_vec4		diff;
+	const float	denominator = vdot(ray.vec, obj->plane.orientation);
+	t_vec4		to_center;
 
-	if (fabs(denom) > EPSILON)
+	if (fabs(denominator) > EPSILON)
 	{
-		diff = vsub(obj->coords, ray.origin);
-		*t = vdot(diff, obj->plane.orientation) / denom;
+		to_center = vsub(obj->coords, ray.origin);
+		*t = vdot(to_center, obj->plane.orientation) / denominator;
 		return (*t >= 0.0F);
 	}
-	return false;
+	return (false);
 }
 
-// Ray-sphere intersection
 uint8_t	ray_intersect_sphere(t_ray ray, t_objs *obj, float *t)
 {
-	t_vec4	oc = vsub(ray.origin, obj->coords);
-	float	a = vdot(ray.vec, ray.vec);
-	float	b = 2.0F * vdot(oc, ray.vec);
-	float	c = vdot(oc, oc) - obj->sphere.radius * obj->sphere.radius;
-	float	discriminant = b * b - 4.0F * a * c;
-	float	sqrt_d;
+	const t_vec4	to_center = vsub(ray.origin, obj->coords);
+	const t_vec4	abc = {
+		vdot(ray.vec, ray.vec),
+		2.0F * vdot(to_center, ray.vec),
+		vdot(to_center, to_center) - obj->sphere.radius * obj->sphere.radius
+	};
+	const float		discriminant = abc[1] * abc[1] - 4.0F * abc[0] * abc[2];
+	float			sqrt_discriminant;
 
 	if (discriminant < 0.0F)
 		return (false);
-	sqrt_d = sqrtf(discriminant);
-	*t = (-b - sqrt_d) / (2.0F * a);
+	sqrt_discriminant = sqrtf(discriminant);
+	*t = (-abc[1] - sqrt_discriminant) / (2.0F * abc[0]);
 	if (*t < 0.0F)
-		*t = (-b + sqrt_d) / (2.0F * a);
+		*t = (-abc[1] + sqrt_discriminant) / (2.0F * abc[0]);
 	return (*t >= 0.0F);
 }

@@ -3,18 +3,18 @@
 #include <mathRT.h>
 #include <render.h>
 
-void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color)
-{
-	static const t_vec4	multiply = {255.0F, 255.0F, 255.0F, 255.0F};
-	uint8_t				*pixels;
+// void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color)
+// {
+// 	static const t_vec4	multiply = {255.0F, 255.0F, 255.0F, 255.0F};
+// 	uint8_t				*pixels;
 
-	color *= multiply;
-	pixels = win->img->pixels + (y * win->window_wdth + x) * 4;
-	*(pixels++) = (uint8_t)color[R];
-	*(pixels++) = (uint8_t)color[G];
-	*(pixels++) = (uint8_t)color[B];
-	*(pixels++) = (uint8_t)color[A];
-}
+// 	color *= multiply;
+// 	pixels = win->img->pixels + (y * win->window_wdth + x) * 4;
+// 	*(pixels++) = (uint8_t)color[R];
+// 	*(pixels++) = (uint8_t)color[G];
+// 	*(pixels++) = (uint8_t)color[B];
+// 	*(pixels++) = (uint8_t)color[A];
+// }
 
 void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color)
 {
@@ -45,7 +45,6 @@ void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color)
 	}
 }
 
-// For multithreading.
 void	set_pixel_multi(t_thread *th, uint16_t res_ratio, t_axis2 inp, t_vec4 color)
 {
 	static const t_vec4	to_rgba = {255.0F, 255.0F, 255.0F, 255.0F};
@@ -57,16 +56,13 @@ void	set_pixel_multi(t_thread *th, uint16_t res_ratio, t_axis2 inp, t_vec4 color
 	i.y = 0;
 	while (i.y < res_ratio)
 	{
-		// puts("first");
 		i.x = 0;
 		pix.y = inp.y * res_ratio + i.y;
 		while (i.x < res_ratio)
 		{
-			// puts("second");
 			pix.x = inp.x * res_ratio + i.x;
 			if (pix.x > th->img->width || pix.y > th->img->height)
 				continue ;
-			// printf("inp [x: %d, y: %d] pix [x: %d, y: %d], resrat: %f\n", inp.x, inp.y, pix.x, pix.y, res_ratio);
 			pixels = th->pixels + (pix.y * th->img->width + pix.x) * 4;
 			*(pixels++) = (uint8_t)color[R];
 			*(pixels++) = (uint8_t)color[G];

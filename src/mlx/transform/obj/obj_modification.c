@@ -33,7 +33,7 @@ bool	handle_object_modification(const keys_t key, t_scene *sc)
 
 static void	select_obj_left(t_scene *sc)
 {
-	ssize_t index;
+	ssize_t	index;
 
 	index = sc->sel_obj_index - 1;
 	while (index >= 0 && sc->objs[index].type == PLANE)
@@ -44,7 +44,7 @@ static void	select_obj_left(t_scene *sc)
 		while (index >= 0 && sc->objs[index].type == PLANE)
 			--index;
 		if (index < 0)
-			return;
+			return ;
 	}
 	sc->selected_obj = sc->objs + index;
 	sc->sel_obj_index = index;
@@ -52,7 +52,7 @@ static void	select_obj_left(t_scene *sc)
 
 static void	select_obj_right(t_scene *sc)
 {
-	ssize_t index = sc->sel_obj_index;
+	ssize_t	index;
 
 	index = sc->sel_obj_index + 1;
 	while (index < (ssize_t)sc->o_arr_size && sc->objs[index].type == PLANE)
@@ -63,7 +63,7 @@ static void	select_obj_right(t_scene *sc)
 		while (index < (ssize_t)sc->o_arr_size && sc->objs[index].type == PLANE)
 			++index;
 		if (index >= (ssize_t)sc->o_arr_size)
-			return;
+			return ;
 	}
 	sc->selected_obj = sc->objs + index;
 	sc->sel_obj_index = index;
@@ -74,17 +74,11 @@ static bool	increase_obj(t_objs *selected_obj, bool radius_or_height)
 	if (selected_obj != NULL)
 	{
 		if (selected_obj->type == SPHERE)
-		{
 			selected_obj->sphere.radius *= 1.1F;
-		}
 		else if (radius_or_height == RADIUS)
-		{
 			selected_obj->cylinder.radius *= 1.1F;
-		}
 		else if (radius_or_height == HEIGHT)
-		{
 			selected_obj->cylinder.height *= 1.1F;
-		}
 		return (true);
 	}
 	return (false);
@@ -92,21 +86,13 @@ static bool	increase_obj(t_objs *selected_obj, bool radius_or_height)
 
 static bool	decrease_obj(t_objs *selected_obj, bool radius_or_height)
 {
-	if (selected_obj != NULL)
-	{
-		if (selected_obj->type == SPHERE && selected_obj->sphere.radius > 0.01F)
-		{
-			selected_obj->sphere.radius /= 1.1F;
-		}
-		else if (radius_or_height == RADIUS && selected_obj->cylinder.radius > 0.01F)
-		{
-			selected_obj->cylinder.radius /= 1.1F;
-		}
-		else if (radius_or_height == HEIGHT && selected_obj->cylinder.height > 0.01F)
-		{
-			selected_obj->cylinder.height /= 1.1F;
-		}
-		return (true);
-	}
-	return (false);
+	if (selected_obj == NULL)
+		return (false);
+	if (selected_obj->type == SPHERE && selected_obj->sphere.radius > 0.01F)
+		selected_obj->sphere.radius /= 1.1F;
+	else if (radius_or_height == RADIUS && selected_obj->cylinder.radius > 0.01F)
+		selected_obj->cylinder.radius /= 1.1F;
+	else if (radius_or_height == HEIGHT && selected_obj->cylinder.height > 0.01F)
+		selected_obj->cylinder.height /= 1.1F;
+	return (true);
 }

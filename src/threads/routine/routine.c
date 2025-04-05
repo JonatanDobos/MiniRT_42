@@ -18,7 +18,6 @@ void	*thread_routine_init(t_thread *th)
 	return (NULL);
 }
 
-// Ook iets doen wanneer de render onderbroken wordt?
 static void	render_routine(t_thread *th)
 {
 	double	time;
@@ -54,8 +53,9 @@ static void	set_starting_res_ratio(t_rt *rt, double delta_time)
 {
 	const double	error = delta_time - rt->win->target_time;
 	const double	adjustment_factor = 10.0F;
-	const double	new_ratio = rt->win->res_r_start * (1.0F + (error * adjustment_factor));
+	int				new_ratio;	
 
+	new_ratio = rt->win->res_r_start * (1.0F + (error * adjustment_factor));
 	rt->win->res_r_start = intclamp((int)new_ratio, 2, 30);
 }
 

@@ -24,11 +24,10 @@ typedef struct s_window
 	mlx_image_t		*img;
 	uint8_t			*pixels;
 	int16_t			id;
-	uint16_t		rndr_wdth;
-	uint16_t		rndr_hght;
-	uint16_t		window_wdth;
-	uint16_t		window_hght;
-	uint16_t		set_rndr_hght;
+	uint32_t		rndr_wdth;
+	uint32_t		rndr_hght;
+	uint32_t		window_wdth;
+	uint32_t		window_hght;
 	float			aspectrat;
 	uint16_t		res_ratio;
 	uint16_t		res_r_start;
@@ -66,7 +65,6 @@ bool	handle_object_modification(const keys_t key, t_scene *sc);
 // scaling.c
 
 void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
-bool	res_setscale(t_window *win, const float scale);
 
 // camera_move.c
 

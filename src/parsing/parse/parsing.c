@@ -41,5 +41,3 @@ static bool	shrink_dynarr(t_scene *sc)
 		return (false);
 	return (true);
 }
-
-

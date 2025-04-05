@@ -6,7 +6,7 @@ static int16_t	process_format(char *line);
 static uint8_t	is_valid_prefix(char *line, char *prefix);
 static void		check_values(t_value_check *vc);
 
- int16_t	line_validation(const int fd, t_scene *sc)
+int16_t	line_validation(const int fd, t_scene *sc)
 {
 	char			*skip_sp;
 	char			*line;
@@ -89,8 +89,8 @@ static uint8_t	is_valid_prefix(char *line, char *prefix)
 	while (i < num_prefixes)
 	{
 		prefix_len = ft_strlen(prefixes[i]);
-		if (ft_strncmp(line, prefixes[i], prefix_len) == 0 &&
-			ft_isspace(line[prefix_len]) == true)
+		if (ft_strncmp(line, prefixes[i], prefix_len) == 0 && \
+		ft_isspace(line[prefix_len]) == true)
 		{
 			if (ft_isspace(line[prefix_len - 1]) == false)
 			{
@@ -109,8 +109,6 @@ static void	check_values(t_value_check *vc)
 		errset(perr_msg("check_values", ERRFORM, EMSG_4A));
 	else if (vc->cam_amount != 1)
 		errset(perr_msg("check_values", ERRFORM, EMSG_4C));
-	// else if (vc->light_amount < 1)
-	// 	errset(perr_msg("check_values", ERRFORM, EMSG_4L));
 	else if (vc->obj_amount < 1)
 		errset(perr_msg("check_values", ERRFORM, EMSG_4O));
 }
