@@ -37,7 +37,7 @@ t_vec4	calc_lighting(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
 	while (i < sc->l_arr_size)
 	{
 		light_dir = vnorm(vsub(sc->lights[i].coords, point));
-		if (sc->soft_shadows == false || THREADS == 1 || sc->shadow_sample_gridsize < 2)
+		if (sc->soft_shadows == false || sc->shadow_sample_gridsize < 2)
 		{
 			if (calc_hard_shadow(sc, (t_ray){point, normal}, light_dir, i))
 				shadow = 0.1F;

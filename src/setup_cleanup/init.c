@@ -29,6 +29,8 @@ void	init_main(t_rt *rt, t_scene *scn, t_scene *read_scn, t_window *win)
 	win->delta_time = 0.1F;
 	win->target_time = 0.002F + screen_size_multiplier;
 	rt->scene->shadow_sample_gridsize = 1;
+	if (THREADS > 1)
+		rt->scene->soft_shadows = true;
 }
 
 int16_t	setup_init_parsing(t_rt *rt, const int argc, const char *argv)
