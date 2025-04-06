@@ -26,7 +26,7 @@ bool	windows_setup_mlx(t_rt *rt)
 			return (EXIT_FAILURE);
 	}
 	center_window(rt->win);
-	mlx_set_window_title(rt->win->mlx, "miniRT");
+	mlx_set_window_title(rt->win->mlx, "Rendering miniRT");
 	return (EXIT_SUCCESS);
 }
 

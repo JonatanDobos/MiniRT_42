@@ -132,7 +132,7 @@ typedef struct	s_scene
 	float		cam_r_speed;
 	float		cam_fov_speed;
 	bool		soft_shadows;
-	uint16_t	shadow_sample_gridsize;
+	uint16_t	shadow_grsize;
 }	t_scene;
 
 void	create_scene_rt_file(t_scene *sc, const char *filename);

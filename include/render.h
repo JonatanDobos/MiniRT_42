@@ -19,6 +19,12 @@ typedef enum e_intersect_types
 	CYL_BOTTOM
 }	t_intersect_type;
 
+typedef enum e_render_stages
+{
+	RSTAGE_START,
+	RSTAGE_ONGOING,
+	RSTAGE_END
+}	t_render_stage;
 
 // set_pixels.c
 

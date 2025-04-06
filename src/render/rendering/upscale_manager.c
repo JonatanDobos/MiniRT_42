@@ -3,6 +3,9 @@
 #include <mathRT.h>
 #include <render.h>
 
+//	Static functions
+static void	set_shadow_gridsize(t_rt *rt, uint8_t stage);
+
 void	upscale_manager(t_rt *rt)
 {
 	if (rt->scene->render == true)
@@ -34,21 +37,19 @@ void	upscale_manager_thread(t_rt *rt)
 			return ;
 		rt->win->res_ratio = rt->win->res_r_start;
 		rt->scene->render_ongoing = true;
-		rt->read_scene->shadow_sample_gridsize = 1;
+		set_shadow_gridsize(rt, RSTAGE_START);
 		mlx_set_window_title(rt->win->mlx, "Rendering miniRT");
 	}
 	else if (rt->win->res_ratio > RES_R_FULL)
 	{
 		rt->win->res_ratio = intclamp( \
 		rt->win->res_ratio - RES_STEP_SIZE, RES_R_FULL, rt->win->res_r_start);
-		if (rt->win->res_ratio < rt->win->res_r_start - 2 \
-			&& rt->read_scene->shadow_sample_gridsize < 4)
-			rt->read_scene->shadow_sample_gridsize += rt->win->res_ratio % 2;
+		set_shadow_gridsize(rt, RSTAGE_ONGOING);
 	}
 	else
 	{
 		rt->scene->render_ongoing = false;
-		rt->read_scene->shadow_sample_gridsize = 6;
+		set_shadow_gridsize(rt, RSTAGE_END);
 	}
 	rt->win->rndr_hght = (float)rt->win->mlx->height / rt->win->res_ratio;
 	rt->win->rndr_wdth = (float)rt->win->mlx->width / rt->win->res_ratio;
@@ -62,4 +63,22 @@ void	set_starting_res_ratio(t_rt *rt, double delta_time)
 
 	new_ratio = rt->win->res_r_start * (1.0F + (error * adjustment_factor));
 	rt->win->res_r_start = intclamp((int)new_ratio, 2, 30);
+}
+
+static void	set_shadow_gridsize(t_rt *rt, uint8_t stage)
+{
+	if (stage == RSTAGE_START)
+		rt->read_scene->shadow_grsize = 1;
+	else if (stage == RSTAGE_ONGOING)
+	{
+		if (rt->win->res_ratio == 1)
+			rt->read_scene->shadow_grsize = 5;
+		else if (rt->win->res_ratio < rt->win->res_r_start - 2 \
+			&& rt->read_scene->shadow_grsize < 3)
+			rt->read_scene->shadow_grsize += rt->win->res_ratio % 2;
+	}
+	else if (stage == RSTAGE_END)
+	{
+		rt->read_scene->shadow_grsize = 8;
+	}
 }
