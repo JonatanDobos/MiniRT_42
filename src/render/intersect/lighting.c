@@ -40,7 +40,7 @@ t_vec4	calc_lighting(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
 		if (sc->soft_shadows == false || sc->shadow_grsize < 2)
 		{
 			if (calc_hard_shadow(sc, (t_ray){point, normal}, light_dir, i))
-				shadow = 0.1F;
+				shadow = 0.0F;
 			else
 				shadow = 1.0F;
 		}
