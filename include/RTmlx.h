@@ -11,7 +11,7 @@
 # define CAM_MOVE_SPEED 12.0F
 # define FOV_SCROLL_SPEED 160.0F
 
-# define FOV_MAX 180.0f
+# define FOV_MAX 180.0F
 
 typedef struct	s_rt		t_rt;
 typedef struct	s_scene		t_scene;
