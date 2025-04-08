@@ -10,13 +10,10 @@ int32_t	cleanup(t_rt *rt)
 {
 	if (THREADS > 1)
 	{
-		if (rt->mtx_init_check == true)
-		{
-			pthread_mutex_unlock(rt->mtx + MTX_SYNC);
-			destroy_mutexes(rt, MTX_AMOUNT);
-		}
 		if (rt->creation_check == true)
 			destroy_threads(rt);
+		if (rt->mtx_init_check == true)
+			destroy_mutexes(rt, MTX_AMOUNT);
 		if (rt->read_scene->objs)
 			free(rt->read_scene->objs);
 		if (rt->read_scene->lights)

@@ -5,10 +5,11 @@
 #include <threadsRT.h>
 #include <render.h>
 #include <libft.h>
-
+#define MTX_FAIL "pthread_mutex_destroy() failed on index "
 
 void	destroy_mutexes(t_rt *rt, size_t amount)
 {
+	char	on_err[sizeof(MTX_FAIL) + 12];
 	ssize_t	i;
 
 	i = amount - 1;
@@ -16,26 +17,14 @@ void	destroy_mutexes(t_rt *rt, size_t amount)
 	{
 		if (pthread_mutex_destroy(rt->mtx + i) != 0)
 		{
-			if (i == 1) {
-				// pthread_mutex_lock(rt->mtx + MTX_SYNC);
-				if (pthread_mutex_trylock(rt->mtx + MTX_SYNC) == EBUSY) {
-					puts("locked");
-					printf("errno %d\n", errno);
-				} else {
-					puts("now locked");
-				}
+			if (i > 0)
+			{
+				cpy_str(on_err, MTX_FAIL);
+				nbr_to_buff(on_err + sizeof(MTX_FAIL) - 1, (int64_t)i);
+				pthread_mutex_lock(rt->mtx + MTX_PRINT);
+				perror(on_err);
+				pthread_mutex_unlock(rt->mtx + MTX_PRINT);
 			}
-				// pthread_mutex_unlock(rt->mtx + MTX_SYNC);
-			// if (i > 0)
-			// {
-				// pthread_mutex_lock(rt->mtx + MTX_PRINT);
-				printf("%zu\n", i);
-				perror("huh");
-				write(STDERR_FILENO, "1pthread_mutex_destroy: Failed\n", 31);	//	also this write does need lock protection
-				// pthread_mutex_unlock(rt->mtx + MTX_PRINT);
-			// }
-			// else
-			// 	write(STDERR_FILENO, "2pthread_mutex_destroy: Failed\n", 31);	//	also this write does need lock protection
 		}
 		--i;
 	}
@@ -45,7 +34,7 @@ bool	destroy_conditions(t_rt *rt)
 {
 	if (pthread_cond_destroy(&rt->cond) != 0)
 	{
-		write(STDERR_FILENO, "pthread_cond_destroy\n", 21);
+		perror("pthread_cond_destroy");
 		return (false);
 	}
 	return (true);
@@ -56,7 +45,7 @@ void	destroy_threads(t_rt *rt)
 	if (pthread_join(rt->thread.thread, NULL) != 0)
 	{
 		pthread_mutex_lock(rt->mtx + MTX_PRINT);
-		printf("pthread_join: Thread failed.");
+		printf("pthread_join");
 		pthread_mutex_unlock(rt->mtx + MTX_PRINT);
 	}
 }

@@ -22,15 +22,8 @@ void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 {
 	if (keydata.action == MLX_PRESS)
 	{
-		if (keydata.key == MLX_KEY_P)
-			print_obj_info(rt->scene);
 		if (keydata.key == MLX_KEY_ENTER || rt->win->file_creation == true)
 			set_filename(keydata.key, rt->win, rt->scene);
-		else if (keydata.key == MLX_KEY_ESCAPE)
-		{
-			closing_cleanup_threads(rt);
-			mlx_close_window(rt->win->mlx);
-		}
 		else if (keydata.key == MLX_KEY_K)
 			rt->scene->selected_obj = &rt->scene->ambient;
 		else if (handle_object_modification(keydata.key, rt->scene) == true)
@@ -44,6 +37,13 @@ void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 		{
 			rt->scene->soft_shadows = !rt->scene->soft_shadows;
 			rt->scene->render = true;
+		}
+		else if (keydata.key == MLX_KEY_P)
+			print_obj_info(rt->scene);
+		else if (keydata.key == MLX_KEY_ESCAPE)
+		{
+			closing_cleanup_threads(rt);
+			mlx_close_window(rt->win->mlx);
 		}
 	}
 }

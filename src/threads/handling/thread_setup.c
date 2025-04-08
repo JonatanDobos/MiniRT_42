@@ -42,7 +42,6 @@ bool	launch_pthreads(t_rt *rt)
 	rt->thread.rt = rt;
 	rt->thread.scene = rt->read_scene;
 	rt->thread.win = rt->win;
-	rt->thread.id = 1;
 	if (pthread_create(&rt->thread.thread, NULL, (t_cast)thread_routine_init, &rt->thread) != 0)
 	{
 		pthread_mutex_lock(rt->mtx + MTX_PRINT);

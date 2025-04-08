@@ -36,13 +36,25 @@ void	init_main(t_rt *rt, t_scene *scn, t_scene *read_scn, t_window *win)
 int16_t	setup_init_parsing(t_rt *rt, const int argc, const char *argv)
 {
 	if (argc != 2)
-		return (write(1, NO_FILENAME, sizeof(NO_FILENAME) - 1), EXIT_FAILURE);
+	{
+		write(1, NO_FILENAME, sizeof(NO_FILENAME) - 1);
+		return (EXIT_FAILURE);
+	}
 	else if (SCREEN_WIDTH < 5 || SCREEN_HEIGHT < 5)
-		return (write(1, SCREEN_ERROR, sizeof(SCREEN_ERROR) - 1), EXIT_FAILURE);
+	{
+		write(1, SCREEN_ERROR, sizeof(SCREEN_ERROR) - 1);
+		return (EXIT_FAILURE);
+	}
 	else if (parse_scene_file(argv, rt->scene) != 0)
-		return (cleanup(rt), errset(ERTRN));
+	{
+		cleanup(rt);
+		return (errset(ERTRN));
+	}
 	else if (windows_setup_mlx(rt) != 0)
-		return (cleanup(rt), perr("MLX", errset(ERTRN)));
+	{
+		cleanup(rt);
+		return (perr("MLX", errset(ERTRN)));
+	}
 	rt->win->target_time += (float)(rt->scene->l_arr_size + rt->scene->o_arr_size) * 0.0005F;
 	rt->win->target_time = clamp(rt->win->target_time, 0.01F, 0.025F);
 	return (EXIT_SUCCESS);
@@ -51,19 +63,23 @@ int16_t	setup_init_parsing(t_rt *rt, const int argc, const char *argv)
 int32_t	multithreaded(t_rt *rt)
 {
 	if (init_read_scene(rt->scene, rt->read_scene))
-		return (perr("read_scene", errset(ERTRN)), cleanup(rt));
+	{
+		perr("read_scene", errset(ERTRN));
+		return (cleanup(rt));
+	}
 	rt->mtx_init_check = true;
 	if (initialize_mutexes(rt) == false)
 		return (false);
 	if (pthread_cond_init(&rt->cond, NULL) != 0)
 	{
 		fprintf(stderr, "Failed to initialize condition variable\n");
-		exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE);														//	TODO handle fprintf and exit differently
 	}
 	rt->creation_check = true;
 	if (launch_pthreads(rt) == false)
 	{
-		return (perr("Pthread", errset(ERTRN)), cleanup(rt));
+		perr("Pthread", errset(ERTRN));
+		return (cleanup(rt));
 	}
 	pthread_mutex_lock(rt->mtx + MTX_RESYNC);
 	pthread_mutex_unlock(rt->mtx + MTX_SYNC);

@@ -18,21 +18,6 @@ typedef struct s_rt			t_rt;
 typedef pthread_mutex_t		t_mtx;
 typedef void				*(*t_cast)(void *);
 
-typedef struct	s_thread
-{
-	uint16_t		id;
-	t_rt			*rt;
-	t_scene			*scene;
-	t_window		*win;
-	mlx_image_t		*img;
-	uint8_t			*pixels;
-	uint8_t			*pixels_mlx;
-	uint8_t			*pixels_own;
-	t_mtx			mtx;
-	pthread_t		thread;
-}	t_thread;
-
-
 enum e_mtx
 {
 	MTX_PRINT,
@@ -45,9 +30,21 @@ enum e_mtx
 	MTX_AMOUNT
 };
 
+typedef struct	s_thread
+{
+	t_rt			*rt;
+	t_scene			*scene;
+	t_window		*win;
+	mlx_image_t		*img;
+	uint8_t			*pixels;
+	uint8_t			*pixels_mlx;
+	uint8_t			*pixels_own;
+	pthread_t		thread;
+}	t_thread;
+
+
 bool	res_setscale(t_window *win, const float scale);
 
-// bool	init_pthread_mutex(t_rt *rt);
 bool	initialize_mutexes(t_rt *rt);
 bool	initialize_conditions(t_rt *rt);
 bool	launch_pthreads(t_rt *rt);
@@ -60,7 +57,6 @@ void	*thread_routine_init(t_thread *th);
 
 bool	check_bool(t_mtx *mutex, bool to_check);
 bool	toggle_bool(t_mtx *mutex, bool *to_toggle, bool new_value);
-void	print_lock(t_mtx *print, char *str);
 
 int16_t	init_read_scene(t_scene *src, t_scene *dest);
 int16_t	cpy_scene(t_scene *src, t_scene *dest);
