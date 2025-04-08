@@ -24,25 +24,27 @@ void	scroll_fov_hook(double xdelta, double ydelta, t_scene *sc)
 
 void	mouse_hook(mouse_key_t button, action_t action, modifier_key_t mods, t_rt *rt)
 {
+	int32_t xy[2];
 	t_vec4	ndc;
 	t_ray	ray;
-	int32_t	x;
-	int32_t	y;
+	float	x;
+	float	y;
 
 	(void)mods;
 	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS)
 	{
-		mlx_get_mouse_pos(rt->win->mlx, &x, &y);
-		y = y / rt->win->res_ratio;
-		x = x / rt->win->res_ratio;
-		ndc[X] = (2.0F * ((x + 0.5F) / (float)rt->win->rndr_wdth) - 1.0F) * rt->win->aspectrat;
-		ndc[Y] = 1.0F - 2.0F * ((y + 0.5F) / (float)rt->win->rndr_hght);
-		ndc[Y] = rt->scene->camera.c.zvp_dist;
+		mlx_get_mouse_pos(rt->win->mlx, &xy[X], &xy[Y]);
+		x = ((float)xy[X] / (float)rt->win->res_ratio) + 0.5F;
+		y = ((float)xy[Y] / (float)rt->win->res_ratio) + 0.5F;
+		ndc[X] = (2.0F * (x / (float)rt->win->rndr_wdth) - 1.0F) * rt->win->aspectrat;
+		ndc[Y] = 1.0F - 2.0F * (y / (float)rt->win->rndr_hght);
+		ndc[Z] = rt->scene->camera.c.zvp_dist;
 		ray.origin = rt->scene->camera.coords;
 		ray.vec = transform_ray_dir(ndc, rt->scene->camera.c.orientation);
 		mouse_clicks_on_obj(rt->scene, ray);
 	}
 }
+
 
 static void	mouse_clicks_on_obj(t_scene *sc, t_ray ray)
 {
@@ -70,3 +72,4 @@ static void	mouse_clicks_on_obj(t_scene *sc, t_ray ray)
 		}
 	}
 }
+
