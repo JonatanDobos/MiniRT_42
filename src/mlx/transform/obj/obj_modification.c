@@ -75,6 +75,8 @@ static bool	increase_obj(t_objs *selected_obj, bool radius_or_height)
 	{
 		if (selected_obj->type == SPHERE)
 			selected_obj->sphere.radius *= 1.1F;
+		else if (selected_obj->type == LIGHT)
+			selected_obj->l.radius *= 1.1F;
 		else if (radius_or_height == RADIUS)
 			selected_obj->cylinder.radius *= 1.1F;
 		else if (radius_or_height == HEIGHT)
@@ -90,6 +92,8 @@ static bool	decrease_obj(t_objs *selected_obj, bool radius_or_height)
 		return (false);
 	if (selected_obj->type == SPHERE && selected_obj->sphere.radius > 0.01F)
 		selected_obj->sphere.radius /= 1.1F;
+	else if (selected_obj->type == LIGHT && selected_obj->sphere.radius > 0.01F)
+		selected_obj->l.radius /= 1.1F;
 	else if (radius_or_height == RADIUS && selected_obj->cylinder.radius > 0.01F)
 		selected_obj->cylinder.radius /= 1.1F;
 	else if (radius_or_height == HEIGHT && selected_obj->cylinder.height > 0.01F)

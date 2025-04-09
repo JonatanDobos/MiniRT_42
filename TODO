@@ -8,12 +8,9 @@ TODO:
 
 Options:
 
-- Nog een scene struct maken en daarin overkopieren van de verzamelde movement data wanneer de threads klaar zijn (kan zijn in een render of na een render) - Dit zorgt ervoor dat de values niet veranderen tijdens het renderen en dat we minder hoeven te locken!
-
-- Syncen op verschillende manieren als de render onderbroken wordt op verschillende manieren, en voor optimale communicatie met main.
-
-
-- Implementeren van variabele resolutie-scaling om wat smoothere bewegingen te krijgen ook bij veel objs
+- Cylinder opruimen en optimaliseren
+- Toevoegen keybinds for lichten aanpassen
+- soft shadows optimaliseren en aanpassen om bij grotere schaduwen smoother te zijn
 
 
 Joni			kan je ook alvast cylinder opslitsen in kleinere functies?

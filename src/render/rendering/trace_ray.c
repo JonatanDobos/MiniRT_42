@@ -64,6 +64,10 @@ t_vec4 calculate_normal(t_objs *obj, t_ray *ray, float t, uint8_t intersect_type
 {
 	if (obj->type == PLANE)
 	{
+		if (vdot(obj->plane.orientation, ray->vec) > 0.0F)
+		{
+			return (vscale(obj->plane.orientation, -1.0F));
+		}
 		return (obj->plane.orientation);
 	}
 	if (obj->type == SPHERE)

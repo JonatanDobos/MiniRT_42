@@ -3,7 +3,7 @@
 #include <render.h>
 
 //	Static Functions
-static bool	calc_hard_shadow(t_scene *sc, t_ray ray, t_vec4 light_dir, uint32_t light);
+static bool		calc_hard_shadow(t_scene *sc, t_ray ray, t_vec4 light_dir, uint32_t light);
 static float	calc_soft_shadow(t_scene *sc, t_ray ray, t_vec4 light_pos, uint32_t light);
 
 t_objs	*render_light(t_scene *sc, t_ray ray, float *closest_t, t_objs *closest_obj)
@@ -14,7 +14,7 @@ t_objs	*render_light(t_scene *sc, t_ray ray, float *closest_t, t_objs *closest_o
 	i = 0;
 	while (i < sc->l_arr_size)
 	{
-		if (ray_intersect_sphere(ray, &sc->lights[i], &t) && t < *closest_t)
+		if (ray_intersect_light(ray, &sc->lights[i], &t) && t < *closest_t)
 		{
 			closest_obj = sc->lights + i;
 			*closest_t = t;

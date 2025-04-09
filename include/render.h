@@ -14,7 +14,8 @@
 
 typedef enum e_intersect_types
 {
-	CYL_BODY = 1,
+	CYL_NONE,
+	CYL_BODY,
 	CYL_TOP,
 	CYL_BOTTOM
 }	t_intersect_type;
@@ -25,6 +26,19 @@ typedef enum e_render_stages
 	RSTAGE_ONGOING,
 	RSTAGE_END
 }	t_render_stage;
+
+// typedef struct s_cyl_intersect
+// {
+// 	t_vec4	ca;
+// 	t_vec4	oc;
+// 	t_vec4	rd;
+// 	t_vec4	oc_proj;
+// 	t_vec4	top_cam;
+// 	t_vec4	oc_proj;
+// 	t_vec4	oc_proj;
+// 	t_vec4	oc_proj;
+// 	t_vec4	oc_proj;
+// }	t_cyl_intersect;
 
 // set_pixels.c
 
@@ -41,12 +55,11 @@ t_objs		*render_light(t_scene *scene, t_ray ray, float *closest_t, t_objs *close
 
 uint8_t		ray_intersect_plane(t_ray ray, t_objs *obj, float *t);
 uint8_t		ray_intersect_sphere(t_ray ray, t_objs *obj, float *t);
+uint8_t		ray_intersect_light(t_ray ray, t_objs *obj, float *t);
 
 // cylinder.c
 
 uint8_t		ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t);
-
-
 
 // trace_ray.c
 

@@ -1,7 +1,16 @@
 NAME			:=	miniRT
 
+OS := $(shell uname -s)
+
 #	Get the number of logical processors (threads)
-N_JOBS			:=	$(shell nproc)
+ifeq ($(OS),Linux)
+    N_JOBS := $(shell nproc)
+else ifeq ($(OS),Darwin)
+    N_JOBS := $(shell sysctl -n hw.logicalcpu)
+else
+    N_JOBS := 1  # fallback
+endif
+
 #	(-j) Specify the number of jobs (commands) to run simultaneously
 MULTI_THREADED	:=	-j $(N_JOBS)
 
@@ -57,13 +66,12 @@ else
 endif
 CFLAGS += $(OFLAGS)
 
-OS := $(shell uname -s)
 ifeq ($(OS), Linux)
     SCREEN_RES   := $(shell xrandr | grep '*' | uniq | awk '{print $$1}')
     SCREEN_WIDTH := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
     SCREEN_HEIGHT := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
 else ifeq ($(OS), Darwin)  # macOS
-    SCREEN_RES   := $(shell system_profiler SPDisplaysDataType | grep Resolution | awk '{print $$2"x"$$4}')
+    SCREEN_RES   := $(shell system_profiler SPDisplaysDataType 2>/dev/null | grep Resolution | head -n 1 | awk '{print $$2"x"$$4}')
     SCREEN_WIDTH := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
     SCREEN_HEIGHT := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
 endif
