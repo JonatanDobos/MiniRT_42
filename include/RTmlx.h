@@ -6,7 +6,7 @@
 # include <libft.h> 
 
 # define LOGO_PATH "images/glasses.png"
-# define NAME_FILE "Name your .rt file:  "
+# define NAME_FILE "Name your .rt file: "
 # define CAM_ROTATION_SPEED 1.0F
 # define CAM_MOVE_SPEED 12.0F
 # define FOV_SCROLL_SPEED 160.0F

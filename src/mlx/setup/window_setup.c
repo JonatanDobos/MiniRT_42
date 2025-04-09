@@ -32,17 +32,12 @@ bool	windows_setup_mlx(t_rt *rt)
 
 static bool	init_mlx(t_window *win)
 {
-	uint32_t	win_width;
-	uint32_t	win_height;
-
-	win_width = SCREEN_WIDTH / 2;
-	win_height = SCREEN_HEIGHT / 2;
-	win->aspectrat = (float)win_width / (float)win_height;
-	win->mlx = mlx_init(win_width, win_height, "miniRT is setting up MLX", false);
+	win->window_wdth = SCREEN_WIDTH / 2;
+	win->window_hght = SCREEN_HEIGHT / 2;
+	win->aspectrat = (float)win->window_wdth / (float)win->window_hght;
+	win->mlx = mlx_init(win->window_wdth, win->window_hght, "miniRT is setting up MLX", false);
 	if (win->mlx == NULL)
 		return (false);
-	win->window_hght = win_height;
-	win->window_wdth = win_width;
 	return (true);
 }
 

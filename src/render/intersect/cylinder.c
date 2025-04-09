@@ -13,28 +13,47 @@ static bool	intersect_cylinder_caps(t_vec4 coords, t_vec4 orientation, t_vec4 pl
 	return false;
 }
 
-uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
+static bool compute_cylinder_intersection(t_vec4 ray_vec, t_vec4 oc, t_vec4 ca, t_vec4 *quad_coeffs)
 {
-	// Step 1: Compute vectors for the cylinder's axis
-	t_vec4 ca = vnorm(obj->cylinder.orientation); // Cylinder axis (normalized)
-	t_vec4 oc = vsub(ray.origin, obj->coords); // Vector from ray origin to obj->cylinder center
-	
 	// Step 2: Project ray direction and oc onto plane perpendicular to the cylinder axis
-	t_vec4 rd = vsub(ray.vec, vscale(ca, vdot(ray.vec, ca))); // Projected ray direction
+	t_vec4 rd = vsub(ray_vec, vscale(ca, vdot(ray_vec, ca))); // Projected ray direction
 	t_vec4 oc_proj = vsub(oc, vscale(ca, vdot(oc, ca)));     // Projected oc
 
 	// Step 3: Solve quadratic equation for the intersection
-	float a = vdot(rd, rd);
-	float b = 2.0F * vdot(rd, oc_proj);
-	float c = vdot(oc_proj, oc_proj) - (obj->cylinder.radius * obj->cylinder.radius);
-	float discriminant = b * b - 4.0F * a * c;
-	if (discriminant < 0.0F)
+	(*quad_coeffs)[X] = vdot(rd, rd); // a
+	(*quad_coeffs)[Y] = 2.0F * vdot(rd, oc_proj); // b
+	(*quad_coeffs)[Z] = vdot(oc_proj, oc_proj) - (*quad_coeffs)[W]; // c
+	(*quad_coeffs)[W] = (*quad_coeffs)[Y] * (*quad_coeffs)[Y] - 4.0F * (*quad_coeffs)[X] * (*quad_coeffs)[Z];
+
+	return ((*quad_coeffs)[W] >= 0.0F); // Return true if there is an intersection
+}
+
+uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
+{
+	// Step 1: Compute vectors for the cylinder's axis
+	t_vec4 oc = vsub(ray.origin, obj->coords); // Vector from ray origin to obj->cylinder center
+	t_vec4 ca = vnorm(obj->cylinder.orientation); // Cylinder axis (normalized)
+	
+	// Step 2: Project ray direction and oc onto plane perpendicular to the cylinder axis
+	// t_vec4 rd = vsub(ray.vec, vscale(ca, vdot(ray.vec, ca))); // Projected ray direction
+	// t_vec4 oc_proj = vsub(oc, vscale(ca, vdot(oc, ca)));     // Projected oc
+
+	// Step 3: Solve quadratic equation for the intersection
+	t_vec4	quadratic_coefficients;
+	// quadratic_coefficients[X] = vdot(rd, rd);
+	// quadratic_coefficients[Y] = 2.0F * vdot(rd, oc_proj);
+	// quadratic_coefficients[Z] = vdot(oc_proj, oc_proj) - (obj->cylinder.radius * obj->cylinder.radius);
+	quadratic_coefficients[W] = obj->cylinder.radius * obj->cylinder.radius;
+	// float discriminant = quadratic_coefficients[Y] * quadratic_coefficients[Y] - 4.0F * quadratic_coefficients[X] * quadratic_coefficients[Z];
+	if (compute_cylinder_intersection(ray.vec, oc, ca, &quadratic_coefficients))
 		return false; // No intersection
 
 	// Compute the roots of the quadratic
-	float sqrt_discriminant = sqrtf(discriminant);
-	float t0 = (-b - sqrt_discriminant) / (2.0F * a);
-	float t1 = (-b + sqrt_discriminant) / (2.0F * a);
+	float sqrt_discriminant = sqrtf(quadratic_coefficients[W]);
+
+
+	float t0 = ((quadratic_coefficients[Y] * -1) - sqrt_discriminant) / (2.0F * quadratic_coefficients[X]);
+	float t1 = ((quadratic_coefficients[Y] * -1) + sqrt_discriminant) / (2.0F * quadratic_coefficients[X]);
 
 	// Step 4: Determine the valid intersection point
 	if (t0 > t1) // Ensure t0 is the smaller value
