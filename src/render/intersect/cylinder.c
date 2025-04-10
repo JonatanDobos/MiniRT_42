@@ -10,117 +10,121 @@ static bool	intersect_cylinder_caps(t_vec4 coords, t_vec4 orientation, t_vec4 pl
 		*t = vdot(p0l0, plane_normal) / denom;
 		return (*t >= 0);
 	}
-	return false;
+	return (false);
 }
 
-static bool compute_cylinder_intersection(t_vec4 ray_vec, t_vec4 oc, t_vec4 ca, t_vec4 *quad_coeffs)
+// static bool compute_cylinder_intersection(t_vec4 ray_vec, t_vec4 oc, t_vec4 ca, t_vec4 *quad_coeffs)
+// {
+// 	// Step 2: Project ray direction and oc onto plane perpendicular to the cylinder axis
+// 	t_vec4 rd = vsub(ray_vec, vscale(ca, vdot(ray_vec, ca))); // Projected ray direction
+// 	t_vec4 oc_proj = vsub(oc, vscale(ca, vdot(oc, ca)));     // Projected oc
+
+// 	// Step 3: Solve quadratic equation for the intersection
+// 	(*quad_coeffs)[X] = vdot(rd, rd); // a
+// 	(*quad_coeffs)[Y] = 2.0F * vdot(rd, oc_proj); // b
+// 	(*quad_coeffs)[Z] = vdot(oc_proj, oc_proj) - (*quad_coeffs)[W]; // c
+// 	(*quad_coeffs)[W] = (*quad_coeffs)[Y] * (*quad_coeffs)[Y] - 4.0F * (*quad_coeffs)[X] * (*quad_coeffs)[Z];
+
+// 	if ((*quad_coeffs)[W] < 0.0F)
+// 		return (false);
+// 	(*quad_coeffs)[W] = sqrtf((*quad_coeffs)[W]);
+// 	return (true); // Return true if there is an intersection
+// }
+
+static bool compute_cylinder_intersection(t_vec4 ray_vec, t_vec4 oc, t_vec4 ca, float *t)
 {
-	// Step 2: Project ray direction and oc onto plane perpendicular to the cylinder axis
-	t_vec4 rd = vsub(ray_vec, vscale(ca, vdot(ray_vec, ca))); // Projected ray direction
-	t_vec4 oc_proj = vsub(oc, vscale(ca, vdot(oc, ca)));     // Projected oc
+	const t_vec4	rd = vsub(ray_vec, vscale(ca, vdot(ray_vec, ca)));
+	const t_vec4	oc_proj = vsub(oc, vscale(ca, vdot(oc, ca)));
+	t_vec4			quadratic_coefficients;
+	float			discriminant;
+	float			tmp;
 
-	// Step 3: Solve quadratic equation for the intersection
-	(*quad_coeffs)[X] = vdot(rd, rd); // a
-	(*quad_coeffs)[Y] = 2.0F * vdot(rd, oc_proj); // b
-	(*quad_coeffs)[Z] = vdot(oc_proj, oc_proj) - (*quad_coeffs)[W]; // c
-	(*quad_coeffs)[W] = (*quad_coeffs)[Y] * (*quad_coeffs)[Y] - 4.0F * (*quad_coeffs)[X] * (*quad_coeffs)[Z];
+	quadratic_coefficients[X] = vdot(rd, rd); // a
+	quadratic_coefficients[Y] = 2.0F * vdot(rd, oc_proj); // b
+	quadratic_coefficients[Z] = vdot(oc_proj, oc_proj) - t[2]; // c
+	discriminant = (quadratic_coefficients[Y] * quadratic_coefficients[Y]) - \
+	(4.0F * (quadratic_coefficients[X] * quadratic_coefficients[Z]));
+	if (discriminant < 0.0F)
+		return (false);
+	discriminant = sqrtf(discriminant);
+	t[0] = (-quadratic_coefficients[Y] - discriminant) / (2.0F * quadratic_coefficients[X]);
+	t[1] = (-quadratic_coefficients[Y] + discriminant) / (2.0F * quadratic_coefficients[X]);
+	if (t[0] > t[1])
+	{
+		tmp = t[0];
+		t[0] = t[1];
+		t[1] = tmp;
+	}
+	return (true);
+}
 
-	return ((*quad_coeffs)[W] >= 0.0F); // Return true if there is an intersection
+
+static uint8_t validate_cap_intersection(t_ray ray, t_objs *obj, t_vec4 ca, float *t_tmp)
+{
+	const t_vec4	top_cap = vadd(obj->coords, vscale(ca, obj->cylinder.height / 2.0F));
+	const t_vec4	bottom_cap = vsub(obj->coords, vscale(ca, obj->cylinder.height / 2.0F));
+	const bool		hit_top = intersect_cylinder_caps(ray.origin, ray.vec, top_cap, ca, &t_tmp[0]);
+	const bool		hit_bottom = intersect_cylinder_caps(ray.origin, ray.vec, bottom_cap, ca, &t_tmp[1]);
+	uint8_t			hit_type;
+
+	hit_type = 0;
+	if (hit_top)
+	{
+		t_vec4 p = vadd(ray.origin, vscale(ray.vec, t_tmp[0]));
+		if (vlen(vsub(p, top_cap)) <= obj->cylinder.radius)
+		{
+			if (t_tmp[2] < 0.0F || t_tmp[0] < t_tmp[2])
+			{
+				t_tmp[2] = t_tmp[0];
+				hit_type = CYL_TOP;
+			}
+		}
+	}
+	if (hit_bottom)
+	{
+		t_vec4 p = vadd(ray.origin, vscale(ray.vec, t_tmp[1]));
+		if (vlen(vsub(p, bottom_cap)) <= obj->cylinder.radius)
+		{
+			if (t_tmp[2] < 0.0F || t_tmp[1] < t_tmp[2])
+			{
+				t_tmp[2] = t_tmp[1];
+				hit_type = CYL_BOTTOM;
+			}
+		}
+	}
+	return (hit_type);
 }
 
 uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 {
-	// Step 1: Compute vectors for the cylinder's axis
-	t_vec4 oc = vsub(ray.origin, obj->coords); // Vector from ray origin to obj->cylinder center
-	t_vec4 ca = vnorm(obj->cylinder.orientation); // Cylinder axis (normalized)
-	
-	// Step 2: Project ray direction and oc onto plane perpendicular to the cylinder axis
-	// t_vec4 rd = vsub(ray.vec, vscale(ca, vdot(ray.vec, ca))); // Projected ray direction
-	// t_vec4 oc_proj = vsub(oc, vscale(ca, vdot(oc, ca)));     // Projected oc
+	t_vec4	oc = vsub(ray.origin, obj->coords);
+	t_vec4	ca = vnorm(obj->cylinder.orientation);
+	float	t_tmp[3];
+	uint8_t hit_type[2];
 
-	// Step 3: Solve quadratic equation for the intersection
-	t_vec4	quadratic_coefficients;
-	// quadratic_coefficients[X] = vdot(rd, rd);
-	// quadratic_coefficients[Y] = 2.0F * vdot(rd, oc_proj);
-	// quadratic_coefficients[Z] = vdot(oc_proj, oc_proj) - (obj->cylinder.radius * obj->cylinder.radius);
-	quadratic_coefficients[W] = obj->cylinder.radius * obj->cylinder.radius;
-	// float discriminant = quadratic_coefficients[Y] * quadratic_coefficients[Y] - 4.0F * quadratic_coefficients[X] * quadratic_coefficients[Z];
-	if (compute_cylinder_intersection(ray.vec, oc, ca, &quadratic_coefficients))
-		return false; // No intersection
+	t_tmp[2] = obj->cylinder.radius * obj->cylinder.radius;
+	if (compute_cylinder_intersection(ray.vec, oc, ca, t_tmp) == false)
+		return (false);
 
-	// Compute the roots of the quadratic
-	float sqrt_discriminant = sqrtf(quadratic_coefficients[W]);
-
-
-	float t0 = ((quadratic_coefficients[Y] * -1) - sqrt_discriminant) / (2.0F * quadratic_coefficients[X]);
-	float t1 = ((quadratic_coefficients[Y] * -1) + sqrt_discriminant) / (2.0F * quadratic_coefficients[X]);
-
-	// Step 4: Determine the valid intersection point
-	if (t0 > t1) // Ensure t0 is the smaller value
-	{
-		float temp = t0;
-		t0 = t1;
-		t1 = temp;
-	}
-
-	// Check if the intersection is within the finite height of the cylinder
-	// Adjust to grow symmetrically: height / 2 goes both up and down
-	float y0 = vdot(ca, vadd(oc, vscale(ray.vec, t0)));
-	float y1 = vdot(ca, vadd(oc, vscale(ray.vec, t1)));
-
-	float valid_t = -1.0F;
-	uint8_t hit_type = 0;
-
-	// Ensure the intersection is within the cylinder's height bounds
+	t_tmp[2] = -1.0F;
+	hit_type[0] = 0;
+	float y0 = vdot(ca, vadd(oc, vscale(ray.vec, t_tmp[0])));
+	float y1 = vdot(ca, vadd(oc, vscale(ray.vec, t_tmp[1])));
 	if (y0 >= -obj->cylinder.height / 2.0F && y0 <= obj->cylinder.height / 2.0F)
 	{
-		valid_t = t0;
-		hit_type = CYL_BODY; // Cylinder body
+		t_tmp[2] = t_tmp[0];
+		hit_type[0] = CYL_BODY;
 	}
 	else if (y1 >= -obj->cylinder.height / 2.0F && y1 <= obj->cylinder.height / 2.0F)
 	{
-		valid_t = t1;
-		hit_type = CYL_BODY; // Cylinder body
+		t_tmp[2] = t_tmp[1];
+		hit_type[0] = CYL_BODY;
 	}
-
-	// Step 5: Check caps if the body intersections are invalid
-	t_vec4 top_cap = vadd(obj->coords, vscale(ca, obj->cylinder.height / 2.0F));
-	t_vec4 bottom_cap = vsub(obj->coords, vscale(ca, obj->cylinder.height / 2.0F));
-
-	float t_top, t_bottom;
-	bool hit_top = intersect_cylinder_caps(ray.origin, ray.vec, top_cap, ca, &t_top);
-	bool hit_bottom = intersect_cylinder_caps(ray.origin, ray.vec, bottom_cap, ca, &t_bottom);
-
-	// Validate cap intersections
-	if (hit_top)
-	{
-		t_vec4 p = vadd(ray.origin, vscale(ray.vec, t_top));
-		if (vlen(vsub(p, top_cap)) <= obj->cylinder.radius)
-		{
-			if (valid_t < 0.0F || t_top < valid_t)
-			{
-				valid_t = t_top;
-				hit_type = CYL_TOP; // Cylinder cap
-			}
-		}
-	}
-
-	if (hit_bottom)
-	{
-		t_vec4 p = vadd(ray.origin, vscale(ray.vec, t_bottom));
-		if (vlen(vsub(p, bottom_cap)) <= obj->cylinder.radius)
-		{
-			if (valid_t < 0.0F || t_bottom < valid_t)
-			{
-				valid_t = t_bottom;
-				hit_type = CYL_BOTTOM; // Cylinder cap
-			}
-		}
-	}
-
-	if (valid_t < 0.0F)
-		return false;
-
-	*t = valid_t;
-	return hit_type;
+	hit_type[1] = validate_cap_intersection(ray, obj, ca, t_tmp);
+	if (hit_type[1] != 0)
+        hit_type[0] = hit_type[1];
+	if (t_tmp[2] < 0.0F)
+		return (false);
+	*t = t_tmp[2];
+	return hit_type[0];
 }
