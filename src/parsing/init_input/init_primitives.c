@@ -23,11 +23,12 @@ static int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 	pl.coords[X] = rt_atof(line);
 	pl.coords[Y] = rt_atof(nxtvp(&line));
 	pl.coords[Z] = rt_atof(nxtvp(&line));
-	pl.coords[3] = 1.0F;
+	pl.coords[W] = 1.0F;
 	pl.plane.orientation[X] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	pl.plane.orientation[Y] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	pl.plane.orientation[Z] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	pl.plane.orientation[3] = 0.0F;
+	pl.plane.orientation = vnorm(pl.plane.orientation);
 	pl.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	pl.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	pl.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
@@ -47,7 +48,7 @@ static int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 	sp.coords[X] = rt_atof(line);
 	sp.coords[Y] = rt_atof(nxtvp(&line));
 	sp.coords[Z] = rt_atof(nxtvp(&line));
-	sp.coords[3] = 1.0F;
+	sp.coords[W] = 1.0F;
 	sp.sphere.diameter = rt_atof(nxtvp(&line));
 	sp.sphere.radius = sp.sphere.diameter / 2.0F;
 	sp.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
@@ -69,11 +70,12 @@ static int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 	cy.coords[X] = rt_atof(line);
 	cy.coords[Y] = rt_atof(nxtvp(&line));
 	cy.coords[Z] = rt_atof(nxtvp(&line));
-	cy.coords[3] = 1.0F;
+	cy.coords[W] = 1.0F;
 	cy.cylinder.orientation[X] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	cy.cylinder.orientation[Y] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	cy.cylinder.orientation[Z] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
-	cy.cylinder.orientation[3] = 0.0F;
+	cy.cylinder.orientation[W] = 0.0F;
+	cy.cylinder.orientation = vnorm(cy.cylinder.orientation);
 	cy.cylinder.diameter = rt_atof(nxtvp(&line));
 	cy.cylinder.radius = cy.cylinder.diameter / 2.0F;
 	cy.cylinder.height = rt_atof(nxtvp(&line));

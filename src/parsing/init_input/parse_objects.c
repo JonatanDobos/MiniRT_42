@@ -37,6 +37,8 @@ static int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
 	sc->camera.c.orientation[X] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	sc->camera.c.orientation[Y] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	sc->camera.c.orientation[Z] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
+	sc->camera.c.orientation[W] = 0.0F;
+	sc->camera.c.orientation = vnorm(sc->camera.c.orientation);
 	sc->camera.c.fov = clamp(atoi32(nxtvp(&line)), 0.0F, 180.0F);
 	sc->camera.c.zvp_dist = 1.0F / tanf((sc->camera.c.fov * M_PI / 180.0F) / 2.0F);
 	sc->camera.c.fov = sc->camera.c.fov;
@@ -52,7 +54,7 @@ static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 	l.coords[X] = rt_atof(line);
 	l.coords[Y] = rt_atof(nxtvp(&line));
 	l.coords[Z] = rt_atof(nxtvp(&line));
-	l.coords[3] = 1.0F;
+	l.coords[W] = 1.0F;
 	l.l.brightness = clamp(rt_atof(nxtvp(&line)), 0.0F, 1.0F);
 	l.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	l.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;

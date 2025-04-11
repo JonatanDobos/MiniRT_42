@@ -12,6 +12,8 @@ Optional:
 - soft shadows optimaliseren en aanpassen om bij grotere schaduwen smoother te zijn
 ----> Miscschien een soft shadow functie die twee samples schiet en de shadow fade tussen die twee??
 
+- Cap shadow van binnenuit fixen, in cylnormal calculate.
+
 
 Joni			kan je ook alvast cylinder opslitsen in kleinere functies?
 
