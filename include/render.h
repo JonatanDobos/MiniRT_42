@@ -34,10 +34,10 @@ typedef enum e_render_stages
 // 	t_vec4	rd;
 // 	t_vec4	oc_proj;
 // 	t_vec4	top_cam;
-// 	t_vec4	oc_proj;
-// 	t_vec4	oc_proj;
-// 	t_vec4	oc_proj;
-// 	t_vec4	oc_proj;
+// 	t_vec4	bottom_cap;
+// 	float	half_height
+// 	float	t0;
+// 	float	t1;
 // }	t_cyl_intersect;
 
 // set_pixels.c

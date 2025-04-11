@@ -93,7 +93,6 @@ static uint8_t get_cap_intersection(t_ray ray, t_vec4 cap_center, t_vec4 ca,
 	return (CYL_NONE);
 }
 
-// Needs to be further split up!
 uint8_t ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 {
 	// Normalize the cylinder axis.

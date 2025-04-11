@@ -1,15 +1,14 @@
 
 TODO:
 
-- SEGFAULT oplossen!!!!!!!!
-- res_ratio opzoeken en mutexen!!!!!!
+AFRONDEN:
 
 - Mutexes cleanen
-
-Options:
-
 - Cylinder opruimen en optimaliseren
-- Toevoegen keybinds for lichten aanpassen
+- Norminette
+
+Optional:
+
 - soft shadows optimaliseren en aanpassen om bij grotere schaduwen smoother te zijn
 
 
