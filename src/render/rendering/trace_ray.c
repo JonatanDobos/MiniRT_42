@@ -32,7 +32,7 @@ t_vec4 calculate_normal_cylinder(t_objs *obj, t_ray ray, float t, uint8_t inters
 	else if (intersect_type == CYL_TOP)
 		return (vnorm(obj->cylinder.orientation));
 	else
-		return (vnorm(obj->cylinder.orientation) * -1);
+		return (vnorm(obj->cylinder.orientation) * -1.0F);
 }
 
 uint32_t	find_closest_object(t_scene *sc, t_ray ray, float *closest_t, uint8_t *closest_intersect_type)

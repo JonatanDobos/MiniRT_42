@@ -65,8 +65,8 @@ typedef struct	s_plane
 
 typedef struct	s_sphere
 {
-	float radius;
-	float diameter;
+	float	radius;
+	float	diameter;
 }	t_sphere;
 
 typedef struct	s_cylinder
@@ -82,12 +82,6 @@ typedef struct	s_camera
 	t_vec4	orientation;
 	float	fov;
 	float	zvp_dist;
-	// t_fvec	rotated;
-	// float	rotation[2];
-	// t_fvec	u;
-	// t_fvec	v;
-	// t_fvec	proj_vec;
-	// float	exposure;
 }	t_camera;
 
 typedef struct	s_objs

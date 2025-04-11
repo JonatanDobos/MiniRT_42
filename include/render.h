@@ -27,18 +27,24 @@ typedef enum e_render_stages
 	RSTAGE_END
 }	t_render_stage;
 
-// typedef struct s_cyl_intersect
-// {
-// 	t_vec4	ca;
-// 	t_vec4	oc;
-// 	t_vec4	rd;
-// 	t_vec4	oc_proj;
-// 	t_vec4	top_cam;
-// 	t_vec4	bottom_cap;
-// 	float	half_height
-// 	float	t0;
-// 	float	t1;
-// }	t_cyl_intersect;
+typedef struct s_cyl_intersect
+{
+	t_vec4	ca;
+	t_vec4	oc;
+	t_vec4	rd;
+	t_vec4	oc_proj;
+	float	t[2];
+	float	valid_t;
+	float	half_height;
+}	t_cyl;
+
+typedef struct s_cyl_capintersect
+{
+	t_vec4	top_cap;
+	t_vec4	bottom_cap;
+	float	t_cap;
+	float	cap_radius;
+}	t_cyl_cap;
 
 // set_pixels.c
 
@@ -60,6 +66,7 @@ uint8_t		ray_intersect_light(t_ray ray, t_objs *obj, float *t);
 // cylinder.c
 
 uint8_t		ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t);
+t_vec4		ray_at(t_ray ray, float t);
 
 // trace_ray.c
 

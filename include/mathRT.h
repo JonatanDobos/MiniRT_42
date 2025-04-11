@@ -4,7 +4,7 @@
 # include <math.h>
 # include <miniRT.h>
 
-# define EPSILON 1e-6f
+# define EPSILON 1e-6F
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846

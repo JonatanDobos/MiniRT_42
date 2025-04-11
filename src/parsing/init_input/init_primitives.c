@@ -70,9 +70,9 @@ static int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 	cy.coords[Y] = rt_atof(nxtvp(&line));
 	cy.coords[Z] = rt_atof(nxtvp(&line));
 	cy.coords[3] = 1.0F;
-	cy.cylinder.orientation[X] = clamp(rt_atof(nxtvp(&line)), -1.0f, 1.0f);
-	cy.cylinder.orientation[Y] = clamp(rt_atof(nxtvp(&line)), -1.0f, 1.0f);
-	cy.cylinder.orientation[Z] = clamp(rt_atof(nxtvp(&line)), -1.0f, 1.0f);
+	cy.cylinder.orientation[X] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
+	cy.cylinder.orientation[Y] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
+	cy.cylinder.orientation[Z] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
 	cy.cylinder.orientation[3] = 0.0F;
 	cy.cylinder.diameter = rt_atof(nxtvp(&line));
 	cy.cylinder.radius = cy.cylinder.diameter / 2.0F;
