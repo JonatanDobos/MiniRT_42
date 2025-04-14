@@ -4,7 +4,7 @@
 //	Static Functions
 static int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line);
 static int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line);
-static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line);
+static int16_t	parse_light(t_scene *sc, char *line);
 
 int16_t	input_type_parse(t_scene *sc, t_value_check *vc, char *line)
 {
@@ -13,7 +13,7 @@ int16_t	input_type_parse(t_scene *sc, t_value_check *vc, char *line)
 	else if (ft_strncmp(line, "C", 1) == 0)
 		return (parse_cam(sc, vc, nxtv(line)));
 	else if (ft_strncmp(line, "L", 1) == 0)
-		return (parse_light(sc, vc, nxtv(line)));
+		return (parse_light(sc, nxtv(line)));
 	return (init_primitives(sc, vc, line));
 }
 
@@ -46,7 +46,7 @@ static int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
 	return (EXIT_SUCCESS);
 }
 
-static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
+static int16_t	parse_light(t_scene *sc, char *line)
 {
 	t_objs	l;
 
@@ -64,6 +64,5 @@ static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 	if (dynarr_insert(&sc->light_dynarr, &l) == false)
 		return (errset(perr("parse_light", ENOMEM)));
 	++sc->l_arr_size;
-	++vc->light_amount;
 	return (EXIT_SUCCESS);
 }

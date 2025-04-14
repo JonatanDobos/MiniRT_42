@@ -13,22 +13,23 @@ int16_t	line_validation(const int fd, t_scene *sc)
 	t_value_check	vc;
 
 	ft_bzero(&vc, sizeof(t_value_check));
-	while (true)
+	line = gnl(fd);
+	while (line != NULL)
 	{
-		line = gnl(fd);
-		if (line == NULL && errno == ENOMEM)
+		if (*line != '\n' && *line != '#')
 		{
-			errset(perr("input_line_check", ENOMEM));
-			break ;
-		}
-		if (line != NULL)
 			skip_sp = line + skip_spaces(line);
-		if (line == NULL || check_line_format(skip_sp) != EXIT_SUCCESS
+			if (check_line_format(skip_sp) != EXIT_SUCCESS
 			|| input_type_parse(sc, &vc, skip_sp) != EXIT_SUCCESS)
-			break ;
+				break ;
+		}
 		free_str(&line);
+		line = gnl(fd);
 	}
-	free_str(&line);
+	if (errno == 0)
+		free_str(&line);
+	else
+		errset(perr("line_validation", ENOMEM));
 	if (errset(ERTRN) == 0)
 		check_values(&vc);
 	return (errset(ERTRN));
@@ -38,10 +39,8 @@ static int16_t	check_line_format(char *line)
 {
 	const size_t	len = ft_strlen(line);
 
-	if (*line == '\n' || *line == '#')
-		return (EXIT_SUCCESS);
 	if (len < 4)
-		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_1)));
+		return (errset(perr_msg("check_line_format", ERRFORM, EMSG_1)));
 	if (process_format(line) != EXIT_SUCCESS)
 		return (errset(ERTRN));
 	return (EXIT_SUCCESS);
@@ -55,11 +54,11 @@ static int16_t	process_format(char *line)
 
 	nbr_of_groups = is_valid_prefix(line, &prefix);
 	if (nbr_of_groups == false)
-		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_2)));
+		return (errset(perr_msg("process_format 1", ERRFORM, EMSG_2)));
 	i = 2 + ft_isspace(line[2]);
 	i += skip_spaces(line + i);
 	if (check_line(line + i, prefix, nbr_of_groups) == false)
-		return (errset(perr_msg("input_line_check", ERRFORM, EMSG_3)));
+		return (errset(perr_msg("process_format 2", ERRFORM, EMSG_3)));
 	return (EXIT_SUCCESS);
 }
 

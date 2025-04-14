@@ -10,7 +10,6 @@
 typedef struct s_parsing_value_check
 {
 	uint16_t		cam_amount;
-	uint16_t		light_amount;
 	uint16_t		amb_amount;
 	uint16_t		obj_amount;
 }	t_value_check;

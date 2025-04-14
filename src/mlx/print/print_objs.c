@@ -49,11 +49,12 @@ static void	print_ambient(t_objs amb)
 
 static void	print_light(t_objs l)
 {
-	printf("\nLight\nCoordinates: (x=%f, y=%f, z=%f)\n     "
-		"Ratio:	%f)\n    "
+	printf("\nLight\nCoordinates: (x=%f, y=%f, z=%f)\n      "
+		"Ratio:	%f)\n      "
+		"Radius: %f\n      "
 		"Colour: (%d, %d, %d)\n",
 		l.coords[0], l.coords[1], l.coords[2],
-		l.a.ratio,
+		l.a.ratio, l.l.radius,
 		(int)(l.color[0] * 255), (int)(l.color[1] * 255),
 		(int)(l.color[2] * 255));
 }

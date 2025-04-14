@@ -37,7 +37,7 @@ static int	*group_numbers(const char prefix)
 	static int			groups[6][5] = {
 		{1, 3, 0, 0, 0},	// 'A'
 		{3, 3, 1, 0, 0},	// 'C'
-		{3, 1, 3, 0, 0},	// 'L'
+		{3, 1, 3, 1, 3},	// 'L'
 		{3, 1, 3, 0, 0},	// 'sp'
 		{3, 3, 3, 0, 0},	// 'pl'
 		{3, 3, 1, 1, 3}		// 'cy'
