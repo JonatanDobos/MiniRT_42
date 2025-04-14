@@ -42,6 +42,7 @@ typedef struct s_light
 {
 	float		brightness;
 	float		radius;
+	bool		intersect_lights;
 }	t_light;
 
 typedef struct s_amblight

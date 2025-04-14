@@ -33,7 +33,7 @@ char	*nxtvp(char **str)
 	char	*c;
 
 	c = *str;
-	while (*c != '\0' && !ft_isspace(*c) && *c != ',')
+	while (*c != '\0' && ft_isspace(*c) == false && *c != ',')
 		++c;
 	while (*c != '\0' && *c != '.' && *c != '-' && ft_isdigit(*c) == false)
 		++c;

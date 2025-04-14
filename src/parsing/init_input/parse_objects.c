@@ -61,6 +61,20 @@ static int16_t	parse_light(t_scene *sc, char *line)
 	l.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	l.color[A] = 1.0F;
 	l.l.radius = 1.5F;
+	l.l.intersect_lights = false;
+	printf("line >%s<\n", line);
+	while (ft_isnum(line) == true)
+		++line;
+	printf("line >%s<\n", line);
+	while (ft_isspace(*line) == true)
+		++line;
+	printf("line >%s<\n", line);
+	if (ft_isnum(line) == true)
+	{
+		l.l.radius = (float)atoi32(line);
+		printf(">>%f\n", l.l.radius);
+		l.l.intersect_lights = true;
+	}
 	if (dynarr_insert(&sc->light_dynarr, &l) == false)
 		return (errset(perr("parse_light", ENOMEM)));
 	++sc->l_arr_size;

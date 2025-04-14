@@ -17,19 +17,23 @@ bool	check_line(char *line, const char prefix, uint8_t nbr_of_groups)
 	group_index = 0;
 	while (*line != '\0' && *line != '#')
 	{
+		// printf("prefix_nbr %d\n", *prefix_nbr);
 		if (ft_isnum(line) == false)
-			return (false);
+			return (printf("uhm >%s<\n", line),false);
 		if (group_ptr[((*prefix_nbr) == 3)](&line) == false)
-			return (false);
+			return (puts("2"),false);
 		++group_index;
-		if (group_index > nbr_of_groups)
-			return (false);
+		// if (group_index > nbr_of_groups)
+		// 	return (false);
 		++prefix_nbr;
 		line += skip_spaces(line);
 	}
-	if (group_index != nbr_of_groups)
-		return (false);
-	return (true);
+	// if (group_index != nbr_of_groups)
+	// 	return (false);
+	// return (true);
+	if (prefix != 'L')
+		return (group_index == nbr_of_groups);
+	return (group_index == 3 || group_index == 5);
 }
 
 static int	*group_numbers(const char prefix)
