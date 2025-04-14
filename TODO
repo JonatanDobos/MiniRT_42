@@ -21,4 +21,7 @@ Remy:
 flags -Wpedantic -Wconversion nog verwerken in de code
 probeerde -Wpedantic maar wordt wel heel erg veel extra werk
 
+- PARSING NEW_LINE CHECK!!!!!!! DOET HET NIET
+- TE GROTE SCENES GEVEN MEMORY ERROR!!!!!
+
 cleanup.c nog norminetten en veranderen

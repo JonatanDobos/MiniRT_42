@@ -24,15 +24,9 @@ t_vec4 calculate_normal_cylinder(t_objs *obj, t_ray ray, float t, uint8_t inters
 				vadd(obj->coords, 
 				vscale(obj->cylinder.orientation, 
 				vdot(vsub(hit_point, obj->coords), obj->cylinder.orientation))));
-		normal = vnorm(normal);
-		if (vdot(normal, ray.vec) > 0.0F)
-			normal = vscale(normal, -1.0F);
-		return (normal);
+		return (vnorm(normal));
 	}
-	else if (intersect_type == CYL_TOP)
-		return (vnorm(obj->cylinder.orientation));
-	else
-		return (vnorm(obj->cylinder.orientation) * -1.0F);
+	return (vnorm(obj->cylinder.orientation));
 }
 
 uint32_t	find_closest_object(t_scene *sc, t_ray ray, float *closest_t, uint8_t *closest_intersect_type)
@@ -62,6 +56,8 @@ uint32_t	find_closest_object(t_scene *sc, t_ray ray, float *closest_t, uint8_t *
 
 t_vec4 calculate_normal(t_objs *obj, t_ray *ray, float t, uint8_t intersect_type)
 {
+	t_vec4	normal;
+
 	if (obj->type == PLANE)
 	{
 		if (vdot(obj->plane.orientation, ray->vec) > 0.0F)
@@ -70,15 +66,18 @@ t_vec4 calculate_normal(t_objs *obj, t_ray *ray, float t, uint8_t intersect_type
 		}
 		return (obj->plane.orientation);
 	}
+	normal = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
 	if (obj->type == SPHERE)
 	{
-		return (vnorm(vsub(vadd(ray->origin, vscale(ray->vec, t)), obj->coords)));
+		normal = vnorm(vsub(vadd(ray->origin, vscale(ray->vec, t)), obj->coords));
 	}
 	if (obj->type == CYLINDER)
 	{
-		return (calculate_normal_cylinder(obj, *ray, t, intersect_type));
+		normal = calculate_normal_cylinder(obj, *ray, t, intersect_type);
 	}
-	return ((t_vec4){0.0F, 0.0F, 0.0F, 1.0F});
+	if (vdot(normal, ray->vec) > 0.0F)
+		normal *= -1.0F;
+	return (normal);
 }
 
 t_vec4 trace_ray(t_scene *sc, t_ray ray)

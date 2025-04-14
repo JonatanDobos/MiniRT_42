@@ -4,7 +4,7 @@
 
 //	Static Functions
 static bool		calc_hard_shadow(t_scene *sc, t_ray ray, t_vec4 light_dir, uint32_t light);
-static float	calc_soft_shadow(t_scene *sc, t_ray ray, t_vec4 light_pos, uint32_t light);
+static float	calc_soft_shadow_circle(t_scene *sc, t_ray ray, t_vec4 light_pos, uint32_t light, uint8_t sample_count);
 
 t_objs	*render_light(t_scene *sc, t_ray ray, float *closest_t, t_objs *closest_obj)
 {
@@ -45,7 +45,7 @@ t_vec4	calc_lighting(t_scene *sc, t_vec4 point, t_vec4 normal, t_vec4 obj_color)
 				shadow = 1.0F;
 		}
 		else
-			shadow = calc_soft_shadow(sc, (t_ray){point, normal}, sc->lights[i].coords, i);
+			shadow = calc_soft_shadow_circle(sc, (t_ray){point, normal}, sc->lights[i].coords, i, sc->shadow_grsize);
 		diff = clamp(vdot(normal, light_dir), 0.0F, 1.0F) * sc->lights[i].l.brightness;
 		result += (obj_color * sc->lights[i].color * bcast3(diff * shadow));
 		++i;
@@ -79,46 +79,11 @@ static bool	calc_hard_shadow(t_scene *sc, t_ray ray, t_vec4 light_dir, uint32_t 
 //--------------- Soft shadows -----------------
 // Work in progress.
 
-t_vec4	rotate_2d(t_vec4 v, float angle)
+
+// Linear interpolation helper: lerp(a, b, t) = a + t*(b - a)
+static float	lerp(float a, float b, float t)
 {
-	const float cos_a = cosf(angle);
-	const float sin_a = sinf(angle);
-
-	return ((t_vec4)
-	{
-		v[X] * cos_a - v[Y] * sin_a,
-		v[X] * sin_a + v[Y] * cos_a,
-		0.0F,
-		0.0F
-	});
-}
-
-t_vec4	grid_disk_sample(int idx, int grid_size, float angle)
-{
-	int		x;
-	int		y;
-	float	fx;
-	float	fy;
-	t_vec4	offset;
-
-	x = idx % grid_size;
-	y = idx / grid_size;
-	fx = ((float)x + 0.5F) / grid_size * 2.0F - 1.0F;
-	fy = ((float)y + 0.5F) / grid_size * 2.0F - 1.0F;
-	offset = (t_vec4){fx, fy, 0.0F, 0.0F};
-
-	// Optional: discard points outside unit disk
-	if (fx * fx + fy * fy > 1.0F)
-		return (t_vec4){0.0F, 0.0F, 0.0F, 0.0F};
-
-	return (rotate_2d(offset, angle));
-}
-
-t_vec4	get_d_sample_pos(t_vec4 light_pos, int idx, int grid_size, float angle, float radius)
-{
-	const t_vec4	offset = grid_disk_sample(idx, grid_size, angle);
-
-	return vadd(light_pos, vscale(offset, radius));
+	return (a + t * (b - a));
 }
 
 bool	is_occluded(t_scene *sc, t_vec4 origin, t_vec4 dir, float max_dist)
@@ -138,23 +103,113 @@ bool	is_occluded(t_scene *sc, t_vec4 origin, t_vec4 dir, float max_dist)
 	return false;
 }
 
-static float	calc_soft_shadow(t_scene *sc, t_ray ray, t_vec4 light_pos, uint32_t light)
+// Smoothstep helper (same idea as GLSL's smoothstep)
+static float	smoothstep(float edge0, float edge1, float x)
 {
-	uint16_t		hit_count;
-	uint16_t		i;
-	const float		radius = sc->lights[light].l.radius;
-	const float		angle = 3.14159F * (light * 0.618F);
-	const float		distance = vlen(vsub(light_pos, ray.origin));
-	const uint16_t	total_samples = sc->shadow_grsize * sc->shadow_grsize;
+	float t = clamp((x - edge0) / (edge1 - edge0), 0.0F, 1.0F);
+	return t * t * (3.0F - 2.0F * t);
+}
 
-	hit_count = 0;
+static float	calc_soft_shadow_circle(t_scene *sc, t_ray ray, t_vec4 light_pos, uint32_t light, uint8_t sample_count)
+{
+	t_vec4		light_dir;
+	t_vec4		tangent, bitangent, sample_dir;
+	float		distance, angle, vis;
+	uint8_t		i;
+	const float	radius = sc->lights[light].l.radius;
+
+	light_dir = vnorm(vsub(light_pos, ray.origin));
+	tangent = vnorm(vcross(light_dir, ray.vec));
+	if (vlen(tangent) < 0.001F)
+		tangent = (t_vec4){1.0F, 0.0F, 0.0F, 0.0F};
+	bitangent = vnorm(vcross(light_dir, tangent));
+
+	distance = vlen(vsub(light_pos, ray.origin));
+	vis = 0.0F;
 	i = 0;
-	while (i < total_samples)
+
+	while (i < sample_count)
 	{
-		if (is_occluded(sc, ray.origin, vnorm(vsub(get_d_sample_pos(light_pos \
-			, i, sc->shadow_grsize, angle, radius), ray.origin)), distance))
-			hit_count++;
+		angle = (2.0F * 3.14159F * i) / sample_count;
+		sample_dir = vadd(
+			vscale(tangent, cosf(angle) * radius),
+			vscale(bitangent, sinf(angle) * radius)
+		);
+		sample_dir = vnorm(vsub(vadd(light_pos, sample_dir), ray.origin));
+
+		if (!is_occluded(sc, ray.origin, sample_dir, distance))
+			vis += 1.0F;
 		++i;
 	}
-	return 1.0F - ((float)hit_count / (float)total_samples);
+	// if (sample_count == 2)
+	// 	printf("dist: %.3f, vis; %.3f\n", distance, vis);
+	float softness = clamp((distance - radius) / (radius * 0.1F), 0.0F, 1.0F);
+	return lerp(vis / (float)sample_count, 1.0F, softness);
+
+
 }
+
+
+
+
+// t_vec4	rotate_2d(t_vec4 v, float angle)
+// {
+// 	const float cos_a = cosf(angle);
+// 	const float sin_a = sinf(angle);
+
+// 	return ((t_vec4)
+// 	{
+// 		v[X] * cos_a - v[Y] * sin_a,
+// 		v[X] * sin_a + v[Y] * cos_a,
+// 		0.0F,
+// 		0.0F
+// 	});
+// }
+
+// t_vec4	grid_disk_sample(int idx, int grid_size, float angle)
+// {
+// 	int		x;
+// 	int		y;
+// 	float	fx;
+// 	float	fy;
+// 	t_vec4	offset;
+
+// 	x = idx % grid_size;
+// 	y = idx / grid_size;
+// 	fx = ((float)x + 0.5F) / grid_size * 2.0F - 1.0F;
+// 	fy = ((float)y + 0.5F) / grid_size * 2.0F - 1.0F;
+// 	offset = (t_vec4){fx, fy, 0.0F, 0.0F};
+
+// 	// Optional: discard points outside unit disk
+// 	if (fx * fx + fy * fy > 1.0F)
+// 		return (t_vec4){0.0F, 0.0F, 0.0F, 0.0F};
+
+// 	return (rotate_2d(offset, angle));
+// }
+
+// t_vec4	get_d_sample_pos(t_vec4 light_pos, int idx, int grid_size, float angle, float radius)
+// {
+// 	const t_vec4	offset = grid_disk_sample(idx, grid_size, angle);
+// 	return vadd(light_pos, vscale(offset, radius));
+// }
+
+// static float	calc_soft_shadow(t_scene *sc, t_ray ray, t_vec4 light_pos, uint32_t light)
+// {
+// 	uint16_t		hit_count;
+// 	uint16_t		i;
+// 	const float		radius = sc->lights[light].l.radius;
+// 	const float		angle = 3.14159F * (light * 0.618F);
+// 	const float		distance = vlen(vsub(light_pos, ray.origin));
+// 	const uint16_t	total_samples = sc->shadow_grsize * sc->shadow_grsize;
+
+// 	hit_count = 0;
+// 	i = 0;
+// 	while (i < total_samples)
+// 	{
+// 		if (is_occluded(sc, ray.origin, vnorm(vsub(get_d_sample_pos(light_pos \
+// 			, i, sc->shadow_grsize, angle, radius), ray.origin)), distance))
+// 			hit_count++;
+// 		++i;
+// 	}
+// 	return 1.0F - ((float)hit_count / (float)total_samples);
+// }

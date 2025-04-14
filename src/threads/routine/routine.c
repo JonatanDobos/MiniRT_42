@@ -17,6 +17,25 @@ void	*thread_routine_init(t_thread *th)
 	return (NULL);
 }
 
+void	T_print_fps(t_rt *rt, float fps)
+{
+	static float	fps_average;
+	static uint8_t	counter;
+
+	if (rt->win->res_ratio != rt->win->res_r_start)
+		return ;
+	fps_average += fps;
+	++counter;
+	if (counter != 20)
+		return ;
+	pthread_mutex_lock(rt->mtx + MTX_PRINT);
+	printf("\r%4.1f fps", fps_average / (float)counter);
+	fflush(stdout);
+	pthread_mutex_unlock(rt->mtx + MTX_PRINT);
+	counter = 0;
+	fps_average = 0;
+}
+
 static void	render_routine(t_thread *th)
 {
 	double	time;
@@ -36,10 +55,8 @@ static void	render_routine(t_thread *th)
 			if (th->win->res_ratio == th->win->res_r_start - 1)
 				set_starting_res_ratio(th->rt, time);
 		}
-		// pthread_mutex_lock(th->rt->mtx + MTX_PRINT);
-		// printf("\r  resratio: %2hu -> %3hu fps", th->win->res_ratio, (uint16_t)(1.0 / time));
-		// fflush(stdout);
-		// pthread_mutex_unlock(th->rt->mtx + MTX_PRINT);
+		T_print_fps(th->rt, 1.0F / time);
+		printf("ratio: %hu\n", th->rt->win->res_ratio);
 		resynchronize_after_rendering(th);
 	}
 	pthread_mutex_lock(th->rt->mtx + MTX_STOPPED_THREADS);
