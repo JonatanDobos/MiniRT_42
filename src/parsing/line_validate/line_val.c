@@ -106,6 +106,6 @@ static void	check_values(t_value_check *vc)
 		errset(perr_msg("check_values", ERRFORM, EMSG_4A));
 	else if (vc->cam_amount != 1)
 		errset(perr_msg("check_values", ERRFORM, EMSG_4C));
-	else if (vc->obj_amount < 1)
+	else if (vc->obj_dynarr.length < 1)
 		errset(perr_msg("check_values", ERRFORM, EMSG_4O));
 }

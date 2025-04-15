@@ -2,20 +2,20 @@
 #include <mathRT.h>
 
 //	Static Functions
-static bool		parse_pl(t_scene *sc, t_value_check *vc, char *line);
-static bool		parse_sp(t_scene *sc, t_value_check *vc, char *line);
-static bool		parse_cy(t_scene *sc, t_value_check *vc, char *line);
+static bool		parse_pl(t_value_check *vc, char *line);
+static bool		parse_sp(t_value_check *vc, char *line);
+static bool		parse_cy(t_value_check *vc, char *line);
 
-bool	init_primitives(t_scene *sc, t_value_check *vc, char *line)
+bool	init_primitives(t_value_check *vc, char *line)
 {
 	if (ft_strncmp(line, "pl", 2) == 0)
-		return (parse_pl(sc, vc, nxtv(line)));
+		return (parse_pl(vc, nxtv(line)));
 	else if (ft_strncmp(line, "sp", 2) == 0)
-		return (parse_sp(sc, vc, nxtv(line)));
-	return (parse_cy(sc, vc, nxtv(line)));
+		return (parse_sp(vc, nxtv(line)));
+	return (parse_cy(vc, nxtv(line)));
 }
 
-static bool	parse_pl(t_scene *sc, t_value_check *vc, char *line)
+static bool	parse_pl(t_value_check *vc, char *line)
 {
 	t_objs	pl;
 
@@ -24,23 +24,16 @@ static bool	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 	pl.coords[Y] = rt_atof(nxtvp(&line));
 	pl.coords[Z] = rt_atof(nxtvp(&line));
 	pl.coords[W] = 1.0F;
-	pl.plane.orientation[X] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
-	pl.plane.orientation[Y] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
-	pl.plane.orientation[Z] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
-	pl.plane.orientation[3] = 0.0F;
-	pl.plane.orientation = vnorm(pl.plane.orientation);
-	pl.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	pl.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	pl.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	pl.color[A] = 1.0F;
+	if (validate_orientation(&pl.plane.orientation, &line) == false)
+		return (EXIT_FAILURE);
+	if (validate_and_normalize_color(&pl.color, &line) == false)
+		return (EXIT_FAILURE);
 	if (dynarr_insert(&vc->obj_dynarr, &pl) == false)
 		return (errset(perr("parse_pl", ENOMEM)));
-	++sc->o_arr_size;
-	++vc->obj_amount;
 	return (EXIT_SUCCESS);
 }
 
-static bool	parse_sp(t_scene *sc, t_value_check *vc, char *line)
+static bool	parse_sp(t_value_check *vc, char *line)
 {
 	t_objs	sp;
 
@@ -50,19 +43,17 @@ static bool	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 	sp.coords[Z] = rt_atof(nxtvp(&line));
 	sp.coords[W] = 1.0F;
 	sp.sphere.diameter = rt_atof(nxtvp(&line));
+	if (sp.sphere.diameter < 0)
+		return (EXIT_FAILURE);
 	sp.sphere.radius = sp.sphere.diameter / 2.0F;
-	sp.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	sp.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	sp.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	sp.color[A] = 1.0F;
+	if (validate_and_normalize_color(&sp.color, &line) == false)
+		return (EXIT_FAILURE);
 	if (dynarr_insert(&vc->obj_dynarr, &sp) == false)
 		return (errset(perr("parse_sp", ENOMEM)));
-	++sc->o_arr_size;
-	++vc->obj_amount;
 	return (EXIT_SUCCESS);
 }
 
-static bool	parse_cy(t_scene *sc, t_value_check *vc, char *line)
+static bool	parse_cy(t_value_check *vc, char *line)
 {
 	t_objs	cy;
 
@@ -71,21 +62,18 @@ static bool	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 	cy.coords[Y] = rt_atof(nxtvp(&line));
 	cy.coords[Z] = rt_atof(nxtvp(&line));
 	cy.coords[W] = 1.0F;
-	cy.cylinder.orientation[X] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
-	cy.cylinder.orientation[Y] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
-	cy.cylinder.orientation[Z] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
-	cy.cylinder.orientation[W] = 0.0F;
-	cy.cylinder.orientation = vnorm(cy.cylinder.orientation);
+	if (validate_orientation(&cy.cylinder.orientation, &line) == false)
+		return (EXIT_FAILURE);
 	cy.cylinder.diameter = rt_atof(nxtvp(&line));
+	if (cy.cylinder.diameter < 0)
+		return (EXIT_FAILURE);
 	cy.cylinder.radius = cy.cylinder.diameter / 2.0F;
 	cy.cylinder.height = rt_atof(nxtvp(&line));
-	cy.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	cy.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	cy.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	cy.color[A] = 1.0F;
+	if (cy.cylinder.height < 0)
+		return (EXIT_FAILURE);
+	if (validate_and_normalize_color(&cy.color, &line) == false)
+		return (EXIT_FAILURE);
 	if (dynarr_insert(&vc->obj_dynarr, &cy) == false)
 		return (errset(perr("parse_cy", ENOMEM)));
-	++sc->o_arr_size;
-	++vc->obj_amount;
 	return (EXIT_SUCCESS);
 }

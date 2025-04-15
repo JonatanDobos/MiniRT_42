@@ -5,6 +5,7 @@
 static bool	parse_amb(t_objs *ambient, t_value_check *vc, char *line);
 static bool	parse_cam(t_objs *camera, t_value_check *vc, char *line);
 static bool	parse_light(t_value_check *vc, char *line);
+static bool	parse_light_extra(t_objs *l, char **line);
 
 bool	input_type_parse(t_scene *sc, t_value_check *vc, char *line)
 {
@@ -14,26 +15,9 @@ bool	input_type_parse(t_scene *sc, t_value_check *vc, char *line)
 		return (parse_cam(&sc->camera, vc, nxtv(line)));
 	else if (ft_strncmp(line, "L", 1) == 0)
 		return (parse_light(vc, nxtv(line)));
-	return (init_primitives(sc, vc, line));
+	return (init_primitives(vc, line));
 }
 
-bool	validate_and_normalize_color(t_vec4 *color, char **line)
-{
-	int32_t	color_value;
-	uint8_t	i;
-
-	i = 0;
-	while (i <= 2)
-	{
-		color_value = atoi32(nxtvp(line));
-		if (color_value < 0 || color_value > 255)
-			return (false);
-		(*color)[i] = (float)color_value / 255.0F;
-		++i;
-	}
-	(*color)[i] = 1.0F;
-	return (true);
-}
 static bool	parse_amb(t_objs *ambient, t_value_check *vc, char *line)
 {
 	ambient->type = AMBIENT;
@@ -45,25 +29,6 @@ static bool	parse_amb(t_objs *ambient, t_value_check *vc, char *line)
 	return (EXIT_SUCCESS);
 }
 
-bool	validate_orientation(t_vec4 *or, char **line)
-{
-	uint8_t	i;
-
-	i = 0;
-	while (i <= 2)
-	{
-		(*or)[i] = rt_atof(nxtvp(line));
-		printf("Parsed value for axis %d: %f\n", i, (*or)[i]);
-		if ((*or)[i] < -1.0F || (*or)[i] > 1.0F)
-		{
-			puts("second");
-			return (false);
-		}
-		++i;
-	}
-	(*or)[i] = 0.0F;
-	return (true);
-}
 
 static bool	parse_cam(t_objs *camera, t_value_check *vc, char *line)
 {
@@ -90,7 +55,6 @@ static bool	parse_light(t_value_check *vc, char *line)
 	l.coords[Y] = rt_atof(nxtvp(&line));
 	l.coords[Z] = rt_atof(nxtvp(&line));
 	l.coords[W] = 1.0F;
-	// l.l.brightness = clamp(rt_atof(nxtvp(&line)), 0.0F, 1.0F);
 	l.l.brightness = rt_atof(nxtvp(&line));
 	if ((l.l.brightness < 0.0F || l.l.brightness > 1.0F) ||
 	validate_and_normalize_color(&l.color, &line) == false)
@@ -98,18 +62,27 @@ static bool	parse_light(t_value_check *vc, char *line)
 	l.l.radius = 1.5F;
 	l.l.intersect_lights = false;
 	l.l.visible = false;
-	while (ft_isnum(line) == true)
-		++line;
-	while (ft_isspace(*line) == true)
-		++line;
-	if (ft_isnum(line) == true)
-	{
-		l.l.radius = rt_atof(line);
-		if (l.l.radius < 0)
-			return (EXIT_FAILURE);
-		l.l.visible = true;
-	}
+	if (parse_light_extra(&l, &line) == false)
+		return (EXIT_FAILURE);
 	if (dynarr_insert(&vc->light_dynarr, &l) == false)
 		return (errset(perr("parse_light", ENOMEM)));
 	return (EXIT_SUCCESS);
+}
+
+static bool	parse_light_extra(t_objs *l, char **line)
+{
+	while (ft_isnum(*line) == true)
+		++(*line);
+	while (ft_isspace(**line) == true)
+		++(*line);
+	puts(*line);
+	if (ft_isnum(*line) == true)
+	{
+		l->l.radius = rt_atof(*line);
+		if (l->l.radius < 0)
+			return (false);
+		l->l.visible = true;
+	}
+	printf("%f\n", l->l.radius);
+	return (true);
 }

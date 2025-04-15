@@ -1,5 +1,5 @@
 #include <parsing.h>
-#include <math.h>
+#include <mathRT.h>
 
 /**
  * @brief Skips till it encounters a new numerical value.
@@ -64,4 +64,41 @@ float	rt_atof(const char *str)
 	while (str[i] != '\0' && ft_isdigit(str[i]) == true)
 		num += (float)(str[i++] - '0') / pow(10, (float)(place++));
 	return (num * sign);
+}
+
+bool	validate_orientation(t_vec4 *or, char **line)
+{
+	uint8_t	i;
+
+	i = 0;
+	while (i <= 2)
+	{
+		(*or)[i] = rt_atof(nxtvp(line));
+		if ((*or)[i] < -1.0F || (*or)[i] > 1.0F)
+		{
+			return (false);
+		}
+		++i;
+	}
+	(*or)[i] = 0.0F;
+	*or = vnorm(*or);
+	return (true);
+}
+
+bool	validate_and_normalize_color(t_vec4 *color, char **line)
+{
+	int32_t	color_value;
+	uint8_t	i;
+
+	i = 0;
+	while (i <= 2)
+	{
+		color_value = atoi32(nxtvp(line));
+		if (color_value < 0 || color_value > 255)
+			return (false);
+		(*color)[i] = (float)color_value / 255.0F;
+		++i;
+	}
+	(*color)[i] = 1.0F;
+	return (true);
 }
