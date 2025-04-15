@@ -30,6 +30,7 @@ bool		init_primitives(t_value_check *vc, char *line);
 
 // parse_utils.c
 float		rt_atof(const char *str);
+float		rt_atoff(const char *str, bool *overflow);
 char		*nxtv(char *str);
 char		*nxtvp(char **str);
 

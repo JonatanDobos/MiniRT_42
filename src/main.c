@@ -5,25 +5,326 @@
 #include <setup_clean.h>
 #include <render.h>
 
-int main(int argc, char **argv)
-{
-	t_rt		rt;
-	t_scene		sc;
-	t_scene		read_sc;
-	t_window	win;
+// int main(int argc, char **argv)
+// {
+// 	t_rt		rt;
+// 	t_scene		sc;
+// 	t_scene		read_sc;
+// 	t_window	win;
 
-	init_main(&rt, &sc, &read_sc, &win);
-	if (setup_init_parsing(&rt, argc, argv[1]) != EXIT_SUCCESS)
-		return (errset(ERTRN));
-	init_hooks(&rt);
-	if (THREADS > 1)
-	{
-		rt.scene->render_ongoing = true;
-		if (multithreaded(&rt))
-			return (errset(ERTRN));
+// 	init_main(&rt, &sc, &read_sc, &win);
+// 	if (setup_init_parsing(&rt, argc, argv[1]) != EXIT_SUCCESS)
+// 		return (errset(ERTRN));
+// 	init_hooks(&rt);
+// 	if (THREADS > 1)
+// 	{
+// 		rt.scene->render_ongoing = true;
+// 		if (multithreaded(&rt))
+// 			return (errset(ERTRN));
+// 	}
+// 	mlx_loop(rt.win->mlx);
+// 	cleanup(&rt);
+// 	printf("exiting miniRT\n");
+// 	return (EXIT_SUCCESS);
+// }
+
+
+
+
+
+
+// #include <stdio.h>
+// #include <float.h>
+// #include <math.h>
+// #include <stdbool.h>
+// #include <string.h>
+// #include <parsing.h>
+
+// void test_case(const char *input, const char *description) {
+// 	bool overflow = false;
+// 	float result = rt_atoff(input, &overflow);
+	
+// 	printf("Test: %s\n", description);
+// 	printf("Input: \"%s\"\n", input);
+// 	printf("Result: %e\n", result);
+// 	// printf("Result: %f\n", result);
+// 	printf("Overflow/Underflow detected: %s\n", overflow ? "Yes" : "No");
+// 	printf("Result is %s\n", 
+// 		overflow ? (result == 0.0F ? "UNDERFLOW (set to 0)" : 
+// 					(result > 0 ? "OVERFLOW (set to FLT_MAX)" : "OVERFLOW (set to -FLT_MAX)")) : 
+// 		"NORMAL");
+// 	printf("Difference from FLT_MAX: %e\n", FLT_MAX - result);
+// 	printf("-----------------------------\n");
+// }
+
+// int main() {
+// 	printf("FLT_MAX = %e\n", FLT_MAX);
+// 	printf("FLT_MIN = %e\n\n", FLT_MIN);
+	
+// 	// Normal cases
+// 	test_case("0.0", "Zero");
+// 	test_case("123.456", "Normal positive number");
+// 	test_case("-42.5", "Normal negative number");
+	
+// 	// Overflow cases
+// 	char huge_number[100] = "1";
+// 	for (int i = 0; i < 40; i++) strcat(huge_number, "0");  // 1e40
+// 	test_case(huge_number, "Large positive number");
+
+// 	char huge_negative[101] = "-";
+// 	strcat(huge_negative, huge_number);
+// 	test_case(huge_negative, "Large negative number");
+
+// 	test_case("3.4e38", "Near FLT_MAX");
+// 	test_case("3.5e38", "Exceeding FLT_MAX");
+// 	test_case("3.403e38", "Slightly exceeding FLT_MAX");
+// 	test_case("4e38", "Far exceeding FLT_MAX");
+	
+// 	// Underflow cases
+// 	test_case("1.0e-46", "Small positive number near underflow");
+// 	test_case("1.0e-50", "Very small positive number (underflow)");
+// 	test_case("1e-100", "Exponent causing underflow");
+
+// 	// Special values
+// 	test_case("inf", "Positive infinity");
+// 	test_case("-inf", "Negative infinity");
+// 	test_case("nan", "Not-a-Number (NaN)");
+// 	test_case("-nan", "Negative Not-a-Number (NaN)");
+// 	test_case("NaN", "Uppercase NaN");
+// 	test_case("nAn", "Mixed case NaN");
+// 	test_case("-NaN", "Uppercase negative NaN");
+// 	test_case("Infinity", "Full word Infinity");
+// 	test_case("INFINITY", "Uppercase Infinity");
+// 	test_case("-Infinity", "Negative full word Infinity");
+
+// 	// Whitespace handling
+// 	test_case("   123.456", "Leading whitespace");
+// 	test_case("123.456   ", "Trailing whitespace");
+// 	test_case("   123.456   ", "Leading and trailing whitespace");
+// 	test_case(" +123.456e+2", "Number with whitespace, sign and exponent");
+
+// 	// Invalid strings
+// 	test_case("", "Empty string");
+// 	test_case("abc", "Invalid string with letters");
+// 	test_case("123abc", "Number followed by letters");
+// 	test_case("abc123", "Letters followed by numbers");
+// 	test_case("..123", "Invalid format with multiple dots");
+// 	test_case("123..456", "Invalid format with multiple dots in the middle");
+// 	test_case(".", "Only decimal point");
+// 	test_case("-", "Only negative sign");
+// 	test_case("+", "Only positive sign");
+// 	test_case("--123.456", "Double negative sign");
+// 	test_case("++123.456", "Double positive sign");
+// 	test_case("+-123.456", "Mixed signs");
+
+// 	// Exponent handling
+// 	test_case("1e38", "Exponent at upper boundary");
+// 	test_case("1e-38", "Exponent at lower boundary");
+// 	test_case("1e39", "Exponent exceeding upper boundary");
+// 	test_case("1e-39", "Exponent exceeding lower boundary");
+// 	test_case("1e-1", "Small negative exponent");
+// 	test_case("1e-10", "Larger negative exponent");
+// 	test_case("1e", "Missing exponent");
+// 	test_case("1e+", "Missing exponent after sign");
+// 	test_case("e10", "Missing mantissa");
+
+// 	// Boundary cases
+// 	test_case("3.4028234e+38", "Just below FLT_MAX");
+// 	test_case("3.4028235e+38", "Just above FLT_MAX");
+// 	test_case("1.1754943e-38", "Just above FLT_MIN");
+// 	test_case("1.1754942e-38", "Just below FLT_MIN");
+// 	test_case("1.0e-45", "At FLT_MIN boundary");
+
+// 	// Leading zeros
+// 	test_case("000123.456", "Number with leading zeros");
+// 	test_case("0000.123", "Fractional number with leading zeros");
+
+// 	// Negative zero
+// 	test_case("-0.0", "Negative zero");
+
+// 	// Long numbers
+// 	char long_number[1000];
+// 	memset(long_number, '9', 999);
+// 	long_number[999] = '\0';
+// 	test_case(long_number, "Excessively long number");
+
+// 	// Exact and slightly above FLT_MAX
+// 	char max_float[100];
+// 	sprintf(max_float, "%.10e", FLT_MAX);
+// 	test_case(max_float, "Exact FLT_MAX value");
+
+// 	char above_max[100];
+// 	sprintf(above_max, "%.10e", FLT_MAX);
+// 	// Find the last digit and increment it
+// 	for (int i = 0; above_max[i]; i++) {
+// 		if (above_max[i] >= '0' && above_max[i] <= '8' && 
+// 			(above_max[i+1] == 'e' || above_max[i+1] == 'E')) {
+// 			++above_max[i];
+// 			break;
+// 		}
+// 	}
+// 	test_case(above_max, "Slightly above FLT_MAX");
+
+// 	return 0;
+// }
+
+
+#include <parsing.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <float.h>
+#include <math.h>
+#include <string.h>
+
+// Define colors for output
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define RESET "\033[0m"
+
+// Function to compare floating-point numbers with a tolerance
+bool float_equals(float a, float b) {
+	if (isnan(a) || isnan(b)) return false; // NAN is not equal to anything
+	if (isinf(a) || isinf(b)) return a == b; // INFINITY comparison
+	return fabsf(a - b) <= FLT_EPSILON * fmaxf(fabsf(a), fabsf(b));
+}
+
+// Tester function
+bool test_case_auto_check(const char *input, float expected_result, bool expected_overflow, size_t index) {
+	const char *table[2] = {
+		RED "%zu.KO " RESET,
+		GREEN "%zu.OK " RESET
+	};
+
+	bool overflow = false;
+	float result = rt_atoff(input, &overflow);
+
+	// Check if the result matches the expected result and overflow status
+	bool result_match = false;
+	if (isnan(expected_result)) {
+		result_match = isnan(result); // Check if both are NAN
+	} else if (isinf(expected_result)) {
+		result_match = (isinf(result) && (signbit(expected_result) == signbit(result))); // Check for INFINITY and sign
+	} else {
+		result_match = float_equals(result, expected_result);
 	}
-	mlx_loop(rt.win->mlx);
-	cleanup(&rt);
-	printf("exiting miniRT\n");
-	return (EXIT_SUCCESS);
+
+	bool overflow_match = (overflow == expected_overflow);
+
+	// Print the test result
+	bool test_passed = result_match && overflow_match;
+	printf((table[test_passed]), index);
+
+	if (!test_passed) {
+		printf("\nInput: \"%s\"\n", input);
+		printf("Expected: %e, Got: %e\n", expected_result, result);
+		printf("Expected Overflow: %s, Got: %s\n", expected_overflow ? "Yes" : "No", overflow ? "Yes" : "No");
+	}
+
+	return test_passed;
+}
+
+int main() {
+	printf("FLT_MAX = %e\n", FLT_MAX);
+	printf("FLT_MIN = %e\n\n", FLT_MIN);
+
+	size_t index = 1;
+
+	// Normal cases
+	test_case_auto_check("123.456", 123.456f, false, index++);
+	test_case_auto_check("-42.5", -42.5f, false, index++);
+	test_case_auto_check("0.0", 0.0f, false, index++);
+
+	// Overflow cases
+	test_case_auto_check("10000000000000000000000000000000000000000", FLT_MAX, true, index++);
+	test_case_auto_check("-10000000000000000000000000000000000000000", -FLT_MAX, true, index++);
+	test_case_auto_check("3.4e38", 3.4e38f, false, index++);
+	test_case_auto_check("3.5e38", FLT_MAX, true, index++);
+	test_case_auto_check("3.403e38", FLT_MAX, true, index++);
+	test_case_auto_check("4e38", FLT_MAX, true, index++);
+
+	// Underflow cases
+	test_case_auto_check("1.0e-46", 0.0f, true, index++);
+	test_case_auto_check("1.0e-50", 0.0f, true, index++);
+	test_case_auto_check("1e-100", 0.0f, true, index++);
+
+	// Special values
+	test_case_auto_check("inf", INFINITY, false, index++);
+	test_case_auto_check("-inf", -INFINITY, false, index++);
+	test_case_auto_check("nan", NAN, false, index++);
+	test_case_auto_check("-nan", NAN, false, index++);
+	test_case_auto_check("NaN", NAN, false, index++);
+	test_case_auto_check("nAn", NAN, false, index++);
+	test_case_auto_check("-NaN", NAN, false, index++);
+	test_case_auto_check("Infinity", INFINITY, false, index++);
+	test_case_auto_check("INFINITY", INFINITY, false, index++);
+	test_case_auto_check("-Infinity", -INFINITY, false, index++);
+
+	// Whitespace handling
+	test_case_auto_check("   123.456", 123.456f, false, index++);
+	test_case_auto_check("123.456   ", 123.456f, false, index++);
+	test_case_auto_check("   123.456   ", 123.456f, false, index++);
+	test_case_auto_check(" +123.456e+2", 12345.6f, false, index++);
+
+	// Invalid strings
+	test_case_auto_check("", 0.0f, false, index++);
+	test_case_auto_check("abc", 0.0f, false, index++);
+	test_case_auto_check("123abc", 123.0f, false, index++);
+	test_case_auto_check("abc123", 0.0f, false, index++);
+	test_case_auto_check("..123", 0.0f, false, index++);
+	test_case_auto_check("123..456", 123.0f, false, index++);
+	test_case_auto_check(".", 0.0f, false, index++);
+	test_case_auto_check("-", 0.0f, false, index++);
+	test_case_auto_check("+", 0.0f, false, index++);
+	test_case_auto_check("--123.456", 0.0f, false, index++);
+	test_case_auto_check("++123.456", 0.0f, false, index++);
+	test_case_auto_check("+-123.456", 0.0f, false, index++);
+
+	// Exponent handling
+	test_case_auto_check("1e38", 1e38f, false, index++);
+	test_case_auto_check("1e-38", 0.0f, true, index++);
+	test_case_auto_check("1e39", FLT_MAX, true, index++);
+	test_case_auto_check("1e-39", 0.0f, true, index++);
+	test_case_auto_check("1e-1", 0.1f, false, index++);
+	test_case_auto_check("1e-10", 1e-10f, false, index++);
+	test_case_auto_check("1e", 1.0f, false, index++);
+	test_case_auto_check("1e+", 1.0f, false, index++);
+	test_case_auto_check("e10", 0.0f, false, index++);
+
+	// Boundary cases
+	test_case_auto_check("3.4028234e+38", FLT_MAX, true, index++);
+	test_case_auto_check("3.4028235e+38", FLT_MAX, true, index++);
+	test_case_auto_check("1.1754943e-38", 1.1754943e-38f, false, index++);
+	test_case_auto_check("1.1754942e-38", 1.1754942e-38f, false, index++);
+	test_case_auto_check("1.0e-45", 0.0f, true, index++);
+
+	// Leading zeros
+	test_case_auto_check("000123.456", 123.456f, false, index++);
+	test_case_auto_check("0000.123", 0.123f, false, index++);
+
+	// Negative zero
+	test_case_auto_check("-0.0", -0.0f, false, index++);
+
+	// Long numbers
+	char long_number[1000];
+	memset(long_number, '9', 999);
+	long_number[999] = '\0';
+	test_case_auto_check(long_number, FLT_MAX, true, index++);
+
+	// Exact and slightly above FLT_MAX
+	char max_float[100];
+	sprintf(max_float, "%.10e", FLT_MAX);
+	test_case_auto_check(max_float, FLT_MAX, true, index++);
+
+	char above_max[100];
+	sprintf(above_max, "%.10e", FLT_MAX);
+	for (int i = 0; above_max[i]; i++) {
+		if (above_max[i] >= '0' && above_max[i] <= '8' && 
+			(above_max[i+1] == 'e' || above_max[i+1] == 'E')) {
+			++above_max[i];
+			break;
+		}
+	}
+	test_case_auto_check(above_max, FLT_MAX, true, index++);
+	printf("\n");
+	return 0;
 }
