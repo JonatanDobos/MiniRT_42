@@ -11,12 +11,12 @@ void	obj_rotate_up(t_scene *sc)
 	if (picked->type == PLANE)
 	{
 		picked->plane.orientation = vnorm( \
-		vrotate(picked->plane.orientation, right, sc->cam_r_speed));
+		vrotate(picked->plane.orientation, right, sc->camera.c.cam_r_speed));
 	}
 	else if (picked->type == CYLINDER)
 	{
 		picked->cylinder.orientation = vnorm( \
-		vrotate(picked->cylinder.orientation, right, sc->cam_r_speed));
+		vrotate(picked->cylinder.orientation, right, sc->camera.c.cam_r_speed));
 	}
 	sc->render = true;
 }
@@ -30,12 +30,12 @@ void	obj_rotate_down(t_scene *sc)
 	if (picked->type == PLANE)
 	{
 		picked->plane.orientation = vnorm( \
-		vrotate(picked->plane.orientation, right, -sc->cam_r_speed));
+		vrotate(picked->plane.orientation, right, -sc->camera.c.cam_r_speed));
 	}
 	else if (picked->type == CYLINDER)
 	{
 		picked->cylinder.orientation = vnorm( \
-		vrotate(picked->cylinder.orientation, right, -sc->cam_r_speed));
+		vrotate(picked->cylinder.orientation, right, -sc->camera.c.cam_r_speed));
 	}
 	sc->render = true;
 }
@@ -49,12 +49,12 @@ void	obj_rotate_left(t_scene *sc)
 	if (picked->type == PLANE)
 	{
 		picked->plane.orientation = vnorm( \
-		vrotate(picked->plane.orientation, rotation_axis, -sc->cam_r_speed));
+		vrotate(picked->plane.orientation, rotation_axis, -sc->camera.c.cam_r_speed));
 	}
 	else if (picked->type == CYLINDER)
 	{
 		picked->cylinder.orientation = vnorm( \
-		vrotate(picked->cylinder.orientation, rotation_axis, -sc->cam_r_speed));
+		vrotate(picked->cylinder.orientation, rotation_axis, -sc->camera.c.cam_r_speed));
 	}
 	sc->render = true;
 }
@@ -68,12 +68,12 @@ void	obj_rotate_right(t_scene *sc)
 	if (picked->type == PLANE)
 	{
 		picked->plane.orientation = vnorm( \
-		vrotate(picked->plane.orientation, rotation_axis, sc->cam_r_speed));
+		vrotate(picked->plane.orientation, rotation_axis, sc->camera.c.cam_r_speed));
 	}
 	else if (picked->type == CYLINDER)
 	{
 		picked->cylinder.orientation = vnorm( \
-		vrotate(picked->cylinder.orientation, rotation_axis, sc->cam_r_speed));
+		vrotate(picked->cylinder.orientation, rotation_axis, sc->camera.c.cam_r_speed));
 	}
 	sc->render = true;
 }

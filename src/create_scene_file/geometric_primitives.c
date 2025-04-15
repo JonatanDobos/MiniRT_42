@@ -42,7 +42,7 @@ static void	sphere_line(t_objs *sp, t_dbltoa *dbl, int fd)
 
 	line_index = cpy_str(rt_line, "sp\t");
 	line_index += coords_line(dbl, rt_line + line_index, sp->coords);
-	dbl->value = sp->sphere.diameter;
+	dbl->value = sp->sphere.radius * 2;
 	dbltoa_buff_prec(*dbl);
 	line_index += cpy_str(rt_line + line_index, dbl->buff);
 	line_index += cpy_str(rt_line + line_index, "\t\t");
@@ -58,7 +58,7 @@ static void	cylinder_line(t_objs *cy, t_dbltoa *dbl, int fd)
 	line_index = cpy_str(rt_line, "cy\t");
 	line_index += coords_line(dbl, rt_line + line_index, cy->coords);
 	line_index += coords_line(dbl, rt_line + line_index, cy->cylinder.orientation);
-	dbl->value = cy->cylinder.diameter;
+	dbl->value = cy->cylinder.radius * 2;
 	dbltoa_buff_prec(*dbl);
 	line_index += cpy_str(rt_line + line_index, dbl->buff);
 	line_index += cpy_str(rt_line + line_index, "\t\t");

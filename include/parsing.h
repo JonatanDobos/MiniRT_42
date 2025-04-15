@@ -25,8 +25,8 @@ int16_t		line_validation(const int fd, t_scene *sc, t_value_check *vc);
 bool		check_line(char *line, const char prefix, uint8_t nbr_of_groups);
 
 //	initialize_input_element
-int16_t		input_type_parse(t_scene *sc, t_value_check *vc, char *line);
-int16_t		init_primitives(t_scene *sc, t_value_check *vc, char *line);
+bool		input_type_parse(t_scene *sc, t_value_check *vc, char *line);
+bool		init_primitives(t_scene *sc, t_value_check *vc, char *line);
 
 // parse_utils.c
 float		rt_atof(const char *str);

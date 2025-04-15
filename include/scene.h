@@ -84,6 +84,9 @@ typedef struct	s_camera
 	t_vec4	orientation;
 	float	fov;
 	float	zvp_dist;
+	float	cam_m_speed;
+	float	cam_r_speed;
+	float	cam_fov_speed;
 }	t_camera;
 
 typedef struct	s_objs
@@ -105,10 +108,10 @@ typedef struct	s_objs
 
 typedef struct	s_scene
 {
-	t_objs		camera;
-	t_objs		ambient;
 	bool		render;
 	bool		render_ongoing;
+	t_objs		camera;
+	t_objs		ambient;
 	struct
 	{
 		t_objs		*objs;
@@ -121,9 +124,6 @@ typedef struct	s_scene
 	};
 	t_objs		*selected_obj;
 	ssize_t		sel_obj_index;
-	float		cam_m_speed;
-	float		cam_r_speed;
-	float		cam_fov_speed;
 	bool		soft_shadows;
 	uint16_t	shadow_grsize;
 }	t_scene;

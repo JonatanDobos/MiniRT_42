@@ -2,11 +2,11 @@
 #include <mathRT.h>
 
 //	Static Functions
-static int16_t		parse_pl(t_scene *sc, t_value_check *vc, char *line);
-static int16_t		parse_sp(t_scene *sc, t_value_check *vc, char *line);
-static int16_t		parse_cy(t_scene *sc, t_value_check *vc, char *line);
+static bool		parse_pl(t_scene *sc, t_value_check *vc, char *line);
+static bool		parse_sp(t_scene *sc, t_value_check *vc, char *line);
+static bool		parse_cy(t_scene *sc, t_value_check *vc, char *line);
 
-int16_t	init_primitives(t_scene *sc, t_value_check *vc, char *line)
+bool	init_primitives(t_scene *sc, t_value_check *vc, char *line)
 {
 	if (ft_strncmp(line, "pl", 2) == 0)
 		return (parse_pl(sc, vc, nxtv(line)));
@@ -15,7 +15,7 @@ int16_t	init_primitives(t_scene *sc, t_value_check *vc, char *line)
 	return (parse_cy(sc, vc, nxtv(line)));
 }
 
-static int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
+static bool	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	pl;
 
@@ -40,7 +40,7 @@ static int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 	return (EXIT_SUCCESS);
 }
 
-static int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
+static bool	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	sp;
 
@@ -62,7 +62,7 @@ static int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 	return (EXIT_SUCCESS);
 }
 
-static int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
+static bool	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	cy;
 

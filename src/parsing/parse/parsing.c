@@ -21,6 +21,7 @@ int16_t	parse_scene_file(const char *file, t_scene *sc)
 	if (shrink_dynarr(&vc) == false)
 		return (close(fd), errset(perr("shrink_dynarr", ENOMEM)));
 	sc->objs = (t_objs *)dynarr_take_arr(&vc.obj_dynarr);
+	sc->l_arr_size = vc.light_dynarr.length;
 	sc->lights = (t_objs *)dynarr_take_arr(&vc.light_dynarr);
 	close(fd);
 	return (errset(ERTRN));

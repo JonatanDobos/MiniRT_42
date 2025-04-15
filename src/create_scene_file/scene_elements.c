@@ -47,6 +47,13 @@ void	lights_line(t_objs *lights, size_t amount, t_dbltoa *dbl, int fd)
 		line_index += cpy_str(rt_line + line_index, dbl->buff);
 		line_index += cpy_str(rt_line + line_index, "\t\t");
 		line_index += color_line(dbl, rt_line + line_index, lights[i].color);
+		if (lights[i].l.visible == true)
+		{
+			dbl->value = lights[i].l.radius;
+			dbltoa_buff_prec(*dbl);
+			line_index += cpy_srcs(rt_line + line_index, "\t\t", dbl->buff, "\t\t");
+			line_index += color_line(dbl, rt_line + line_index, lights[i].color);
+		}
 		ft_putendl_fd(rt_line, fd);
 		++i;
 	}

@@ -2,51 +2,86 @@
 #include <mathRT.h>
 
 //	Static Functions
-static int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line);
-static int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line);
-static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line);
+static bool	parse_amb(t_objs *ambient, t_value_check *vc, char *line);
+static bool	parse_cam(t_objs *camera, t_value_check *vc, char *line);
+static bool	parse_light(t_value_check *vc, char *line);
 
-int16_t	input_type_parse(t_scene *sc, t_value_check *vc, char *line)
+bool	input_type_parse(t_scene *sc, t_value_check *vc, char *line)
 {
 	if (ft_strncmp(line, "A", 1) == 0)
-		return (parse_amb(sc, vc, nxtv(line)));
+		return (parse_amb(&sc->ambient, vc, nxtv(line)));
 	else if (ft_strncmp(line, "C", 1) == 0)
-		return (parse_cam(sc, vc, nxtv(line)));
+		return (parse_cam(&sc->camera, vc, nxtv(line)));
 	else if (ft_strncmp(line, "L", 1) == 0)
-		return (parse_light(sc, vc, nxtv(line)));
+		return (parse_light(vc, nxtv(line)));
 	return (init_primitives(sc, vc, line));
 }
 
-static int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line)
+bool	validate_and_normalize_color(t_vec4 *color, char **line)
 {
-	sc->ambient.type = AMBIENT;
-	sc->ambient.a.ratio = clamp(rt_atof(line), 0.0F, 1.0F);
-	sc->ambient.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	sc->ambient.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	sc->ambient.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	sc->ambient.color[A] = 1.0F;
+	int32_t	color_value;
+	uint8_t	i;
+
+	i = 0;
+	while (i <= 2)
+	{
+		color_value = atoi32(nxtvp(line));
+		if (color_value < 0 || color_value > 255)
+			return (false);
+		(*color)[i] = (float)color_value / 255.0F;
+		++i;
+	}
+	(*color)[i] = 1.0F;
+	return (true);
+}
+static bool	parse_amb(t_objs *ambient, t_value_check *vc, char *line)
+{
+	ambient->type = AMBIENT;
+	ambient->a.ratio = rt_atof(line);
+	if ((ambient->a.ratio < 0.0F || ambient->a.ratio > 1.0F) ||
+	validate_and_normalize_color(&ambient->color, &line) == false)
+		return (EXIT_FAILURE);
 	++vc->amb_amount;
 	return (EXIT_SUCCESS);
 }
 
-static int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
+bool	validate_orientation(t_vec4 *or, char **line)
 {
-	sc->camera.coords[X] = rt_atof(line);
-	sc->camera.coords[Y] = rt_atof(nxtvp(&line));
-	sc->camera.coords[Z] = rt_atof(nxtvp(&line));
-	sc->camera.c.orientation[X] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
-	sc->camera.c.orientation[Y] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
-	sc->camera.c.orientation[Z] = clamp(rt_atof(nxtvp(&line)), -1.0F, 1.0F);
-	sc->camera.c.orientation[W] = 0.0F;
-	sc->camera.c.orientation = vnorm(sc->camera.c.orientation);
-	sc->camera.c.fov = clamp(atoi32(nxtvp(&line)), 0.0F, 180.0F);
-	sc->camera.c.zvp_dist = 1.0F / tanf((sc->camera.c.fov * M_PI / 180.0F) / 2.0F);
-	sc->camera.c.fov = sc->camera.c.fov;
+	uint8_t	i;
+
+	i = 0;
+	while (i <= 2)
+	{
+		(*or)[i] = rt_atof(nxtvp(line));
+		printf("Parsed value for axis %d: %f\n", i, (*or)[i]);
+		if ((*or)[i] < -1.0F || (*or)[i] > 1.0F)
+		{
+			puts("second");
+			return (false);
+		}
+		++i;
+	}
+	(*or)[i] = 0.0F;
+	return (true);
+}
+
+static bool	parse_cam(t_objs *camera, t_value_check *vc, char *line)
+{
+	camera->coords[X] = rt_atof(line);
+	camera->coords[Y] = rt_atof(nxtvp(&line));
+	camera->coords[Z] = rt_atof(nxtvp(&line));
+	if (validate_orientation(&camera->c.orientation, &line) == false)
+		return (EXIT_FAILURE);
+	camera->c.orientation = vnorm(camera->c.orientation);
+	camera->c.fov = atoi32(nxtvp(&line));
+	if (camera->c.fov < 0 || camera->c.fov > 180)
+		return (EXIT_FAILURE);
+	camera->c.zvp_dist = 1.0F / tanf((camera->c.fov * M_PI / 180.0F) / 2.0F);
 	++vc->cam_amount;
 	return (EXIT_SUCCESS);
 }
 
-static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
+static bool	parse_light(t_value_check *vc, char *line)
 {
 	t_objs	l;
 
@@ -55,30 +90,26 @@ static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 	l.coords[Y] = rt_atof(nxtvp(&line));
 	l.coords[Z] = rt_atof(nxtvp(&line));
 	l.coords[W] = 1.0F;
-	l.l.brightness = clamp(rt_atof(nxtvp(&line)), 0.0F, 1.0F);
-	l.color[R] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	l.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	l.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
-	l.color[A] = 1.0F;
+	// l.l.brightness = clamp(rt_atof(nxtvp(&line)), 0.0F, 1.0F);
+	l.l.brightness = rt_atof(nxtvp(&line));
+	if ((l.l.brightness < 0.0F || l.l.brightness > 1.0F) ||
+	validate_and_normalize_color(&l.color, &line) == false)
+		return (EXIT_FAILURE);
 	l.l.radius = 1.5F;
 	l.l.intersect_lights = false;
 	l.l.visible = false;
-	// printf("line >%s<\n", line);
 	while (ft_isnum(line) == true)
 		++line;
-	// printf("line >%s<\n", line);
 	while (ft_isspace(*line) == true)
 		++line;
-	// printf("line >%s<\n", line);
 	if (ft_isnum(line) == true)
 	{
-		puts("zero");
-		l.l.radius = (float)atoi32(line);
+		l.l.radius = rt_atof(line);
+		if (l.l.radius < 0)
+			return (EXIT_FAILURE);
 		l.l.visible = true;
-		// printf(">>%f\n", l.l.radius);
 	}
 	if (dynarr_insert(&vc->light_dynarr, &l) == false)
 		return (errset(perr("parse_light", ENOMEM)));
-	++sc->l_arr_size;
 	return (EXIT_SUCCESS);
 }

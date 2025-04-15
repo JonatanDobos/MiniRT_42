@@ -32,7 +32,7 @@ static void	print_sphere(t_objs sp)
 	printf("\nSphere\nCoordinates: (x=%f, y=%f, z=%f)\n   "
 		"Diameter: %f\n     Radius: %f\n     Colour: (%d, %d, %d)\n",
 		sp.coords[0], sp.coords[1], sp.coords[2],
-		sp.sphere.diameter, sp.sphere.radius,
+		sp.sphere.radius * 2, sp.sphere.radius,
 		(int)(sp.color[0] * 255), (int)(sp.color[1] * 255),
 		(int)(sp.color[2] * 255));
 }
@@ -46,7 +46,7 @@ static void	print_cylinder(t_objs cy)
 		"Height: %f\n     Colour: (%d, %d, %d)\n",
 		cy.coords[0], cy.coords[1], cy.coords[2],
 		c.orientation[0], c.orientation[1], c.orientation[2],
-		c.diameter, c.radius, c.height,
+		c.radius * 2, c.radius, c.height,
 		(int)(cy.color[0] * 255), (int)(cy.color[1] * 255),
 		(int)(cy.color[2] * 255));
 }
