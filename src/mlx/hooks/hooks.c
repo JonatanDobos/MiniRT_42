@@ -71,11 +71,20 @@ void	brightness_keys(mlx_key_data_t keydata, t_rt *rt)
 
 static void	scene_manipulate_keys(mlx_key_data_t keydata, t_rt *rt)
 {
+	uint16_t	index;
+	t_objs		*light;
+
 	if (handle_object_modification(keydata.key, rt->scene) == true)
 		rt->scene->render = true;
 	else if (keydata.key == MLX_KEY_L)
 	{
-		rt->scene->intersect_lights = !rt->scene->intersect_lights;
+		light = rt->scene->lights;
+		index = 0;
+		while (index < rt->scene->l_arr_size)
+		{
+			light[index].l.intersect_lights = !light[index].l.intersect_lights;
+			++index;
+		}
 		rt->scene->render = true;
 	}
 	else if (keydata.key == MLX_KEY_RIGHT_SHIFT && THREADS > 1)

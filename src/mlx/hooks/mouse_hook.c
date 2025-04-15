@@ -55,8 +55,8 @@ static void	mouse_clicks_on_obj(t_scene *sc, t_ray ray)
 
 	closest_obj_index = find_closest_object(sc, ray, &closest_t, &closest_intersect_type);
 	closest_obj = sc->objs + closest_obj_index;
-	if (sc->intersect_lights == true)
-		closest_obj = render_light(sc, ray, &closest_t, closest_obj);
+	
+	closest_obj = render_light(sc, ray, &closest_t, closest_obj);
 	if (closest_t < INFINITY && closest_t > 0.0F)
 	{
 		sc->render = true;

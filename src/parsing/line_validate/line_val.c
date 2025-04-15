@@ -6,13 +6,11 @@ static int16_t	process_format(char *line);
 static uint8_t	is_valid_prefix(char *line, char *prefix);
 static void		check_values(t_value_check *vc);
 
-int16_t	line_validation(const int fd, t_scene *sc)
+int16_t	line_validation(const int fd, t_scene *sc, t_value_check *vc)
 {
 	char			*skip_sp;
 	char			*line;
-	t_value_check	vc;
 
-	ft_bzero(&vc, sizeof(t_value_check));
 	line = gnl(fd);
 	while (line != NULL)
 	{
@@ -20,7 +18,7 @@ int16_t	line_validation(const int fd, t_scene *sc)
 		{
 			skip_sp = line + skip_spaces(line);
 			if (check_line_format(skip_sp) != EXIT_SUCCESS
-			|| input_type_parse(sc, &vc, skip_sp) != EXIT_SUCCESS)
+			|| input_type_parse(sc, vc, skip_sp) != EXIT_SUCCESS)
 				break ;
 		}
 		free_str(&line);
@@ -31,7 +29,7 @@ int16_t	line_validation(const int fd, t_scene *sc)
 	else
 		errset(perr("line_validation", ENOMEM));
 	if (errset(ERTRN) == 0)
-		check_values(&vc);
+		check_values(vc);
 	return (errset(ERTRN));
 }
 

@@ -9,9 +9,11 @@
 
 typedef struct s_parsing_value_check
 {
-	uint16_t		cam_amount;
-	uint16_t		amb_amount;
-	uint16_t		obj_amount;
+	uint16_t	cam_amount;
+	uint16_t	amb_amount;
+	uint16_t	obj_amount;
+	t_dynarr	obj_dynarr;
+	t_dynarr	light_dynarr;
 }	t_value_check;
 
 // parsing.c
@@ -19,7 +21,7 @@ typedef struct s_parsing_value_check
 int16_t		parse_scene_file(const char *file, t_scene *sc);
 
 //	line_validation
-int16_t		line_validation(const int fd, t_scene *sc);
+int16_t		line_validation(const int fd, t_scene *sc, t_value_check *vc);
 bool		check_line(char *line, const char prefix, uint8_t nbr_of_groups);
 
 //	initialize_input_element

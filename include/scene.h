@@ -43,6 +43,7 @@ typedef struct s_light
 	float		brightness;
 	float		radius;
 	bool		intersect_lights;
+	bool		visible;
 }	t_light;
 
 typedef struct s_amblight
@@ -110,16 +111,13 @@ typedef struct	s_scene
 	bool		render_ongoing;
 	struct
 	{
-		t_dynarr	obj_dynarr;
 		t_objs		*objs;
 		size_t		o_arr_size;	
 	};
 	struct
 	{
-		t_dynarr	light_dynarr;
 		t_objs		*lights;
 		size_t		l_arr_size;
-		bool		intersect_lights;
 	};
 	t_objs		*selected_obj;
 	ssize_t		sel_obj_index;

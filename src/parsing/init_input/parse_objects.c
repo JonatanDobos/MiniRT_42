@@ -4,7 +4,7 @@
 //	Static Functions
 static int16_t	parse_amb(t_scene *sc, t_value_check *vc, char *line);
 static int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line);
-static int16_t	parse_light(t_scene *sc, char *line);
+static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line);
 
 int16_t	input_type_parse(t_scene *sc, t_value_check *vc, char *line)
 {
@@ -13,7 +13,7 @@ int16_t	input_type_parse(t_scene *sc, t_value_check *vc, char *line)
 	else if (ft_strncmp(line, "C", 1) == 0)
 		return (parse_cam(sc, vc, nxtv(line)));
 	else if (ft_strncmp(line, "L", 1) == 0)
-		return (parse_light(sc, nxtv(line)));
+		return (parse_light(sc, vc, nxtv(line)));
 	return (init_primitives(sc, vc, line));
 }
 
@@ -46,7 +46,7 @@ static int16_t	parse_cam(t_scene *sc, t_value_check *vc, char *line)
 	return (EXIT_SUCCESS);
 }
 
-static int16_t	parse_light(t_scene *sc, char *line)
+static int16_t	parse_light(t_scene *sc, t_value_check *vc, char *line)
 {
 	t_objs	l;
 
@@ -62,20 +62,22 @@ static int16_t	parse_light(t_scene *sc, char *line)
 	l.color[A] = 1.0F;
 	l.l.radius = 1.5F;
 	l.l.intersect_lights = false;
-	printf("line >%s<\n", line);
+	l.l.visible = false;
+	// printf("line >%s<\n", line);
 	while (ft_isnum(line) == true)
 		++line;
-	printf("line >%s<\n", line);
+	// printf("line >%s<\n", line);
 	while (ft_isspace(*line) == true)
 		++line;
-	printf("line >%s<\n", line);
+	// printf("line >%s<\n", line);
 	if (ft_isnum(line) == true)
 	{
+		puts("zero");
 		l.l.radius = (float)atoi32(line);
-		printf(">>%f\n", l.l.radius);
-		l.l.intersect_lights = true;
+		l.l.visible = true;
+		// printf(">>%f\n", l.l.radius);
 	}
-	if (dynarr_insert(&sc->light_dynarr, &l) == false)
+	if (dynarr_insert(&vc->light_dynarr, &l) == false)
 		return (errset(perr("parse_light", ENOMEM)));
 	++sc->l_arr_size;
 	return (EXIT_SUCCESS);

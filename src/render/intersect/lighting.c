@@ -14,10 +14,13 @@ t_objs	*render_light(t_scene *sc, t_ray ray, float *closest_t, t_objs *closest_o
 	i = 0;
 	while (i < sc->l_arr_size)
 	{
-		if (ray_intersect_light(ray, &sc->lights[i], &t) && t < *closest_t)
+		if (sc->lights[i].l.visible == true || sc->lights[i].l.intersect_lights == true)
 		{
-			closest_obj = sc->lights + i;
-			*closest_t = t;
+			if (ray_intersect_light(ray, &sc->lights[i], &t) && t < *closest_t)
+			{
+				closest_obj = sc->lights + i;
+				*closest_t = t;
+			}
 		}
 		++i;
 	}

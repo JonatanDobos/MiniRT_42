@@ -33,7 +33,7 @@ static int16_t	parse_pl(t_scene *sc, t_value_check *vc, char *line)
 	pl.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	pl.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	pl.color[A] = 1.0F;
-	if (dynarr_insert(&sc->obj_dynarr, &pl) == false)
+	if (dynarr_insert(&vc->obj_dynarr, &pl) == false)
 		return (errset(perr("parse_pl", ENOMEM)));
 	++sc->o_arr_size;
 	++vc->obj_amount;
@@ -55,7 +55,7 @@ static int16_t	parse_sp(t_scene *sc, t_value_check *vc, char *line)
 	sp.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	sp.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	sp.color[A] = 1.0F;
-	if (dynarr_insert(&sc->obj_dynarr, &sp) == false)
+	if (dynarr_insert(&vc->obj_dynarr, &sp) == false)
 		return (errset(perr("parse_sp", ENOMEM)));
 	++sc->o_arr_size;
 	++vc->obj_amount;
@@ -83,7 +83,7 @@ static int16_t	parse_cy(t_scene *sc, t_value_check *vc, char *line)
 	cy.color[G] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	cy.color[B] = (float)atoi32(nxtvp(&line)) / 255.0F;
 	cy.color[A] = 1.0F;
-	if (dynarr_insert(&sc->obj_dynarr, &cy) == false)
+	if (dynarr_insert(&vc->obj_dynarr, &cy) == false)
 		return (errset(perr("parse_cy", ENOMEM)));
 	++sc->o_arr_size;
 	++vc->obj_amount;

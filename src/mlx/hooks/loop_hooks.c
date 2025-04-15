@@ -9,7 +9,8 @@ static void	last_pix_arr_switch(t_rt *rt);
 
 void	loop_hook(t_rt *rt)
 {
-	static double	time;
+	
+	double	time;
 
 	time = mlx_get_time();
 	movement(rt);
