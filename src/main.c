@@ -181,11 +181,21 @@
 #define GREEN "\033[32m"
 #define RESET "\033[0m"
 
-// Function to compare floating-point numbers with a tolerance
-bool float_equals(float a, float b) {
-	if (isnan(a) || isnan(b)) return false; // NAN is not equal to anything
-	if (isinf(a) || isinf(b)) return a == b; // INFINITY comparison
-	return fabsf(a - b) <= FLT_EPSILON * fmaxf(fabsf(a), fabsf(b));
+bool float_equals(float a, float b)
+{
+	if (isnan(a) && isnan(b))
+		return true; // Both NAN
+	if (isnan(a) || isnan(b))
+		return false; // One NAN, one not
+	if (isinf(a) && isinf(b))
+		return signbit(a) == signbit(b); // Both INF with same sign
+	if (isinf(a) || isinf(b))
+		return false; // One INF, one not
+	
+	// For regular numbers
+	float diff = fabsf(a - b);
+	float tolerance = FLT_EPSILON * fmaxf(1.0f, fmaxf(fabsf(a), fabsf(b)));
+	return diff <= tolerance;
 }
 
 // Tester function
@@ -224,6 +234,10 @@ bool test_case_auto_check(const char *input, float expected_result, bool expecte
 }
 
 int main() {
+	// test_case_auto_check("3.4028234e+38", FLT_MAX, true, 1);
+	// test_case_auto_check("3.4028235e+38", FLT_MAX, true, 2);
+
+	// exit(0);
 	printf("FLT_MAX = %e\n", FLT_MAX);
 	printf("FLT_MIN = %e\n\n", FLT_MIN);
 
