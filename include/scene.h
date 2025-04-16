@@ -40,6 +40,7 @@ typedef struct s_ray
 
 typedef struct s_light
 {
+	t_vec4		obj_color;
 	float		brightness;
 	float		radius;
 	bool		intersect_lights;

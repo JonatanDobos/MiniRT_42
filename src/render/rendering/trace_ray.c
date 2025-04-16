@@ -96,7 +96,7 @@ t_vec4 trace_ray(t_scene *sc, t_ray ray)
 	{
 		pixel_color = closest_obj->color;
 		if (closest_obj->type == LIGHT)
-			return (pixel_color);
+			return (closest_obj->l.obj_color);
 		hit_point = vadd(ray.origin, vscale(ray.vec, closest_t));
 		return (calc_lighting(sc, hit_point, \
 				calculate_normal(closest_obj, &ray, closest_t, \
