@@ -80,7 +80,6 @@ static bool	parse_light_extra(t_objs *l, char **line)
 		l->l.radius = rt_atof(*line);
 		if (l->l.radius < 0 || validate_and_normalize_color(&l->l.obj_color, line) == false)
 			return (false);
-		return (EXIT_FAILURE);
 		l->l.visible = true;
 	}
 	return (true);

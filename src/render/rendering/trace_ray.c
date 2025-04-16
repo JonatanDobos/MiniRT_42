@@ -90,13 +90,16 @@ t_vec4 trace_ray(t_scene *sc, t_ray ray)
 
 	pixel_color = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
 	closest_obj = sc->objs + find_closest_object(sc, ray, &closest_t, &closest_intersect_type);
-
 	closest_obj = render_light(sc, ray, &closest_t, closest_obj);
 	if (closest_t < INFINITY && closest_t > 0.0F)
 	{
 		pixel_color = closest_obj->color;
 		if (closest_obj->type == LIGHT)
+		{
+			if (closest_obj->l.visible == false)
+				return (pixel_color);
 			return (closest_obj->l.obj_color);
+		}
 		hit_point = vadd(ray.origin, vscale(ray.vec, closest_t));
 		return (calc_lighting(sc, hit_point, \
 				calculate_normal(closest_obj, &ray, closest_t, \
