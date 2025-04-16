@@ -75,14 +75,13 @@ static bool	parse_light_extra(t_objs *l, char **line)
 		++(*line);
 	while (ft_isspace(**line) == true)
 		++(*line);
-	puts(*line);
 	if (ft_isnum(*line) == true)
 	{
 		l->l.radius = rt_atof(*line);
-		if (l->l.radius < 0)
+		if (l->l.radius < 0 || validate_and_normalize_color(&l->l.obj_color, line) == false)
 			return (false);
+		return (EXIT_FAILURE);
 		l->l.visible = true;
 	}
-	printf("%f\n", l->l.radius);
 	return (true);
 }
