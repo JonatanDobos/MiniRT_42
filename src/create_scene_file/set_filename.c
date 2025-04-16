@@ -40,7 +40,7 @@ void	reset_filename(t_window *win)
 
 static void	update_filename_input(const keys_t key, t_window *win)
 {
-	if (key == MLX_KEY_BACKSPACE && win->filename_len > sizeof(NAME_FILE) - 2)
+	if (key == MLX_KEY_BACKSPACE && win->filename_len > sizeof(NAME_FILE) - 1)
 		win->filename[--win->filename_len] = '\0';
 	else if (key >= MLX_KEY_SPACE && key <= MLX_KEY_GRAVE_ACCENT)
 	{
