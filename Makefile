@@ -1,14 +1,13 @@
 NAME			:=	miniRT
 
-OS := $(shell uname -s)
-
 #	Get the number of logical processors (threads)
-ifeq ($(OS),Linux)
-    N_JOBS := $(shell nproc)
-else ifeq ($(OS),Darwin)
-    N_JOBS := $(shell sysctl -n hw.logicalcpu)
+OS				:=	$(shell uname -s)
+ifeq ($(OS), Linux)
+	N_JOBS		:=	$(shell nproc)
+else ifeq ($(OS), Darwin)
+	N_JOBS		:=	$(shell sysctl -n hw.logicalcpu)
 else
-    N_JOBS := 1  # fallback
+	N_JOBS		:=	1
 endif
 
 #	(-j) Specify the number of jobs (commands) to run simultaneously
@@ -22,60 +21,44 @@ PRINT_NO_DIR	:=	--no-print-directory
 
 #		CFLAGS for testing
 COMPILER		:=	gcc
-# CFLAGS			:=	-std=c99
 CFLAGS			+=	-Wall -Wextra
 # CFLAGS			+=	-Werror
-# CFLAGS			+=	-Wunreachable-code -Wpedantic -Wconversion -Wshadow
-# CFLAGS			+=	-Wunreachable-code -Wshadow
 CFLAGS			+=	-MMD -MP
 CFLAGS			+=	-g
-#	Werror cannot go together with fsanitize, because fsanitize won't work correctly.
+#		Werror cannot go together with fsanitize, because fsanitize won't work correctly.
 # CFLAGS			+=	-fsanitize=address
 
-#	Sets MINIRT_THREADS to 2 if N_JOBS (logical processors) is greater than 1, otherwise sets it to 1.
-# MINIRT_THREADS	:=	1
+#		Sets MINIRT_THREADS to 2 if N_JOBS (logical processors) is greater than 1, otherwise sets it to 1.
 MINIRT_THREADS	:=	$(if $(filter-out 1,$(N_JOBS)),2,1)
 
 #		Temporary CFLAGS
 CFLAGS			+=	-pthread -D THREADS=$(MINIRT_THREADS)
-# CFLAGS			+=	-Wno-unused-result
-# #		Optimization flags
-# # Generate code optimized for the host machine's CPU
-# OFLAGS			 =	-march=native
-# # # Disable setting errno after math functions for better performance
-# OFLAGS			+=	-fno-math-errno
-# # # This flag allows the compiler to use reciprocal approximations for division operations, which can improve performance but may reduce precision.
-# OFLAGS			+=	-freciprocal-math
-# # # This flag allows the compiler to ignore the distinction between positive and negative zero, which can enable more aggressive optimizations.
-# OFLAGS			+=	-fno-signed-zeros
-# # # This flag tells the compiler that floating-point operations cannot generate traps (such as overflow or division by zero), allowing for more aggressive optimizations.
-# OFLAGS			+=	-fno-trapping-math
-
-OFLAGS += -Ofast
-OFLAGS += -O3
-#	macOS = Darwin
-ifeq ($(shell uname -s), Darwin)
-# GLFW := $(shell brew --prefix glfw)/lib
-# LINKER_FLAGS += -L $(GLFW)
-# CORE_COUNT = $(shell sysctl -n hw.ncpu)
-	OFLAGS += -flto
-else
-# LINKER_FLAGS += -ldl
-# CORE_COUNT = $(shell grep '^processor' /proc/cpuinfo | wc -l)
-	# OFLAGS += -fsingle-precision-constant -flto=auto -fuse-linker-plugin
-endif
-CFLAGS += $(OFLAGS)
+CFLAGS			+=	-Wno-unused-result
+#		Optimization flags
+OFLAGS			+=	-Ofast
+# OFLAGS += -O3
+# 		Generate code optimized for the host machine's CPU
+OFLAGS			 =	-march=native
+#		Disable setting errno after math functions for better performance
+OFLAGS			+=	-fno-math-errno
+#		This flag allows the compiler to use reciprocal approximations for division operations, which can improve performance but may reduce precision.
+OFLAGS			+=	-freciprocal-math
+#		This flag allows the compiler to ignore the distinction between positive and negative zero, which can enable more aggressive optimizations.
+OFLAGS			+=	-fno-signed-zeros
+#		This flag tells the compiler that floating-point operations cannot generate traps (such as overflow or division by zero), allowing for more aggressive optimizations.
+OFLAGS			+=	-fno-trapping-math
 
 ifeq ($(OS), Linux)
-    SCREEN_RES   := $(shell xrandr | grep '*' | uniq | awk '{print $$1}')
-    SCREEN_WIDTH := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
-    SCREEN_HEIGHT := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
+	SCREEN_RES	:=	$(shell xrandr | grep '*' | uniq | awk '{print $$1}')
+	OFLAG		+=	-fsingle-precision-constant -flto=auto -fuse-linker-plugin
 else ifeq ($(OS), Darwin)  # macOS
-    SCREEN_RES   := $(shell system_profiler SPDisplaysDataType 2>/dev/null | grep Resolution | head -n 1 | awk '{print $$2"x"$$4}')
-    SCREEN_WIDTH := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
-    SCREEN_HEIGHT := $(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
+	SCREEN_RES	:=	$(shell system_profiler SPDisplaysDataType 2>/dev/null | grep Resolution | head -n 1 | awk '{print $$2"x"$$4}')
+	OFLAGS		+=	-flto
 endif
-CFLAGS += -D SCREEN_WIDTH=$(SCREEN_WIDTH) -D SCREEN_HEIGHT=$(SCREEN_HEIGHT)
+SCREEN_WIDTH	:=	$(shell echo $(SCREEN_RES) | cut -d 'x' -f 1)
+SCREEN_HEIGHT	:=	$(shell echo $(SCREEN_RES) | cut -d 'x' -f 2)
+CFLAGS			+=	$(OFLAGS)
+CFLAGS			+=	-D SCREEN_WIDTH=$(SCREEN_WIDTH) -D SCREEN_HEIGHT=$(SCREEN_HEIGHT)
 
 #		Directories
 BUILD_DIR		:=	.build/
@@ -109,7 +92,6 @@ MATH_VEC		:=	vec/vec_arithmetic.c		vec/vec_geometry.c				vec/vec_transform.c				
 					math/clamp.c
 SETUP_CLEAN		:=	init.c						cleanup.c
 ERROR			:=	error.c						print.c
-
 
 #		Find all .c files in the specified directories
 SRCP			:=	$(addprefix $(SRC_DIR), $(MAIN))															\
@@ -177,9 +159,6 @@ $(LIBFT_L):
 
 $(MLX42_L):
 	@cmake $(MLX42_D) -B $(MLX42_D)/build && cmake --build $(MLX42_D)/build --parallel $(N_JOBS)
-	# @printf "MLX is being built...\n"
-	# @cmake $(MLX42_D) -B $(MLX42_D)/build > /dev/null 2>&1 && cmake --build $(MLX42_D)/build --parallel $(N_JOBS) > /dev/null 2>&1
-	# @printf "\rMLX has been built!  \n"
 
 cln:
 	@$(RM) $(BUILD_DIR) $(DELETE)
@@ -260,4 +239,3 @@ CA_MARK_UP	= $(GREEN)$(BOLD)
 CUR_DIR := $(dir $(abspath $(firstword $(MAKEFILE_LIST))))
 REMOVED := $(R_MARK_UP)REMOVED $(CYAN)%s$(MAGENTA) (%s) $(RESET)\n
 CREATED := $(CA_MARK_UP)CREATED $(CYAN)%s$(GREEN) (%s) $(RESET)\n
-

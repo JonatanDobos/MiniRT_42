@@ -55,7 +55,6 @@ static bool	parse_light(t_value_check *vc, char *line)
 	l.coords[Z] = rt_atof(nxtvp(&line));
 	l.coords[W] = 1.0F;
 	l.l.brightness = rt_atof(nxtvp(&line));
-	printf("%f\n", l.l.brightness);
 	if ((l.l.brightness < 0.0F || l.l.brightness > 1.0F) ||
 	validate_and_normalize_color(&l.color, &line) == false)
 		return (errset(perr("parse_light", ERRFORM)), EXIT_FAILURE);
