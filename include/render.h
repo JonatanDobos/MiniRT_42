@@ -68,7 +68,8 @@ uint8_t		ray_intersect_light(t_ray ray, t_objs *obj, float *t);
 // cylinder.c
 
 uint8_t		ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t);
-t_vec4		ray_at(t_ray ray, float t);
+uint8_t		check_body_intersection(t_ray ray, t_objs *obj, t_cyl *cy);
+uint8_t		check_cyl_caps(t_cyl *cy, t_ray ray, t_objs *obj, uint8_t hit_type);
 
 // trace_ray.c
 

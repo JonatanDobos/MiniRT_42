@@ -1,6 +1,9 @@
-#include <scene.h>
 #include <mathRT.h>
 #include <render.h>
+
+//	Static functions
+static t_vec4	calculate_normal(t_objs *obj, t_ray *ray, float t, uint8_t intersect_type);
+static t_vec4	calculate_normal_cylinder(t_objs *obj, t_ray ray, float t, uint8_t intersect_type);
 
 uint8_t	ray_intersect_table(t_ray ray, t_objs *obj, float *t)
 {
@@ -11,22 +14,6 @@ uint8_t	ray_intersect_table(t_ray ray, t_objs *obj, float *t)
 	};
 
 	return (intersect_obj[obj->type](ray, obj, t));
-}
-
-t_vec4 calculate_normal_cylinder(t_objs *obj, t_ray ray, float t, uint8_t intersect_type)
-{
-	const t_vec4	hit_point = vadd(ray.origin, vscale(ray.vec, t));
-	t_vec4			normal;
-
-	if (intersect_type == CYL_BODY)
-	{
-		normal = vsub(hit_point, 
-				vadd(obj->coords, 
-				vscale(obj->cylinder.orientation, 
-				vdot(vsub(hit_point, obj->coords), obj->cylinder.orientation))));
-		return (vnorm(normal));
-	}
-	return (vnorm(obj->cylinder.orientation));
 }
 
 uint32_t	find_closest_object(t_scene *sc, t_ray ray, float *closest_t, uint8_t *closest_intersect_type)
@@ -54,33 +41,8 @@ uint32_t	find_closest_object(t_scene *sc, t_ray ray, float *closest_t, uint8_t *
 	return (closest_obj);
 }
 
-t_vec4 calculate_normal(t_objs *obj, t_ray *ray, float t, uint8_t intersect_type)
-{
-	t_vec4	normal;
 
-	if (obj->type == PLANE)
-	{
-		if (vdot(obj->plane.orientation, ray->vec) > 0.0F)
-		{
-			return (vscale(obj->plane.orientation, -1.0F));
-		}
-		return (obj->plane.orientation);
-	}
-	normal = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
-	if (obj->type == SPHERE)
-	{
-		normal = vnorm(vsub(vadd(ray->origin, vscale(ray->vec, t)), obj->coords));
-	}
-	if (obj->type == CYLINDER)
-	{
-		normal = calculate_normal_cylinder(obj, *ray, t, intersect_type);
-	}
-	if (vdot(normal, ray->vec) > 0.0F)
-		normal *= -1.0F;
-	return (normal);
-}
-
-t_vec4 trace_ray(t_scene *sc, t_ray ray)
+t_vec4	trace_ray(t_scene *sc, t_ray ray)
 {
 	uint8_t	closest_intersect_type;
 	t_objs	*closest_obj;
@@ -106,4 +68,46 @@ t_vec4 trace_ray(t_scene *sc, t_ray ray)
 				closest_intersect_type), pixel_color));
 	}
 	return (pixel_color);
+}
+
+static t_vec4	calculate_normal(t_objs *obj, t_ray *ray, float t, uint8_t intersect_type)
+{
+	t_vec4	normal;
+
+	if (obj->type == PLANE)
+	{
+		if (vdot(obj->plane.orientation, ray->vec) > 0.0F)
+		{
+			return (vscale(obj->plane.orientation, -1.0F));
+		}
+		return (obj->plane.orientation);
+	}
+	normal = (t_vec4){0.0F, 0.0F, 0.0F, 1.0F};
+	if (obj->type == SPHERE)
+	{
+		normal = vnorm(vsub(vadd(ray->origin, vscale(ray->vec, t)), obj->coords));
+	}
+	if (obj->type == CYLINDER)
+	{
+		normal = calculate_normal_cylinder(obj, *ray, t, intersect_type);
+	}
+	if (vdot(normal, ray->vec) > 0.0F)
+		normal *= -1.0F;
+	return (normal);
+}
+
+static t_vec4	calculate_normal_cylinder(t_objs *obj, t_ray ray, float t, uint8_t intersect_type)
+{
+	const t_vec4	hit_point = vadd(ray.origin, vscale(ray.vec, t));
+	t_vec4			normal;
+
+	if (intersect_type == CYL_BODY)
+	{
+		normal = vsub(hit_point, 
+				vadd(obj->coords, 
+				vscale(obj->cylinder.orientation, 
+				vdot(vsub(hit_point, obj->coords), obj->cylinder.orientation))));
+		return (vnorm(normal));
+	}
+	return (vnorm(obj->cylinder.orientation));
 }

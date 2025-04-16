@@ -1,20 +1,5 @@
-#include <scene.h>
 #include <RTmlx.h>
-#include <mathRT.h>
 #include <render.h>
-
-// void	set_pixel(t_window *win, uint16_t x, uint16_t y, t_vec4 color)
-// {
-// 	static const t_vec4	multiply = {255.0F, 255.0F, 255.0F, 255.0F};
-// 	uint8_t				*pixels;
-
-// 	color *= multiply;
-// 	pixels = win->img->pixels + (y * win->window_wdth + x) * 4;
-// 	*(pixels++) = (uint8_t)color[R];
-// 	*(pixels++) = (uint8_t)color[G];
-// 	*(pixels++) = (uint8_t)color[B];
-// 	*(pixels++) = (uint8_t)color[A];
-// }
 
 void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color)
 {

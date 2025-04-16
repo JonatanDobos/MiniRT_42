@@ -85,7 +85,8 @@ SCENE			:=	set_filename.c				create_rt_file.c				scene_elements.c				\
 					geometric_primitives.c
 RENDER			:=	rendering/render.c			rendering/trace_ray.c											\
 					rendering/set_pixel.c		rendering/upscale_manager.c 									\
-					intersect/obj_intersect.c	intersect/cylinder.c			intersect/lighting.c
+					intersect/obj_intersect.c	intersect/cylinder.c			intersect/cylinder_parts.c		\
+					intersect/lighting.c
 MATH_VEC		:=	vec/vec_arithmetic.c		vec/vec_geometry.c				vec/vec_transform.c				\
 					math/clamp.c
 SETUP_CLEAN		:=	init.c						cleanup.c
