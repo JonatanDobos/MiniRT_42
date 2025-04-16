@@ -19,9 +19,9 @@ bool	check_line(char *line, const char prefix, uint8_t nbr_of_groups)
 	{
 		// printf("prefix_nbr %d\n", *prefix_nbr);
 		if (ft_isnum(line) == false)
-			return (printf("uhm >%s<\n", line),false);
+			return (false);
 		if (group_ptr[((*prefix_nbr) == 3)](&line) == false)
-			return (puts("2"),false);
+			return (false);
 		++group_index;
 		// if (group_index > nbr_of_groups)
 		// 	return (false);

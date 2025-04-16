@@ -50,7 +50,7 @@ size_t	coords_line(t_dbltoa *dbl, char *rt_line, t_vec4 coords)
 	size_t	line_index;
 
 	dbl->value = coords[X];
-	dbl->precision = 1;
+	dbl->precision = 3;
 	dbl->trim_trailing_zeros = true;
 	dbltoa_buff_prec(*dbl);
 	line_index = cpy_str(rt_line, dbl->buff);

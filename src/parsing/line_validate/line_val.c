@@ -24,9 +24,7 @@ int16_t	line_validation(const int fd, t_scene *sc, t_value_check *vc)
 		free_str(&line);
 		line = gnl(fd);
 	}
-	puts(line);
 	free_str(&line);
-	printf("%d\n", errno);
 	if (errset(ERTRN) == 0 && errno == 0)
 		check_values(vc);
 	return (errset(ERTRN));

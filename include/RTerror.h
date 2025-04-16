@@ -7,7 +7,7 @@
 
 # define EMSG_1 "Insufficient line in .rt file."
 # define EMSG_2 "Unknown identifier in .rt file."
-# define EMSG_3 "Unknown symbol in .rt file."
+# define EMSG_3 "Wrong amount of parameters in .rt file."
 # define EMSG_4C "Unsupported amount of cameras (C)."
 # define EMSG_4A "Unsupported amount of ambient light (A)."
 // # define EMSG_4L "Unsupported amount of Lights (L)."

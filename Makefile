@@ -38,18 +38,18 @@ MINIRT_THREADS	:=	$(if $(filter-out 1,$(N_JOBS)),2,1)
 
 #		Temporary CFLAGS
 CFLAGS			+=	-pthread -D THREADS=$(MINIRT_THREADS)
-CFLAGS			+=	-Wno-unused-result
-#		Optimization flags
-# Generate code optimized for the host machine's CPU
-OFLAGS			 =	-march=native
-# # Disable setting errno after math functions for better performance
-OFLAGS			+=	-fno-math-errno
-# # This flag allows the compiler to use reciprocal approximations for division operations, which can improve performance but may reduce precision.
-OFLAGS			+=	-freciprocal-math
-# # This flag allows the compiler to ignore the distinction between positive and negative zero, which can enable more aggressive optimizations.
-OFLAGS			+=	-fno-signed-zeros
-# # This flag tells the compiler that floating-point operations cannot generate traps (such as overflow or division by zero), allowing for more aggressive optimizations.
-OFLAGS			+=	-fno-trapping-math
+# CFLAGS			+=	-Wno-unused-result
+# #		Optimization flags
+# # Generate code optimized for the host machine's CPU
+# OFLAGS			 =	-march=native
+# # # Disable setting errno after math functions for better performance
+# OFLAGS			+=	-fno-math-errno
+# # # This flag allows the compiler to use reciprocal approximations for division operations, which can improve performance but may reduce precision.
+# OFLAGS			+=	-freciprocal-math
+# # # This flag allows the compiler to ignore the distinction between positive and negative zero, which can enable more aggressive optimizations.
+# OFLAGS			+=	-fno-signed-zeros
+# # # This flag tells the compiler that floating-point operations cannot generate traps (such as overflow or division by zero), allowing for more aggressive optimizations.
+# OFLAGS			+=	-fno-trapping-math
 
 OFLAGS += -Ofast
 OFLAGS += -O3
