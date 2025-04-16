@@ -107,11 +107,11 @@ bool	is_occluded(t_scene *sc, t_vec4 origin, t_vec4 dir, float max_dist)
 }
 
 // Smoothstep helper (same idea as GLSL's smoothstep)
-static float	smoothstep(float edge0, float edge1, float x)
-{
-	float t = clamp((x - edge0) / (edge1 - edge0), 0.0F, 1.0F);
-	return t * t * (3.0F - 2.0F * t);
-}
+// static float	smoothstep(float edge0, float edge1, float x)
+// {
+// 	float t = clamp((x - edge0) / (edge1 - edge0), 0.0F, 1.0F);
+// 	return t * t * (3.0F - 2.0F * t);
+// }
 
 static float	calc_soft_shadow_circle(t_scene *sc, t_ray ray, t_vec4 light_pos, uint32_t light, uint8_t sample_count)
 {
@@ -209,8 +209,7 @@ static float	calc_soft_shadow_circle(t_scene *sc, t_ray ray, t_vec4 light_pos, u
 // 	i = 0;
 // 	while (i < total_samples)
 // 	{
-// 		if (is_occluded(sc, ray.origin, vnorm(vsub(get_d_sample_pos(light_pos \
-// 			, i, sc->shadow_grsize, angle, radius), ray.origin)), distance))
+// 		if (is_occluded(sc, ray.origin, vnorm(vsub(get_d_sample_pos(light_pos, i, sc->shadow_grsize, angle, radius), ray.origin)), distance))
 // 			hit_count++;
 // 		++i;
 // 	}

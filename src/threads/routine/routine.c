@@ -17,21 +17,30 @@ void	*thread_routine_init(t_thread *th)
 	return (NULL);
 }
 
-void	T_print_fps(t_rt *rt, float fps)
+void	print_performance_stats(t_rt *rt, float fps)
 {
-	static float	fps_average;
-	static uint8_t	counter;
+	static float	fps_average = 0.0F;
+	static uint8_t	counter = 0;
+	static double	last_print_time = 0.0;
+	// char			string[32];
 
 	if (rt->win->res_ratio != rt->win->res_r_start)
 		return ;
+	puts("YOOOO");
 	fps_average += fps;
 	++counter;
-	if (counter != 20)
+	if (mlx_get_time() < last_print_time + 40.0)
 		return ;
-	pthread_mutex_lock(rt->mtx + MTX_PRINT);
-	printf("\r%4.1f fps", fps_average / (float)counter);
-	fflush(stdout);
-	pthread_mutex_unlock(rt->mtx + MTX_PRINT);
+	last_print_time = mlx_get_time();
+	if (PRINT_PERFORMANCE == true)
+	{
+		pthread_mutex_lock(rt->mtx + MTX_PRINT);
+		// ft_putchar_fd('\r', STDOUT_FILENO);
+		// ft_putstr_fd("", STDOUT_FILENO);
+		printf("\r%4.1f fps", fps_average / (float)counter);
+		fflush(stdout);
+		pthread_mutex_unlock(rt->mtx + MTX_PRINT);
+	}
 	counter = 0;
 	fps_average = 0;
 }
@@ -55,8 +64,7 @@ static void	render_routine(t_thread *th)
 			if (th->win->res_ratio == th->win->res_r_start - 1)
 				set_starting_res_ratio(th->rt, time);
 		}
-		T_print_fps(th->rt, 1.0F / time);
-		printf("ratio: %hu\n", th->rt->win->res_ratio);
+		print_performance_stats(th->rt, 1.0F / time);
 		resynchronize_after_rendering(th);
 	}
 	pthread_mutex_lock(th->rt->mtx + MTX_STOPPED_THREADS);

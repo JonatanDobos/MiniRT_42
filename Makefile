@@ -24,7 +24,7 @@ PRINT_NO_DIR	:=	--no-print-directory
 COMPILER		:=	gcc
 # CFLAGS			:=	-std=c99
 CFLAGS			+=	-Wall -Wextra
-# CFLAGS			+=	-Werror
+CFLAGS			+=	-Werror
 # CFLAGS			+=	-Wunreachable-code -Wpedantic -Wconversion -Wshadow
 # CFLAGS			+=	-Wunreachable-code -Wshadow
 CFLAGS			+=	-MMD -MP
