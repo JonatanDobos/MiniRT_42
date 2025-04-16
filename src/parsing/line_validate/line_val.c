@@ -24,11 +24,10 @@ int16_t	line_validation(const int fd, t_scene *sc, t_value_check *vc)
 		free_str(&line);
 		line = gnl(fd);
 	}
-	if (errno == 0)
-		free_str(&line);
-	else
-		errset(perr("line_validation", ENOMEM));
-	if (errset(ERTRN) == 0)
+	puts(line);
+	free_str(&line);
+	printf("%d\n", errno);
+	if (errset(ERTRN) == 0 && errno == 0)
 		check_values(vc);
 	return (errset(ERTRN));
 }

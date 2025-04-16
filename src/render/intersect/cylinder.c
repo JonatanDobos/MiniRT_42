@@ -140,7 +140,6 @@ uint8_t	ray_intersect_cylinder(t_ray ray, t_objs *obj, float *t)
 	hit_type = CYL_NONE;
 	hit_type = check_body_intersection(ray, obj, &cy);
 	hit_type = check_cyl_caps(&cy, ray, obj, hit_type);
-
 	if (cy.valid_t < 0.0F)
 		return (CYL_NONE);
 	*t = cy.valid_t;

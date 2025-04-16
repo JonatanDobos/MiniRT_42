@@ -210,7 +210,7 @@ single_thread:
 malloc_wrap: all
 
 test: all
-	./$(NAME) ./scenes/test1.rt
+	./$(NAME) ./scenes/test.rt
 
 test2: all
 	./$(NAME) ./scenes/plane_sphere.rt
