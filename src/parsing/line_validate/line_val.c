@@ -19,12 +19,14 @@ int16_t	line_validation(const int fd, t_scene *sc, t_value_check *vc)
 			skip_sp = line + skip_spaces(line);
 			if (check_line_format(skip_sp) != EXIT_SUCCESS
 			|| input_type_parse(sc, vc, skip_sp) != EXIT_SUCCESS)
+			{
+				free_str(&line);
 				break ;
+			}
 		}
 		free_str(&line);
 		line = gnl(fd);
 	}
-	free_str(&line);
 	if (errset(ERTRN) == 0 && errno == 0)
 		check_values(vc);
 	return (errset(ERTRN));
