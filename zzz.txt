@@ -1,14 +1,140 @@
-1
-2
-exp_val 38
-1.KO 
+DEBUG rt_atoff: input string = '3.4028234e+38'
+DEBUG rt_atoff: initialized stod: max_val = 3.402823e+38, min_val = 1.175494e-38
+DEBUG rt_atoff: after process_first_part: num = 3.402823e+00, overflow = 0
+DEBUG process_second_part: after exponent, num = 3.402823e+38, overflow = 0
+DEBUG check_near_max: current num = 3.402823e+38, max_val = 3.402823e+38
+DEBUG check_near_max: comparison ratio = 1.000000
+DEBUG check_near_max: exp_val = 38, mantissa = 3.402823e+00
+DEBUG check_near_max: condition check: 0
+DEBUG process_second_part: check_near_max returned 0
+DEBUG rt_atoff: after process_second_part: num = 3.402823e+38, overflow = 0
+DEBUG rt_atoff: final result = 3.402823e+38, overflow = 0
+48.KO 
 Input: "3.4028234e+38"
 Expected: 3.402823e+38, Got: 3.402823e+38
 Expected Overflow: Yes, Got: No
-1
-2
-exp_val 38
-2.KO 
-Input: "3.4028235e+38"
-Expected: 3.402823e+38, Got: 3.402823e+38
-Expected Overflow: Yes, Got: No
+DEBUG rt_atoff: input string = '1.1754942e-38'
+DEBUG rt_atoff: initialized stod: max_val = 3.402823e+38, min_val = 1.175494e-38
+DEBUG rt_atoff: after process_first_part: num = 1.175494e+00, overflow = 0
+DEBUG apply_negative_exponent: starting with num = 1.175494e+00, exp = -38
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-01
+DEBUG apply_negative_exponent: abs_value = 1.175494e-01, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-02
+DEBUG apply_negative_exponent: abs_value = 1.175494e-02, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-03
+DEBUG apply_negative_exponent: abs_value = 1.175494e-03, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-04
+DEBUG apply_negative_exponent: abs_value = 1.175494e-04, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-05
+DEBUG apply_negative_exponent: abs_value = 1.175494e-05, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-06
+DEBUG apply_negative_exponent: abs_value = 1.175494e-06, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-07
+DEBUG apply_negative_exponent: abs_value = 1.175494e-07, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-08
+DEBUG apply_negative_exponent: abs_value = 1.175494e-08, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-09
+DEBUG apply_negative_exponent: abs_value = 1.175494e-09, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-10
+DEBUG apply_negative_exponent: abs_value = 1.175494e-10, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-11
+DEBUG apply_negative_exponent: abs_value = 1.175494e-11, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-12
+DEBUG apply_negative_exponent: abs_value = 1.175494e-12, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-13
+DEBUG apply_negative_exponent: abs_value = 1.175494e-13, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-14
+DEBUG apply_negative_exponent: abs_value = 1.175494e-14, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-15
+DEBUG apply_negative_exponent: abs_value = 1.175494e-15, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-16
+DEBUG apply_negative_exponent: abs_value = 1.175494e-16, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-17
+DEBUG apply_negative_exponent: abs_value = 1.175494e-17, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-18
+DEBUG apply_negative_exponent: abs_value = 1.175494e-18, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-19
+DEBUG apply_negative_exponent: abs_value = 1.175494e-19, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-20
+DEBUG apply_negative_exponent: abs_value = 1.175494e-20, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-21
+DEBUG apply_negative_exponent: abs_value = 1.175494e-21, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-22
+DEBUG apply_negative_exponent: abs_value = 1.175494e-22, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-23
+DEBUG apply_negative_exponent: abs_value = 1.175494e-23, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-24
+DEBUG apply_negative_exponent: abs_value = 1.175494e-24, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-25
+DEBUG apply_negative_exponent: abs_value = 1.175494e-25, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-26
+DEBUG apply_negative_exponent: abs_value = 1.175494e-26, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-27
+DEBUG apply_negative_exponent: abs_value = 1.175494e-27, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-28
+DEBUG apply_negative_exponent: abs_value = 1.175494e-28, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-29
+DEBUG apply_negative_exponent: abs_value = 1.175494e-29, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-30
+DEBUG apply_negative_exponent: abs_value = 1.175494e-30, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-31
+DEBUG apply_negative_exponent: abs_value = 1.175494e-31, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-32
+DEBUG apply_negative_exponent: abs_value = 1.175494e-32, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-33
+DEBUG apply_negative_exponent: abs_value = 1.175494e-33, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-34
+DEBUG apply_negative_exponent: abs_value = 1.175494e-34, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-35
+DEBUG apply_negative_exponent: abs_value = 1.175494e-35, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-36
+DEBUG apply_negative_exponent: abs_value = 1.175494e-36, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-37
+DEBUG apply_negative_exponent: abs_value = 1.175494e-37, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 0
+DEBUG apply_negative_exponent: after mult by 0.1: num = 1.175494e-38
+DEBUG apply_negative_exponent: abs_value = 1.175494e-38, min_val = 1.175494e-38
+DEBUG apply_negative_exponent: comparison = 1
+DEBUG apply_negative_exponent: overflow detected, returning 0.0
+DEBUG process_second_part: after exponent, num = 0.000000e+00, overflow = 1
+DEBUG rt_atoff: after process_second_part: num = 0.000000e+00, overflow = 1
+51.KO 
+Input: "1.1754942e-38"
+Expected: 1.175494e-38, Got: 0.000000e+00
+Expected Overflow: No, Got: Yes

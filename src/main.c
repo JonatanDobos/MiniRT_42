@@ -234,101 +234,99 @@ bool test_case_auto_check(const char *input, float expected_result, bool expecte
 }
 
 int main() {
-	// test_case_auto_check("3.4028234e+38", FLT_MAX, true, 1);
-	// test_case_auto_check("3.4028235e+38", FLT_MAX, true, 2);
-
+	// test_case_auto_check("3.4028234e+38", FLT_MAX, true, 48);
+	// test_case_auto_check("1.1754942e-38", 1.1754942e-38f, false, 51);
 	// exit(0);
+
+
 	printf("FLT_MAX = %e\n", FLT_MAX);
 	printf("FLT_MIN = %e\n\n", FLT_MIN);
 
-	size_t index = 1;
-
-	// Normal cases
-	test_case_auto_check("123.456", 123.456f, false, index++);
-	test_case_auto_check("-42.5", -42.5f, false, index++);
-	test_case_auto_check("0.0", 0.0f, false, index++);
-
+	test_case_auto_check("123.456", 123.456f, false, 1);
+	test_case_auto_check("-42.5", -42.5f, false, 2);
+	test_case_auto_check("0.0", 0.0f, false, 3);
+	
 	// Overflow cases
-	test_case_auto_check("10000000000000000000000000000000000000000", FLT_MAX, true, index++);
-	test_case_auto_check("-10000000000000000000000000000000000000000", -FLT_MAX, true, index++);
-	test_case_auto_check("3.4e38", 3.4e38f, false, index++);
-	test_case_auto_check("3.5e38", FLT_MAX, true, index++);
-	test_case_auto_check("3.403e38", FLT_MAX, true, index++);
-	test_case_auto_check("4e38", FLT_MAX, true, index++);
-
+	test_case_auto_check("10000000000000000000000000000000000000000", FLT_MAX, true, 4);
+	test_case_auto_check("-10000000000000000000000000000000000000000", -FLT_MAX, true, 5);
+	test_case_auto_check("3.4e38", 3.4e38f, false, 6);
+	test_case_auto_check("3.5e38", FLT_MAX, true, 7);
+	test_case_auto_check("3.403e38", FLT_MAX, true, 8);
+	test_case_auto_check("4e38", FLT_MAX, true, 9);
+	
 	// Underflow cases
-	test_case_auto_check("1.0e-46", 0.0f, true, index++);
-	test_case_auto_check("1.0e-50", 0.0f, true, index++);
-	test_case_auto_check("1e-100", 0.0f, true, index++);
-
+	test_case_auto_check("1.0e-46", 0.0f, true, 10);
+	test_case_auto_check("1.0e-50", 0.0f, true, 11);
+	test_case_auto_check("1e-100", 0.0f, true, 12);
+	
 	// Special values
-	test_case_auto_check("inf", INFINITY, false, index++);
-	test_case_auto_check("-inf", -INFINITY, false, index++);
-	test_case_auto_check("nan", NAN, false, index++);
-	test_case_auto_check("-nan", NAN, false, index++);
-	test_case_auto_check("NaN", NAN, false, index++);
-	test_case_auto_check("nAn", NAN, false, index++);
-	test_case_auto_check("-NaN", NAN, false, index++);
-	test_case_auto_check("Infinity", INFINITY, false, index++);
-	test_case_auto_check("INFINITY", INFINITY, false, index++);
-	test_case_auto_check("-Infinity", -INFINITY, false, index++);
-
+	test_case_auto_check("inf", INFINITY, false, 13);
+	test_case_auto_check("-inf", -INFINITY, false, 14);
+	test_case_auto_check("nan", NAN, false, 15);
+	test_case_auto_check("-nan", NAN, false, 16);
+	test_case_auto_check("NaN", NAN, false, 17);
+	test_case_auto_check("nAn", NAN, false, 18);
+	test_case_auto_check("-NaN", NAN, false, 19);
+	test_case_auto_check("Infinity", INFINITY, false, 20);
+	test_case_auto_check("INFINITY", INFINITY, false, 21);
+	test_case_auto_check("-Infinity", -INFINITY, false, 22);
+	
 	// Whitespace handling
-	test_case_auto_check("   123.456", 123.456f, false, index++);
-	test_case_auto_check("123.456   ", 123.456f, false, index++);
-	test_case_auto_check("   123.456   ", 123.456f, false, index++);
-	test_case_auto_check(" +123.456e+2", 12345.6f, false, index++);
-
+	test_case_auto_check("   123.456", 123.456f, false, 23);
+	test_case_auto_check("123.456   ", 123.456f, false, 24);
+	test_case_auto_check("   123.456   ", 123.456f, false, 25);
+	test_case_auto_check(" +123.456e+2", 12345.6f, false, 26);
+	
 	// Invalid strings
-	test_case_auto_check("", 0.0f, false, index++);
-	test_case_auto_check("abc", 0.0f, false, index++);
-	test_case_auto_check("123abc", 123.0f, false, index++);
-	test_case_auto_check("abc123", 0.0f, false, index++);
-	test_case_auto_check("..123", 0.0f, false, index++);
-	test_case_auto_check("123..456", 123.0f, false, index++);
-	test_case_auto_check(".", 0.0f, false, index++);
-	test_case_auto_check("-", 0.0f, false, index++);
-	test_case_auto_check("+", 0.0f, false, index++);
-	test_case_auto_check("--123.456", 0.0f, false, index++);
-	test_case_auto_check("++123.456", 0.0f, false, index++);
-	test_case_auto_check("+-123.456", 0.0f, false, index++);
-
+	test_case_auto_check("", 0.0f, false, 27);
+	test_case_auto_check("abc", 0.0f, false, 28);
+	test_case_auto_check("123abc", 123.0f, false, 29);
+	test_case_auto_check("abc123", 0.0f, false, 30);
+	test_case_auto_check("..123", 0.0f, false, 31);
+	test_case_auto_check("123..456", 123.0f, false, 32);
+	test_case_auto_check(".", 0.0f, false, 33);
+	test_case_auto_check("-", 0.0f, false, 34);
+	test_case_auto_check("+", 0.0f, false, 35);
+	test_case_auto_check("--123.456", 0.0f, false, 36);
+	test_case_auto_check("++123.456", 0.0f, false, 37);
+	test_case_auto_check("+-123.456", 0.0f, false, 38);
+	
 	// Exponent handling
-	test_case_auto_check("1e38", 1e38f, false, index++);
-	test_case_auto_check("1e-38", 0.0f, true, index++);
-	test_case_auto_check("1e39", FLT_MAX, true, index++);
-	test_case_auto_check("1e-39", 0.0f, true, index++);
-	test_case_auto_check("1e-1", 0.1f, false, index++);
-	test_case_auto_check("1e-10", 1e-10f, false, index++);
-	test_case_auto_check("1e", 1.0f, false, index++);
-	test_case_auto_check("1e+", 1.0f, false, index++);
-	test_case_auto_check("e10", 0.0f, false, index++);
-
+	test_case_auto_check("1e38", 1e38f, false, 39);
+	test_case_auto_check("1e-38", 0.0f, true, 40);
+	test_case_auto_check("1e39", FLT_MAX, true, 41);
+	test_case_auto_check("1e-39", 0.0f, true, 42);
+	test_case_auto_check("1e-1", 0.1f, false, 43);
+	test_case_auto_check("1e-10", 1e-10f, false, 44);
+	test_case_auto_check("1e", 1.0f, false, 45);
+	test_case_auto_check("1e+", 1.0f, false, 46);
+	test_case_auto_check("e10", 0.0f, false, 47);
+	
 	// Boundary cases
-	test_case_auto_check("3.4028234e+38", FLT_MAX, true, index++);
-	test_case_auto_check("3.4028235e+38", FLT_MAX, true, index++);
-	test_case_auto_check("1.1754943e-38", 1.1754943e-38f, false, index++);
-	test_case_auto_check("1.1754942e-38", 1.1754942e-38f, false, index++);
-	test_case_auto_check("1.0e-45", 0.0f, true, index++);
-
+	test_case_auto_check("3.4028234e+38", FLT_MAX, true, 48);
+	test_case_auto_check("3.4028235e+38", FLT_MAX, true, 49);
+	test_case_auto_check("1.1754943e-38", 1.1754943e-38f, false, 50);
+	test_case_auto_check("1.1754942e-38", 1.1754942e-38f, false, 51);
+	test_case_auto_check("1.0e-45", 0.0f, true, 52);
+	
 	// Leading zeros
-	test_case_auto_check("000123.456", 123.456f, false, index++);
-	test_case_auto_check("0000.123", 0.123f, false, index++);
-
+	test_case_auto_check("000123.456", 123.456f, false, 53);
+	test_case_auto_check("0000.123", 0.123f, false, 54);
+	
 	// Negative zero
-	test_case_auto_check("-0.0", -0.0f, false, index++);
-
+	test_case_auto_check("-0.0", -0.0f, false, 55);
+	
 	// Long numbers
 	char long_number[1000];
 	memset(long_number, '9', 999);
 	long_number[999] = '\0';
-	test_case_auto_check(long_number, FLT_MAX, true, index++);
-
+	test_case_auto_check(long_number, FLT_MAX, true, 56);
+	
 	// Exact and slightly above FLT_MAX
 	char max_float[100];
 	sprintf(max_float, "%.10e", FLT_MAX);
-	test_case_auto_check(max_float, FLT_MAX, true, index++);
-
+	test_case_auto_check(max_float, FLT_MAX, true, 57);
+	
 	char above_max[100];
 	sprintf(above_max, "%.10e", FLT_MAX);
 	for (int i = 0; above_max[i]; i++) {
@@ -338,7 +336,7 @@ int main() {
 			break;
 		}
 	}
-	test_case_auto_check(above_max, FLT_MAX, true, index++);
+	test_case_auto_check(above_max, FLT_MAX, true, 58);
 	printf("\n");
 	return 0;
 }
