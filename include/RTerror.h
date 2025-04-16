@@ -18,8 +18,7 @@
 
 /**
  * @brief Custom error code macros (range <= -2).
- * @param ERTRN A fixed option (errset() & nsave())
- * which returns the set value.
+ * @param ERTRN A fixed option, which returns the set value.
  * @param ESET A fixed option (errset()),
  * or returned by errset() when waiting for address.
  * @param ERRNSET Returned by errset() when static is NULL.
@@ -36,14 +35,10 @@ enum	custom_error
 };
 
 // error.c
-
 int32_t		errset(const int64_t errnum);
-int16_t		nsave(const int16_t num);
 
 // print.c
-
 int16_t		perr(char *place, int16_t num);
-int16_t		perrmlx(char *place, const int16_t num);
 int16_t		perr_msg(char *place, const int16_t errnum, char *msg);
 
 #endif

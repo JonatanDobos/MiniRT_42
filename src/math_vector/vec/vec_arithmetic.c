@@ -1,4 +1,3 @@
-#include <miniRT.h>
 #include <mathRT.h>
 
 // Vector addition.

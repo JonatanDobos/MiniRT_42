@@ -38,18 +38,3 @@ int32_t	errset(const int64_t errnum)
 		return (set_address = true, ESET);
 	return (ERRNSET);
 }
-
-/**
- * @brief Saves num inside static variable saved_num.
- * @param errnum Number to be saved, or ERTRN (-1).
- * @return saved number.
- * @note Use ERTRN (-1) retreive saved_num without overwriting it.
- */
-int16_t	nsave(const int16_t num)
-{
-	static int16_t	saved_num;
-
-	if (saved_num != ENOMEM && num != ERTRN)
-		saved_num = num;
-	return (saved_num);
-}

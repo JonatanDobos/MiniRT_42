@@ -47,8 +47,11 @@ void	print_performance_stats(t_rt *rt, float fps)
 
 static void	render_routine(t_thread *th)
 {
+	static double	begin_time = 0.0;
 	double	time;
 
+	if (begin_time == 0.0)
+		begin_time = mlx_get_time();
 	while (check_bool(th->rt->mtx + MTX_QUIT_ROUTINE, th->rt->quit_routine) == false)
 	{
 		time = mlx_get_time();
@@ -64,7 +67,10 @@ static void	render_routine(t_thread *th)
 			if (th->win->res_ratio == th->win->res_r_start - 1)
 				set_starting_res_ratio(th->rt, time);
 		}
-		print_performance_stats(th->rt, 1.0F / time);
+		// print_performance_stats(th->rt, 1.0F / time);
+		printf("ratio: %hu\n", th->rt->win->res_ratio);
+		if (th->rt->win->res_ratio == 1)
+			printf("%.2f ms\n", (time - begin_time) * 1000.0);
 		resynchronize_after_rendering(th);
 	}
 	pthread_mutex_lock(th->rt->mtx + MTX_STOPPED_THREADS);

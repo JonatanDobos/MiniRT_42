@@ -1,4 +1,3 @@
-#include <miniRT.h>
 #include <scene.h>
 
 //	Static Functions

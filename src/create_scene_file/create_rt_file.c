@@ -1,7 +1,6 @@
-#include <miniRT.h>
-#include <scene.h>
-#include <dbltoa.h>
 #include <fcntl.h>
+#include <dbltoa.h>
+#include <scene.h>
 
 //	Static Function
 static t_dbltoa	setup_dbltoa_params(char *buff);

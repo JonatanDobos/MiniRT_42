@@ -22,7 +22,7 @@ PRINT_NO_DIR	:=	--no-print-directory
 #		CFLAGS for testing
 COMPILER		:=	gcc
 CFLAGS			+=	-Wall -Wextra
-# CFLAGS			+=	-Werror
+CFLAGS			+=	-Werror
 CFLAGS			+=	-MMD -MP
 CFLAGS			+=	-g
 #		Werror cannot go together with fsanitize, because fsanitize won't work correctly.
@@ -33,12 +33,10 @@ MINIRT_THREADS	:=	$(if $(filter-out 1,$(N_JOBS)),2,1)
 
 #		Temporary CFLAGS
 CFLAGS			+=	-pthread -D THREADS=$(MINIRT_THREADS)
-CFLAGS			+=	-Wno-unused-result
 #		Optimization flags
-OFLAGS			+=	-Ofast
-# OFLAGS += -O3
+OFLAGS			=	-O2
 # 		Generate code optimized for the host machine's CPU
-OFLAGS			 =	-march=native
+OFLAGS			+=	-march=native
 #		Disable setting errno after math functions for better performance
 OFLAGS			+=	-fno-math-errno
 #		This flag allows the compiler to use reciprocal approximations for division operations, which can improve performance but may reduce precision.
