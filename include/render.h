@@ -1,8 +1,6 @@
 #ifndef RENDER_H
 # define RENDER_H
 # include <common_defs.h>
-# include <math.h>
-# include <miniRT.h>
 # include <scene.h>
 
 # define PRINT_PERFORMANCE true

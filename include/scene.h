@@ -1,10 +1,8 @@
 #ifndef SCENE_H
 # define SCENE_H
 
-# include <stdlib.h>
-# include <miniRT.h>
-# include <dynarr.h>
 # include <dbltoa.h>
+# include <miniRT.h>
 
 # define RT_MAX_LINE_LEN 150
 //	3 objects, Plane Sphere Cylinder

@@ -1,7 +1,4 @@
-#include <MLX42/MLX42.h>
-#include <scene.h>
 #include <setup_clean.h>
-#include <RTmlx.h>
 #include <render.h>
 #include <RTerror.h>
 #include <mathRT.h>
@@ -65,16 +62,13 @@ int32_t	multithreaded(t_rt *rt)
 	if (init_read_scene(rt->scene, rt->read_scene))
 	{
 		perr("read_scene", errset(ERTRN));
-		return (cleanup(rt));
+		return (rt->errnum);
 	}
 	rt->mtx_init_check = true;
 	if (initialize_mutexes(rt) == false)
-		return (false);
-	if (pthread_cond_init(&rt->cond, NULL) != 0)
-	{
-		fprintf(stderr, "Failed to initialize condition variable\n");
-		exit(EXIT_FAILURE);														//	TODO handle fprintf and exit differently
-	}
+		return (rt->errnum);
+	if (initialize_conditions(rt) == rt->errnum)
+		return (rt->errnum);
 	rt->creation_check = true;
 	if (launch_pthreads(rt) == false)
 	{

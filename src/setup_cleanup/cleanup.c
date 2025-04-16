@@ -1,9 +1,3 @@
-#include <MLX42/MLX42.h>
-#include <parsing.h>
-#include <scene.h>
-#include <RTmlx.h>
-#include <RTerror.h>
-#include <mathRT.h>
 #include <setup_clean.h>
 
 int32_t	cleanup(t_rt *rt)
@@ -12,6 +6,8 @@ int32_t	cleanup(t_rt *rt)
 	{
 		if (rt->creation_check == true)
 			destroy_threads(rt);
+		if (rt->stopped_threads == 0)
+			destroy_conditions(rt);
 		if (rt->mtx_init_check == true)
 			destroy_mutexes(rt, MTX_AMOUNT);
 		if (rt->read_scene->objs)

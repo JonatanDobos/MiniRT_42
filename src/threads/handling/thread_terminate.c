@@ -1,10 +1,6 @@
-#include <miniRT.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <threadsRT.h>
-#include <render.h>
 #include <libft.h>
+#include <stdio.h>
+#include <miniRT.h>
 #define MTX_FAIL "pthread_mutex_destroy() failed on index "
 
 void	destroy_mutexes(t_rt *rt, size_t amount)
@@ -45,7 +41,7 @@ void	destroy_threads(t_rt *rt)
 	if (pthread_join(rt->thread.thread, NULL) != 0)
 	{
 		pthread_mutex_lock(rt->mtx + MTX_PRINT);
-		printf("pthread_join");
+		perror("pthread_cond_destroy");
 		pthread_mutex_unlock(rt->mtx + MTX_PRINT);
 	}
 }

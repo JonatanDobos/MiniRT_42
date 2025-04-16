@@ -1,9 +1,8 @@
 #ifndef THREADSRT_H
 # define THREADSRT_H
 
-# include <pthread.h>
-# include <miniRT.h>
 # include <common_defs.h>
+# include <pthread.h>
 
 typedef float				t_vec4 __attribute__ ((vector_size(16)));
 

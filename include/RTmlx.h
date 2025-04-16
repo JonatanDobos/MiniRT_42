@@ -1,9 +1,8 @@
 #ifndef RTMLX_H
 # define RTMLX_H
 # include <MLX42/MLX42.h>
-# include <common_defs.h>
-# include <miniRT.h>
 # include <libft.h> 
+# include <miniRT.h>
 
 # define LOGO_PATH "images/glasses.png"
 # define NAME_FILE "Name your .rt file:  "

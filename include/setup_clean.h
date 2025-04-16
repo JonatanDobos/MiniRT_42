@@ -1,17 +1,9 @@
 #ifndef UTILS_H
 # define UTILS_H
 # include <common_defs.h>
-# include <math.h>
-# include <miniRT.h>
+# include <scene.h>
+# include <RTmlx.h>
 
-// static inline float	rt_minf(float a, float b)
-// {
-// 		if (a > b)
-// 			return (b);
-// 		else
-// 			return (a);
-// }
-	// utils.c
 int32_t		cleanup(t_rt *rt);
 
 void		init_main(t_rt *rt, t_scene *scn, t_scene *read_scn, t_window *win);

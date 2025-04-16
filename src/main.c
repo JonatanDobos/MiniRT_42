@@ -1,7 +1,7 @@
 #include <miniRT.h>
 #include <RTerror.h>
-#include <scene.h>
-#include <RTmlx.h>
+// #include <scene.h>
+// #include <RTmlx.h>
 #include <setup_clean.h>
 #include <render.h>
 
@@ -19,8 +19,8 @@ int main(int argc, char **argv)
 	if (THREADS > 1)
 	{
 		rt.scene->render_ongoing = true;
-		if (multithreaded(&rt))
-			return (errset(ERTRN));
+		if (multithreaded(&rt) != EXIT_SUCCESS)
+			return (cleanup(&rt), errset(ERTRN));
 	}
 	mlx_loop(rt.win->mlx);
 	cleanup(&rt);

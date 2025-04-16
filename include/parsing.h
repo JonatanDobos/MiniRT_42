@@ -1,10 +1,8 @@
 #ifndef PARSING_H
 # define PARSING_H
-# include <common_defs.h>
+# include <dynarr.h>
 # include <libft.h>
 # include <scene.h>
-# include <miniRT.h>
-# include <fcntl.h>
 # include <RTerror.h>
 
 typedef struct s_parsing_value_check
