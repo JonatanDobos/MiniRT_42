@@ -37,12 +37,12 @@ int16_t	setup_init_parsing(t_rt *rt, const int argc, const char *argv)
 {
 	if (argc != 2)
 	{
-		write(1, NO_FILENAME, sizeof(NO_FILENAME) - 1);
+		ft_putendl_fd(NO_FILENAME, STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
 	else if (SCREEN_WIDTH < 5 || SCREEN_HEIGHT < 5)
 	{
-		write(1, SCREEN_ERROR, sizeof(SCREEN_ERROR) - 1);
+		ft_putendl_fd(SCREEN_ERROR, STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
 	else if (parse_scene_file(argv, rt->scene) != 0)

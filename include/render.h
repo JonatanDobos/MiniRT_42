@@ -5,6 +5,8 @@
 # include <miniRT.h>
 # include <scene.h>
 
+# define PRINT_PERFORMANCE true
+
 # define RES_STEP_SIZE 1
 # define RES_RATIO_MAX 12
 # define RES_R_LOW 10
