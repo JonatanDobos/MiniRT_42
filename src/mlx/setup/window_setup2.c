@@ -1,9 +1,4 @@
-#include <stdlib.h>
-#include <miniRT.h>
 #include <RTmlx.h>
-#include <render.h>
-#include <miniRT.h>
-#include <threadsRT.h>
 
 bool	res_setscale(t_window *win, const float scale)
 {

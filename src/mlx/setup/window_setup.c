@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <miniRT.h>
 #include <RTmlx.h>
-#include <render.h>
 
 //	Static Functions
 static bool	init_mlx(t_window *win);

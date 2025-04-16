@@ -1,8 +1,8 @@
 #include <RTmlx.h>
-#include <mathRT.h>
 #include <render.h>
+#include <mathRT.h>
 
-//	Static Functions
+//	Static Function
 static void	mouse_clicks_on_obj(t_scene *sc, t_ray ray);
 
 void	scroll_fov_hook(double xdelta, double ydelta, t_scene *sc)

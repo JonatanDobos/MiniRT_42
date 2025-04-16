@@ -21,20 +21,20 @@ static void	print_plane(t_objs pl)
 	printf("\nPlane\nCoordinates: (x=%f, y=%f, z=%f)\n  "
 		"Direction: (%f, %f, %f)\n     "
 		"Colour: (%d, %d, %d)\n",
-		pl.coords[0], pl.coords[1], pl.coords[2],
-		pl.plane.orientation[0], pl.plane.orientation[1], pl.plane.orientation[2],
-		(int)(pl.color[0] * 255), (int)(pl.color[1] * 255),
-		(int)(pl.color[2] * 255));
+		pl.coords[X], pl.coords[Y], pl.coords[Z],
+		pl.plane.orientation[X], pl.plane.orientation[Y], pl.plane.orientation[Z],
+		(int)(pl.color[R] * 255), (int)(pl.color[G] * 255),
+		(int)(pl.color[B] * 255));
 }
 
 static void	print_sphere(t_objs sp)
 {
 	printf("\nSphere\nCoordinates: (x=%f, y=%f, z=%f)\n   "
 		"Diameter: %f\n     Radius: %f\n     Colour: (%d, %d, %d)\n",
-		sp.coords[0], sp.coords[1], sp.coords[2],
+		sp.coords[X], sp.coords[Y], sp.coords[Z],
 		sp.sphere.radius * 2, sp.sphere.radius,
-		(int)(sp.color[0] * 255), (int)(sp.color[1] * 255),
-		(int)(sp.color[2] * 255));
+		(int)(sp.color[R] * 255), (int)(sp.color[G] * 255),
+		(int)(sp.color[B] * 255));
 }
 
 static void	print_cylinder(t_objs cy)
@@ -44,9 +44,9 @@ static void	print_cylinder(t_objs cy)
 	printf("\nCylinder\nCoordinates: (x=%f, y=%f, z=%f)\n  Direction: (%f, %f, %f)\n"
 		"Diameter: %f\n     Radius: %f\n     "
 		"Height: %f\n     Colour: (%d, %d, %d)\n",
-		cy.coords[0], cy.coords[1], cy.coords[2],
-		c.orientation[0], c.orientation[1], c.orientation[2],
+		cy.coords[X], cy.coords[Y], cy.coords[Z],
+		c.orientation[X], c.orientation[Y], c.orientation[Z],
 		c.radius * 2, c.radius, c.height,
-		(int)(cy.color[0] * 255), (int)(cy.color[1] * 255),
-		(int)(cy.color[2] * 255));
+		(int)(cy.color[R] * 255), (int)(cy.color[G] * 255),
+		(int)(cy.color[B] * 255));
 }

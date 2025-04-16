@@ -1,5 +1,4 @@
 #include <RTmlx.h>
-#include <mathRT.h>
 #include <render.h>
 
 //	Static Functions
