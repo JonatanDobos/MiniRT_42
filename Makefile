@@ -74,7 +74,8 @@ PARSE			:=	parse/parsing.c				parse/parse_utils.c												\
 					line_validate/line_val.c	line_validate/number_check.c									\
 					init_input/parse_objects.c	init_input/init_primitives.c
 THREADING		:=	handling/thread_setup.c		handling/thread_terminate.c										\
-					routine/routine.c			routine/utils_thread.c			routine/read_scene.c
+					routine/routine.c			routine/utils_thread.c			routine/read_scene.c			\
+					routine/performance_stats.c
 MLX				:=	setup/window_setup.c		setup/window_setup2.c											\
 					hooks/hooks.c				hooks/loop_hooks.c				hooks/mouse_hook.c				\
 					hooks/loop_move_hooks.c																		\

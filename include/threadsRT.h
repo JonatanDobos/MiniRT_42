@@ -4,6 +4,8 @@
 # include <common_defs.h>
 # include <pthread.h>
 
+# define PRT_BUFFER_SIZE 64
+
 typedef float				t_vec4 __attribute__ ((vector_size(16)));
 
 //	Forward declaration of structs;
@@ -43,6 +45,7 @@ typedef struct	s_thread
 
 
 bool	res_setscale(t_window *win, const float scale);
+void	print_performance_stats(t_rt *rt, float fps);
 
 bool	initialize_mutexes(t_rt *rt);
 bool	initialize_conditions(t_rt *rt);
