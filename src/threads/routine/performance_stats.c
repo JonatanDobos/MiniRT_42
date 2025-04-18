@@ -4,6 +4,7 @@
 #include <render.h>
 #include <threadsRT.h>
 #include <setup_clean.h>
+#include <limits.h>
 
 int	powi(int base, int pow)
 {

@@ -29,6 +29,10 @@ void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 		rt->scene->selected_obj = &rt->scene->ambient;
 	else if (keydata.key == MLX_KEY_P)
 		print_obj_info(rt->scene);
+	else if (keydata.key == MLX_KEY_1)
+		switch_scaling_mode(rt);
+	else if (keydata.key == MLX_KEY_2 || keydata.key == MLX_KEY_3)
+		change_scaling_start(rt, keydata);
 	else if (keydata.key == MLX_KEY_ESCAPE)
 	{
 		closing_cleanup_threads(rt);

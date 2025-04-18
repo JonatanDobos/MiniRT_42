@@ -57,8 +57,8 @@ void	upscale_manager_thread(t_rt *rt)
 void	set_starting_res_ratio(t_rt *rt, double delta_time)
 {
 	const double	error = delta_time - rt->win->target_time;
-	const double	adjustment_factor = 10.0F;
-	int				new_ratio;	
+	const double	adjustment_factor = 8.0F;
+	int				new_ratio;
 
 	new_ratio = rt->win->res_r_start * (1.0F + (error * adjustment_factor));
 	rt->win->res_r_start = intclamp((int)new_ratio, 2, 30);

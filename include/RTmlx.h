@@ -29,6 +29,8 @@ typedef struct s_window
 	float			aspectrat;
 	uint16_t		res_ratio;
 	uint16_t		res_r_start;
+	uint16_t		man_r_start;
+	bool			auto_res;
 	float			target_time;
 	float			delta_time;
 	bool			resize;
@@ -63,6 +65,11 @@ bool	handle_object_modification(const keys_t key, t_scene *sc);
 // scaling.c
 
 void	scaled_res_set_pixel(t_window *w, uint16_t x, uint16_t y, t_vec4 color);
+
+// scaling_resolution.c
+
+void	switch_scaling_mode(t_rt *rt);
+void	change_scaling_start(t_rt *rt, mlx_key_data_t keydata);
 
 // camera_move.c
 

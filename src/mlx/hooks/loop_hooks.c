@@ -8,18 +8,20 @@ static void	last_pix_arr_switch(t_rt *rt);
 
 void	loop_hook(t_rt *rt)
 {
-
 	double	time;
 
 	time = mlx_get_time();
 	movement(rt);
 	if (rt->scene->render == true || rt->scene->render_ongoing == true)
 	{
+		if (rt->scene->render == true && rt->win->auto_res == false)
+			rt->win->res_r_start = rt->win->man_r_start;
 		upscale_manager(rt);
 		time = mlx_get_time() - time;
 		if (rt->win->res_ratio == rt->win->res_r_start)
 			rt->win->delta_time = time;
-		else if (rt->win->res_ratio == rt->win->res_r_start - 1)
+		else if (rt->win->res_ratio == rt->win->res_r_start - 1 \
+				&& rt->win->auto_res == true)
 			set_starting_res_ratio(rt, time);
 		rt->scene->camera.c.cam_fov_speed = FOV_SCROLL_SPEED * rt->win->delta_time;
 		rt->scene->camera.c.cam_m_speed = CAM_MOVE_SPEED * rt->win->delta_time;
@@ -56,7 +58,11 @@ void	loop_hook_threaded(t_rt *rt)
 static void	render_updates(t_rt *rt)
 {
 	if (rt->scene->render == true)
+	{
 		cpy_scene(rt->scene, rt->read_scene);
+		if (rt->win->auto_res == false)
+			rt->win->res_r_start = rt->win->man_r_start;
+	}
 	upscale_manager_thread(rt);
 	rt->scene->camera.c.cam_fov_speed = FOV_SCROLL_SPEED * rt->win->delta_time;
 	rt->scene->camera.c.cam_m_speed = CAM_MOVE_SPEED * rt->win->delta_time;

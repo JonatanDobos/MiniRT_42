@@ -28,6 +28,10 @@ CFLAGS			+=	-g
 #		Werror cannot go together with fsanitize, because fsanitize won't work correctly.
 # CFLAGS			+=	-fsanitize=address
 
+ifeq ($(PRINT_PERFORMANCE), true)
+	CFLAGS		+=	-DPRINT_PERFORMANCE=true
+endif
+
 #		Sets MINIRT_THREADS to 2 if N_JOBS (logical processors) is greater than 1, otherwise sets it to 1.
 MINIRT_THREADS	:=	$(if $(filter-out 1,$(N_JOBS)),2,1)
 
@@ -81,6 +85,7 @@ MLX				:=	setup/window_setup.c		setup/window_setup2.c											\
 					hooks/loop_move_hooks.c																		\
 					transform/cam/camera_move.c	transform/cam/camera_rotate.c									\
 					transform/obj/obj_move.c	transform/obj/obj_rotate.c		transform/obj/obj_modification.c\
+					transform/resolution/scaling_resolution.c													\
 					print/print_objs.c			print/print_primitives.c
 SCENE			:=	set_filename.c				create_rt_file.c				scene_elements.c				\
 					geometric_primitives.c
@@ -184,9 +189,10 @@ re:
 	$(MAKE) $(PRINT_NO_DIR) all
 
 single_thread:
-	@$(MAKE) $(PRINT_NO_DIR) MINIRT_THREADS=1	
+	@$(MAKE) $(PRINT_NO_DIR) MINIRT_THREADS=1
 
-malloc_wrap: all
+stats:
+	$(MAKE) $(PRINT_NO_DIR) PRINT_PERFORMANCE=true
 
 test: all
 	./$(NAME) ./scenes/test.rt
