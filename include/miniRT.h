@@ -33,7 +33,7 @@ typedef struct	s_rt
 	struct s_scene	*read_scene;
 	struct s_window	*win;
 	pthread_cond_t	cond;
-	uint16_t		stopped_threads;
+	int16_t			stopped_threads;
 	uint16_t		finished_rendering;
 	uint16_t		thread_rend_step;
 	bool			creation_check;

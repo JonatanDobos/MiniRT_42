@@ -37,6 +37,7 @@ typedef struct s_window
 	bool			file_creation;
 	char			filename[FILE_CREATION + (sizeof(NAME_FILE) - 1)];
 	uint16_t		filename_len;
+	bool			prt_perf_stats;
 	mlx_texture_t	*logo;
 }	t_window;
 
@@ -73,36 +74,36 @@ void	change_scaling_start(t_rt *rt, mlx_key_data_t keydata);
 
 // camera_move.c
 
-void		cam_move_forw(t_scene *sc);
-void		cam_move_backw(t_scene *sc);
-void		cam_move_right(t_scene *sc);
-void		cam_move_left(t_scene *sc);
-void		cam_move_up(t_scene *sc);
-void		cam_move_down(t_scene *sc);
+void	cam_move_forw(t_scene *sc);
+void	cam_move_backw(t_scene *sc);
+void	cam_move_right(t_scene *sc);
+void	cam_move_left(t_scene *sc);
+void	cam_move_up(t_scene *sc);
+void	cam_move_down(t_scene *sc);
 
 // camera_rotate.c
 
-void		cam_rotate_right(t_scene *sc);
-void		cam_rotate_left(t_scene *sc);
-void		cam_rotate_up(t_scene *sc);
-void		cam_rotate_down(t_scene *sc);
+void	cam_rotate_right(t_scene *sc);
+void	cam_rotate_left(t_scene *sc);
+void	cam_rotate_up(t_scene *sc);
+void	cam_rotate_down(t_scene *sc);
 
 
-bool		obj_move_forw(t_scene *sc);
-bool		obj_move_backw(t_scene *sc);
-bool		obj_move_left(t_scene *sc);
-bool		obj_move_right(t_scene *sc);
-bool		obj_move_up(t_scene *sc);
-bool		obj_move_down(t_scene *sc);
+bool	obj_move_forw(t_scene *sc);
+bool	obj_move_backw(t_scene *sc);
+bool	obj_move_left(t_scene *sc);
+bool	obj_move_right(t_scene *sc);
+bool	obj_move_up(t_scene *sc);
+bool	obj_move_down(t_scene *sc);
 
-void		obj_rotate_up(t_scene *sc);
-void		obj_rotate_down(t_scene *sc);
-void		obj_rotate_left(t_scene *sc);
-void		obj_rotate_right(t_scene *sc);
+void	obj_rotate_up(t_scene *sc);
+void	obj_rotate_down(t_scene *sc);
+void	obj_rotate_left(t_scene *sc);
+void	obj_rotate_right(t_scene *sc);
 
-void		set_filename(const keys_t key, t_window *win, t_scene *sc);
-void		reset_filename(t_window *win);
+void	set_filename(const keys_t key, t_window *win, t_scene *sc);
+void	reset_filename(t_window *win);
 
-void	create_bmp(t_rt *rt/* , const char *filename */);
-
+// print_perf_stats.c
+void	switch_prt_perf_stats(t_rt *rt);
 #endif

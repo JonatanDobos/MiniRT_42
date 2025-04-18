@@ -34,7 +34,7 @@ static void	render_routine(t_thread *th)
 		{
 			time = mlx_get_time() - time;
 			if (th->win->res_ratio == th->win->res_r_start - 1 \
-				&& check_bool(th->rt->mtx + MTX_AUTO_SCALE, th->rt->win->auto_res))
+				&& check_bool(th->rt->mtx + MTX_SWITCH_BOOL, th->rt->win->auto_res))
 				set_starting_res_ratio(th->rt, time);
 		}
 		print_performance_stats(th->rt, 1.0F / time);

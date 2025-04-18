@@ -9,13 +9,15 @@ static void	scene_manipulate_keys(mlx_key_data_t keydata, t_rt *rt);
 void	init_hooks(t_rt *rt)
 {
 	if (THREADS > 1)
+	{
 		mlx_loop_hook(rt->win->mlx, (mlx_closefunc)loop_hook_threaded, rt);
+		mlx_close_hook(rt->win->mlx, (mlx_closefunc)closing_cleanup_threads, rt);
+	}
 	else
 		mlx_loop_hook(rt->win->mlx, (mlx_closefunc)loop_hook, rt);
 	mlx_key_hook(rt->win->mlx, (mlx_keyfunc)my_keyhook, rt);
 	mlx_scroll_hook(rt->win->mlx, (mlx_cursorfunc)scroll_fov_hook, rt->scene);
 	mlx_mouse_hook(rt->win->mlx, (mlx_mousefunc)mouse_hook, rt);
-	mlx_close_hook(rt->win->mlx, (mlx_closefunc)closing_cleanup_threads, rt);
 	reset_filename(rt->win);
 }
 
@@ -25,17 +27,18 @@ void	my_keyhook(mlx_key_data_t keydata, t_rt *rt)
 		return ;
 	if (keydata.key == MLX_KEY_ENTER || rt->win->file_creation == true)
 		set_filename(keydata.key, rt->win, rt->scene);
-	else if (keydata.key == MLX_KEY_K)
-		rt->scene->selected_obj = &rt->scene->ambient;
 	else if (keydata.key == MLX_KEY_P)
 		print_obj_info(rt->scene);
 	else if (keydata.key == MLX_KEY_1)
 		switch_scaling_mode(rt);
 	else if (keydata.key == MLX_KEY_2 || keydata.key == MLX_KEY_3)
 		change_scaling_start(rt, keydata);
+	else if (keydata.key == MLX_KEY_K && THREADS > 1)
+		switch_prt_perf_stats(rt);
 	else if (keydata.key == MLX_KEY_ESCAPE)
 	{
-		closing_cleanup_threads(rt);
+		if (THREADS > 1)
+			closing_cleanup_threads(rt);
 		mlx_close_window(rt->win->mlx);
 	}
 	else

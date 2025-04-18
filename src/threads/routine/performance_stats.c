@@ -5,6 +5,7 @@
 #include <threadsRT.h>
 #include <setup_clean.h>
 #include <limits.h>
+#include <dbltoa.h>
 
 int	powi(int base, int pow)
 {
@@ -99,11 +100,12 @@ void	print_performance_stats(t_rt *rt, float fps)
 		&& cur_time < last_print_time + 0.3)
 		return ;
 	last_print_time = cur_time;
-	if (PRINT_PERFORMANCE == true)
+	ft_putstr_fd("\r\33[2K", STDOUT_FILENO);
+	if (rt->win->prt_perf_stats == true)
 	{
 		fill_print_buffer(rt, fps_average / (float)counter, buffer);
 		pthread_mutex_lock(rt->mtx + MTX_PRINT);
-		ft_putstr_fd("\r\33[2K\033[94m", STDOUT_FILENO);
+		ft_putstr_fd("\033[94m", STDOUT_FILENO);
 		if (rt->win->res_ratio == RES_R_FULL)
 			ft_putstr_fd("\033[92m", STDOUT_FILENO);
 		ft_putstr_fd(buffer, STDOUT_FILENO);

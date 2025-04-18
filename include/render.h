@@ -3,10 +3,6 @@
 # include <common_defs.h>
 # include <scene.h>
 
-# ifndef PRINT_PERFORMANCE
-#  define PRINT_PERFORMANCE false
-# endif
-
 # define RES_STEP_SIZE 1
 # define RES_RATIO_MAX 12
 # define RES_R_LOW 10
