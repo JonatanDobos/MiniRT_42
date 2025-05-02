@@ -11,7 +11,7 @@ else
 endif
 
 #	(-j) Specify the number of jobs (commands) to run simultaneously
-MULTI_THREADED	:=	-j $(N_JOBS)
+MULTI_THREADED	:=	-j$(N_JOBS)
 
 #	MAKEFLAGS will automatically apply the specified options (e.g., parallel execution) when 'make' is invoked
 MAKEFLAGS		+=	$(MULTI_THREADED)
@@ -26,13 +26,10 @@ CFLAGS			+=	-Werror
 CFLAGS			+=	-MMD -MP
 CFLAGS			+=	-g
 #		Werror cannot go together with fsanitize, because fsanitize won't work correctly.
-# CFLAGS			+=	-fsanitize=address
-
-#		Sets MINIRT_THREADS to 2 if N_JOBS (logical processors) is greater than 1, otherwise sets it to 1.
-MINIRT_THREADS	:=	1
+CFLAGS			+=	-fsanitize=address
 
 #		Temporary CFLAGS
-CFLAGS			+=	-pthread -D THREADS=$(MINIRT_THREADS)
+CFLAGS			+=	-pthread -D THREADS=$(if $(filter-out 1,$(N_JOBS)),2,1)
 #		Optimization flags
 OFLAGS			=	-O2
 # 		Generate code optimized for the host machine's CPU
@@ -187,9 +184,6 @@ fcln:	cln
 re:
 	$(MAKE) $(PRINT_NO_DIR) fclean
 	$(MAKE) $(PRINT_NO_DIR) all
-
-double_thread:
-	@$(MAKE) $(PRINT_NO_DIR) MINIRT_THREADS=$(if $(filter-out 1,$(N_JOBS)),2,1)
 
 test: all
 	./$(NAME) ./scenes/test.rt
