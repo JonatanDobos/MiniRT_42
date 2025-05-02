@@ -151,7 +151,11 @@ $(NAME): $(LIBS) $(OBJS)
 	$(BUILD) $(OBJS) $(LIBS) $(LINKER_FLAGS) -o $(NAME)
 	@printf "$(CREATED)" $@ $(CUR_DIR)
 
-$(BUILD_DIR)%.o: %.c $(HEADERS)
+# $(BUILD_DIR)%.o: %.c $(HEADERS)
+# 	@mkdir -p $(@D)
+# 	$(BUILD) $(INCLUDE_RT) -c $< -o $@
+
+$(BUILD_DIR)%.o: %.c
 	@mkdir -p $(@D)
 	$(BUILD) $(INCLUDE_RT) -c $< -o $@
 
@@ -190,23 +194,17 @@ double_thread:
 test: all
 	./$(NAME) ./scenes/test.rt
 
-test2: all
-	./$(NAME) ./scenes/plane_sphere.rt
+pillars: all
+	./$(NAME) ./scenes/pillars.rt
 
-test3: all
-	./$(NAME) ./scenes/sphere_behind_sphere.rt
-
-test4: all
-	./$(NAME) ./scenes/cylinder.rt
-
-test5: all
-	./$(NAME) ./scenes/resizing.rt
+sunshine: all
+	./$(NAME) ./scenes/sunshine.rt
 
 white: all
 	./$(NAME) ./scenes/white.rt
 
-valrind: all
-	./$(NAME) ./scenes/test1.rt
+valgrind: all
+	./$(NAME) ./scenes/test.rt
 
 print-%:
 	$(info $($*))
@@ -214,7 +212,7 @@ print-%:
 #		Include the dependency files
 -include $(DEPS)
 
-.PHONY:	$(NAME) $(BUILD_DIR) $(LIBFT_L) all cln clean fclean fcln re print-%
+.PHONY: all clean fclean fcln re cln double_thread pillars sunshine white valgrind
 
 # ----------------------------------- colors --------------------------------- #
 BOLD		= \033[1m
