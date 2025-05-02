@@ -20,7 +20,7 @@ RM				:=	rm -rf
 PRINT_NO_DIR	:=	--no-print-directory
 
 #		CFLAGS for testing
-COMPILER		:=	gcc
+COMPILER		:=	cc
 CFLAGS			+=	-Wall -Wextra
 CFLAGS			+=	-Werror
 CFLAGS			+=	-MMD -MP

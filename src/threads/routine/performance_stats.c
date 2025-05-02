@@ -74,7 +74,7 @@ char	*ftoa_simple(float num, char *buffer, uint8_t prec)
 
 static void	fill_print_buffer(t_rt *rt, float avg_fps, char *buffer)
 {
-	if (avg_fps > INT_MAX || avg_fps < 0.0F)
+	if ((int)avg_fps > INT_MAX || avg_fps < 0.0F)
 		return ;
 	ft_bzero(buffer, PRT_BUFFER_SIZE);
 	ft_strlcpy(buffer, " ResStep ", 10);
